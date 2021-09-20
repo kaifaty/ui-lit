@@ -1,0 +1,41 @@
+{
+  "name": "lit-ui",
+  "version": "0.0.1",
+  "description": "UI Elements on LIT",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "typesVersions": {
+    "<3.8": {
+      "*": [
+        "ts3.4/*"
+      ]
+    }
+  },
+  "scripts": {
+    "dev": "parcel demo/index.html -d ./demo/dist",
+    "build": "tsc"
+  },
+  "files": [
+    "/demo/",
+    "/src/",
+    "/dist/"
+  ],
+  "keywords": [
+    "user-interface",
+    "lit-element",
+    "LitElement"
+  ],
+  "homepage": "https://github.com/kaifaty/lit-ui/#readme",
+  "bugs": {
+    "url": "https://github.com/kaifaty/lit-ui/issues"
+  },
+  "author": "kaifaty",
+  "license": "MIT",
+  "devDependencies": {
+    "@web/dev-server": "^0.1.22",
+    "lit": "latest",
+    "tslib": "^2.1.0",
+    "typescript": "latest"
+  }
+}

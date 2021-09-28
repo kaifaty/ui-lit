@@ -1,5 +1,5 @@
 import { css } from 'lit';
-export const input = css`
+export const input = css `
 :host{
     display: var(--input-display, inline-block);
     height: var(--input-height);
@@ -48,4 +48,4 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active{
     box-shadow: 0 0 0 30px white inset
-}`
+}`;

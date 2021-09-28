@@ -108,18 +108,20 @@ const getY = (bound: DOMRect, neededHeight: number, align: TAlign = 'smart') => 
 const getX = (bound: DOMRect, nedeedWidth: number, align: TAlign = 'smart') => {
     let x = 0;
     if(bound.left - nedeedWidth < 0){
-        x = bound.bottom + window.scrollX;;
+        x = bound.left + window.scrollX;;
     }
     else{
-        x = bound.top - nedeedWidth + window.scrollX;
+        x = bound.left - nedeedWidth + window.scrollX;
     }
     return x;
 }
 
 export const calcPositionForNote = (el: HTMLElement, data: TPositionNote) => {
     const bound = el.getBoundingClientRect();
+    
     const y = getY(bound, data.height, data.alignY);
-    const x = getX(bound, data.width, data.alignY);
+    const x = getX(bound, data.width, data.alignX);
+    console.log(x)
     return {x, y};
 
 }

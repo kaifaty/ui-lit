@@ -1,0 +1,36 @@
+import { LitElement } from 'lit';
+import { FormAssociatedElement } from '../form-associated/interface';
+import '../label';
+export interface IFormProps {
+    disabled: boolean;
+    noValidate: boolean;
+}
+export interface IFormElement {
+    checkValidity(): boolean;
+    reportValidity(): boolean;
+    submit(): void;
+}
+export declare class FromElement extends LitElement implements IFormElement, IFormProps {
+    _elements: FormAssociatedElement[];
+    get length(): number;
+    get elements(): FormAssociatedElement[];
+    noValidate: boolean;
+    disabled: boolean;
+    render(): import("lit-html").TemplateResult<1>;
+    connectedCallback(): void;
+    disconnectedCallback(): void;
+    private _onSubmit;
+    private _onFormAttached;
+    private _onFormDettached;
+    private _getData;
+    checkValidity(): boolean;
+    reportValidity(): boolean;
+    updated(props: Map<string, string | boolean>): void;
+    submit(): void;
+    reset(): void;
+}
+declare global {
+    interface HTMLElementTagNameMap {
+        'form-element': FromElement;
+    }
+}

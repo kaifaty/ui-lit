@@ -8,6 +8,7 @@ interface IProps extends ButtonProps{
 }
 const Button = (data: IProps) => 
     html`<button-element 
+        type = "${data.type}"
         ?primary = "${!!data.primary}"
         ?disabled = "${!!data.disabled}"
         ?borderless = "${!!data.borderless}"
@@ -30,6 +31,7 @@ Default.args = {
     success: false,
     error: false,
     switchOn: false,
+    type: 'button',
 }
 export const Disabled = Template.bind({});
 Disabled.args = {
@@ -66,5 +68,16 @@ Error_.args = {
     error: true
 }
 export default {
-    title: 'UI kit/Button',
+    title: 'Form assosiated/Button',
+    argTypes: {
+        type: {
+          options: ['button', 'submit'],
+          control: { type: 'radio' }
+        }
+    },
+    parameters: {
+        actions: {
+            handles: ['submitForm', 'switchChanged'],
+        }
+    }
 } as Meta;

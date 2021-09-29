@@ -5,8 +5,8 @@ import { formAssociated } from '../form-associated/index';
 ;
 import '../icon';
 import { input } from '../styles/input';
+import { live } from 'lit//directives/live';
 import { createRef, ref } from 'lit/directives/ref.js';
-import { inputDirective } from './inputValueDirective';
 const AvailabledKeys = ['Control', 'Backspace', 'Delete', ',', '.', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End', "Enter"];
 const Numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 const CtrAvailable = [
@@ -115,7 +115,7 @@ let NumberField = class NumberField extends formAssociated(LitElement) {
                    @keydown = "${this._onKeyDown}"
                    @change = "${this._onChange}"
                    ${ref(this.inputRef)}
-                   ${inputDirective(this.value)}>
+                   .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
             ${this._iconTemplate()}
         </div>`;

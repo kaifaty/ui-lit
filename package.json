@@ -1,5 +1,5 @@
 {
-  "name": "lit-ui",
+  "name": "ui-lit",
   "version": "0.0.1",
   "description": "UI Elements on LIT",
   "main": "dist/index.js",
@@ -15,8 +15,8 @@
   "scripts": {
     "dev": "parcel demo/index.html -d ./demo/dist",
     "build": "tsc",
-    "watch": "parcel index.html",
-    "tsc": "tsc -w",
+    
+    "watch": "tsc -w",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -30,9 +30,9 @@
     "lit-element",
     "LitElement"
   ],
-  "homepage": "https://github.com/kaifaty/lit-ui/#readme",
+  "homepage": "https://github.com/kaifaty/ui-lit/#readme",
   "bugs": {
-    "url": "https://github.com/kaifaty/lit-ui/issues"
+    "url": "https://github.com/kaifaty/ui-lit/issues"
   },
   "author": "kaifaty",
   "license": "MIT",

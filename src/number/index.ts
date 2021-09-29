@@ -4,6 +4,7 @@ import { formAssociated } from '../form-associated/index'
 import type { FormAssociated } from '../form-associated/interface';;
 import '../icon';
 import { input } from '../styles/input';
+import { live } from 'lit//directives/live';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
 import {inputDirective} from './inputValueDirective';
 import { TInputMode } from '../text-field/index';
@@ -133,7 +134,7 @@ export class NumberField extends formAssociated(LitElement) implements NumberPro
                    @keydown = "${this._onKeyDown}"
                    @change = "${this._onChange}"
                    ${ref(this.inputRef)}
-                   ${inputDirective(this.value)}>
+                   .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
             ${this._iconTemplate()}
         </div>`;

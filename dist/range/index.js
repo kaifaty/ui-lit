@@ -68,8 +68,8 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
                 min-width: 200px;
                 position: relative;
                 box-sizing: border-box;
-                --size: 4px;
-                --pointer: 10px;
+                --size: 8px;
+                --pointer: 8px;
                 --pointer-border: 2px;
                 --poiner-width: calc(var(--pointer) + var(--pointer-border));
                 --line-height: 4px;
@@ -239,7 +239,9 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
         return rect.width - this._padding * 2;
     }
     _calcOffset(e) {
-        return getClientX(e) - this._trackStartX - this._thumbSize / 2; //  - this._trackStartX - this._thumbSize / 2;
+        const xPosition = getClientX(e);
+        console.log(e, xPosition, this._trackStartX);
+        return xPosition - this._trackStartX; //  - this._trackStartX - this._thumbSize / 2;
     }
     _calcPercentByOffset(offset) {
         let percent = Math.round(offset / (this._trackSize) * 100 * 10) / 10;

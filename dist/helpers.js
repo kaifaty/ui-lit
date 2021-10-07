@@ -21,3 +21,15 @@ export const isiOS = () => {
         // iPad on iOS 13 detection
         || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
 };
+export const getEventDataset = (e, data) => {
+    return e.target.closest(".option").dataset[data];
+};
+export const isChildOfElement = (el, target) => {
+    while (el.parentElement) {
+        if (el === target) {
+            return true;
+        }
+        el = el.parentElement;
+    }
+    return false;
+};

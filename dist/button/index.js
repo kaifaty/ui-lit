@@ -2,7 +2,7 @@ import { __decorate } from "tslib";
 import { LitElement, nothing, html, } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { classMap } from 'lit/directives/class-map';
-import { EnterController } from '../controllers/EnterController';
+import { KeyDownController } from '../controllers/KeyController';
 import { button } from '../styles/button';
 let ButtomElement = class ButtomElement extends LitElement {
     constructor() {
@@ -19,7 +19,7 @@ let ButtomElement = class ButtomElement extends LitElement {
         this.success = false;
         this.error = false;
         this.switchOn = true;
-        this.enter = new EnterController(this);
+        this.enter = new KeyDownController(this);
     }
     connectedCallback() {
         super.connectedCallback();
@@ -60,8 +60,8 @@ let ButtomElement = class ButtomElement extends LitElement {
             >${this._iconBeforeTemplate()}<div><slot></slot></div>${this._iconAfterTemplate()}</div>`;
     }
     // ==== Events ====
-    onkeyEnter() {
-        if (document.activeElement === this) {
+    onkeyDown(e) {
+        if (e.key === "Enter" && document.activeElement === this) {
             this.submit();
         }
     }

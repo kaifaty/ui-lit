@@ -1,5 +1,5 @@
 import { TemplateResult, LitElement } from 'lit';
-import { EnterController } from '../controllers/EnterController';
+import { KeyDownController } from '../controllers/KeyController';
 export interface ButtonProps {
     type?: 'button' | 'submit';
     primary?: boolean;
@@ -24,7 +24,7 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
     success: boolean;
     error: boolean;
     switchOn: boolean;
-    enter: EnterController;
+    enter: KeyDownController;
     connectedCallback(): void;
     disconnectedCallback(): void;
     get classes(): {
@@ -43,7 +43,7 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
     private _iconBeforeTemplate;
     private _iconAfterTemplate;
     render(): TemplateResult<1>;
-    onkeyEnter(): void;
+    onkeyDown(e: KeyboardEvent): void;
     private _click;
     toggleSwitch(): void;
     submit(): void;

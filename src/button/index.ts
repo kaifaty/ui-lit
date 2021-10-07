@@ -1,7 +1,7 @@
 import { TemplateResult, LitElement, nothing, html, } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { classMap } from 'lit/directives/class-map';
-import { EnterController } from '../controllers/EnterController';
+import { KeyDownController } from '../controllers/KeyController';
 import { button } from '../styles/button';
 
 
@@ -35,7 +35,7 @@ export class ButtomElement extends LitElement implements ButtonProps{
     @property({type: Boolean}) switchOn: boolean = true;
 
 
-    enter = new EnterController(this);
+    enter = new KeyDownController(this);
 
     connectedCallback(){
         super.connectedCallback();
@@ -75,8 +75,8 @@ export class ButtomElement extends LitElement implements ButtonProps{
     }
 
     // ==== Events ====
-    onkeyEnter(){
-        if(document.activeElement === this){
+    onkeyDown(e: KeyboardEvent){
+        if(e.key === "Enter" && document.activeElement === this){
             this.submit();
         }
     }

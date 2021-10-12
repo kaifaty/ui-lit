@@ -1,7 +1,7 @@
 import { LitElement, html, nothing, css } from 'lit';
 import { state, property } from 'lit/decorators';
 import type { FormAssociatedElement, ProxyElement, ValidityStateFlags } from './interface';
-import { calcPositionForNote } from '../helpers/position';
+import { calcPositionForPopup } from '../helpers/position';
 import type { NoteElement } from '../note';
 import '../note';
 import { ref, createRef } from 'lit/directives/ref.js';
@@ -66,7 +66,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         }
         render(){
             if(this.showNote){
-                const {x, y} = calcPositionForNote(this, {width: 400, height: 40});
+                const {x, y} = calcPositionForPopup(this, {width: 400, height: 40});
                 return html`<note-element 
                     @close = "${this._onCloseNote}" 
                     style = "left: ${x}px; top: ${y + 5}px"

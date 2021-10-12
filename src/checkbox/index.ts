@@ -27,22 +27,25 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
             --offset: calc((var(--checkbox-switcher-height) - var(--checkbox-control-size) - 2px ) / 2);
 
             --checkmark-border: 2px;
-            --checkmark-width: 4px;
+            --checkmark-width: 5px;
             --checkmark-height: 8px;
             --checkmark-left: calc(var(--checkbox-control-size) - var(--checkmark-width) - var(--checkmark-border) - 3px);
-            --checkmark-top: calc(var(--checkbox-control-size) - var(--checkmark-height) - var(--checkmark-border) - 3px);
+            --checkmark-top: calc(var(--checkbox-control-size) - var(--checkmark-height) - var(--checkmark-border) - 4px);
 
         }
         .checkbox{
             width: var(--checkbox-control-size);
             height: var(--checkbox-control-size);
-            border: var(--checkbox-border, 1px solid #999);
+            border: 1px solid var(--checkbox-border, #999);
             position: relative;
             cursor: pointer;
+            
+        }
+        .checkbox:hover{
+            box-shadow: 0 0 2px var(--checkbox-border, #999);
         }
         .checkbox.on{
-            
-            background-color: var(--checkbox-off-background, hsl(100, 85%, 54%));
+            background-color: var(--checkbox-off-background, white);
         }
         .checkbox.on:after{
             content:'';

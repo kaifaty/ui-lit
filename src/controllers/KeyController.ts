@@ -1,7 +1,7 @@
 import {ReactiveController, ReactiveControllerHost} from 'lit';
 
 interface IKeyControllerHost extends ReactiveControllerHost{
-    onkeyDown(e: KeyboardEvent): void
+    handlekeyDown(e: KeyboardEvent): void
 }
 
 export class KeyDownController implements ReactiveController{
@@ -11,15 +11,12 @@ export class KeyDownController implements ReactiveController{
       (this.host = host).addController(this);
     }
     hostConnected() {
-        document.addEventListener("keydown", this.onkeyDown);
-        console.log('hostConnected')
+        document.addEventListener("keydown", this.handlekeyDown);
     }
     hostDisconnected() {
-        console.log('hostDisconnected')
-        document.removeEventListener("keydown", this.onkeyDown);
+        document.removeEventListener("keydown", this.handlekeyDown);
     }
-    onkeyDown = (e: KeyboardEvent) => {
-        console.log(e)
-        this.host.onkeyDown(e);
+    handlekeyDown = (e: KeyboardEvent) => {
+        this.host.handlekeyDown(e);
     }
 }

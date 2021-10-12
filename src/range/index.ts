@@ -229,7 +229,6 @@ export class RangeElement extends formAssociated(LitElement){
     }
     private _calcOffset(e: IUIEvent){
         const xPosition = getClientX(e);
-        console.log(e, xPosition, this._trackStartX);
         return xPosition -  this._trackStartX  ; //  - this._trackStartX - this._thumbSize / 2;
     }
     private _calcPercentByOffset(offset: number){
@@ -363,9 +362,8 @@ export class RangeElement extends formAssociated(LitElement){
         return nothing;
     }
     private _percentTemplate(){
-        if(this.showPercent) return nothing;
-        const translateX = (this.percent * 0.25 ).toFixed(1);
-        const left = this.offsetX + this._padding - this._thumbSize * this.percent / 100; //+ this._trackSize * this.percent / 100 + this._padding;
+        if(!this.showPercent) return nothing;
+        const left = this.offsetX + this._padding - this._thumbSize * this.percent / 100;
         return  html`<div style = "left: ${left}px;"
                         class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this.percent}%</div> `
     }

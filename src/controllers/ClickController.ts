@@ -1,7 +1,7 @@
 import {ReactiveController, ReactiveControllerHost} from 'lit';
 
 interface IClickControllerHost extends ReactiveControllerHost{
-    onDocumentClick(e: Event): void
+    handleDocumentClick(e: Event): void
 }
 
 export class ClickController implements ReactiveController{
@@ -17,6 +17,6 @@ export class ClickController implements ReactiveController{
         document.removeEventListener("click", this.onClick);
     }
     onClick = (e: Event) => {
-        this.host.onDocumentClick(e);
+        this.host.handleDocumentClick(e);
     }
 }

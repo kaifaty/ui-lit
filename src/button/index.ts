@@ -12,7 +12,7 @@ export interface ButtonProps{
     borderless?: boolean
     switch?: boolean
     success?: boolean
-    error?: boolean
+    danger?: boolean
     switchOn?: boolean
 }
 
@@ -29,8 +29,9 @@ export class ButtomElement extends LitElement implements ButtonProps{
     @property({type: Boolean}) borderless: boolean = false;
     @property({type: Boolean}) switch: boolean = false;
     @property({type: Boolean}) primary: boolean = false;
+    @property({type: Boolean}) secondary: boolean = false;
     @property({type: Boolean}) success: boolean = false;
-    @property({type: Boolean}) error: boolean = false;
+    @property({type: Boolean}) danger: boolean = false;
 
     @property({type: Boolean}) switchOn: boolean = true;
 
@@ -49,8 +50,9 @@ export class ButtomElement extends LitElement implements ButtonProps{
             switch: this.switch,
             "switch-on": this.switchOn,
             primary: this.primary,
+            secondary: this.secondary,
             success: this.success,
-            error: this.error,
+            danger: this.danger,
             disabled: this.disabled,
             wrapper: true,
             noselect: true,

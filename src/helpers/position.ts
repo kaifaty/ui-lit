@@ -116,12 +116,11 @@ const getX = (bound: DOMRect, nedeedWidth: number, align: TAlign = 'smart') => {
     return x;
 }
 
-export const calcPositionForNote = (el: HTMLElement, data: TPositionNote) => {
+export const calcPositionForPopup = (el: HTMLElement, data: TPositionNote) => {
     const bound = el.getBoundingClientRect();
     
     const y = getY(bound, data.height, data.alignY);
     const x = getX(bound, data.width, data.alignX);
-    console.log(x)
     return {x, y};
 
 }

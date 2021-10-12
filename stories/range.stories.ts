@@ -27,6 +27,7 @@ Default.args = {
     min: 0,
     max:  100,
     usePoints:  true,
+    showPercent:  true,
     startFromMin:  false,
     disabled:  false,
 }
@@ -37,6 +38,7 @@ NoPoints.args = {
     max:  100,
     usePoints:  false,
     startFromMin:  false,
+    showPercent:  true,
 }
 export default {
     title: 'Form Assosiated/Range Element',

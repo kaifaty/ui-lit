@@ -34,7 +34,7 @@ Default.args = {
     ]
 }
 export default {
-    title: 'Form Assosiated/Select Element',
+    title: 'Form Assosiated/Select',
     argTypes: {
             
     },

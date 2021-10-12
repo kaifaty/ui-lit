@@ -2,6 +2,7 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/range';
+import { RangeElement } from '../dist/range';
 import type { IRangeProps } from '../src/range';
 
 
@@ -41,7 +42,7 @@ NoPoints.args = {
     showPercent:  true,
 }
 export default {
-    title: 'Form Assosiated/Range Element',
+    title: 'Form Assosiated/Range',
     argTypes: {
         backgroundColor: { control: 'color' },
             
@@ -49,7 +50,15 @@ export default {
     parameters: {
         actions: {
             // handles: ['changed'],
-        }
-    }
+        },
+        docs: {
+            description: {
+                component: '### Usage: \n `<range-element></range-element>`',
+            },
+        },
+    },
+    component: 'range-element',
+    
+    
     
 } as Meta;

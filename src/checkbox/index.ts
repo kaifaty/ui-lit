@@ -131,12 +131,12 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
     }
     private _switcherTemplate(){
         return html`<div 
-            @click = "${this._onClick}" 
+            @click = "${this._handleClick}" 
             class = "switcher ${this.readonly ? 'readonly' : ''} ${this.value}"><span class = "control"></span></div>`;
     }
     private _checkboxTemplate(){
         return html`<div 
-            @click = "${this._onClick}" 
+            @click = "${this._handleClick}" 
             class = "checkbox ${this.readonly ? 'readonly' : ''} ${this.value}">
     </div>`;
     }
@@ -146,7 +146,7 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
         }
         return this._checkboxTemplate();
     }
-    private _onClick(){
+    private _handleClick(){
         if(this.readonly) return;
         this.checked = !this.checked;
         this.dispatchEvent(new CustomEvent("changed", {

@@ -16,6 +16,8 @@ export interface IRangeProps extends FormAssociated {
     startFromMin: boolean
     showPercent: boolean
 }
+
+/** <range-element></range-element> */
 @customElement("range-element")
 export class RangeElement extends formAssociated(LitElement){
     
@@ -319,19 +321,19 @@ export class RangeElement extends formAssociated(LitElement){
     }
     
     // ==== Events ==== 
-    _onPointerDown = (e: IUIEvent) => {
+    private _handlePointerDown = (e: IUIEvent) => {
         if(this.isDisabled()) return;
         this._isMoving = true;
         this.isPercentHidden = false;
     }
-    _onPointerMove = (e: Event) => {
+    private _handlePointerMove = (e: Event) => {
         if(this._isMoving === true){        
             this._movePosition(e as IUIEvent);
             this.isPercentHidden = false;
             e.preventDefault();
         }
     }
-    _onPointerUp = (e: IUIEvent) => {
+    private _handlePointerUp = (e: IUIEvent) => {
         if(this._isMoving === true){
             this._isMoving = false;
             this._hidePercent();
@@ -339,13 +341,13 @@ export class RangeElement extends formAssociated(LitElement){
             e.preventDefault();
         }
     }
-    _onPointOver = (e: Event) => {
+    private _handlePointOver = (e: Event) => {
         if(this.isDisabled()) return;
         clearTimeout(this._timeout);
         this.isPercentHidden = false;
         e.preventDefault();
     }
-    _onPointLeave = (e: Event) => {
+    private _handlePointLeave = (e: Event) => {
         e.preventDefault();
         this._hidePercent();
     }
@@ -382,10 +384,10 @@ export class RangeElement extends formAssociated(LitElement){
     render(){
         return html`
         <div class = "track ${this.isDisabled() ? 'disabled' : ''}"
-            @mousedown = "${this._onPointerDown}"
-            @mouserover = "${this._onPointOver}"
-            @mouseleave = "${this._onPointLeave}"
-            @touchstart = "${this._onPointerDown}">
+            @mousedown = "${this._handlePointerDown}"
+            @mouserover = "${this._handlePointOver}"
+            @mouseleave = "${this._handlePointLeave}"
+            @touchstart = "${this._handlePointerDown}">
             ${this._thumbTemplate()}
             <div class = "track-line"></div>
             ${this._pointersTemplate()}
@@ -397,10 +399,10 @@ export class RangeElement extends formAssociated(LitElement){
     
     connectedCallback(){
         super.connectedCallback();
-        document.addEventListener("touchmove", this._onPointerMove, {passive: false});
-        document.addEventListener("touchend", this._onPointerUp as EventListener);
-        document.addEventListener("mousemove", this._onPointerMove, {passive: false});
-        document.addEventListener("mouseup", this._onPointerUp as EventListener);
+        document.addEventListener("touchmove", this._handlePointerMove, {passive: false});
+        document.addEventListener("touchend", this._handlePointerUp as EventListener);
+        document.addEventListener("mousemove", this._handlePointerMove, {passive: false});
+        document.addEventListener("mouseup", this._handlePointerUp as EventListener);
         const rect = this.getBoundingClientRect()
         this._trackSize = this._calcTackWidth(rect);
         this._trackStartX = this._calcTrackStartX(rect);
@@ -409,10 +411,10 @@ export class RangeElement extends formAssociated(LitElement){
         
     }
     disconnectedCallback(){
-        document.removeEventListener("touchmove", this._onPointerMove);
-        document.removeEventListener("touchend", this._onPointerUp as EventListener);
-        document.removeEventListener("mousemove", this._onPointerMove);
-        document.removeEventListener("mouseup", this._onPointerUp as EventListener);
+        document.removeEventListener("touchmove", this._handlePointerMove);
+        document.removeEventListener("touchend", this._handlePointerUp as EventListener);
+        document.removeEventListener("mousemove", this._handlePointerMove);
+        document.removeEventListener("mouseup", this._handlePointerUp as EventListener);
         super.disconnectedCallback()
     }
 }

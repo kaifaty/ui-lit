@@ -31,26 +31,26 @@ export class FromElement extends LitElement implements IFormElement, IFormProps{
     }
     connectedCallback(){
         super.connectedCallback();
-        this.addEventListener("submitForm", this._onSubmit)
-        this.addEventListener("fromAttached", this._onFormAttached as EventListener);
-        this.addEventListener("fromDettached", this._onFormDettached as EventListener);
+        this.addEventListener("submitForm", this._handleSubmit)
+        this.addEventListener("fromAttached", this._handleFormAttached as EventListener);
+        this.addEventListener("fromDettached", this._handleFormDettached as EventListener);
     }
     disconnectedCallback(){
         super.disconnectedCallback();
-        this.removeEventListener("submitForm", this._onSubmit)
-        this.removeEventListener("fromAttached", this._onFormAttached as EventListener);
-        this.removeEventListener("fromDettached", this._onFormDettached as EventListener);
+        this.removeEventListener("submitForm", this._handleSubmit)
+        this.removeEventListener("fromAttached", this._handleFormAttached as EventListener);
+        this.removeEventListener("fromDettached", this._handleFormDettached as EventListener);
     }
 
     // ==== Events ==== 
-    private _onSubmit = (e: Event) => {
+    private _handleSubmit = (e: Event) => {
         e.preventDefault();
         this.submit();
     }
-    private _onFormAttached = (e: CustomEvent) => {
+    private _handleFormAttached = (e: CustomEvent) => {
         this._elements.push(e.detail);
     } 
-    private _onFormDettached = (e: CustomEvent) => {
+    private _handleFormDettached = (e: CustomEvent) => {
         this._elements.filter(it => e.detail !== it);
     }
     private _getData(){

@@ -11,7 +11,7 @@ import type { LabelText } from '../label';
 type Constructor<T> = new (...args: any[]) => T;
 
 export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T) => {
-    class FormAssociated extends superClass {
+    class FormAssociated extends superClass implements FormAssociated{
         _formAssiciated =  true;
         static get properties(){
             return {
@@ -49,7 +49,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         
         public connectedCallback(): void {
             super.connectedCallback();
-            this.addEventListener("keypress", this._keypressHandler);
+            this.addEventListener("keypress", this._handleKeypress);
             this.dispatchEvent(new CustomEvent("fromAttached", {
                 bubbles: true,
                 composed: true,
@@ -68,7 +68,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             if(this.showNote){
                 const {x, y} = calcPositionForPopup(this, {width: 400, height: 40});
                 return html`<note-element 
-                    @close = "${this._onCloseNote}" 
+                    @close = "${this._handleCloseNote}" 
                     style = "left: ${x}px; top: ${y + 5}px"
                     class = "error" ${ref(this.noteRef)}>${this.validationMessage}</note-element>`;
             }
@@ -145,13 +145,10 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         
         /** ========= */
 
-
-        
-
-        private _onCloseNote(){
+        private _handleCloseNote(){
             this.showNote = false;
         }
-        private _keypressHandler(e: KeyboardEvent): void {
+        private _handleKeypress(e: KeyboardEvent): void {
             if(e.key === 'Enter'){
                 this.dispatchEvent(new CustomEvent('submitForm', {
                     bubbles: true,

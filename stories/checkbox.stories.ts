@@ -31,7 +31,7 @@ Checkbox.args = {
 }
 
 export default {
-    title: 'Form assosiated/Checkbox element',
+    title: 'Form assosiated/Checkbox',
     
     argTypes: {
         value: {

@@ -14,7 +14,7 @@ const Button = (data: IProps) =>
         ?borderless = "${!!data.borderless}"
         ?switch = "${!!data.switch}"
         ?success = "${!!data.success}"
-        ?error = "${!!data.error}"
+        ?danger = "${!!data.danger}"
         ?switchOn = "${!!data.switchOn}"
     >${data.label}</button-element>`;
 
@@ -29,7 +29,7 @@ Default.args = {
     borderless: false,
     switch: false,
     success: false,
-    error: false,
+    danger: false,
     switchOn: false,
     type: 'button',
 }
@@ -69,6 +69,7 @@ Error_.args = {
 }
 export default {
     title: 'Form assosiated/Button',
+    component: 'button-element',
     argTypes: {
         type: {
           options: ['button', 'submit'],

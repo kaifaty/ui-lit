@@ -77,7 +77,7 @@ export class ButtomElement extends LitElement implements ButtonProps{
     }
 
     // ==== Events ====
-    onkeyDown(e: KeyboardEvent){
+    handlekeyDown(e: KeyboardEvent){
         if(e.key === "Enter" && document.activeElement === this){
             this.submit();
         }

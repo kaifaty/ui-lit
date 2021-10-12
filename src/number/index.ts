@@ -130,9 +130,9 @@ export class NumberField extends formAssociated(LitElement) implements NumberPro
                    placeholder = "${this.placeholder}"
                    spellcheck = "${this.spellcheck}"
                    inputmode = "${this.inputmode}"
-                   @input = "${this._onInput}" 
-                   @keydown = "${this._onKeyDown}"
-                   @change = "${this._onChange}"
+                   @input = "${this._handleInput}" 
+                   @keydown = "${this._handleKeyDown}"
+                   @change = "${this._handleChange}"
                    ${ref(this.inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
@@ -187,13 +187,13 @@ export class NumberField extends formAssociated(LitElement) implements NumberPro
     }
     
     // ==== Events ====
-    private _onChange(e: Event){
+    private _handleChange(e: Event){
         this.reportValidity();
     }
-    private _onInput(e: Event){
+    private _handleInput(e: Event){
         this.value = (e.target as HTMLInputElement).value as string;
     }
-    private _onKeyDown(e: KeyboardEvent){
+    private _handleKeyDown(e: KeyboardEvent){
         if(
             !AvailabledKeys.includes(e.key) && 
             !Numbers.includes(e.key) && 

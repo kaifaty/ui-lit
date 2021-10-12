@@ -9,6 +9,7 @@ import { ClickController } from '../controllers/ClickController';
 import { KeyDownController } from '../controllers/KeyController';
 import { calcPositionForPopup } from '../helpers/position';
 import { scrollbar } from '../styles/scrollbar';
+import { FormAssociatedProps } from '../form-associated/interface';
 
 
 type TSelectItem = {
@@ -16,9 +17,8 @@ type TSelectItem = {
     value: string
 }
 
-export interface IPropsSelect {
+export interface IPropsSelect extends FormAssociatedProps{
     items: TSelectItem[],
-    value: string,
     disabled: boolean
     optionsWidth: number
     optionsHeight: number
@@ -89,11 +89,7 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
         return this.items.filter(it => this.value === it.value)[0];
     }
     currentOption(){
-        const el = this.shadowRoot?.querySelector(".value-" + this.value) as HTMLElement;
-        if(el !== undefined){
-            return Number(el.dataset.index);
-        }
-        return -1;
+        return this.items.findIndex(it => it.value === this.value);
     }
     firstUpdated(){
         if(!this.optionsWidth){
@@ -102,12 +98,8 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
     }
     willUpdate(){
         if(this.open){
-            const rect = this.getBoundingClientRect();
             this._optionsPosition = calcPositionForPopup(this, {width: this.optionsWidth, height: this.optionsHeight || 40});
-
         }
-        
-        
     }
     private _contentTemplate(){
         if(!this.open) return nothing;
@@ -135,16 +127,18 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
                 tabindex = "0"
                 data-index = "${i}"
                 data-value = "${it.value}"
-                @click = "${this._onSelect}" 
-                @focus = "${this._onOptionFocus}" 
+                @click = "${this._handleSelectClick}" 
+                @focus = "${this._handleOptionFocus}" 
                 class = "${classMap(className)}">${it.text}</div>`
         })}</div>`;
+    }
+    focus(){
+        (this.shadowRoot?.querySelector(".content") as HTMLElement)?.focus();
     }
     render(){
         return html`
         <div 
             @click = "${this.handleClick}"
-            @focus = "${this.handleFocus}"
             tabindex = "0"
             class = "content">
             <div>${this.selected()?.text || '-'}</div>
@@ -164,14 +158,17 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
         }
     }
     
+    setValue(value: string){
+        this.value = value;
+        this.focus();
+    }
     nextSelect(){
         let current = this.currentOption();
         current++;
         if(current > this.items.length - 1){
             current = 0;
         }
-        this.value = this.items[current].value;
-
+        this.setValue(this.items[current].value);
     }
     prevSelect(){
         let current = this.currentOption();
@@ -179,18 +176,16 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
         if(current < 0){
             current = this.items.length - 1;
         }
-        this.value = this.items[current].value;
-
+        this.setValue(this.items[current].value);
     }
-    private _onOptionFocus(e: Event){
+    private _handleOptionFocus(e: Event){
         this._focusedOption = (e.target as HTMLElement).dataset.value!;
     }
-    private _onSelect(e: Event){
-        this.value = getEventDataset(e, 'value');
+    private _handleSelectClick(e: Event){
+        this.setValue(getEventDataset(e, 'value'))
         this.open = false;
         e.stopPropagation();
-    }
-    
+    }  
     handlekeyDown(e: KeyboardEvent){
         if(e.key === "ArrowDown"){
             this.nextSelect();
@@ -199,9 +194,12 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
             this.prevSelect();
         }
         if(e.key === "Enter"){
-            if(this.open){
-                this.value = this._focusedOption;
+            if(this.open){                
+                this.setValue(this._focusedOption)
                 this.open = false;
+            }
+            else{
+                this.open = true;
             }
         }
     }
@@ -212,15 +210,7 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
         }
     }
     private handleClick(){
-        if(this._isFocus && Date.now() - this._focusTime > 250){
-            this.open = !this.open;
-        }
-    }
-    private handleFocus(){
-        this._isFocus = true;
-        this._focusTime = Date.now();
-        this.open = true;
-        
+        this.open = !this.open;
     }
 }
 

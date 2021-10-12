@@ -8,12 +8,12 @@ export class OuterClickRemoveController implements ReactiveController{
       (this.host = host).addController(this);
     }
     hostConnected() {
-        document.addEventListener("click", this.onClick);
+        document.addEventListener("click", this.handleClick);
     }
     hostDisconnected() {
-        document.removeEventListener("click", this.onClick);
+        document.removeEventListener("click", this.handleClick);
     }
-    onClick = (e: Event) => {
+    handleClick = (e: Event) => {
         if(e.target !== this.host){
             this.host.remove();
         }

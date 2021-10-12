@@ -58,9 +58,9 @@ export declare class NumberField extends NumberField_base implements NumberProps
     validate(): void;
     private _clearValue;
     focus(): void;
-    private _onChange;
-    private _onInput;
-    private _onKeyDown;
+    private _handleChange;
+    private _handleInput;
+    private _handleKeyDown;
 }
 declare global {
     interface HTMLElementTagNameMap {

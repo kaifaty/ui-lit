@@ -5,7 +5,7 @@ declare type TPositionNote = {
     alignX?: TAlign;
     alignY?: TAlign;
 };
-export declare const calcPositionForNote: (el: HTMLElement, data: TPositionNote) => {
+export declare const calcPositionForPopup: (el: HTMLElement, data: TPositionNote) => {
     x: number;
     y: number;
 };

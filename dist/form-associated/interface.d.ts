@@ -12,13 +12,15 @@ export interface ValidityStateFlags {
     typeMismatch?: boolean;
     valueMissing?: boolean;
 }
-export interface FormAssociated {
-    findLabel(): LabelText | null;
+export interface FormAssociatedProps {
     readonly: boolean;
     disabled: boolean;
     name: string;
     required: boolean;
     value: string;
+}
+export interface FormAssociated extends FormAssociatedProps {
+    findLabel(): LabelText | null;
     readonly validationMessage: string;
     validity: ValidityStateFlags;
     validate(): void;

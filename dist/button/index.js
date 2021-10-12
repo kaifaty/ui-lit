@@ -16,8 +16,9 @@ let ButtomElement = class ButtomElement extends LitElement {
         this.borderless = false;
         this.switch = false;
         this.primary = false;
+        this.secondary = false;
         this.success = false;
-        this.error = false;
+        this.danger = false;
         this.switchOn = true;
         this.enter = new KeyDownController(this);
     }
@@ -33,8 +34,9 @@ let ButtomElement = class ButtomElement extends LitElement {
             switch: this.switch,
             "switch-on": this.switchOn,
             primary: this.primary,
+            secondary: this.secondary,
             success: this.success,
-            error: this.error,
+            danger: this.danger,
             disabled: this.disabled,
             wrapper: true,
             noselect: true,
@@ -60,7 +62,7 @@ let ButtomElement = class ButtomElement extends LitElement {
             >${this._iconBeforeTemplate()}<div><slot></slot></div>${this._iconAfterTemplate()}</div>`;
     }
     // ==== Events ====
-    onkeyDown(e) {
+    handlekeyDown(e) {
         if (e.key === "Enter" && document.activeElement === this) {
             this.submit();
         }
@@ -122,10 +124,13 @@ __decorate([
 ], ButtomElement.prototype, "primary", void 0);
 __decorate([
     property({ type: Boolean })
+], ButtomElement.prototype, "secondary", void 0);
+__decorate([
+    property({ type: Boolean })
 ], ButtomElement.prototype, "success", void 0);
 __decorate([
     property({ type: Boolean })
-], ButtomElement.prototype, "error", void 0);
+], ButtomElement.prototype, "danger", void 0);
 __decorate([
     property({ type: Boolean })
 ], ButtomElement.prototype, "switchOn", void 0);

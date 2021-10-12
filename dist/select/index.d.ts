@@ -1,14 +1,14 @@
 import { LitElement, TemplateResult } from 'lit';
-import { ClickController } from '../controllers/ClickController';
-import { KeyDownController } from '../controllers/KeyController';
+import { FormAssociatedProps } from '../form-associated/interface';
 declare type TSelectItem = {
     text: string | TemplateResult;
     value: string;
 };
-export interface IPropsSelect {
+export interface IPropsSelect extends FormAssociatedProps {
     items: TSelectItem[];
-    value: string;
     disabled: boolean;
+    optionsWidth: number;
+    optionsHeight: number;
 }
 declare const SelectElement_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
 export declare class SelectElement extends SelectElement_base implements IPropsSelect {
@@ -16,26 +16,29 @@ export declare class SelectElement extends SelectElement_base implements IPropsS
     items: TSelectItem[];
     value: string;
     optionsWidth: number;
+    optionsHeight: number;
     open: boolean;
-    clickController: ClickController;
-    keyPressController: KeyDownController;
-    isFocus: boolean;
-    focusTime: number;
-    _focusedOption: string;
+    private _clickController;
+    private _keyPressController;
+    private _isFocus;
+    private _focusTime;
+    private _focusedOption;
+    private _optionsPosition;
     selected(): TSelectItem;
     currentOption(): number;
     firstUpdated(): void;
+    willUpdate(): void;
     private _contentTemplate;
+    focus(): void;
     render(): TemplateResult<1>;
     updated(p: Map<string, unknown>): void;
+    setValue(value: string): void;
     nextSelect(): void;
     prevSelect(): void;
-    private _onOptionFocus;
-    private _onSelect;
-    onkeyDown(e: KeyboardEvent): void;
-    onDocumentClick(e: Event): void;
-    private onClick;
-    private onBlur;
-    private onFocus;
+    private _handleOptionFocus;
+    private _handleSelectClick;
+    handlekeyDown(e: KeyboardEvent): void;
+    handleDocumentClick(e: Event): void;
+    private handleClick;
 }
 export {};

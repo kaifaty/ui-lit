@@ -24,8 +24,12 @@ export const button = [
     .wrapper.icon-before.icon-after{
         grid-template-columns: auto auto auto;
     }
-    .wrapper.borderless{
+    .wrapper.borderless, div.wrapper.borderless:focus{
         border: none;
+        outline: none;
+    }
+    div.wrapper.borderless:focus{
+        background-color: var(--button-background-hover,  hsl(222, 20%, 96%));
     }
     .wrapper{
         cursor: pointer;
@@ -39,15 +43,16 @@ export const button = [
         border: var(--button-border, 1px solid  hsl(222, 20%, 65%));
         outline: var(--button-outline, none);
         border-radius: var(--button-radius, 3px);
-        color: var(--button-color, hsl(222, 20%, 20%));
-        background-color: var(--button-backround-color, hsl(222, 20%, 99%));
+        color: var(--button-color, hsl(222, 20%, 35%));
+        background-color: var(--button-backround, hsl(222, 20%, 99%));
         --icon-fill: var(--button-color);
+        font-weight: var(--button-weight, 600);
     }
     .wrapper:not(.disabled):hover{
         background-color: var(--button-background-hover,  hsl(222, 20%, 96%));
     }
     .wrapper:not(.disabled):focus{
-        background-color: var(--button-background-focus, var(--button-backround-color, hsl(222,20%, 99%)));
+        background-color: var(--button-background-focus, var(--button-backround, hsl(222,20%, 99%)));
         outline: var(--button-outline-focus, 1px solid hsla(222, 20%, 60%, 0.5));
         
     }
@@ -80,25 +85,26 @@ export const button = [
         outline: var(--button-success-outline-focus, 1px solid hsl(120, 95%, 50%));
     }
 
-    .wrapper.error{
-        color: var(--button-error, hsl(1, 95%, 15%));
-        background-color: var(--button-error-background, hsl(1, 95%, 80%));
-        border: 1px solid var(--button-error-border, hsl(1, 95%, 55%));
-        --icon-fill: var(--button-error);
+    .wrapper.danger{
+        color: var(--button-danger, hsl(1, 95%, 15%));
+        background-color: var(--button-danger-background, hsl(1, 95%, 80%));
+        border: 1px solid var(--button-danger-border, hsl(1, 95%, 55%));
+        --icon-fill: var(--button-danger);
     }
-    .wrapper.error:not(.disabled):hover{
-        background-color: var(--button-error-background-hover,  hsl(1, 95%, 75%));
+    .wrapper.danger:not(.disabled):hover{
+        background-color: var(--button-danger-background-hover,  hsl(1, 95%, 75%));
     }
-    .wrapper.error:not(.disabled):focus{
-        background-color: var(--button-error-background-hover,  hsl(1, 95%, 80%));
-        outline: var(--button-error-outline-focus, 1px solid  hsl(1, 95%, 55%));
+    .wrapper.danger:not(.disabled):focus{
+        background-color: var(--button-danger-background-hover,  hsl(1, 95%, 80%));
+        outline: var(--button-danger-outline-focus, 1px solid  hsl(1, 95%, 55%));
     }
 
     .wrapper.switch:focus{
         outline: none;
     }
     .wrapper.switch.switch-on{
-        background-color: var(--button-backround-color, hsl(222, 20%, 85%));
+        background-color: var(--button-switch-backround, hsl(222, 80%, 60%));
+        color: var(--button-switch-color, hsl(222, 80%, 98%));
     }
     .wrapper.switch:not(.switch-on):not(:hover),
     .wrapper.switch:not(.switch-on):focus

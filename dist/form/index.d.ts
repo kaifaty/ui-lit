@@ -19,9 +19,9 @@ export declare class FromElement extends LitElement implements IFormElement, IFo
     render(): import("lit-html").TemplateResult<1>;
     connectedCallback(): void;
     disconnectedCallback(): void;
-    private _onSubmit;
-    private _onFormAttached;
-    private _onFormDettached;
+    private _handleSubmit;
+    private _handleFormAttached;
+    private _handleFormDettached;
     private _getData;
     checkValidity(): boolean;
     reportValidity(): boolean;

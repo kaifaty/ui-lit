@@ -1,7 +1,7 @@
 import { __decorate } from "tslib";
 import { html, nothing } from 'lit';
 import { state, property } from 'lit/decorators';
-import { calcPositionForNote } from '../helpers/position';
+import { calcPositionForPopup } from '../helpers/position';
 import '../note';
 import { ref, createRef } from 'lit/directives/ref.js';
 export const formAssociated = (superClass) => {
@@ -40,7 +40,7 @@ export const formAssociated = (superClass) => {
         }
         connectedCallback() {
             super.connectedCallback();
-            this.addEventListener("keypress", this._keypressHandler);
+            this.addEventListener("keypress", this._handleKeypress);
             this.dispatchEvent(new CustomEvent("fromAttached", {
                 bubbles: true,
                 composed: true,
@@ -57,9 +57,9 @@ export const formAssociated = (superClass) => {
         }
         render() {
             if (this.showNote) {
-                const { x, y } = calcPositionForNote(this, { width: 400, height: 40 });
+                const { x, y } = calcPositionForPopup(this, { width: 400, height: 40 });
                 return html `<note-element 
-                    @close = "${this._onCloseNote}" 
+                    @close = "${this._handleCloseNote}" 
                     style = "left: ${x}px; top: ${y + 5}px"
                     class = "error" ${ref(this.noteRef)}>${this.validationMessage}</note-element>`;
             }
@@ -133,10 +133,10 @@ export const formAssociated = (superClass) => {
             this.checkValidity();
         }
         /** ========= */
-        _onCloseNote() {
+        _handleCloseNote() {
             this.showNote = false;
         }
-        _keypressHandler(e) {
+        _handleKeypress(e) {
             if (e.key === 'Enter') {
                 this.dispatchEvent(new CustomEvent('submitForm', {
                     bubbles: true,

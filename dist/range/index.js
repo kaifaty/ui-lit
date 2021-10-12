@@ -4,6 +4,7 @@ import { customElement, property, state, query } from 'lit/decorators';
 import { formAssociated } from '../form-associated/index';
 import { noselect } from '../styles/noselect';
 import { getClientX } from '../helpers';
+/** <range-element></range-element> */
 let RangeElement = class RangeElement extends formAssociated(LitElement) {
     constructor() {
         super(...arguments);
@@ -26,20 +27,20 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
         this._max = 100;
         this._value = '0';
         // ==== Events ==== 
-        this._onPointerDown = (e) => {
+        this._handlePointerDown = (e) => {
             if (this.isDisabled())
                 return;
             this._isMoving = true;
             this.isPercentHidden = false;
         };
-        this._onPointerMove = (e) => {
+        this._handlePointerMove = (e) => {
             if (this._isMoving === true) {
                 this._movePosition(e);
                 this.isPercentHidden = false;
                 e.preventDefault();
             }
         };
-        this._onPointerUp = (e) => {
+        this._handlePointerUp = (e) => {
             if (this._isMoving === true) {
                 this._isMoving = false;
                 this._hidePercent();
@@ -47,14 +48,14 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
                 e.preventDefault();
             }
         };
-        this._onPointOver = (e) => {
+        this._handlePointOver = (e) => {
             if (this.isDisabled())
                 return;
             clearTimeout(this._timeout);
             this.isPercentHidden = false;
             e.preventDefault();
         };
-        this._onPointLeave = (e) => {
+        this._handlePointLeave = (e) => {
             e.preventDefault();
             this._hidePercent();
         };
@@ -240,7 +241,6 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
     }
     _calcOffset(e) {
         const xPosition = getClientX(e);
-        console.log(e, xPosition, this._trackStartX);
         return xPosition - this._trackStartX; //  - this._trackStartX - this._thumbSize / 2;
     }
     _calcPercentByOffset(offset) {
@@ -338,10 +338,9 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
         return nothing;
     }
     _percentTemplate() {
-        if (this.showPercent)
+        if (!this.showPercent)
             return nothing;
-        const translateX = (this.percent * 0.25).toFixed(1);
-        const left = this.offsetX + this._padding - this._thumbSize * this.percent / 100; //+ this._trackSize * this.percent / 100 + this._padding;
+        const left = this.offsetX + this._padding - this._thumbSize * this.percent / 100;
         return html `<div style = "left: ${left}px;"
                         class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this.percent}%</div> `;
     }
@@ -361,10 +360,10 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
     render() {
         return html `
         <div class = "track ${this.isDisabled() ? 'disabled' : ''}"
-            @mousedown = "${this._onPointerDown}"
-            @mouserover = "${this._onPointOver}"
-            @mouseleave = "${this._onPointLeave}"
-            @touchstart = "${this._onPointerDown}">
+            @mousedown = "${this._handlePointerDown}"
+            @mouserover = "${this._handlePointOver}"
+            @mouseleave = "${this._handlePointLeave}"
+            @touchstart = "${this._handlePointerDown}">
             ${this._thumbTemplate()}
             <div class = "track-line"></div>
             ${this._pointersTemplate()}
@@ -375,10 +374,10 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
     }
     connectedCallback() {
         super.connectedCallback();
-        document.addEventListener("touchmove", this._onPointerMove, { passive: false });
-        document.addEventListener("touchend", this._onPointerUp);
-        document.addEventListener("mousemove", this._onPointerMove, { passive: false });
-        document.addEventListener("mouseup", this._onPointerUp);
+        document.addEventListener("touchmove", this._handlePointerMove, { passive: false });
+        document.addEventListener("touchend", this._handlePointerUp);
+        document.addEventListener("mousemove", this._handlePointerMove, { passive: false });
+        document.addEventListener("mouseup", this._handlePointerUp);
         const rect = this.getBoundingClientRect();
         this._trackSize = this._calcTackWidth(rect);
         this._trackStartX = this._calcTrackStartX(rect);
@@ -386,10 +385,10 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
     }
     disconnectedCallback() {
-        document.removeEventListener("touchmove", this._onPointerMove);
-        document.removeEventListener("touchend", this._onPointerUp);
-        document.removeEventListener("mousemove", this._onPointerMove);
-        document.removeEventListener("mouseup", this._onPointerUp);
+        document.removeEventListener("touchmove", this._handlePointerMove);
+        document.removeEventListener("touchend", this._handlePointerUp);
+        document.removeEventListener("mousemove", this._handlePointerMove);
+        document.removeEventListener("mouseup", this._handlePointerUp);
         super.disconnectedCallback();
     }
 };

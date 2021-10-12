@@ -111,9 +111,9 @@ let NumberField = class NumberField extends formAssociated(LitElement) {
                    placeholder = "${this.placeholder}"
                    spellcheck = "${this.spellcheck}"
                    inputmode = "${this.inputmode}"
-                   @input = "${this._onInput}" 
-                   @keydown = "${this._onKeyDown}"
-                   @change = "${this._onChange}"
+                   @input = "${this._handleInput}" 
+                   @keydown = "${this._handleKeyDown}"
+                   @change = "${this._handleChange}"
                    ${ref(this.inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
@@ -165,13 +165,13 @@ let NumberField = class NumberField extends formAssociated(LitElement) {
         (_b = this.inputRef.value) === null || _b === void 0 ? void 0 : _b.setSelectionRange(this.value.length, this.value.length);
     }
     // ==== Events ====
-    _onChange(e) {
+    _handleChange(e) {
         this.reportValidity();
     }
-    _onInput(e) {
+    _handleInput(e) {
         this.value = e.target.value;
     }
-    _onKeyDown(e) {
+    _handleKeyDown(e) {
         if (!AvailabledKeys.includes(e.key) &&
             !Numbers.includes(e.key) &&
             !(CtrAvailable.includes(e.key) && (e.ctrlKey || e.metaKey) ||

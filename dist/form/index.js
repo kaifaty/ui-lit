@@ -9,14 +9,14 @@ let FromElement = class FromElement extends LitElement {
         this.noValidate = false;
         this.disabled = false;
         // ==== Events ==== 
-        this._onSubmit = (e) => {
+        this._handleSubmit = (e) => {
             e.preventDefault();
             this.submit();
         };
-        this._onFormAttached = (e) => {
+        this._handleFormAttached = (e) => {
             this._elements.push(e.detail);
         };
-        this._onFormDettached = (e) => {
+        this._handleFormDettached = (e) => {
             this._elements.filter(it => e.detail !== it);
         };
     }
@@ -31,15 +31,15 @@ let FromElement = class FromElement extends LitElement {
     }
     connectedCallback() {
         super.connectedCallback();
-        this.addEventListener("submitForm", this._onSubmit);
-        this.addEventListener("fromAttached", this._onFormAttached);
-        this.addEventListener("fromDettached", this._onFormDettached);
+        this.addEventListener("submitForm", this._handleSubmit);
+        this.addEventListener("fromAttached", this._handleFormAttached);
+        this.addEventListener("fromDettached", this._handleFormDettached);
     }
     disconnectedCallback() {
         super.disconnectedCallback();
-        this.removeEventListener("submitForm", this._onSubmit);
-        this.removeEventListener("fromAttached", this._onFormAttached);
-        this.removeEventListener("fromDettached", this._onFormDettached);
+        this.removeEventListener("submitForm", this._handleSubmit);
+        this.removeEventListener("fromAttached", this._handleFormAttached);
+        this.removeEventListener("fromDettached", this._handleFormDettached);
     }
     _getData() {
         const data = {};

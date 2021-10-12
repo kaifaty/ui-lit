@@ -11,7 +11,7 @@ export declare class NoteElement extends LitElement {
     connectedCallback(): void;
     disconnectedCallback(): void;
     render(): import("lit-html").TemplateResult<1>;
-    onClick: (e: Event) => void;
+    handleClick: (e: Event) => void;
 }
 declare global {
     interface HTMLElementTagNameMap {

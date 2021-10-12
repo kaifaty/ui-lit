@@ -7,7 +7,7 @@ export interface ButtonProps {
     borderless?: boolean;
     switch?: boolean;
     success?: boolean;
-    error?: boolean;
+    danger?: boolean;
     switchOn?: boolean;
 }
 export declare class ButtomElement extends LitElement implements ButtonProps {
@@ -21,8 +21,9 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
     borderless: boolean;
     switch: boolean;
     primary: boolean;
+    secondary: boolean;
     success: boolean;
-    error: boolean;
+    danger: boolean;
     switchOn: boolean;
     enter: KeyDownController;
     connectedCallback(): void;
@@ -32,8 +33,9 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
         switch: boolean;
         "switch-on": boolean;
         primary: boolean;
+        secondary: boolean;
         success: boolean;
-        error: boolean;
+        danger: boolean;
         disabled: boolean;
         wrapper: boolean;
         noselect: boolean;
@@ -43,7 +45,7 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
     private _iconBeforeTemplate;
     private _iconAfterTemplate;
     render(): TemplateResult<1>;
-    onkeyDown(e: KeyboardEvent): void;
+    handlekeyDown(e: KeyboardEvent): void;
     private _click;
     toggleSwitch(): void;
     submit(): void;

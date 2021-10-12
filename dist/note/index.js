@@ -6,7 +6,7 @@ let NoteElement = class NoteElement extends LitElement {
         super(...arguments);
         this._hosted = 0;
         this._minShowTime = 500;
-        this.onClick = (e) => {
+        this.handleClick = (e) => {
             if (e.target !== this && Date.now() - this._hosted > this._minShowTime) {
                 this.dispatchEvent(new CustomEvent("close"));
             }
@@ -25,11 +25,11 @@ let NoteElement = class NoteElement extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this._hosted = Date.now();
-        document.addEventListener("click", this.onClick);
+        document.addEventListener("click", this.handleClick);
     }
     disconnectedCallback() {
         super.disconnectedCallback();
-        document.removeEventListener("click", this.onClick);
+        document.removeEventListener("click", this.handleClick);
     }
     render() {
         return html `<slot></slot>`;

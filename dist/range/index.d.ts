@@ -1,6 +1,5 @@
 import { LitElement, TemplateResult } from 'lit';
 import type { FormAssociated } from '../form-associated/interface';
-import { IUIEvent } from '../../dist/helpers';
 export interface IRangeProps extends FormAssociated {
     value: string;
     valueAsNumber: number;
@@ -12,6 +11,7 @@ export interface IRangeProps extends FormAssociated {
     showPercent: boolean;
 }
 declare const RangeElement_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
+/** <range-element></range-element> */
 export declare class RangeElement extends RangeElement_base {
     static get styles(): import("lit").CSSResult[];
     static get properties(): {
@@ -67,11 +67,11 @@ export declare class RangeElement extends RangeElement_base {
     private _hidePercent;
     private _movePosition;
     setPercent(value: number): void;
-    _onPointerDown: (e: IUIEvent) => void;
-    _onPointerMove: (e: Event) => void;
-    _onPointerUp: (e: IUIEvent) => void;
-    _onPointOver: (e: Event) => void;
-    _onPointLeave: (e: Event) => void;
+    private _handlePointerDown;
+    private _handlePointerMove;
+    private _handlePointerUp;
+    private _handlePointOver;
+    private _handlePointLeave;
     private _pointersTemplate;
     private _percentTemplate;
     private _blockedVolume;

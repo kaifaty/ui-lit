@@ -30,7 +30,7 @@ export declare class CheckboxElement extends CheckboxElement_base implements ICh
     private _switcherTemplate;
     private _checkboxTemplate;
     render(): import("lit-html").TemplateResult<1>;
-    private _onClick;
+    private _handleClick;
 }
 declare global {
     interface HTMLElementTagNameMap {

@@ -7,7 +7,7 @@ let LabelText = class LabelText extends LitElement {
         super(...arguments);
         this.for = '';
         this._connectedNode = null;
-        this._onClick = () => {
+        this._handleClick = () => {
             var _a;
             (_a = this._connectedNode) === null || _a === void 0 ? void 0 : _a.focus();
         };
@@ -15,12 +15,12 @@ let LabelText = class LabelText extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this.appendConnectedField(this._findConnectedField());
-        this.addEventListener('click', this._onClick);
+        this.addEventListener('click', this._handleClick);
     }
     disconnectedCallback() {
         super.disconnectedCallback();
         this._connectedNode = null;
-        this.removeEventListener('click', this._onClick);
+        this.removeEventListener('click', this._handleClick);
     }
     render() {
         return html `<slot></slot>`;

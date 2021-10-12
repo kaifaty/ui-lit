@@ -4,5 +4,5 @@ export declare class OuterClickRemoveController implements ReactiveController {
     constructor(host: LitElement);
     hostConnected(): void;
     hostDisconnected(): void;
-    onClick: (e: Event) => void;
+    handleClick: (e: Event) => void;
 }

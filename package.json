@@ -15,7 +15,6 @@
   "scripts": {
     "dev": "parcel demo/index.html -d ./demo/dist",
     "build": "tsc",
-    
     "watch": "tsc -w",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -38,14 +37,13 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.15.5",
-    "@storybook/addon-actions": "^6.3.8",
-    "@storybook/addon-essentials": "^6.3.8",
-    "@storybook/addon-links": "^6.3.8",
-    "@storybook/web-components": "^6.3.8",
+    "@storybook/addon-actions": "^6.3.10",
+    "@storybook/addon-essentials": "^6.3.10",
+    "@storybook/addon-links": "^6.3.10",
+    "@storybook/web-components": "^6.3.10",
     "babel-loader": "^8.2.2",
     "lit": "^2.0.0",
     "tslib": "^2.1.0",
     "typescript": "latest"
-  },
-  "dependencies": {}
+  }
 }

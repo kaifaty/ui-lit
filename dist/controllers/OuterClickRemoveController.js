@@ -1,6 +1,6 @@
 export class OuterClickRemoveController {
     constructor(host) {
-        this.onClick = (e) => {
+        this.handleClick = (e) => {
             if (e.target !== this.host) {
                 this.host.remove();
             }
@@ -8,9 +8,9 @@ export class OuterClickRemoveController {
         (this.host = host).addController(this);
     }
     hostConnected() {
-        document.addEventListener("click", this.onClick);
+        document.addEventListener("click", this.handleClick);
     }
     hostDisconnected() {
-        document.removeEventListener("click", this.onClick);
+        document.removeEventListener("click", this.handleClick);
     }
 }

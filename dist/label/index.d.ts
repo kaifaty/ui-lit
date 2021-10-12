@@ -13,7 +13,7 @@ export declare class LabelText extends LitElement {
     appendConnectedField(el: TLabled | HTMLInputElement | null): void;
     removeConnectedField(el?: TLabled | HTMLInputElement | null): void;
     private _findConnectedField;
-    _onClick: () => void;
+    _handleClick: () => void;
 }
 declare global {
     interface HTMLElementTagNameMap {

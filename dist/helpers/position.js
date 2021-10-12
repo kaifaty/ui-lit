@@ -38,10 +38,9 @@ const getX = (bound, nedeedWidth, align = 'smart') => {
     }
     return x;
 };
-export const calcPositionForNote = (el, data) => {
+export const calcPositionForPopup = (el, data) => {
     const bound = el.getBoundingClientRect();
     const y = getY(bound, data.height, data.alignY);
     const x = getX(bound, data.width, data.alignX);
-    console.log(x);
     return { x, y };
 };

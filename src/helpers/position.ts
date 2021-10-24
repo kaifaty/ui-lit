@@ -92,20 +92,47 @@ type TPositionNote = {
     alignX?: TAlign
     alignY?: TAlign
 }
+interface IDOMRect{
+    top: number
+    right:  number
+    bottom: number
+    left: number
+    width: number
+    height: number
+    x: number
+    y: number
+}
+interface IExtendDomRect extends IDOMRect{
+    offsetTop: number
+    offsetLeft: number
+}
 
+function getBoundingClientRect(el: HTMLElement): IDOMRect {
+    var rect = el.getBoundingClientRect();
+    return {
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      left: rect.left,
+      width: rect.width,
+      height: rect.height,
+      x: rect.x,
+      y: rect.y      
+    };
+  }
 
-const getY = (bound: DOMRect, neededHeight: number, align: TAlign = 'smart') => {
+const getY = (bound: IExtendDomRect, neededHeight: number, align: TAlign = 'smart') => {
     let y = 0;
     if(bound.top - neededHeight < 0){
-        y = bound.bottom + window.scrollY;
+        y = bound.bottom  + window.scrollY;
     }
     else{
-        y = bound.top - neededHeight + window.scrollY
+        y = bound.top - neededHeight +  window.scrollY
     }
     return y;
 }
 
-const getX = (bound: DOMRect, nedeedWidth: number, align: TAlign = 'smart') => {
+const getX = (bound: IExtendDomRect, nedeedWidth: number, align: TAlign = 'smart') => {
     let x = 0;
     if(bound.left - nedeedWidth < 0){
         x = bound.left + window.scrollX;;
@@ -117,8 +144,10 @@ const getX = (bound: DOMRect, nedeedWidth: number, align: TAlign = 'smart') => {
 }
 
 export const calcPositionForPopup = (el: HTMLElement, data: TPositionNote) => {
-    const bound = el.getBoundingClientRect();
-    
+    const offsetTop = el.offsetTop;
+    const offsetLeft = el.offsetLeft;
+    const bound: IExtendDomRect = {...getBoundingClientRect(el), offsetTop, offsetLeft};
+
     const y = getY(bound, data.height, data.alignY);
     const x = getX(bound, data.width, data.alignX);
     return {x, y};

@@ -7,6 +7,42 @@ import '../note';
 import { ref, createRef } from 'lit/directives/ref.js';
 import type { LabelText } from '../label';
 
+type TValidationMessageKey = keyof ValidityStateFlags;
+type TValidationMessages = Record<TValidationMessageKey, {[k: string] : string}>
+
+const defaultValidationMessages: TValidationMessages = {
+    badInput: {
+        "en": "Bad input",
+    },
+    customError: {
+        "en": "Custom error",
+    },
+    patternMismatch: {
+        "en": "Pattern ${pattern} error",
+    },
+    rangeOverflow: {
+        "en": "Value must be less then ${max}",
+    },
+    rangeUnderflow: {
+        "en": "Value must be more then ${min}",
+    },
+    stepMismatch: {
+        "en": "Value must be in step of ${step}",
+    },
+    tooLong: {
+        "en": "Value is too long",
+    },
+    tooShort: {
+        "en": "Value is too short",
+    },
+    valueMissing: {
+        "en": "Value is required",
+    },
+    typeMismatch: {
+        "en": "Type mismatch",
+    },
+};
+
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -18,7 +54,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
                 value: {type: String},
             }
         }
-        @state() showNote: boolean = false;
+        @property({type: Boolean, reflect: true}) showNote: boolean = false;
         @property({type: Boolean}) disabled: boolean = false;
         @property({type: Boolean}) required: boolean = false;
         @property({type: Boolean}) readonly: boolean = false;
@@ -40,6 +76,10 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         public value: string = '';
         protected customValidationMessage = '';
         _isFirstUpdated = false;
+        public min?: number = NaN;
+        public max?: number = NaN;
+        public step?: number = NaN;
+        public pattern?: string = '';
 
         
         constructor(...args: any[]) {
@@ -66,10 +106,11 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         }
         render(){
             if(this.showNote){
-                const {x, y} = calcPositionForPopup(this, {width: 400, height: 40});
+                //const {x, y} = calcPositionForPopup(this, {width: 400, height: 40});
+                // style = "left: ${x}px; top: ${y + 5}px"
                 return html`<note-element 
                     @close = "${this._handleCloseNote}" 
-                    style = "left: ${x}px; top: ${y + 5}px"
+                    style = "transform: translate(0, -100%);"
                     class = "error" ${ref(this.noteRef)}>${this.validationMessage}</note-element>`;
             }
             return nothing;
@@ -106,8 +147,35 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         }
 
         /** Validation */
+        private _getLang(): string{
+            return window.ValidationsMessagesLang || window.navigator.language.split('-')[0];
+        }
+        private _getErrorText(key: TValidationMessageKey){
+            const text = window.ValidationsMessages?.[key][this._getLang()] 
+                || window.ValidationsMessages?.[key]['en'] 
+                || defaultValidationMessages[key][this._getLang()]
+                || defaultValidationMessages[key]['en'];
+            const data: Record<string, number | string | undefined> = {
+                min: this.min,
+                max: this.max,
+                step: this.step,
+            };
+            return text.replace(/\$\{([a-zA-Z0-9_.,=)( ]+)\}/g, (m, n) => {
+                let value = data[n];
+                return value !== undefined
+                    ? String(value)
+                    : m
+            })
+        }
         public get validationMessage(){
-            return "Ошибка";
+            const keys = Object.keys(this.validity);
+            for(const key of keys){
+                const v = this.validity[key as TValidationMessageKey];
+                if(v){
+                    return this._getErrorText(key as TValidationMessageKey)
+                }
+            }
+            return "";
         }
         checkValidity(){
             if(!this._isFirstUpdated) return false;
@@ -160,4 +228,12 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
     
 
     return FormAssociated as Constructor<FormAssociatedElement> & T;;
+}
+
+
+declare global {
+    interface Window { 
+        ValidationsMessages?: TValidationMessages,
+        ValidationsMessagesLang?: string
+     }
 }

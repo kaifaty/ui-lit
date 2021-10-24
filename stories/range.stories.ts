@@ -2,7 +2,6 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/range';
-import { RangeElement } from '../dist/range';
 import type { IRangeProps } from '../src/range';
 
 

@@ -28,19 +28,19 @@ export class TabsElement extends formAssociated(LitElement) implements ITabs{
         display: flex;
     }
     .type-button .tab{
-        border: 1px solid var(--tab-border, #333);
-        padding: var(--tab-button-padding, 3px 10px);
+        border: 1px solid var(--tab-border, tomato);
+        padding: var(--tab-button-padding, 5px 14px);
     }
     .type-tab .tab{
-        padding: var(--tab-padding, 3px 10px);
+        padding: var(--tab-padding, 5px 14px);
         border: 1px solid transparent;
-        border-bottom: 1px solid var(--tab-border, #333);
+        border-bottom: 1px solid var(--tab-border, tomato);
         
     }
     .type-tab .tab.selected{
-        border-top: 1px solid var(--tab-border, #333);
-        border-left: 1px solid var(--tab-border, #333);
-        border-right: 1px solid var(--tab-border, #333);
+        border-top: 1px solid var(--tab-border, tomato);
+        border-left: 1px solid var(--tab-border, tomato);
+        border-right: 1px solid var(--tab-border, tomato);
         border-bottom: 1px solid transparent;
     }
     .tab{
@@ -51,12 +51,11 @@ export class TabsElement extends formAssociated(LitElement) implements ITabs{
     .tab.selected, 
     :not(.disabled) .tab:not(:focus):hover, 
     :not(.disabled) :focus{
-        background-color: #eee;
+        background-color: tomato;
     }
     .disabled{
         opacity: 0.5;
-    }`;
-    
+    }`;    
     @property({type: Array}) items: TTab[] = [];
     @property({type: String}) type: TTabType = 'button';
     private _keyPressController = new KeyDownController(this);
@@ -91,6 +90,10 @@ export class TabsElement extends formAssociated(LitElement) implements ITabs{
         if(this.disabled) return;
         this.value = value;
         (this.shadowRoot?.querySelector(".value-" + value) as HTMLElement)?.focus();
+        this.dispatchEvent(new CustomEvent("changed", {
+            detail: this.value,
+            bubbles: true
+        }))
     }
     nextSelect(){
         let current = this.currentOption();

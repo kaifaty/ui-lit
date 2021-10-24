@@ -26,16 +26,19 @@ export const input = css`
     top: 50%;
     transform: translateY(-50%);
 }
-input{
+input, textarea{
     height: 100%;
     width: 100%;
     font-size: var(--input-font-size, inherit);
     box-sizing: border-box;
     padding: var(--input-padding, 2px 8px);
     border: 1px solid var(--input-border, hsla(222, 20%, 60%, 0.5));
+    text-align: var(--input-align, initial);
+    background-color: var(--input-background, #fff);
 }
 
-input:focus{
+input:focus, 
+textarea:focus{
     outline: var(--input-outline-focus, 1px solid hsla(222, 20%, 60%, 0.5));
 }
 input:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.3s ease;}
@@ -48,4 +51,13 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active{
     box-shadow: 0 0 0 30px white inset
-}`
+}
+
+textarea{
+}
+
+textarea:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.3s ease;}
+textarea:focus::-moz-placeholder          {opacity: 0; transition: opacity 0.3s ease;}
+textarea:focus:-moz-placeholder           {opacity: 0; transition: opacity 0.3s ease;}
+textarea:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.3s ease;}
+`

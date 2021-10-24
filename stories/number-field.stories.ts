@@ -36,6 +36,7 @@ Default.args = {
     autofocus: false,
     useCancelButton: false,
     replaceToRange: false,
+    required: false,
 }
 
 export default {

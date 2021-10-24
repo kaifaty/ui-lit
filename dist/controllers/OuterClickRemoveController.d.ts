@@ -1,8 +1,12 @@
-import { ReactiveController, LitElement } from 'lit';
+import { ReactiveController, ReactiveControllerHost } from 'lit';
+interface IClickControllerHost extends ReactiveControllerHost {
+    handleClick(e: Event): void;
+}
 export declare class OuterClickRemoveController implements ReactiveController {
-    host: LitElement;
-    constructor(host: LitElement);
+    host: IClickControllerHost;
+    constructor(host: IClickControllerHost);
     hostConnected(): void;
     hostDisconnected(): void;
     handleClick: (e: Event) => void;
 }
+export {};

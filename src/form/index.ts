@@ -13,6 +13,7 @@ export interface IFormElement{
     reportValidity(): boolean
     submit(): void
 }
+type TReturnData = Record<string, string | boolean | number>;
 @customElement("form-element")
 export class FromElement extends LitElement implements IFormElement, IFormProps{
     _elements: FormAssociatedElement[] = []
@@ -54,7 +55,7 @@ export class FromElement extends LitElement implements IFormElement, IFormProps{
         this._elements.filter(it => e.detail !== it);
     }
     private _getData(){
-        const data: Record<string, string | boolean | number> = {};
+        const data: TReturnData = {};
 
         this._elements.forEach(it => {
             if(it.name){
@@ -88,17 +89,16 @@ export class FromElement extends LitElement implements IFormElement, IFormProps{
         }
 
     }
-    submit(): void{
-        
+    submit(): false | TReturnData{
         if(!this.noValidate && !this.reportValidity()){
-            return;
+            return false;
         }
+        const data = this._getData();
         this.dispatchEvent(new CustomEvent('submit', {
-            detail: {
-                data: this._getData(),
-            },
+            detail: { data },
             bubbles: true
         }))
+        return data;
     }
     reset(){
 

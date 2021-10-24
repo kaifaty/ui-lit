@@ -1,16 +1,13 @@
 import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators';
+import { OuterClickRemoveController } from '../controllers/OuterClickRemoveController';
 let NoteElement = class NoteElement extends LitElement {
     constructor() {
         super(...arguments);
         this._hosted = 0;
         this._minShowTime = 500;
-        this.handleClick = (e) => {
-            if (e.target !== this && Date.now() - this._hosted > this._minShowTime) {
-                this.dispatchEvent(new CustomEvent("close"));
-            }
-        };
+        this._handle = new OuterClickRemoveController(this);
     }
     getSize() {
         const bound = this.getBoundingClientRect();
@@ -25,14 +22,14 @@ let NoteElement = class NoteElement extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this._hosted = Date.now();
-        document.addEventListener("click", this.handleClick);
-    }
-    disconnectedCallback() {
-        super.disconnectedCallback();
-        document.removeEventListener("click", this.handleClick);
     }
     render() {
         return html `<slot></slot>`;
+    }
+    handleClick(e) {
+        if (e.target !== this && Date.now() - this._hosted > this._minShowTime) {
+            this.dispatchEvent(new CustomEvent("close"));
+        }
     }
 };
 NoteElement.styles = css `
@@ -44,20 +41,20 @@ NoteElement.styles = css `
         transition: 0.4s ease-in;
         border: 1px solid var(--note-border-color);
         z-index: 10;
-        padding: 5px 15px;
-        border-radius: 3px;
+        padding: 5px;
+        border-radius: 1px;
         box-sizing: border-box;
-        background-color: var(--note-background-color, #fff);
-        color: var(--note-color, red);
+        background-color: var(--note-background-color, rgba(255,255,255,0.85));
+        color: var(--note-color);
     }
     :host(.visible){
         visibility: visible;
         opacity: 1;
     }
     :host(.error){
-        background-color: var(--note-error-background-color, #fff);
+        /*background-color: var(--note-error-background-color, #fff);*/
         color: var(--note-error-color, red);
-        border: 1px solid var(--note-error-border-color, #ff7e6d);
+        /*border: 1px solid var(--note-error-border-color, #ff7e6d);*/
     }
     `;
 NoteElement = __decorate([

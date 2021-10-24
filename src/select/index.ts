@@ -12,7 +12,7 @@ import { scrollbar } from '../styles/scrollbar';
 import { FormAssociatedProps } from '../form-associated/interface';
 
 
-type TSelectItem = {
+export type TSelectItem = {
     text: string | TemplateResult
     value: string
 }
@@ -112,6 +112,7 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
         const optionStyles = {
             width: this.optionsWidth + "px",
             height: (this.optionsHeight ? this.optionsHeight + "px" : "initial"),
+            //transform: `translate(0, 100%);`
             left: this._optionsPosition.x + "px",
             top: this._optionsPosition.y + "px"
         };

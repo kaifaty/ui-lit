@@ -5,3 +5,11 @@
     font-weight: normal;
     font-style: normal;
 }
+/* fallback */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url('material.woff2') format('woff2');
+  }
+  

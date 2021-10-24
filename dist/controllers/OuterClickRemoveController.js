@@ -1,9 +1,7 @@
 export class OuterClickRemoveController {
     constructor(host) {
         this.handleClick = (e) => {
-            if (e.target !== this.host) {
-                this.host.remove();
-            }
+            this.host.handleClick(e);
         };
         (this.host = host).addController(this);
     }

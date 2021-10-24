@@ -10,6 +10,7 @@ export interface IFormElement {
     reportValidity(): boolean;
     submit(): void;
 }
+declare type TReturnData = Record<string, string | boolean | number>;
 export declare class FromElement extends LitElement implements IFormElement, IFormProps {
     _elements: FormAssociatedElement[];
     get length(): number;
@@ -26,7 +27,7 @@ export declare class FromElement extends LitElement implements IFormElement, IFo
     checkValidity(): boolean;
     reportValidity(): boolean;
     updated(props: Map<string, string | boolean>): void;
-    submit(): void;
+    submit(): false | TReturnData;
     reset(): void;
 }
 declare global {
@@ -34,3 +35,4 @@ declare global {
         'form-element': FromElement;
     }
 }
+export {};

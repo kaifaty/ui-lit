@@ -17,6 +17,19 @@ const xSmartPos = (bound, tooltip, element) => {
     }
     return window.innerWidth - tooltip.clientWidth - 20;
 };
+function getBoundingClientRect(el) {
+    var rect = el.getBoundingClientRect();
+    return {
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+    };
+}
 const getY = (bound, neededHeight, align = 'smart') => {
     let y = 0;
     if (bound.top - neededHeight < 0) {
@@ -39,7 +52,9 @@ const getX = (bound, nedeedWidth, align = 'smart') => {
     return x;
 };
 export const calcPositionForPopup = (el, data) => {
-    const bound = el.getBoundingClientRect();
+    const offsetTop = el.offsetTop;
+    const offsetLeft = el.offsetLeft;
+    const bound = { ...getBoundingClientRect(el), offsetTop, offsetLeft };
     const y = getY(bound, data.height, data.alignY);
     const x = getX(bound, data.width, data.alignX);
     return { x, y };

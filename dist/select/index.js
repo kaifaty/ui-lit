@@ -52,6 +52,7 @@ let SelectElement = class SelectElement extends formAssociated(LitElement) {
         const optionStyles = {
             width: this.optionsWidth + "px",
             height: (this.optionsHeight ? this.optionsHeight + "px" : "initial"),
+            //transform: `translate(0, 100%);`
             left: this._optionsPosition.x + "px",
             top: this._optionsPosition.y + "px"
         };

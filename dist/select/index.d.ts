@@ -1,6 +1,6 @@
 import { LitElement, TemplateResult } from 'lit';
 import { FormAssociatedProps } from '../form-associated/interface';
-declare type TSelectItem = {
+export declare type TSelectItem = {
     text: string | TemplateResult;
     value: string;
 };

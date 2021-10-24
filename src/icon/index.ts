@@ -1,13 +1,14 @@
 import { LitElement, css,  } from 'lit';
 import { property, customElement } from 'lit/decorators';
 
-
+export interface IIconProps{
+    material: boolean
+    icon: string
+}
 
 @customElement("icon-element")
 export class IconElement extends LitElement{
     static iconsMap: Record<string, number> = {
-        
-
         "help": parseInt(`006E`, 16),
         "dropdown": parseInt(`0069`, 16),
         "arrow-down": parseInt(`004e`, 16),
@@ -97,6 +98,7 @@ export class IconElement extends LitElement{
         "email": "📧",
     };
     @property({type: String}) icon: string = '';
+    @property({type: Boolean}) material: boolean = false;
     static styles = css`
     :host{
         cursor: pointer;
@@ -105,6 +107,7 @@ export class IconElement extends LitElement{
         font-style: normal;
         font-weight: normal;
         font-family: var(--icon-font-family, 'Icons');
+        color: var(--icon-color, #000);
         font-size: var(--icon-font-size, 12px);
         -webkit-touch-callout: none; /* iOS Safari */
         -webkit-user-select: none; /* Safari */
@@ -113,6 +116,23 @@ export class IconElement extends LitElement{
             -ms-user-select: none; /* Internet Explorer/Edge */
                 user-select: none; /* Non-prefixed version, currently
                                         supported by Chrome, Edge, Opera and Firefox */
+    }
+    :host(.material){
+        font-family: 'Material Icons';
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -moz-font-feature-settings: 'liga';
+        -moz-osx-font-smoothing: grayscale;
+    }
+    :host(.font-awesome){
+        font-family: var(--icon-font-family, 'Icons');
     }
     :host(.text-danger),
     :host(.danger),
@@ -128,13 +148,19 @@ export class IconElement extends LitElement{
         transform: rotate(-180deg) translateY(3px)
     }
     `
+    willUpdate(){
+        if(this.material) this.classList.add("material");
+        else this.classList.remove("material");
+    }
     render(){
         const code = IconElement.iconsMap[this.icon];
-        if(code){
-            return String.fromCharCode(code);    
-        }
-        if(IconElement.defaultIcons[this.icon]){
-            return IconElement.defaultIcons[this.icon];
+        if(!this.material){
+            if(code){
+                return String.fromCharCode(code);    
+            }
+            if(IconElement.defaultIcons[this.icon]){
+                return IconElement.defaultIcons[this.icon];
+            }
         }
         return this.icon;
     }

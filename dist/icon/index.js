@@ -6,14 +6,23 @@ let IconElement = IconElement_1 = class IconElement extends LitElement {
     constructor() {
         super(...arguments);
         this.icon = '';
+        this.material = false;
+    }
+    willUpdate() {
+        if (this.material)
+            this.classList.add("material");
+        else
+            this.classList.remove("material");
     }
     render() {
         const code = IconElement_1.iconsMap[this.icon];
-        if (code) {
-            return String.fromCharCode(code);
-        }
-        if (IconElement_1.defaultIcons[this.icon]) {
-            return IconElement_1.defaultIcons[this.icon];
+        if (!this.material) {
+            if (code) {
+                return String.fromCharCode(code);
+            }
+            if (IconElement_1.defaultIcons[this.icon]) {
+                return IconElement_1.defaultIcons[this.icon];
+            }
         }
         return this.icon;
     }
@@ -115,6 +124,7 @@ IconElement.styles = css `
         font-style: normal;
         font-weight: normal;
         font-family: var(--icon-font-family, 'Icons');
+        color: var(--icon-color, #000);
         font-size: var(--icon-font-size, 12px);
         -webkit-touch-callout: none; /* iOS Safari */
         -webkit-user-select: none; /* Safari */
@@ -123,6 +133,23 @@ IconElement.styles = css `
             -ms-user-select: none; /* Internet Explorer/Edge */
                 user-select: none; /* Non-prefixed version, currently
                                         supported by Chrome, Edge, Opera and Firefox */
+    }
+    :host(.material){
+        font-family: 'Material Icons';
+        font-weight: normal;
+        font-style: normal;
+        line-height: 1;
+        letter-spacing: normal;
+        text-transform: none;
+        display: inline-block;
+        white-space: nowrap;
+        word-wrap: normal;
+        direction: ltr;
+        -moz-font-feature-settings: 'liga';
+        -moz-osx-font-smoothing: grayscale;
+    }
+    :host(.font-awesome){
+        font-family: var(--icon-font-family, 'Icons');
     }
     :host(.text-danger),
     :host(.danger),
@@ -141,6 +168,9 @@ IconElement.styles = css `
 __decorate([
     property({ type: String })
 ], IconElement.prototype, "icon", void 0);
+__decorate([
+    property({ type: Boolean })
+], IconElement.prototype, "material", void 0);
 IconElement = IconElement_1 = __decorate([
     customElement("icon-element")
 ], IconElement);

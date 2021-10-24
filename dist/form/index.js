@@ -74,14 +74,14 @@ let FromElement = class FromElement extends LitElement {
     }
     submit() {
         if (!this.noValidate && !this.reportValidity()) {
-            return;
+            return false;
         }
+        const data = this._getData();
         this.dispatchEvent(new CustomEvent('submit', {
-            detail: {
-                data: this._getData(),
-            },
+            detail: { data },
             bubbles: true
         }));
+        return data;
     }
     reset() {
     }

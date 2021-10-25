@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="shortcut icon" href="/logo.svg">
         <script src = "./pages/index.js"></script>
         <style>
             html{
@@ -22,6 +23,8 @@
             }
             header header-element[level="1"]{
                 margin-top: 1.5rem;
+                display: flex;
+                align-items: center;
             }
             header header-element[level="5"]{
                 margin-top: 1rem;
@@ -67,7 +70,7 @@
     <body>
         <header>
             <section>
-                <header-element level = "1">UI Lit</header-element>
+                <header-element level = "1"><img src = "./logo.svg" style = "width: 40px; height: 40px;">&nbsp;UI Lit</header-element>
                 <header-element level = "5">Web-components UI library based on Lit 2.0</header-element>
                 <a class = "view-github"
                     href = "https://github.com/kaifaty/ui-lit" 
@@ -88,7 +91,7 @@
                 <header-element class = "storybook" level = "3" center>
                     <link-element 
                         class = "storybook-link" 
-                        href = "/storybook-static" 
+                        href = "./storybook-static" 
                         target = "_blank">Check in Storybook</link-element>
                 </header-element>
                 <header-element level = "2">Features:</header-element>

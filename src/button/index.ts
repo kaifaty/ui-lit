@@ -70,13 +70,24 @@ export class ButtomElement extends LitElement implements ButtonProps{
     }
     render(){
         return html`
-            <div tabindex = "${this.tabindex}" 
-                class = "${classMap(this.classes)}" 
-                @click = "${this._click}"
-            >${this._iconBeforeTemplate()}<div><slot></slot></div>${this._iconAfterTemplate()}</div>`;
+        <div tabindex = "${this.tabindex}" 
+            class = "${classMap(this.classes)}" 
+            @click = "${this._click}">
+            <slot @slotchange = "${this._onIconBefore}" 
+                  name = "icon-before"></slot>
+            <div><slot></slot></div>
+            <slot @slotchange = "${this._onIconAfter}"
+                  name = "icon-after"></slot>
+        </div>`;
     }
 
     // ==== Events ====
+    private _onIconBefore(e: Event){
+        this.classList.add('icon-before');
+    }
+    private _onIconAfter(e: Event){
+        this.classList.add('icon-after');
+    }
     handlekeyDown(e: KeyboardEvent){
         if(e.key === "Enter" && document.activeElement === this){
             this.submit();

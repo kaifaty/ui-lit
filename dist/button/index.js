@@ -56,12 +56,23 @@ let ButtomElement = class ButtomElement extends LitElement {
     }
     render() {
         return html `
-            <div tabindex = "${this.tabindex}" 
-                class = "${classMap(this.classes)}" 
-                @click = "${this._click}"
-            >${this._iconBeforeTemplate()}<div><slot></slot></div>${this._iconAfterTemplate()}</div>`;
+        <div tabindex = "${this.tabindex}" 
+            class = "${classMap(this.classes)}" 
+            @click = "${this._click}">
+            <slot @slotchange = "${this._onIconBefore}" 
+                  name = "icon-before"></slot>
+            <div><slot></slot></div>
+            <slot @slotchange = "${this._onIconAfter}"
+                  name = "icon-after"></slot>
+        </div>`;
     }
     // ==== Events ====
+    _onIconBefore(e) {
+        this.classList.add('icon-before');
+    }
+    _onIconAfter(e) {
+        this.classList.add('icon-after');
+    }
     handlekeyDown(e) {
         if (e.key === "Enter" && document.activeElement === this) {
             this.submit();

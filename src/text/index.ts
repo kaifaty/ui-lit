@@ -1,6 +1,5 @@
-import { property } from '@lit/reactive-element/decorators/property';
+import { property, customElement } from 'lit/decorators';
 import { LitElement, css, html } from 'lit';
-import { customElement } from '@lit/reactive-element/decorators/custom-element';
 
 type TextStatus = "error" | "danger" | "attention" | "success" | "accented" | "none";
 export interface ITextProps {

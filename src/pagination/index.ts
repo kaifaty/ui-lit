@@ -1,6 +1,5 @@
-import { customElement } from '@lit/reactive-element/decorators/custom-element';
+import { customElement, property } from 'lit/decorators';
 import { LitElement, css, html } from 'lit';
-import { property } from '@lit/reactive-element/decorators/property';
 import '../icon'
 import '../number'
 

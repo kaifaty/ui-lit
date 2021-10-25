@@ -6,7 +6,7 @@ export interface IHeaderProps {
 }
 
 @customElement('header-element')
-export class UIDescription extends LitElement{
+export class HeaderElement extends LitElement{
     static styles = [
         css`
         :host{
@@ -14,11 +14,14 @@ export class UIDescription extends LitElement{
             font-weight: var(--header-font-weight, bold);
             font-family: var(--header-font-weight, inherit);
         }
+        :host([center]){
+            text-align: center;
+        }
         `,
         ...[1, 2, 3, 4, 5, 6].map(it => 
         css`:host([level="${it}"]){
-            margin: var(--header-${it}-margin, 0.5rem 0 1rem 0);
-            font-size: var(--header-${it}-font-size, ${(2.7 - it * 0.3)}rem);
+            margin: var(--header-${it}-margin, 2.5rem 0 1rem 0);
+            font-size: var(--header-${it}-font-size, ${(3 - it * 0.4)}rem);
         }`)
     ];
 
@@ -29,7 +32,7 @@ export class UIDescription extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'header-element': UIDescription;
+      'header-element': HeaderElement;
     }
     
 }

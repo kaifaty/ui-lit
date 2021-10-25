@@ -31,15 +31,23 @@ export const button = [
     div.wrapper.borderless:focus{
         background-color: var(--button-background-hover,  hsl(222, 20%, 96%));
     }
+    :host(.icon-before) .wrapper, 
+    :host(.icon-after) .wrapper {
+        grid-template-columns:repeat(2, auto);
+    }
+    :host(.icon-before.icon-after) .wrapper{
+        grid-template-columns:repeat(3, auto);
+    }
     .wrapper{
         cursor: pointer;
         display: grid;
         gap: var(--button-icon-gap, 4px);
         box-sizing: border-box;
-        align-content: center;
+        align-items: center;
         grid-template-columns: auto;
+        gap: 10px;
         height: 100%;
-        padding: var(--button-padding, 6px 20px);
+        padding: var(--button-padding, 6px 18px);
         border: var(--button-border, 1px solid  hsl(222, 20%, 65%));
         outline: var(--button-outline, none);
         border-radius: var(--button-radius, 3px);

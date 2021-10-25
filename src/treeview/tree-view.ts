@@ -14,8 +14,8 @@ export interface ITreeViewProps {
 }
 
 
-@customElement("treeview-root")
-export class TreeviewRoot extends LitElement{
+@customElement("tree-view")
+export class Treeview extends LitElement{
     static styles = css`
     :host{
         display: inline-block;
@@ -48,102 +48,15 @@ export class TreeviewRoot extends LitElement{
     render(){
         return html`<slot></slot>`;
     }
-}
-
-
-@customElement("treeview-element_")
-export class TreeviewElement_ extends LitElement{
-    static styles = [
-        noselect,
-        css`
-    :host{
-        display: inline-block;
-        box-sizing: border-box;
-    }
-    .title{
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-    }
-    .content.open{
-        display: block;
-    }
-    .content{
-        display: none;
-    }
-    .item{
-        padding: 2px 0;
-        padding-left: 15px;
-        cursor: pointer;
-        --icon-font-size: 16px;
-    }
-    .item.selected{
-        color: var(--button-color, #ff33cc);
-    }
-    .item.selected, 
-    .item:hover, 
-    .title:hover{
-        background-color: var(--button-background-hover);
-    }
-    .icon{
-        margin-left: 10px;
-        --icon-font-size: 12px;
-    }
-    .icon-closed{
-        transform-origin: center;
-        transform: rotate(-90deg);
-    }
-    `];
-    @property({type: Array, attribute: false}) items: TSelectItem[] = [];
-    @property({type: String}) selected: string = '';
-    @property({type: Boolean, attribute: true, reflect: true}) opened: boolean = false;
-
-    
-    render(){
-        const title = {opened: this.opened, title: true, noselect: true};
-        const icon = {"icon-closed": !this.opened, icon: true};
-        return html`
-        <div class = "${classMap(title)}" 
-            @click = "${this._onToggle}">
-            <icon-element 
-                icon = "dropdown" 
-                class = "${classMap(icon)}"></icon-element>
-        </div>
-        <div class = "content noselect ${this.opened ? 'open': ''}">
-            ${this.items.map(it => html`
-                <div @click = "${this._onSelect}" 
-                     data-value = "${it.value}" 
-                     class = "item ${it.value === this.selected ? 'selected' : ''} ">${it.text}</div>
-            `)}
-        </div>
-        `;
-    }
-    private _onToggle(e: Event){
-        e.preventDefault();
-        this.opened = !this.opened;
-        this.dispatchEvent(new CustomEvent("toggle", {
-            composed: true,
-            bubbles: true,
-            detail: this.opened
-        }))
-    }
-    private _onSelect(e: Event){
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        const value = ((e.target as HTMLElement).closest('.item') as HTMLElement).dataset.value as string;
-        console.log(value)
-        this.selected = value;
-        this.dispatchEvent(new CustomEvent("changed", {
-            composed: true,
-            bubbles: true,
-            detail: value
-        }))
+    firstUpdated(){
+        this.setValue(this.selected);
     }
 }
+
+
 declare global {
     interface HTMLElementTagNameMap {
-      'treeview-element': TreeviewRoot;
+      'tree-view': Treeview;
     }
     
 }

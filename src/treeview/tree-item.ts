@@ -1,9 +1,10 @@
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
-import type { TreeviewRoot } from './tree-view';
+import type { Treeview } from './tree-view';
+import { getParentTagName } from '../helpers';
 
-@customElement("treeitem-element")
+@customElement("tree-item")
 export class TreeItem extends LitElement{
     static styles = css`
         :host{
@@ -37,29 +38,12 @@ export class TreeItem extends LitElement{
     @state() selected: boolean = false;
     _childTrees: TreeItem[] = [];
     _childValues: string[] = [];
-    _cachedRoot: TreeviewRoot | null = null;
     
-    get root(): TreeviewRoot | null{
-        if(this._cachedRoot) return this._cachedRoot;
-        let current: HTMLElement | null = this.parentElement;
-        while(current){
-            if(current.tagName.toLowerCase() === "treeview-root"){
-                this._cachedRoot = current as TreeviewRoot;
-                return this._cachedRoot;
-            }
-            current = current.parentElement!;
-        }
-        return null;        
+    get root(): Treeview | null{
+        return getParentTagName(this, "tree-view") as Treeview | null; 
     }
     get rootItem(): TreeItem | null{
-        let current: HTMLElement | null = this.parentElement;
-        while(current){
-            if(current.tagName.toLowerCase() === "treeitem-element"){
-                return current as TreeItem;
-            }
-            current = current.parentElement!;
-        }
-        return null;  
+        return getParentTagName(this.parentElement!, "tree-item") as TreeItem | null; 
     }
     private _connectToView(){
         const root = this.root;
@@ -82,27 +66,27 @@ export class TreeItem extends LitElement{
         this.addEventListener('click', this.onSelect);
         this._connectToView();
         this._connectToItem();
+        if(!this.value){
+            this.container = true;
+        }
 
     }
     disconnectedCallback(){
-        this._cachedRoot = null;
         this._childTrees = [];
         this._disconnectFromView();
         this.removeEventListener('click', this.onSelect);
         super.disconnectedCallback()
     }
     firstUpdated(){
-        const childs = [...this.querySelectorAll("treeitem-element")];
-        if(childs.length){
-            this._childTrees = childs;
-            this._childValues = childs.map(it => it.value);
-            this.container = true;
-            this._updateOpened();
-            const text = this.childNodes[0].textContent;
-            this.append();
-            this.insertAdjacentHTML('afterbegin', `<span>${text}</span>`);
-            this.childNodes[0].remove();
-        }
+        setTimeout(() => {
+            const childs = [...this.querySelectorAll("tree-item")];
+            if(childs.length){
+                this._childTrees = childs;
+                this._childValues = childs.map(it => it.value);
+                this.container = true;
+                this._updateOpened();
+            }
+        })
     }
     private _updateOpened(){
         this._childTrees.forEach(it => {
@@ -152,7 +136,7 @@ export class TreeItem extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'treeitem-element': TreeItem;
+      'tree-item': TreeItem;
     }
     
 }

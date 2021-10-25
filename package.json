@@ -1,10 +1,15 @@
 {
   "name": "ui-lit",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "UI Elements on LIT",
+  "source": "src/index.ts",
   "main": "dist/index.js",
-  "module": "dist/index.js",
-  "typings": "dist/index.d.ts",
+  "module": "dist/index.es6.js",
+  "types": "dist/types.d.ts",
+  
+  "browserslist": [
+    "since 2017-06"
+  ],
   "typesVersions": {
     "<3.8": {
       "*": [
@@ -13,11 +18,12 @@
     }
   },
   "scripts": {
-    "dev": "parcel demo/index.html -d ./demo/dist",
     "build": "tsc",
     "watch": "tsc -w",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "parcel": "parcel build ./src/index.ts -d ./pages/ --out-file index.js",
+    "parcel-watch": "parcel  ./src/index.ts -d ./pages/ --out-file index.js"
   },
   "files": [
     "/demo/",
@@ -37,18 +43,23 @@
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.15.5",
+    "@parcel/packager-ts": "^2.0.0",
+    "@parcel/transformer-typescript-types": "^2.0.0",
     "@storybook/addon-actions": "^6.3.12",
     "@storybook/addon-essentials": "^6.3.12",
     "@storybook/addon-links": "^6.3.12",
     "@storybook/web-components": "^6.3.12",
+    "@types/qrcode": "^1.4.1",
     "babel-loader": "^8.2.2",
-    "lit": "^2.0.0",
+    "cssnano": "^5.0.8",
+    "postcss": "^8.2.15",
     "tslib": "^2.1.0",
     "typescript": "latest"
   },
   "dependencies": {
-    "@types/qrcode": "^1.4.1",
+    "@swc/helpers": "^0.2.13",
     "kailib": "^1.0.29",
+    "lit": "^2.0.2",
     "qrcode": "^1.4.4"
   }
 }

@@ -1,3 +1,13 @@
+export const getParentTagName = (el, tagName) => {
+    let current = el;
+    while (current) {
+        if (current.tagName.toLowerCase() === tagName) {
+            return current;
+        }
+        current = current.parentElement;
+    }
+    return null;
+};
 export const getRootElement = (el) => {
     while (el.parentElement) {
         el = el.parentElement;

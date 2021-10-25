@@ -8,7 +8,16 @@ export interface IUIEvent extends UIEvent{
     touches ?: TouchList
     changedTouches ?: TouchList
 }
-
+export const getParentTagName = (el: HTMLElement, tagName: string) => {
+    let current: HTMLElement | null = el;
+    while(current){
+        if(current.tagName.toLowerCase() === tagName){
+            return current;
+        }
+        current = current.parentElement!;
+    }
+    return null;    
+}
 export const getRootElement = (el: HTMLElement) => {
     while(el.parentElement){
         el = el.parentElement;

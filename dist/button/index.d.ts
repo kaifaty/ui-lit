@@ -45,6 +45,8 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
     private _iconBeforeTemplate;
     private _iconAfterTemplate;
     render(): TemplateResult<1>;
+    private _onIconBefore;
+    private _onIconAfter;
     handlekeyDown(e: KeyboardEvent): void;
     private _click;
     toggleSwitch(): void;

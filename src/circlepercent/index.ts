@@ -1,4 +1,5 @@
-import { LitElement, css, property, customElement, query, html } from 'lit-element';
+import { LitElement, css, html } from 'lit';
+import {property, customElement, query} from 'lit/decorators'
 
 export interface ICircleProps{
     percent: number

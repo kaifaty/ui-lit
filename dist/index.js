@@ -19,7 +19,7 @@ export * from './qrcode';
 export * from './range';
 export * from './select';
 export * from './spinner';
-export * from './tabs';
+export * from './tabs/tabs-element';
 export * from './text';
 export * from './text-field';
 export * from './textarea';

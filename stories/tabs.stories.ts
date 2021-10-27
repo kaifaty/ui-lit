@@ -5,26 +5,23 @@ import '../dist/tabs';
 import { ITabs } from '../src/tabs';
 
 
-const Select = (data: ITabs) => 
+const Tabs = (data: ITabs) => 
     html`<tabs-element 
-        .value = "${data.value}"
-        .items = "${data.items}"
-        .type = "${data.type}"
-        .disabled = "${data.disabled}"
-    ></tabs-element>`;
+        selected = "${data.value}"
+        type = "${data.type}"
+        ?disabled = "${data.disabled}">
+        <tab-item value = "1">Tab 1</tab-item>
+        <tab-item value = "2">Tab 2</tab-item>
+        <tab-item value = "3">Tab 3</tab-item>
+    </tabs-element>`;
 
-const Template: Story<Partial<ITabs>> = (args) => Select(args as ITabs);
+const Template: Story<Partial<ITabs>> = (args) => Tabs(args as ITabs);
 
 export const Default = Template.bind({});
 Default.args = {
     value: '1',
     type:  'button',
-    disabled:  false,
-    items: [
-        {value: '1', text: 'Tab 1'},
-        {value: '2', text: 'Tab 2'},
-        {value: '3', text: 'Tab 3'},
-    ]
+    disabled:  false
 }
 export default {
     title: 'Form Assosiated/Tabs',
@@ -34,5 +31,10 @@ export default {
           control: { type: 'radio' }
         }
     },
+    parameters: {
+        actions: {
+            handles: ['changed', ],
+        }
+    }
     
 } as Meta;

@@ -213,7 +213,7 @@ export const formAssociated = (superClass) => {
         property({ type: Boolean, reflect: true })
     ], FormAssociated.prototype, "showNote", void 0);
     __decorate([
-        property({ type: Boolean })
+        property({ type: Boolean, reflect: true })
     ], FormAssociated.prototype, "disabled", void 0);
     __decorate([
         property({ type: Boolean })

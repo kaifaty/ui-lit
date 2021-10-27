@@ -2085,7 +2085,7 @@ Object.keys(_classMap).forEach(function (key) {
     }
   });
 });
-},{"lit-html/directives/class-map.js":"../node_modules/lit-html/directives/class-map.js"}],"controllers/KeyController.js":[function(require,module,exports) {
+},{"lit-html/directives/class-map.js":"../node_modules/lit-html/directives/class-map.js"}],"controllers/KeyController.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2113,13 +2113,13 @@ class KeyDownController {
 }
 
 exports.KeyDownController = KeyDownController;
-},{}],"styles/noselect.js":[function(require,module,exports) {
+},{}],"styles/noselect.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.noselect = void 0;
+exports.noselectText = exports.noselect = void 0;
 
 var _lit = require("lit");
 
@@ -2129,7 +2129,9 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 const noselect = (0, _lit.css)(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n.noselect {\n  -webkit-touch-callout: none; /* iOS Safari */\n    -webkit-user-select: none; /* Safari */\n     -khtml-user-select: none; /* Konqueror HTML */\n       -moz-user-select: none; /* Old versions of Firefox */\n        -ms-user-select: none; /* Internet Explorer/Edge */\n            user-select: none; /* Non-prefixed version, currently\n                                  supported by Chrome, Edge, Opera and Firefox */\n}\n"])));
 exports.noselect = noselect;
-},{"lit":"../node_modules/lit/index.js"}],"styles/button.js":[function(require,module,exports) {
+const noselectText = "\n-webkit-touch-callout: none;\n    -webkit-user-select: none; \n     -khtml-user-select: none;\n       -moz-user-select: none; \n        -ms-user-select: none; \n            user-select: none;\n";
+exports.noselectText = noselectText;
+},{"lit":"../node_modules/lit/index.js"}],"styles/button.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2147,7 +2149,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 const button = [_noselect.noselect, (0, _lit.css)(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n    :host{\n        display: var(--button-display, inline-block);\n        height: var(--button-height);\n    }\n    .icon{\n        align-self: center;\n        justify-self: center;\n    }\n    .wrapper.mini{\n        padding: 2px 4px;\n        font-size: 0.9rem;\n    }\n    .wrapper.disabled{\n        opacity: 0.5;\n    }\n    .wrapper.icon-before, .wrapper.icon-after{\n        grid-template-columns: auto auto;\n    }\n    .wrapper.icon-before.icon-after{\n        grid-template-columns: auto auto auto;\n    }\n    .wrapper.borderless, div.wrapper.borderless:focus{\n        border: none;\n        outline: none;\n    }\n    div.wrapper.borderless:focus{\n        background-color: var(--button-background-hover,  hsl(222, 20%, 96%));\n    }\n    :host(.icon-before) .wrapper, \n    :host(.icon-after) .wrapper {\n        grid-template-columns:repeat(2, auto);\n    }\n    :host(.icon-before.icon-after) .wrapper{\n        grid-template-columns:repeat(3, auto);\n    }\n    .wrapper{\n        cursor: pointer;\n        display: grid;\n        gap: var(--button-icon-gap, 4px);\n        box-sizing: border-box;\n        align-items: center;\n        grid-template-columns: auto;\n        gap: 10px;\n        height: 100%;\n        padding: var(--button-padding, 6px 18px);\n        border: var(--button-border, 1px solid  hsl(222, 20%, 65%));\n        outline: var(--button-outline, none);\n        border-radius: var(--button-radius, 3px);\n        color: var(--button-color, hsl(222, 20%, 35%));\n        background-color: var(--button-backround, hsl(222, 20%, 99%));\n        --icon-fill: var(--button-color);\n        font-weight: var(--button-weight, 600);\n    }\n    .wrapper:not(.disabled):hover{\n        background-color: var(--button-background-hover,  hsl(222, 20%, 96%));\n    }\n    .wrapper:not(.disabled):focus{\n        background-color: var(--button-background-focus, var(--button-backround, hsl(222,20%, 99%)));\n        outline: var(--button-outline-focus, 1px solid hsla(222, 20%, 60%, 0.5));\n        \n    }\n\n    .wrapper.primary{\n        color: var(--button-primary, hsl(222, 95%, 98%));\n        background-color: var(--button-primary-background, hsl(222, 95%, 65%));\n        border: 1px solid var(--button-primary-border,  hsl(222, 95%, 45%));\n        --icon-fill: var(--button-primary);\n    }\n    .wrapper.primary:not(.disabled):hover{\n        background-color: var(--button-primary-background-hover,  hsl(222, 95%, 60%));\n    }\n    .wrapper.primary:not(.disabled):focus{\n        background-color: var(--button-primary-background-focus,  var(--button-primary-background, hsl(222, 95%, 65%)));\n        outline: var(--button-primary-outline-focus, 1px solid  hsl(222, 95%, 45%));\n    }\n\n    .wrapper.success{\n        color: var(--button-success, hsl(120, 95%, 15%));\n        background-color: var(--button-success-background, hsl(110, 85%, 70%));\n        border: var(--button-success-border, 1px solid hsl(120, 95%, 45%));\n        --icon-fill: var(--button-success);\n    }\n    .wrapper.success:not(.disabled):hover{\n        background-color: var(--button-success-background-hover, hsl(120, 95%, 80%));\n    }\n    .wrapper.success:not(.disabled):focus{\n        background-color: var(--button-success-background-focus, hsl(120, 95%, 70%));\n        outline: var(--button-success-outline-focus, 1px solid hsl(120, 95%, 50%));\n    }\n\n    .wrapper.danger{\n        color: var(--button-danger, hsl(1, 95%, 15%));\n        background-color: var(--button-danger-background, hsl(1, 95%, 80%));\n        border: 1px solid var(--button-danger-border, hsl(1, 95%, 55%));\n        --icon-fill: var(--button-danger);\n    }\n    .wrapper.danger:not(.disabled):hover{\n        background-color: var(--button-danger-background-hover,  hsl(1, 95%, 75%));\n    }\n    .wrapper.danger:not(.disabled):focus{\n        background-color: var(--button-danger-background-hover,  hsl(1, 95%, 80%));\n        outline: var(--button-danger-outline-focus, 1px solid  hsl(1, 95%, 55%));\n    }\n\n    .wrapper.switch:focus{\n        outline: none;\n    }\n    .wrapper.switch.switch-on{\n        background-color: var(--button-switch-backround, hsl(222, 80%, 60%));\n        color: var(--button-switch-color, hsl(222, 80%, 98%));\n    }\n    .wrapper.switch:not(.switch-on):not(:hover),\n    .wrapper.switch:not(.switch-on):focus\n    {\n        background-color: transparent;\n    }\n    "])))];
 exports.button = button;
-},{"lit":"../node_modules/lit/index.js","./noselect":"styles/noselect.js"}],"button/index.js":[function(require,module,exports) {
+},{"lit":"../node_modules/lit/index.js","./noselect":"styles/noselect.ts"}],"button/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2311,7 +2313,7 @@ ButtomElement.styles = _button.button;
   type: Boolean
 })], ButtomElement.prototype, "switchOn", void 0);
 exports.ButtomElement = ButtomElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("button-element")], ButtomElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","lit/directives/class-map":"../node_modules/lit/directives/class-map.js","../controllers/KeyController":"controllers/KeyController.js","../styles/button":"styles/button.js"}],"circlepercent/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","lit/directives/class-map":"../node_modules/lit/directives/class-map.js","../controllers/KeyController":"controllers/KeyController.ts","../styles/button":"styles/button.ts"}],"circlepercent/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2437,7 +2439,7 @@ CirclePercent.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _ta
 })], CirclePercent.prototype, "ratio", void 0);
 (0, _tslib.__decorate)([(0, _decorators.query)('canvas')], CirclePercent.prototype, "canvas", void 0);
 exports.CirclePercent = CirclePercent = (0, _tslib.__decorate)([(0, _decorators.customElement)('circle-percent')], CirclePercent);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js"}],"controllers/OuterClickRemoveController.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js"}],"controllers/OuterClickRemoveController.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2465,7 +2467,7 @@ class OuterClickRemoveController {
 }
 
 exports.OuterClickRemoveController = OuterClickRemoveController;
-},{}],"note/index.js":[function(require,module,exports) {
+},{}],"note/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2524,7 +2526,7 @@ let NoteElement = class NoteElement extends _lit.LitElement {
 exports.NoteElement = NoteElement;
 NoteElement.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    :host{\n        display: block;\n        position: absolute;/*\n        visibility: hidden;\n        opacity: 0;*/\n        transition: 0.4s ease-in;\n        border: 1px solid var(--note-border-color);\n        z-index: 10;\n        padding: 5px;\n        border-radius: 1px;\n        box-sizing: border-box;\n        background-color: var(--note-background-color, rgba(255,255,255,0.85));\n        color: var(--note-color);\n    }\n    :host(.visible){\n        visibility: visible;\n        opacity: 1;\n    }\n    :host(.error){\n        /*background-color: var(--note-error-background-color, #fff);*/\n        color: var(--note-error-color, red);\n        /*border: 1px solid var(--note-error-border-color, #ff7e6d);*/\n    }\n    "])));
 exports.NoteElement = NoteElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("note-element")], NoteElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../controllers/OuterClickRemoveController":"controllers/OuterClickRemoveController.js"}],"../node_modules/lit-html/directive-helpers.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../controllers/OuterClickRemoveController":"controllers/OuterClickRemoveController.ts"}],"../node_modules/lit-html/directive-helpers.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2791,7 +2793,7 @@ Object.keys(_ref).forEach(function (key) {
     }
   });
 });
-},{"lit-html/directives/ref.js":"../node_modules/lit-html/directives/ref.js"}],"form-associated/index.js":[function(require,module,exports) {
+},{"lit-html/directives/ref.js":"../node_modules/lit-html/directives/ref.js"}],"form-associated/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3056,7 +3058,8 @@ const formAssociated = superClass => {
     reflect: true
   })], FormAssociated.prototype, "showNote", void 0);
   (0, _tslib.__decorate)([(0, _decorators.property)({
-    type: Boolean
+    type: Boolean,
+    reflect: true
   })], FormAssociated.prototype, "disabled", void 0);
   (0, _tslib.__decorate)([(0, _decorators.property)({
     type: Boolean
@@ -3073,7 +3076,7 @@ const formAssociated = superClass => {
 };
 
 exports.formAssociated = formAssociated;
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../note":"note/index.js","lit/directives/ref.js":"../node_modules/lit/directives/ref.js"}],"styles/input.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../note":"note/index.ts","lit/directives/ref.js":"../node_modules/lit/directives/ref.js"}],"styles/input.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3089,7 +3092,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 const input = (0, _lit.css)(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n:host{\n    display: var(--input-display, inline-block);\n    height: var(--input-height);\n}\n:host(.error-valid) input{\n    border: 1px solid var(--error-border, #ff7e6d);\n}\n:host(.error-valid) input:focus{\n    outline: 1px solid var(--error-border, #ff7e6d);\n}\n:host(.disabled){\n    opacity: 0.8;\n}\n:host(.readonly){\n    opacity: 0.9;\n}\n.wrapper{\n    position: relative;\n    height: 100%;\n}\n.icon{\n    position: absolute;\n    right: 5px;\n    top: 50%;\n    transform: translateY(-50%);\n}\ninput, textarea{\n    height: 100%;\n    width: 100%;\n    font-size: var(--input-font-size, inherit);\n    box-sizing: border-box;\n    padding: var(--input-padding, 2px 8px);\n    border: 1px solid var(--input-border, hsla(222, 20%, 60%, 0.5));\n    text-align: var(--input-align, initial);\n    background-color: var(--input-background, #fff);\n}\n\ninput:focus, \ntextarea:focus{\n    outline: var(--input-outline-focus, 1px solid hsla(222, 20%, 60%, 0.5));\n}\ninput:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.3s ease;}\ninput:focus::-moz-placeholder          {opacity: 0; transition: opacity 0.3s ease;}\ninput:focus:-moz-placeholder           {opacity: 0; transition: opacity 0.3s ease;}\ninput:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.3s ease;}\n\ninput:-webkit-autofill,\ninput:-webkit-autofill:hover,\ninput:-webkit-autofill:focus,\ninput:-webkit-autofill:active{\n    box-shadow: 0 0 0 30px white inset\n}\n\ntextarea{\n}\n\ntextarea:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.3s ease;}\ntextarea:focus::-moz-placeholder          {opacity: 0; transition: opacity 0.3s ease;}\ntextarea:focus:-moz-placeholder           {opacity: 0; transition: opacity 0.3s ease;}\ntextarea:focus:-ms-input-placeholder      {opacity: 0; transition: opacity 0.3s ease;}\n"])));
 exports.input = input;
-},{"lit":"../node_modules/lit/index.js"}],"checkbox/index.js":[function(require,module,exports) {
+},{"lit":"../node_modules/lit/index.js"}],"checkbox/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3204,7 +3207,7 @@ CheckboxElement.styles = [_input.input, (0, _lit.css)(_templateObject3 || (_temp
   type: String
 })], CheckboxElement.prototype, "type", void 0);
 exports.CheckboxElement = CheckboxElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("checkbox-element")], CheckboxElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","../form-associated/index":"form-associated/index.js","lit":"../node_modules/lit/index.js","../styles/input":"styles/input.js"}],"helpers.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","../form-associated/index":"form-associated/index.ts","lit":"../node_modules/lit/index.js","../styles/input":"styles/input.ts"}],"helpers.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3273,7 +3276,7 @@ const isChildOfElement = (el, target) => {
 };
 
 exports.isChildOfElement = isChildOfElement;
-},{}],"code/code-line.js":[function(require,module,exports) {
+},{}],"code/code-line.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3324,7 +3327,7 @@ exports.CodeLine = CodeLine;
 CodeLine.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    :host{\n        display: block;\n        padding: 3px;\n    }\n    .wrapper{\n        display: grid;\n        grid-template-columns: 25px auto;\n    }\n    .line-number{\n        color: #777;\n    }\n    "])));
 (0, _tslib.__decorate)([(0, _decorators.state)()], CodeLine.prototype, "number", void 0);
 exports.CodeLine = CodeLine = (0, _tslib.__decorate)([(0, _decorators.customElement)('code-line')], CodeLine);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js","../helpers":"helpers.js"}],"code/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js","../helpers":"helpers.ts"}],"code/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3377,7 +3380,7 @@ let CodeElement = class CodeElement extends _lit.LitElement {
 exports.CodeElement = CodeElement;
 CodeElement.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    :host{\n        display: block;\n        background-color: var(--code-background, rgba(0,0,0,0.05));\n        padding: 10px;\n        margin: 10px 0;\n        font-family: monospace;\n        border-radius: 5px;\n    }"])));
 exports.CodeElement = CodeElement = (0, _tslib.__decorate)([(0, _decorators.customElement)('code-element')], CodeElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js","./code-line":"code/code-line.js"}],"description/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js","./code-line":"code/code-line.ts"}],"description/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3993,7 +3996,7 @@ const HSLstringToRGB = hslColor => {
 };
 
 exports.HSLstringToRGB = HSLstringToRGB;
-},{}],"dialog/styles.js":[function(require,module,exports) {
+},{}],"dialog/styles.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4009,7 +4012,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 const DIALOG_STYLES = (0, _lit.css)(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n:host{\n    display: block;\n}\n.overlap{\n    display: flex;\n    --dialog-z-index: 125;\n    margin: 0;\n    top: 0;\n    padding: 0;\n    width: 100%;\n    height: 100%;\n    position: fixed;\n    z-index: var(--dialog-z-index, 100);\n    background-color: var(--dialog-overlap, rgba(0,0,0,0.7));\n    visibility: hidden;\n}\n:host([opened]) .overlap{\n    visibility: visible;\n    align-items: center;\n    justify-content: center;\n}\n:host([opened]) main{\n    padding: var(--dialog-main-padding, var(--dialog-padding, 15px 20px));\n}\n:host([opened]) header{\n    padding: var(--dialog-header-padding, var(--dialog-padding, 15px 20px));\n}\n:host([opened]) footer{\n    padding: var(--dialog-footer-padding, var(--dialog-padding, 15px 20px));\n}\n.dialog{          \n    max-height: var(--dialog-max-height, initial);\n    width: var(--dialog-width, 600px);\n    height: var(--dialog-height, 300px);\n    z-index: calc(var(--dialog-z-index, 100) + 1);\n    color: black;\n    color: var(--dialog-color, black);\n    background-color: var(--dialog-background, #fefefe);\n    border-radius: 3px;\n    box-sizing: border-box;\n    word-wrap: break-word;\n    display: flex;\n    flex-direction: column;\n    position: relative;\n    box-shadow: 1px 1px 8px var(--dialog-boxshadow, rgba(0,0,0,0.7));\n}\n\nheader ::slotted(h1), \nheader ::slotted(h2), \nheader ::slotted(h3), \nheader ::slotted(h4){\n    margin: 0;\n}\nmain{\n    flex: 1 1 auto;\n    overflow-y: auto;\n    overflow-x: hidden;\n}\nheader{\n    position: relative;\n    background-color: var(--dialog-header-background, #111);\n    color: var(--dialog-header-color, #fefefe);\n    font-size: 16px;\n    display: none;\n}\nheader.visible{\n    display: block;\n}\nfooter{\n    display: flex;\n    justify-content: space-between;\n}\n.closebtn-wrapper{\n    display: flex;\n    flex-direction: column;\n    justify-content: end;\n}\n.close-icon, .arrow-back{\n    position: absolute;\n    padding: 10px;\n    right: 2px;\n    top: -2px;\n    cursor: pointer;\n    color: #aaa;\n    --icon-font-size: 18px;\n}\n.arrow-back{\n    right: 30px;\n    transform-origin: center;\n    transform: rotate(90deg);\n}\n.close-icon svg{\n    fill: var(--dialog-icon-fill, #888);\n}"])));
 exports.DIALOG_STYLES = DIALOG_STYLES;
-},{"lit":"../node_modules/lit/index.js"}],"styles/scrollbar.js":[function(require,module,exports) {
+},{"lit":"../node_modules/lit/index.js"}],"styles/scrollbar.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4025,7 +4028,7 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 const scrollbar = (0, _lit.css)(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n::-webkit-scrollbar {\n  width: 5px;\n}\n::-webkit-scrollbar-track {\n  background: var(--scrollbar-track, #f1f1f1);\n}\n::-webkit-scrollbar-thumb {\n  background: var(--scrollbar-thumb, #888);;\n}\n:host, .ff-scrollbar{  \n  scrollbar-color: var(--scrollbar-thumb, #888) var(--scrollbar-track, #f1f1f1) ;\n  scrollbar-width: thin;\n}\n"])));
 exports.scrollbar = scrollbar;
-},{"lit":"../node_modules/lit/index.js"}],"dialog/index.js":[function(require,module,exports) {
+},{"lit":"../node_modules/lit/index.js"}],"dialog/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4176,7 +4179,7 @@ exports.DialogElement = DialogElement;
 })], DialogElement.prototype, "content", void 0);
 (0, _tslib.__decorate)([(0, _decorators.state)()], DialogElement.prototype, "headerVisible", void 0);
 exports.DialogElement = DialogElement = (0, _tslib.__decorate)([(0, _decorators.customElement)('dialog-element')], DialogElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","kailib":"../node_modules/kailib/dist/index.js","./styles":"dialog/styles.js","../styles/scrollbar":"styles/scrollbar.js","../controllers/KeyController":"controllers/KeyController.js"}],"label/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","kailib":"../node_modules/kailib/dist/index.js","./styles":"dialog/styles.ts","../styles/scrollbar":"styles/scrollbar.ts","../controllers/KeyController":"controllers/KeyController.ts"}],"label/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4257,7 +4260,7 @@ LabelText.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _tagged
   type: String
 })], LabelText.prototype, "for", void 0);
 exports.LabelText = LabelText = (0, _tslib.__decorate)([(0, _decorators.customElement)("label-text")], LabelText);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../helpers":"helpers.js"}],"form/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../helpers":"helpers.ts"}],"form/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4391,7 +4394,7 @@ exports.FromElement = FromElement;
   type: Boolean
 })], FromElement.prototype, "disabled", void 0);
 exports.FromElement = FromElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("form-element")], FromElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../label":"label/index.js"}],"header/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../label":"label/index.ts"}],"header/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4428,7 +4431,7 @@ HeaderElement.styles = [(0, _lit.css)(_templateObject2 || (_templateObject2 = _t
   reflect: true
 })], HeaderElement.prototype, "level", void 0);
 exports.HeaderElement = HeaderElement = (0, _tslib.__decorate)([(0, _decorators.customElement)('header-element')], HeaderElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js"}],"icon/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js"}],"icon/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4573,7 +4576,7 @@ IconElement.styles = (0, _lit.css)(_templateObject || (_templateObject = _tagged
   type: Boolean
 })], IconElement.prototype, "material", void 0);
 exports.IconElement = IconElement = IconElement_1 = (0, _tslib.__decorate)([(0, _decorators.customElement)("icon-element")], IconElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js"}],"layout/grid.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js"}],"layout/grid.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4808,7 +4811,7 @@ LayoutGrid.styles = [(0, _lit.css)(_templateObject3 || (_templateObject3 = _tagg
 (0, _tslib.__decorate)([(0, _decorators.state)()], LayoutGrid.prototype, "shadowHeight", void 0);
 (0, _tslib.__decorate)([(0, _decorators.state)()], LayoutGrid.prototype, "maxIndex", void 0);
 exports.LayoutGrid = LayoutGrid = (0, _tslib.__decorate)([(0, _decorators.customElement)("layout-grid")], LayoutGrid);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../styles/scrollbar":"styles/scrollbar.js"}],"layout/element.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../styles/scrollbar":"styles/scrollbar.ts"}],"layout/element.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4951,7 +4954,7 @@ LayoutElement.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _ta
   type: String
 })], LayoutElement.prototype, "name", void 0);
 exports.LayoutElement = LayoutElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("layout-element")], LayoutElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../icon":"icon/index.js"}],"layout/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../icon":"icon/index.ts"}],"layout/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4983,7 +4986,7 @@ Object.keys(_element).forEach(function (key) {
     }
   });
 });
-},{"./grid":"layout/grid.js","./element":"layout/element.js"}],"../node_modules/lit-html/directives/if-defined.js":[function(require,module,exports) {
+},{"./grid":"layout/grid.ts","./element":"layout/element.ts"}],"../node_modules/lit-html/directives/if-defined.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5020,7 +5023,7 @@ Object.keys(_ifDefined).forEach(function (key) {
     }
   });
 });
-},{"lit-html/directives/if-defined.js":"../node_modules/lit-html/directives/if-defined.js"}],"link/index.js":[function(require,module,exports) {
+},{"lit-html/directives/if-defined.js":"../node_modules/lit-html/directives/if-defined.js"}],"link/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5133,7 +5136,7 @@ Object.keys(_live).forEach(function (key) {
     }
   });
 });
-},{"lit-html/directives/live.js":"../node_modules/lit-html/directives/live.js"}],"number/index.js":[function(require,module,exports) {
+},{"lit-html/directives/live.js":"../node_modules/lit-html/directives/live.js"}],"number/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5392,7 +5395,7 @@ exports.NumberField = NumberField;
 })], NumberField.prototype, "useCancelButton", void 0);
 (0, _tslib.__decorate)([(0, _decorators.property)()], NumberField.prototype, "icon", void 0);
 exports.NumberField = NumberField = (0, _tslib.__decorate)([(0, _decorators.customElement)("number-field")], NumberField);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../form-associated/index":"form-associated/index.js","../icon":"icon/index.js","../styles/input":"styles/input.js","lit//directives/live":"../node_modules/lit/directives/live.js","lit/directives/ref.js":"../node_modules/lit/directives/ref.js"}],"pagination/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../form-associated/index":"form-associated/index.ts","../icon":"icon/index.ts","../styles/input":"styles/input.ts","lit//directives/live":"../node_modules/lit/directives/live.js","lit/directives/ref.js":"../node_modules/lit/directives/ref.js"}],"pagination/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5502,7 +5505,7 @@ PaginationElement.styles = [(0, _lit.css)(_templateObject3 || (_templateObject3 
   type: Number
 })], PaginationElement.prototype, "length", void 0);
 exports.PaginationElement = PaginationElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("pagination-element")], PaginationElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js","../icon":"icon/index.js","../number":"number/index.js"}],"panel/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js","../icon":"icon/index.ts","../number":"number/index.ts"}],"panel/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10825,7 +10828,7 @@ exports.toDataURL = renderCanvas.bind(null, CanvasRenderer.renderToDataURL); // 
 exports.toString = renderCanvas.bind(null, function (data, _, opts) {
   return SvgRenderer.render(data, opts);
 });
-},{"./can-promise":"../node_modules/qrcode/lib/can-promise.js","./core/qrcode":"../node_modules/qrcode/lib/core/qrcode.js","./renderer/canvas":"../node_modules/qrcode/lib/renderer/canvas.js","./renderer/svg-tag.js":"../node_modules/qrcode/lib/renderer/svg-tag.js"}],"qrcode/index.js":[function(require,module,exports) {
+},{"./can-promise":"../node_modules/qrcode/lib/can-promise.js","./core/qrcode":"../node_modules/qrcode/lib/core/qrcode.js","./renderer/canvas":"../node_modules/qrcode/lib/renderer/canvas.js","./renderer/svg-tag.js":"../node_modules/qrcode/lib/renderer/svg-tag.js"}],"qrcode/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10875,7 +10878,7 @@ QRCodeElement.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _ta
   type: String
 })], QRCodeElement.prototype, "value", void 0);
 exports.QRCodeElement = QRCodeElement = (0, _tslib.__decorate)([(0, _decorators.customElement)('qrcode-element')], QRCodeElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js","qrcode":"../node_modules/qrcode/lib/browser.js"}],"range/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js","qrcode":"../node_modules/qrcode/lib/browser.js"}],"range/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11261,7 +11264,7 @@ exports.RangeElement = RangeElement;
 })], RangeElement.prototype, "startFromMin", void 0);
 (0, _tslib.__decorate)([(0, _decorators.query)('.track')], RangeElement.prototype, "_wrapper", void 0);
 exports.RangeElement = RangeElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("range-element")], RangeElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../form-associated/index":"form-associated/index.js","../styles/noselect":"styles/noselect.js","../helpers":"helpers.js"}],"../node_modules/lit-html/directives/style-map.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../form-associated/index":"form-associated/index.ts","../styles/noselect":"styles/noselect.ts","../helpers":"helpers.ts"}],"../node_modules/lit-html/directives/style-map.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11337,7 +11340,7 @@ Object.keys(_styleMap).forEach(function (key) {
     }
   });
 });
-},{"lit-html/directives/style-map.js":"../node_modules/lit-html/directives/style-map.js"}],"controllers/ClickController.js":[function(require,module,exports) {
+},{"lit-html/directives/style-map.js":"../node_modules/lit-html/directives/style-map.js"}],"controllers/ClickController.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11365,7 +11368,7 @@ class ClickController {
 }
 
 exports.ClickController = ClickController;
-},{}],"helpers/position.js":[function(require,module,exports) {
+},{}],"helpers/position.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11465,7 +11468,7 @@ const calcPositionForPopup = (el, data) => {
 };
 
 exports.calcPositionForPopup = calcPositionForPopup;
-},{}],"select/index.js":[function(require,module,exports) {
+},{}],"select/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11674,7 +11677,7 @@ SelectElement.styles = [_input.input, _scrollbar.scrollbar, (0, _lit.css)(_templ
 })], SelectElement.prototype, "optionsHeight", void 0);
 (0, _tslib.__decorate)([(0, _decorators.state)()], SelectElement.prototype, "open", void 0);
 exports.SelectElement = SelectElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("select-element")], SelectElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/directives/class-map":"../node_modules/lit/directives/class-map.js","lit/directives/style-map":"../node_modules/lit/directives/style-map.js","lit":"../node_modules/lit/index.js","../form-associated/index":"form-associated/index.js","lit/decorators":"../node_modules/lit/decorators.js","../styles/input":"styles/input.js","../helpers":"helpers.js","../controllers/ClickController":"controllers/ClickController.js","../controllers/KeyController":"controllers/KeyController.js","../helpers/position":"helpers/position.js","../styles/scrollbar":"styles/scrollbar.js"}],"spinner/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/directives/class-map":"../node_modules/lit/directives/class-map.js","lit/directives/style-map":"../node_modules/lit/directives/style-map.js","lit":"../node_modules/lit/index.js","../form-associated/index":"form-associated/index.ts","lit/decorators":"../node_modules/lit/decorators.js","../styles/input":"styles/input.ts","../helpers":"helpers.ts","../controllers/ClickController":"controllers/ClickController.ts","../controllers/KeyController":"controllers/KeyController.ts","../helpers/position":"helpers/position.ts","../styles/scrollbar":"styles/scrollbar.ts"}],"spinner/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11729,7 +11732,7 @@ SpinnerElement.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _t
   reflect: true
 })], SpinnerElement.prototype, "fullscreen", void 0);
 exports.SpinnerElement = SpinnerElement = (0, _tslib.__decorate)([(0, _decorators.customElement)('spinner-element')], SpinnerElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js"}],"tabs/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js"}],"tabs/tabs-element.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11747,9 +11750,7 @@ var _index = require("../form-associated/index");
 
 var _decorators = require("lit/decorators");
 
-var _KeyController = require("../controllers/KeyController");
-
-var _templateObject, _templateObject2, _templateObject3;
+var _templateObject, _templateObject2;
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
@@ -11758,17 +11759,34 @@ let TabsElement = class TabsElement extends (0, _index.formAssociated)(_lit.LitE
     super(...arguments);
     this.items = [];
     this.type = 'button';
-    this._keyPressController = new _KeyController.KeyDownController(this);
+    this.selected = '';
+  }
 
-    this.handlekeyDown = e => {
-      if (e.key === "ArrowRight") {
-        this.nextSelect();
-      }
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('changed', this._handleSelect);
+  }
 
-      if (e.key === "ArrowLeft") {
-        this.prevSelect();
-      }
-    };
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('changed', this._handleSelect);
+  }
+
+  _handleSelect(e) {
+    this.selected = e.detail;
+  }
+
+  _updateTabs() {
+    this.querySelectorAll("tab-item").forEach(it => {
+      it.type = this.type;
+      it.value === this.selected ? it.select() : it.unselect();
+    });
+  }
+
+  updated() {
+    if (this.disabled) return;
+
+    this._updateTabs();
   }
 
   render() {
@@ -11778,69 +11796,24 @@ let TabsElement = class TabsElement extends (0, _index.formAssociated)(_lit.LitE
       disabled: this.disabled,
       ["type-" + this.type]: true
     };
-    return (0, _lit.html)(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n        <div class = \"", "\">\n            ", "\n        </div>"])), (0, _classMap.classMap)(map), this.items.map(it => {
-      const map = {
-        tab: true,
-        selected: it.value === this.value,
-        ["value-" + it.value]: true
-      };
-      return (0, _lit.html)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["<div \n                @focus = \"", "\"\n                data-value = \"", "\"\n                class = \"", "\" \n                tabindex = \"0\">", "</div>"])), this._handleFocus, it.value, (0, _classMap.classMap)(map), it.text);
-    }));
-  }
-
-  currentOption() {
-    return this.items.findIndex(it => it.value === this.value);
-  }
-
-  setValue(value) {
-    var _a, _b;
-
-    if (this.disabled) return;
-    this.value = value;
-    (_b = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector(".value-" + value)) === null || _b === void 0 ? void 0 : _b.focus();
-    this.dispatchEvent(new CustomEvent("changed", {
-      detail: this.value,
-      bubbles: true
-    }));
-  }
-
-  nextSelect() {
-    let current = this.currentOption();
-    current++;
-
-    if (current > this.items.length - 1) {
-      current = 0;
-    }
-
-    this.setValue(this.items[current].value);
-  }
-
-  prevSelect() {
-    let current = this.currentOption();
-    current--;
-
-    if (current < 0) {
-      current = this.items.length - 1;
-    }
-
-    this.setValue(this.items[current].value);
-  }
-
-  _handleFocus(e) {
-    this.setValue(e.target.dataset.value);
+    return (0, _lit.html)(_templateObject || (_templateObject = _taggedTemplateLiteral(["<div class = \"", "\"><slot></slot></div>"])), (0, _classMap.classMap)(map));
   }
 
 };
 exports.TabsElement = TabsElement;
-TabsElement.styles = (0, _lit.css)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n    :host{\n        display: inline-block;\n    }\n    .content{\n        display: flex;\n    }\n    .type-button .tab{\n        border: 1px solid var(--tab-border, tomato);\n        padding: var(--tab-button-padding, 5px 14px);\n    }\n    .type-tab .tab{\n        padding: var(--tab-padding, 5px 14px);\n        border: 1px solid transparent;\n        border-bottom: 1px solid var(--tab-border, tomato);\n        \n    }\n    .type-tab .tab.selected{\n        border-top: 1px solid var(--tab-border, tomato);\n        border-left: 1px solid var(--tab-border, tomato);\n        border-right: 1px solid var(--tab-border, tomato);\n        border-bottom: 1px solid transparent;\n    }\n    .tab{\n        background-color: var(--tab-background);\n        color: var(--tab-color);\n        cursor: pointer;\n    }\n    .tab.selected, \n    :not(.disabled) .tab:not(:focus):hover, \n    :not(.disabled) :focus{\n        background-color: tomato;\n    }\n    .disabled{\n        opacity: 0.5;\n    }"])));
+TabsElement.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n    :host{\n        \n        display: inline-block;        \n    }\n    .content{\n        display: flex;\n    }\n    /*.type-button .tab{\n        border: 1px solid var(--tab-border, tomato);\n        padding: var(--tab-button-padding, 5px 14px);\n    }\n    .type-tab .tab{\n        padding: var(--tab-padding, 5px 14px);\n        border: 1px solid transparent;\n        border-bottom: 1px solid var(--tab-border, tomato);\n        \n    }\n    .type-tab .tab.selected{\n        border-top: 1px solid var(--tab-border, tomato);\n        border-left: 1px solid var(--tab-border, tomato);\n        border-right: 1px solid var(--tab-border, tomato);\n        border-bottom: 1px solid transparent;\n    }\n    .tab{\n        background-color: var(--tab-background);\n        color: var(--tab-color);\n        cursor: pointer;\n    }*/\n    .tab.selected, \n    :not(.disabled) .tab:not(:focus):hover, \n    :not(.disabled) :focus{\n        background-color: tomato;\n    }\n    :host([disabled]){\n        opacity: 0.5;\n       \n    }"])));
 (0, _tslib.__decorate)([(0, _decorators.property)({
   type: Array
 })], TabsElement.prototype, "items", void 0);
 (0, _tslib.__decorate)([(0, _decorators.property)({
-  type: String
+  type: String,
+  reflect: true
 })], TabsElement.prototype, "type", void 0);
+(0, _tslib.__decorate)([(0, _decorators.property)({
+  type: String
+})], TabsElement.prototype, "selected", void 0);
 exports.TabsElement = TabsElement = (0, _tslib.__decorate)([(0, _decorators.customElement)("tabs-element")], TabsElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/directives/class-map":"../node_modules/lit/directives/class-map.js","lit":"../node_modules/lit/index.js","../form-associated/index":"form-associated/index.js","lit/decorators":"../node_modules/lit/decorators.js","../controllers/KeyController":"controllers/KeyController.js"}],"text/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/directives/class-map":"../node_modules/lit/directives/class-map.js","lit":"../node_modules/lit/index.js","../form-associated/index":"form-associated/index.ts","lit/decorators":"../node_modules/lit/decorators.js"}],"text/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11889,7 +11862,7 @@ TextStatusedElement.styles = [(0, _lit.css)(_templateObject2 || (_templateObject
   reflect: true
 })], TextStatusedElement.prototype, "status", void 0);
 exports.TextStatusedElement = TextStatusedElement = (0, _tslib.__decorate)([(0, _decorators.customElement)('text-element')], TextStatusedElement);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js"}],"text-field/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/decorators":"../node_modules/lit/decorators.js","lit":"../node_modules/lit/index.js"}],"text-field/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12103,7 +12076,7 @@ exports.TextField = TextField;
 })], TextField.prototype, "useCancelButton", void 0);
 (0, _tslib.__decorate)([(0, _decorators.property)()], TextField.prototype, "icon", void 0);
 exports.TextField = TextField = (0, _tslib.__decorate)([(0, _decorators.customElement)("text-field")], TextField);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../form-associated/index":"form-associated/index.js","../icon":"icon/index.js","../styles/input":"styles/input.js","lit/directives/ref.js":"../node_modules/lit/directives/ref.js"}],"textarea/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../form-associated/index":"form-associated/index.ts","../icon":"icon/index.ts","../styles/input":"styles/input.ts","lit/directives/ref.js":"../node_modules/lit/directives/ref.js"}],"textarea/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12178,7 +12151,7 @@ TextareaField.styles = [_input.input, (0, _lit.css)(_templateObject2 || (_templa
   type: String
 })], TextareaField.prototype, "resize", void 0);
 exports.TextareaField = TextareaField = (0, _tslib.__decorate)([(0, _decorators.customElement)('textarea-field')], TextareaField);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/directives/style-map":"../node_modules/lit/directives/style-map.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../styles/input":"styles/input.js","../form-associated/index":"form-associated/index.js"}],"treeview/tree-view.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/directives/style-map":"../node_modules/lit/directives/style-map.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../styles/input":"styles/input.ts","../form-associated/index":"form-associated/index.ts"}],"treeview/tree-view.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12246,7 +12219,7 @@ Treeview.styles = (0, _lit.css)(_templateObject2 || (_templateObject2 = _taggedT
   reflect: true
 })], Treeview.prototype, "selected", void 0);
 exports.Treeview = Treeview = (0, _tslib.__decorate)([(0, _decorators.customElement)("tree-view")], Treeview);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../icon":"icon/index.js"}],"treeview/tree-item.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../icon":"icon/index.ts"}],"treeview/tree-item.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12318,8 +12291,16 @@ let TreeItem = class TreeItem extends _lit.LitElement {
   }
 
   _connectToItem() {
-    if (!!this.rootItem) {
+    const root = this.rootItem;
+
+    if (!!root) {
       this.setAttribute("containered", "");
+
+      if (!root.opened) {
+        this.style.display = 'none';
+      } else {
+        this.style.display = 'block';
+      }
     }
   }
 
@@ -12353,9 +12334,9 @@ let TreeItem = class TreeItem extends _lit.LitElement {
         this._childTrees = childs;
         this._childValues = childs.map(it => it.value);
         this.container = true;
-
-        this._updateOpened();
       }
+
+      this._updateOpened();
     });
   }
 
@@ -12417,7 +12398,7 @@ TreeItem.styles = (0, _lit.css)(_templateObject3 || (_templateObject3 = _taggedT
 })], TreeItem.prototype, "opened", void 0);
 (0, _tslib.__decorate)([(0, _decorators.state)()], TreeItem.prototype, "selected", void 0);
 exports.TreeItem = TreeItem = (0, _tslib.__decorate)([(0, _decorators.customElement)("tree-item")], TreeItem);
-},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/directives/class-map":"../node_modules/lit/directives/class-map.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../helpers":"helpers.js"}],"treeview/index.js":[function(require,module,exports) {
+},{"tslib":"../node_modules/tslib/tslib.es6.js","lit/directives/class-map":"../node_modules/lit/directives/class-map.js","lit":"../node_modules/lit/index.js","lit/decorators":"../node_modules/lit/decorators.js","../helpers":"helpers.ts"}],"treeview/index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12449,7 +12430,7 @@ Object.keys(_treeItem).forEach(function (key) {
     }
   });
 });
-},{"./tree-view":"treeview/tree-view.js","./tree-item":"treeview/tree-item.js"}],"index.js":[function(require,module,exports) {
+},{"./tree-view":"treeview/tree-view.ts","./tree-item":"treeview/tree-item.ts"}],"index.ts":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12729,15 +12710,15 @@ Object.keys(_spinner).forEach(function (key) {
   });
 });
 
-var _tabs = require("./tabs");
+var _tabsElement = require("./tabs/tabs-element");
 
-Object.keys(_tabs).forEach(function (key) {
+Object.keys(_tabsElement).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
-  if (key in exports && exports[key] === _tabs[key]) return;
+  if (key in exports && exports[key] === _tabsElement[key]) return;
   Object.defineProperty(exports, key, {
     enumerable: true,
     get: function () {
-      return _tabs[key];
+      return _tabsElement[key];
     }
   });
 });
@@ -12793,7 +12774,7 @@ Object.keys(_treeview).forEach(function (key) {
     }
   });
 });
-},{"./button":"button/index.js","./circlepercent":"circlepercent/index.js","./checkbox":"checkbox/index.js","./code":"code/index.js","./description":"description/index.js","./dialog":"dialog/index.js","./form":"form/index.js","./form-associated":"form-associated/index.js","./header":"header/index.js","./icon":"icon/index.js","./label":"label/index.js","./layout":"layout/index.js","./link":"link/index.js","./note":"note/index.js","./number":"number/index.js","./pagination":"pagination/index.js","./panel":"panel/index.js","./qrcode":"qrcode/index.js","./range":"range/index.js","./select":"select/index.js","./spinner":"spinner/index.js","./tabs":"tabs/index.js","./text":"text/index.js","./text-field":"text-field/index.js","./textarea":"textarea/index.js","./treeview":"treeview/index.js"}],"C:/Users/Kaifat/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./button":"button/index.ts","./circlepercent":"circlepercent/index.ts","./checkbox":"checkbox/index.ts","./code":"code/index.ts","./description":"description/index.ts","./dialog":"dialog/index.ts","./form":"form/index.ts","./form-associated":"form-associated/index.ts","./header":"header/index.ts","./icon":"icon/index.ts","./label":"label/index.ts","./layout":"layout/index.ts","./link":"link/index.ts","./note":"note/index.ts","./number":"number/index.ts","./pagination":"pagination/index.ts","./panel":"panel/index.ts","./qrcode":"qrcode/index.ts","./range":"range/index.ts","./select":"select/index.ts","./spinner":"spinner/index.ts","./tabs/tabs-element":"tabs/tabs-element.ts","./text":"text/index.ts","./text-field":"text-field/index.ts","./textarea":"textarea/index.ts","./treeview":"treeview/index.ts"}],"C:/Users/Kaifat/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -12821,7 +12802,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56709" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59687" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -12997,5 +12978,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/Kaifat/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
+},{}]},{},["C:/Users/Kaifat/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.ts"], null)
 //# sourceMappingURL=/index.js.map

@@ -55,7 +55,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             }
         }
         @property({type: Boolean, reflect: true}) showNote: boolean = false;
-        @property({type: Boolean}) disabled: boolean = false;
+        @property({type: Boolean, reflect: true}) disabled: boolean = false;
         @property({type: Boolean}) required: boolean = false;
         @property({type: Boolean}) readonly: boolean = false;
         @property({type: String}) name: string = '';

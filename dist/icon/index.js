@@ -162,7 +162,7 @@ IconElement.styles = css `
     }
     :host(.dropup){
         transform-origin: center;
-        transform: rotate(-180deg) translateY(3px)
+        transform: rotate(-180deg) translateY(1px)
     }
     `;
 __decorate([

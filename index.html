@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>UI Lit - Web-components based UI library</title>
+        <meta name="description" content="Web-components based UI library">
         <link rel="shortcut icon" href="./logo.svg">
         <script src = "./pages/index.js"></script>
         <style>
@@ -31,8 +33,8 @@
                 font-weight: 300;
             }
             header .zip{
-                display: block;
-                margin-top: 30px;
+                display: inline-block;
+                margin-top: 10px;
             }
             header section{
                 height: 100%;
@@ -51,6 +53,9 @@
             tree-view{
                 font-size: 16px;
                 font-weight: 300;
+            }
+            ul{
+                font-size: 18px;
             }
             @font-face {
                 font-family: 'Icons';
@@ -96,7 +101,7 @@
                 </header-element>
                 <header-element level = "2">Features:</header-element>
                 <ul>
-                    <li>Small: ~30kb gzip</li>
+                    <li>Tiny size: ~30kb gzip</li>
                     <li>Based on web-components</li>
                     <li>Form-associated elements</li>
                 </ul>
@@ -108,14 +113,6 @@
                 <code-element>
                     <code-line>yarn add ui-lit</code-line>       
                 </code-element>
-                <tree-view selected = "main" >
-                    <tree-item value = "main" label = "Main"></tree-item>
-                    <tree-item value = "second" label = "Second item"></tree-item>
-                    <tree-item label = "Third item">
-                        <tree-item value = "subItem1" label = "SubItem 1"></tree-item>
-                        <tree-item value = "subItem2" label = "SubItem 2"></tree-item>
-                    </tree-item>
-                </tree-view>
             </section>
         </main>
     </body>

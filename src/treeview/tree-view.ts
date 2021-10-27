@@ -1,9 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { TSelectItem } from '../select';
-import { noselect } from '../styles/noselect';
-import { classMap } from 'lit/directives/class-map';
-import '../icon'
+import '../icon';
 import type { TreeItem } from './tree-item';
 
 
@@ -13,43 +11,37 @@ export interface ITreeViewProps {
     selected: string
 }
 
-
 @customElement("tree-view")
 export class Treeview extends LitElement{
     static styles = css`
     :host{
         display: inline-block;
+        font-size: var(--treeview-font-size, 14px);
     }
     `;
-    _items: Map<string, TreeItem> = new Map();
     @property({type: String, reflect: true}) selected: string = '';
-
-    setValue(value: string){
-        this.selected = value;
-        for(const [v, it] of this._items){
-            if(it.container){
-                it.selectContainer(value);
-                continue;
-            }
-            if(v === value){
-                it.select();
-            }
-            else{
-                it.unselect();
-            }
-        }
+    connectedCallback(){
+        super.connectedCallback();
+        this.addEventListener('changed', this._onChanged as EventListener);
     }
-    connectTreeItem(item: TreeItem){
-        this._items.set(item.value, item);
+    disconnectedCallback(){
+        super.disconnectedCallback();
+        this.removeEventListener('changed', this._onChanged as EventListener);
     }
-    disconnectTreeItem(item: TreeItem){
-        this._items.delete(item.value);
+    private _onChanged(e: CustomEvent){
+        this.selected = e.detail;
+    }
+    
+    updated(){
+        this.querySelectorAll("tree-subview").forEach(it => {
+            it.updateSelection(false);
+        })
+        this.querySelectorAll("tree-item").forEach(it => {            
+            it.updateSelection(this.selected);
+        })
     }
     render(){
         return html`<slot></slot>`;
-    }
-    firstUpdated(){
-        this.setValue(this.selected);
     }
 }
 
@@ -58,5 +50,4 @@ declare global {
     interface HTMLElementTagNameMap {
       'tree-view': Treeview;
     }
-    
 }

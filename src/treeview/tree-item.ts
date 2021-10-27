@@ -1,139 +1,56 @@
-import { classMap } from 'lit/directives/class-map';
-import { LitElement, html, css, nothing } from 'lit';
-import { customElement, property, state } from 'lit/decorators';
-import type { Treeview } from './tree-view';
-import { getParentTagName } from '../helpers';
+import { customElement, property } from 'lit/decorators';
+import { LitElement, html, css } from 'lit';
 
 @customElement("tree-item")
 export class TreeItem extends LitElement{
     static styles = css`
-        :host{
-            display: block;
-            padding: 5px 10px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        :host([containered]){
-            margin-left: 20px;
-        }
-        :host([container]) .label{
-            padding-bottom: 5px;
-        }
-        :host([container][selected]) .label{
-            color: var(--treeitem-selected-color, #f700ff);
-        }
-        :host(:not([container])[selected]){
-            background-color: var(--treeitem-selected-background, rgba(0, 0, 0, 0.1));
-            color: var(--treeitem-selected-color, #f700ff);
-        }
-        .icon-before{
-            margin-right: 5px;
-            
-        }
-        `;
-    @property({type: String, attribute: true, reflect: true}) value: string = '';
-    @property({type: String}) label: string = '';
-    @property({type: Boolean, reflect: true}) container: boolean = false;
-    @property({type: Boolean}) opened: boolean = false;
-    @state() selected: boolean = false;
-    _childTrees: TreeItem[] = [];
-    _childValues: string[] = [];
-    
-    get root(): Treeview | null{
-        return getParentTagName(this, "tree-view") as Treeview | null; 
+    :host{
+        display: block;
+        padding: 5px 10px;
+        cursor: pointer;
     }
-    get rootItem(): TreeItem | null{
-        return getParentTagName(this.parentElement!, "tree-item") as TreeItem | null; 
+    :host([selected]){
+        background-color: var(--treeitem-selected-background, rgba(0, 0, 0, 0.1));
+        color: var(--treeitem-selected-color, #f700ff);
     }
-    private _connectToView(){
-        const root = this.root;
-        if(!root){
-            console.warn("TreeItem must be child of TreeView");
-            return;
-        }
-        root.connectTreeItem(this);
-    }
-    private _disconnectFromView(){
-        this.root?.disconnectTreeItem(this);
-    }
-    private _connectToItem(){
-        if(!!this.rootItem){
-            this.setAttribute("containered", "");
-        }
-    }
+    `;
+    @property() value: string = '';
+
     connectedCallback(){
         super.connectedCallback();
-        this.addEventListener('click', this.onSelect);
-        this._connectToView();
-        this._connectToItem();
-        if(!this.value){
-            this.container = true;
-        }
-
+        this.addEventListener('click', this._onClick);
     }
     disconnectedCallback(){
-        this._childTrees = [];
-        this._disconnectFromView();
-        this.removeEventListener('click', this.onSelect);
-        super.disconnectedCallback()
+        super.disconnectedCallback();
+        this.removeEventListener('click', this._onClick);
     }
-    firstUpdated(){
-        setTimeout(() => {
-            const childs = [...this.querySelectorAll("tree-item")];
-            if(childs.length){
-                this._childTrees = childs;
-                this._childValues = childs.map(it => it.value);
-                this.container = true;
-                this._updateOpened();
-            }
-        })
-    }
-    private _updateOpened(){
-        this._childTrees.forEach(it => {
-            it.style.display = this.opened ? 'block' : 'none';
-        })
-    }
-    private _containterTemplate(){
-        if(this.container){
-            const data = {
-                dropup: this.opened,
-                "icon-before": true
-            }
-            return html`<icon-element 
-                            icon = "dropdown" 
-                            class = "${classMap(data)}"></icon-element>`;
+
+    updateSelection(selected: string){
+        const isSelected = selected === this.value;
+        if(this.hasAttribute('selected') !== isSelected){
+            isSelected 
+                ? this.setAttribute('selected', '')
+                : this.removeAttribute('selected');
         }
+        if(isSelected){
+            this.dispatchEvent(new CustomEvent('subviewSelected', {
+                detail: isSelected,
+                bubbles: true
+            }))
+        }
+         
+    }
+    private _onClick(){
+        this.dispatchEvent(new CustomEvent("changed", {
+            detail: this.value,
+            bubbles: true
+        }))
     }
     render(){
-        return html`<div class = "label">${this._containterTemplate()}${this.label}</div><slot></slot>`;
-    }
-    onSelect = (e: Event) => {
-        e.stopPropagation();
-        if(this.container){
-            this.opened = !this.opened;
-            this._updateOpened();
-        }
-        else{
-            this.root!.setValue(this.value);
-        }
-    }
-    selectContainer(value: string){
-        if(this._childValues.includes(value)){
-            this.select();
-        }
-        else{
-            this.unselect();
-        }
-    }
-    select(){
-        this.setAttribute("selected", "");
-        this.selected = true;
-    }
-    unselect(){
-        this.selected = false;
-        this.removeAttribute("selected");
+        return html`<slot></slot>`;
     }
 }
+
 declare global {
     interface HTMLElementTagNameMap {
       'tree-item': TreeItem;

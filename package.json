@@ -1,6 +1,6 @@
 {
   "name": "ui-lit",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "UI Elements on LIT",
   "source": "src/index.ts",
   "main": "dist/index.js",
@@ -32,6 +32,9 @@
   "keywords": [
     "user-interface",
     "lit-element",
+    "lit",
+    "UI",
+    "UI kit",    
     "LitElement"
   ],
   "homepage": "https://github.com/kaifaty/ui-lit/#readme",

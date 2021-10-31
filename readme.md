@@ -2,7 +2,7 @@
 
 Web-components UI library based on Lit 2.0
 
-## [Storybook](https://kaifaty.github.io/ui-lit/storybook-static)
+## [Check in Storybook](https://kaifaty.github.io/ui-lit/storybook-static)
 
 ## Features
 

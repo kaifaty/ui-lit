@@ -2,6 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { FormAssociatedElement } from '../form-associated/interface';
 import '../label';
+import type { CheckboxElement } from '../checkbox/index';
 
 export interface IFormProps {
     disabled: boolean
@@ -58,7 +59,10 @@ export class FromElement extends LitElement implements IFormElement, IFormProps{
         const data: TReturnData = {};
 
         this._elements.forEach(it => {
-            if(it.name){
+            if(it.tagName.toLocaleLowerCase() === "checkbox-element"){
+                data[it.name] = Number((it as CheckboxElement).checked);
+            }
+            else if(it.name){
                 data[it.name] = it.value;
             }
         })

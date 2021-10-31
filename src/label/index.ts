@@ -42,11 +42,9 @@ export class LabelText extends LitElement{
             const node = root.querySelector(`#${this.for}`) as (HTMLElement & {_formAssiciated?: boolean});
             if(node && node._formAssiciated || node instanceof HTMLInputElement){
                 return node as TLabled | HTMLInputElement;
-                
             }
         }
         return null;
-        
     }
 
     _handleClick = () => {

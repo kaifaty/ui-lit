@@ -10,8 +10,8 @@ export class TreeItem extends LitElement{
         cursor: pointer;
     }
     :host([selected]){
-        background-color: var(--treeitem-selected-background, rgba(0, 0, 0, 0.1));
-        color: var(--treeitem-selected-color, #f700ff);
+        background-color: var(--treeitem-selected-background, rgba(0, 0, 0, 0.05));
+        color: var(--treeitem-selected-color, tomato);
     }
     `;
     @property() value: string = '';
@@ -55,5 +55,4 @@ declare global {
     interface HTMLElementTagNameMap {
       'tree-item': TreeItem;
     }
-    
 }

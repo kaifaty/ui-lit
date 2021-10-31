@@ -119,11 +119,11 @@ export const formAssociated = (superClass) => {
         }
         findLabel() {
             let parent = this.parentElement;
-            if ((parent === null || parent === void 0 ? void 0 : parent.tagName) === "LABEL-ELEMENT") {
+            if ((parent === null || parent === void 0 ? void 0 : parent.tagName) === "LABEL-TEXT") {
                 return parent;
             }
             while (parent) {
-                if ((parent === null || parent === void 0 ? void 0 : parent.tagName) === "LABEL-ELEMENT") {
+                if ((parent === null || parent === void 0 ? void 0 : parent.tagName) === "LABEL-TEXT") {
                     return parent;
                 }
                 parent = parent.parentElement;

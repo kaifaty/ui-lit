@@ -6,13 +6,21 @@ import type { IPropsSelect } from '../src/select';
 
 
 const Select = (data: IPropsSelect) => 
-    html`<select-element 
-        .value = "${data.value}"
-        .items = "${data.items}"
-        .disabled = "${data.disabled}"
-        .optionsWidth = "${data.optionsWidth}"
-        .optionsHeight = "${data.optionsHeight}"
-    ></select-element>`;
+    html`
+    <div>
+        <select-element 
+            .value = "${data.value}"
+            .disabled = "${data.disabled}"
+            .optionsWidth = "${data.optionsWidth}"
+            .optionsHeight = "${data.optionsHeight}">
+            <select-item value = "1">Item 1</select-item>
+            <select-item value = "2">Item 2</select-item>
+            <select-item value = "3">Item 3</select-item>
+            <select-item value = "4">Item 4</select-item>
+            <select-item value = "5">Item 5</select-item>
+        </select-element>
+    </div>
+    `;
 
 const Template: Story<Partial<IPropsSelect>> = (args) => Select(args as IPropsSelect);
 
@@ -23,15 +31,6 @@ Default.args = {
     readonly:  false,
     optionsWidth:  0,
     optionsHeight:  0,
-    items: [
-        {value: '1', text: 'Text 1'},
-        {value: '2', text: 'Text 2'},
-        {value: '3', text: 'Text 3'},
-        {value: '4', text: 'Text 4'},
-        {value: '5', text: 'Text 5'},
-        {value: '6', text: 'Text 6'},
-        {value: '7', text: 'Text 7'},
-    ]
 }
 export default {
     title: 'Form Assosiated/Select',

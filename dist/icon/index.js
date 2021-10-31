@@ -30,6 +30,7 @@ let IconElement = IconElement_1 = class IconElement extends LitElement {
 IconElement.iconsMap = {
     "help": parseInt(`006E`, 16),
     "dropdown": parseInt(`0069`, 16),
+    "dropup": parseInt(`0060`, 16),
     "arrow-down": parseInt(`004e`, 16),
     "arrow-up": parseInt(`004f`, 16),
     "arrow-down-2": parseInt(`0050`, 16),
@@ -61,6 +62,7 @@ IconElement.iconsMap = {
     "share": parseInt(`005A`, 16),
     "resize": parseInt(`005B`, 16),
     "move": parseInt(`005C`, 16),
+    "filter": parseInt(`005f`, 16),
     "orderbook-mode-sym1sum": parseInt(`0061`, 16),
     "orderbook-mode-sym2sum": parseInt(`0062`, 16),
     "orderbook-mode-sym2vol": parseInt(`0063`, 16),
@@ -70,7 +72,7 @@ IconElement.iconsMap = {
     "user": parseInt(`0064`, 16),
     "hide": parseInt(`0065`, 16),
     "show": parseInt(`0066`, 16),
-    "filter": parseInt(`0067`, 16),
+    //"filter": parseInt(`0067`, 16),
     "exit": parseInt(`0068`, 16),
     "buy": parseInt(`006A`, 16),
     "sell": parseInt(`006B`, 16),
@@ -162,7 +164,7 @@ IconElement.styles = css `
     }
     :host(.dropup){
         transform-origin: center;
-        transform: rotate(-180deg) translateY(1px)
+        transform: rotate(-180deg) translateY(1px);
     }
     `;
 __decorate([

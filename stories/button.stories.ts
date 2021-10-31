@@ -16,6 +16,8 @@ const Button = (data: IProps) =>
         ?success = "${!!data.success}"
         ?danger = "${!!data.danger}"
         ?switchOn = "${!!data.switchOn}"
+        size = "${data.size}"        
+
     >${data.label}</button-element>`;
 
 
@@ -32,6 +34,7 @@ Default.args = {
     danger: false,
     switchOn: false,
     type: 'button',
+    size: 'medium',
 }
 export const Disabled = Template.bind({});
 Disabled.args = {
@@ -73,6 +76,10 @@ export default {
     argTypes: {
         type: {
           options: ['button', 'submit'],
+          control: { type: 'radio' }
+        },
+        size: {
+          options: ['small', 'medium', 'large'],
           control: { type: 'radio' }
         }
     },

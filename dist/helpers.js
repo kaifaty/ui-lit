@@ -14,6 +14,14 @@ export const getRootElement = (el) => {
     }
     return el;
 };
+export const isClickInElement = (e, root) => {
+    for (const el of e.composedPath()) {
+        if (el === root) {
+            return true;
+        }
+    }
+    return false;
+};
 export const getClientX = (e) => {
     var _a;
     const clientx = e.clientX || ((_a = e.targetTouches) === null || _a === void 0 ? void 0 : _a[0].clientX) || 0;

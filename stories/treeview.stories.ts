@@ -13,6 +13,11 @@ const TreeView = (data: ITreeViewProps) =>
             <tree-subview label = "Third item">
                 <tree-item value = "subItem1">SubItem 1</tree-item>
                 <tree-item value = "subItem2">SubItem 2</tree-item>
+                
+                <tree-subview label = "Sub 2 level">
+                    <tree-item value = "subItem3">SubItem 3</tree-item>
+                    <tree-item value = "subItem4">SubItem 4</tree-item>
+                </tree-subview>
             </tree-subview>
         </tree-view>`;
 

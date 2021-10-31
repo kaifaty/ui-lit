@@ -24,7 +24,14 @@ export const getRootElement = (el: HTMLElement) => {
     }
     return el;
 }
-
+export const isClickInElement = (e: Event, root: HTMLElement) => {
+    for(const el of e.composedPath()){
+        if(el === root){
+            return true;
+        }
+    }
+    return false
+}
 export const getClientX = (e: IUIEvent) => {
     const clientx =  e.clientX || e.targetTouches?.[0].clientX || 0; 
     return clientx;

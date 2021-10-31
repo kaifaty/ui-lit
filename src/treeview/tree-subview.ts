@@ -7,17 +7,15 @@ export class TreeSubView extends LitElement{
     static styles = css`
     :host{
         display: block;
-        padding: 5px 10px;
     }
     .label{
         display: flex;
         align-items: center;
         cursor: pointer;
+        padding: 5px 10px;
     }
     .content{
-        margin-top: 5px;
-        margin-left: 15px;
-        
+        margin-left: 25px;
     }
     icon-element{
         margin-right: 5px;
@@ -26,7 +24,7 @@ export class TreeSubView extends LitElement{
         display: none;
     }
     :host([selected]) .label{
-        color: var(--treeitem-selected-color, #f700ff);
+        color: var(--treeitem-selected-color, tomato);
     }
     `;
     @property({type: String}) label: string = '';

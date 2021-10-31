@@ -19,6 +19,7 @@ export const input = css `
 .wrapper{
     position: relative;
     height: 100%;
+    width: 100%;
 }
 .icon{
     position: absolute;

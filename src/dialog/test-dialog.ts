@@ -7,7 +7,7 @@ class TestDialog extends LitElement{
     confirm(){
         this.opened = true;
         this.shadowRoot!.querySelector("dialog-element")!.open().then(r => {
-            console.log('test result', r)
+            
         });
     }
 

@@ -2,6 +2,7 @@ import { TemplateResult, LitElement } from 'lit';
 import { KeyDownController } from '../controllers/KeyController';
 export interface ButtonProps {
     type?: 'button' | 'submit';
+    size?: TSize;
     primary?: boolean;
     disabled?: boolean;
     borderless?: boolean;
@@ -10,13 +11,13 @@ export interface ButtonProps {
     danger?: boolean;
     switchOn?: boolean;
 }
+declare type TSize = 'small' | 'medium' | 'large';
 export declare class ButtomElement extends LitElement implements ButtonProps {
     static styles: import("lit").CSSResult[];
-    iconBefore: string | TemplateResult;
-    iconAfter: string | TemplateResult;
+    iconBefore: boolean;
+    iconAfter: boolean;
     type: 'submit' | 'button';
-    size: 'small' | 'medium' | 'large';
-    tabindex: number;
+    size: TSize;
     disabled: boolean;
     borderless: boolean;
     switch: boolean;
@@ -25,25 +26,16 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
     success: boolean;
     danger: boolean;
     switchOn: boolean;
+    tabindex: number;
     enter: KeyDownController;
     connectedCallback(): void;
     disconnectedCallback(): void;
     get classes(): {
-        borderless: boolean;
-        switch: boolean;
-        "switch-on": boolean;
-        primary: boolean;
-        secondary: boolean;
-        success: boolean;
-        danger: boolean;
-        disabled: boolean;
         wrapper: boolean;
         noselect: boolean;
         "icon-before": boolean;
         "icon-after": boolean;
     };
-    private _iconBeforeTemplate;
-    private _iconAfterTemplate;
     render(): TemplateResult<1>;
     private _onIconBefore;
     private _onIconAfter;
@@ -57,3 +49,4 @@ declare global {
         'button-element': ButtomElement;
     }
 }
+export {};

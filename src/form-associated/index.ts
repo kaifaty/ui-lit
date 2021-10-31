@@ -134,11 +134,11 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
 
         public findLabel(): LabelText | null{
             let parent = this.parentElement;
-            if(parent?.tagName === "LABEL-ELEMENT"){
+            if(parent?.tagName === "LABEL-TEXT"){
                 return parent as LabelText;
             }
             while(parent){
-                if(parent?.tagName === "LABEL-ELEMENT"){
+                if(parent?.tagName === "LABEL-TEXT"){
                     return parent as LabelText;
                 }
                 parent = parent.parentElement

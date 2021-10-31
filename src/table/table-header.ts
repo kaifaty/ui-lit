@@ -7,7 +7,7 @@ import { noselect } from '../styles/noselect';
 import '../text-field';
 import '../number';
 import { ClickController } from '../controllers/ClickController';
-import { isClickInElement } from '../helpers';
+import { isClickInElement } from 'kailib';
 
 @customElement('table-header')
 export class TableHeader extends LitElement{

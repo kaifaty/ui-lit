@@ -3,7 +3,7 @@ import { LitElement, html, nothing, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators';
 import { formAssociated } from '../form-associated/index';
 import { noselect } from '../styles/noselect';
-import { getClientX } from '../helpers';
+import { getClientX } from 'kailib';
 /** <range-element></range-element> */
 let RangeElement = class RangeElement extends formAssociated(LitElement) {
     constructor() {

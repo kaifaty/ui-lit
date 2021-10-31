@@ -6,7 +6,7 @@ import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
 import { formAssociated } from '../form-associated/index';
 import { customElement, property, state } from 'lit/decorators';
 import { input } from '../styles/input';
-import { getEventDataset, isChildOfElement } from '../helpers';
+import { getEventDataset, isChildOfElement } from 'kailib';
 import { ClickController } from '../controllers/ClickController';
 import { KeyDownController } from '../controllers/KeyController';
 import { calcPositionForPopup } from '../helpers/position';
@@ -345,7 +345,7 @@ export class SelectElement_ extends formAssociated(LitElement) implements IProps
         this._focusedOption = (e.target as HTMLElement).dataset.value!;
     }
     private _handleSelectClick(e: Event){
-        this.setValue(getEventDataset(e, 'value'))
+        this.setValue(getEventDataset(e, '.option', 'value')!);
         this.open = false;
         e.stopPropagation();
     }  

@@ -1,12 +1,11 @@
 {
   "name": "ui-lit",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "UI Elements on LIT",
   "source": "src/index.ts",
   "main": "dist/index.js",
   "module": "dist/index.es6.js",
   "types": "dist/types.d.ts",
-  
   "browserslist": [
     "since 2017-06"
   ],
@@ -58,7 +57,7 @@
   },
   "dependencies": {
     "@swc/helpers": "^0.2.13",
-    "kailib": "^1.0.29",
+    "kailib": "^1.0.30",
     "lit": "^2.0.2",
     "qrcode": "^1.4.4"
   }

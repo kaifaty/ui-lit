@@ -1,8 +1,6 @@
 import { noselectText } from './../styles/noselect';
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
-import { getParentTagName } from '../helpers';
-import type { TabsElement } from './tabs-element';
 import { TTabType } from './tabs-element';
 import { KeyDownController } from '../controllers/KeyController';
 

@@ -1,7 +1,7 @@
 import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
-import { getRootElement } from '../helpers';
+import { getRootElement } from 'kailib';
 let LabelText = class LabelText extends LitElement {
     constructor() {
         super(...arguments);

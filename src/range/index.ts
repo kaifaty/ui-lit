@@ -3,7 +3,7 @@ import { customElement, property, state, query } from 'lit/decorators';
 import type { FormAssociated } from '../form-associated/interface';
 import { formAssociated } from '../form-associated/index';
 import { noselect } from '../styles/noselect';
-import { getClientX, IUIEvent } from '../helpers';
+import { getClientX, IUIEvent } from 'kailib';
 
 export interface IRangeProps extends FormAssociated {
     value: string

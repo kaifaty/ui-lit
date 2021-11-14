@@ -2,7 +2,7 @@ import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { getRootElement } from 'kailib';
-let LabelText = class LabelText extends LitElement {
+let LitLabel = class LitLabel extends LitElement {
     constructor() {
         super(...arguments);
         this.for = '';
@@ -46,11 +46,11 @@ let LabelText = class LabelText extends LitElement {
         return null;
     }
 };
-LabelText.styles = css ``;
+LitLabel.styles = css ``;
 __decorate([
     property({ type: String })
-], LabelText.prototype, "for", void 0);
-LabelText = __decorate([
-    customElement("label-text")
-], LabelText);
-export { LabelText };
+], LitLabel.prototype, "for", void 0);
+LitLabel = __decorate([
+    customElement("lit-label")
+], LitLabel);
+export { LitLabel };

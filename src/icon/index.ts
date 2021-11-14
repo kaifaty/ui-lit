@@ -7,7 +7,7 @@ export interface IIconProps{
 }
 
 @customElement("lit-icon")
-export class IconElement extends LitElement{
+export class LitIcon extends LitElement{
     static iconsMap: Record<string, number> = {
         "help": parseInt(`006E`, 16),
         "dropdown": parseInt(`0069`, 16),
@@ -157,13 +157,13 @@ export class IconElement extends LitElement{
         else this.classList.remove("material");
     }
     render(){
-        const code = IconElement.iconsMap[this.icon];
+        const code = LitIcon.iconsMap[this.icon];
         if(!this.material){
             if(code){
                 return String.fromCharCode(code);    
             }
-            if(IconElement.defaultIcons[this.icon]){
-                return IconElement.defaultIcons[this.icon];
+            if(LitIcon.defaultIcons[this.icon]){
+                return LitIcon.defaultIcons[this.icon];
             }
         }
         return this.icon;
@@ -171,6 +171,6 @@ export class IconElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-icon': IconElement;
+      'lit-icon': LitIcon;
     }
 }

@@ -3,8 +3,8 @@ import { customElement } from 'lit/decorators';
 import { OuterClickRemoveController } from '../controllers/OuterClickRemoveController';
 
 
-@customElement("note-element")
-export class NoteElement extends LitElement{
+@customElement("lit-note")
+export class LitNote extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -58,6 +58,6 @@ export class NoteElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'note-element': NoteElement;
+      'lit-note': LitNote;
     }
 }

@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { FormAssociatedElement } from '../form-associated/interface';
 import '../label';
-import type { CheckboxElement } from '../checkbox/index';
+import type { LitCheckbox } from '../checkbox/index';
 
 export interface IFormProps {
     disabled: boolean
@@ -16,7 +16,7 @@ export interface IFormElement{
 }
 type TReturnData = Record<string, string | boolean | number>;
 @customElement("lit-form")
-export class FromElement extends LitElement implements IFormElement, IFormProps{
+export class LitFrom extends LitElement implements IFormElement, IFormProps{
     _elements: FormAssociatedElement[] = []
 
     get length(){
@@ -60,7 +60,7 @@ export class FromElement extends LitElement implements IFormElement, IFormProps{
 
         this._elements.forEach(it => {
             if(it.tagName.toLocaleLowerCase() === "checkbox-element"){
-                data[it.name] = Number((it as CheckboxElement).checked);
+                data[it.name] = Number((it as LitCheckbox).checked);
             }
             else if(it.name){
                 data[it.name] = it.value;
@@ -110,6 +110,6 @@ export class FromElement extends LitElement implements IFormElement, IFormProps{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-form': FromElement;
+      'lit-form': LitFrom;
     }
 }

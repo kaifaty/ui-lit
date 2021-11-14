@@ -11,7 +11,7 @@ export interface IFormElement {
     submit(): void;
 }
 declare type TReturnData = Record<string, string | boolean | number>;
-export declare class FromElement extends LitElement implements IFormElement, IFormProps {
+export declare class LitFrom extends LitElement implements IFormElement, IFormProps {
     _elements: FormAssociatedElement[];
     get length(): number;
     get elements(): FormAssociatedElement[];
@@ -32,7 +32,7 @@ export declare class FromElement extends LitElement implements IFormElement, IFo
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'lit-form': FromElement;
+        'lit-form': LitFrom;
     }
 }
 export {};

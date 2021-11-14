@@ -94,10 +94,10 @@ export const formAssociated = (superClass) => {
             if (this.showNote) {
                 //const {x, y} = calcPositionForPopup(this, {width: 400, height: 40});
                 // style = "left: ${x}px; top: ${y + 5}px"
-                return html `<note-element 
+                return html `<lit-note 
                     @close = "${this._handleCloseNote}" 
                     style = "transform: translate(0, -100%);"
-                    class = "error" ${ref(this.noteRef)}>${this.validationMessage}</note-element>`;
+                    class = "error" ${ref(this.noteRef)}>${this.validationMessage}</lit-note>`;
             }
             return nothing;
         }
@@ -119,11 +119,11 @@ export const formAssociated = (superClass) => {
         }
         findLabel() {
             let parent = this.parentElement;
-            if ((parent === null || parent === void 0 ? void 0 : parent.tagName) === "LABEL-TEXT") {
+            if ((parent === null || parent === void 0 ? void 0 : parent.tagName) === "lit-label") {
                 return parent;
             }
             while (parent) {
-                if ((parent === null || parent === void 0 ? void 0 : parent.tagName) === "LABEL-TEXT") {
+                if ((parent === null || parent === void 0 ? void 0 : parent.tagName) === "lit-label") {
                     return parent;
                 }
                 parent = parent.parentElement;

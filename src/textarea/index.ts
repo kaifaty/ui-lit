@@ -12,7 +12,7 @@ export interface ITextareaProps {
 }
 type TResize = "none" | "both" | "horizontal" | "vertical" | "block" | "inline";
 @customElement('lit-textarea')
-export class TextareaField extends formAssociated(LitElement){
+export class LitTextarea extends formAssociated(LitElement){
     static styles = [input, css`
     :host{  
         display: inline-block;
@@ -61,6 +61,6 @@ export class TextareaField extends formAssociated(LitElement){
 
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-textarea': TextareaField;
+      'lit-textarea': LitTextarea;
     }
 }

@@ -1,10 +1,10 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
 import '../icon';
-import type { LayoutGrid } from './grid';
+import type { LitLayoutGrid } from './grid';
 
 @customElement("lit-layout")
-export class LayoutElement extends LitElement{
+export class LitLayout extends LitElement{
   static styles = css`
     :host{
       display: block;
@@ -70,8 +70,8 @@ export class LayoutElement extends LitElement{
 
   connectedCallback(){
     super.connectedCallback();
-    this.width = (this.parentElement as LayoutGrid).getNewPosition(this.width);
-    this.height = (this.parentElement as LayoutGrid).getNewPosition(this.height);
+    this.width = (this.parentElement as LitLayoutGrid).getNewPosition(this.width);
+    this.height = (this.parentElement as LitLayoutGrid).getNewPosition(this.height);
   }
   willUpdate(){
     this._setStyleValue('--width', this.width);
@@ -98,8 +98,8 @@ export class LayoutElement extends LitElement{
 
   /** Events */
   private _onSetMaxZindex(){
-    this.zIndex = (this.parentElement as LayoutGrid).maxIndex + 1;
-    (this.parentElement as LayoutGrid).maxIndex = this.zIndex;
+    this.zIndex = (this.parentElement as LitLayoutGrid).maxIndex + 1;
+    (this.parentElement as LitLayoutGrid).maxIndex = this.zIndex;
   }
   private _onResize(e: MouseEvent){
     this.dispatchEvent(new CustomEvent("startResize", {
@@ -147,7 +147,7 @@ export class LayoutElement extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-layout': LayoutElement;
+      'lit-layout': LitLayout;
     }
     
 }

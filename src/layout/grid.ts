@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement, query, state, queryAll} from 'lit/decorators';
-import type { LayoutElement } from './element';
+import type { LitLayout } from './element';
 import { scrollbar } from '../styles/scrollbar';
 
 export interface TPosition {
@@ -19,7 +19,7 @@ export interface ILayoutElementProps extends TPosition{
 }
 
 @customElement("lit-layout-grid")
-export class LayoutGrid extends LitElement{
+export class LitLayoutGrid extends LitElement{
     static styles = [
         css`
         :host{
@@ -63,7 +63,7 @@ export class LayoutGrid extends LitElement{
     @state() isMoving: boolean = false;
     @state() isResizing: boolean = false;
     @state() layoutElementData: null | {
-        element: LayoutElement,
+        element: LitLayout,
         layerX: number,
         layerY: number
     } = null;
@@ -243,7 +243,7 @@ export class LayoutGrid extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-layout-grid': LayoutGrid;
+      'lit-layout-grid': LitLayoutGrid;
     }
     
 }

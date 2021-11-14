@@ -9,8 +9,8 @@ import '../number';
 import { ClickController } from '../controllers/ClickController';
 import { isClickInElement } from 'kailib';
 
-@customElement('table-header')
-export class TableHeader extends LitElement{
+@customElement('lit-table-header')
+export class LitTableHeader extends LitElement{
     static styles = [css`
     :host{
         padding: var(--cell-header-padding, 0 15px);
@@ -160,23 +160,23 @@ export class TableHeader extends LitElement{
         }
         if(item.type === 'input' && typeof item.value === 'number'){
             return html`
-                <label-text>
+                <lit-label>
                     ${item.text}
-                    <lit-number 
+                    <lit-numberfield 
                         name = "${i}" 
                         value = "${item.value}"
-                        placeholder = "${ifDefined(item.placeholder)}"></lit-number>
-                </label-text>`;
+                        placeholder = "${ifDefined(item.placeholder)}"></lit-numberfield>
+                </lit-label>`;
         }
         if(item.type === 'input'){
             return html`
-                <label-text>
+                <lit-label>
                     ${item.text}
                     <lit-textfield 
                         name = "${i}" 
                         value = "${item.value}"
                         placeholder = "${ifDefined(item.placeholder)}"></lit-textfield>
-                </label-text>`;
+                </lit-label>`;
         }
         return nothing;
     }
@@ -272,6 +272,6 @@ export class TableHeader extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'table-header': TableHeader;
+      'lit-table-header': LitTableHeader;
     }
 }

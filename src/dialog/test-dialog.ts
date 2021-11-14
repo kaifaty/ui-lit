@@ -6,7 +6,7 @@ class TestDialog extends LitElement{
     @state() opened = false;
     confirm(){
         this.opened = true;
-        this.shadowRoot!.querySelector("dialog-element")!.open().then(r => {
+        this.shadowRoot!.querySelector("lit-dialog")!.open().then(r => {
             
         });
     }

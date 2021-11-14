@@ -20,7 +20,7 @@ export interface ITabs extends FormAssociatedProps{
 }
 
 @customElement("lit-tabs")
-export class TabsElement extends formAssociated(LitElement) implements ITabs{
+export class LitTabs extends formAssociated(LitElement) implements ITabs{
     static styles = css`
     :host{
         
@@ -83,6 +83,6 @@ export class TabsElement extends formAssociated(LitElement) implements ITabs{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-tabs': TabsElement;
+      'lit-tabs': LitTabs;
     }
 }

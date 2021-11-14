@@ -2,11 +2,11 @@
 import { customElement, state } from 'lit/decorators';
 import { LitElement, html, css } from 'lit';
 import { getParentTagName } from 'kailib';
-import type { CodeElement } from './index';
+import type { LitCode } from './index';
 
 
-@customElement('code-line')
-export class CodeLine extends LitElement{
+@customElement('lit-code-line')
+export class LitCodeLine extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -22,7 +22,7 @@ export class CodeLine extends LitElement{
     `;
     @state() number: number = 0;
     get root(){        
-        return getParentTagName(this, 'lit-code') as CodeElement | null; 
+        return getParentTagName(this, 'lit-code') as LitCode | null; 
     }
     connectedCallback(){
         super.connectedCallback();
@@ -42,7 +42,7 @@ export class CodeLine extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'code-line': CodeLine;
+      'lit-code-line': LitCodeLine;
     }
     
 }

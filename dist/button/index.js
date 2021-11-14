@@ -4,7 +4,7 @@ import { customElement, property, state } from 'lit/decorators';
 import { classMap } from 'lit/directives/class-map';
 import { KeyDownController } from '../controllers/KeyController';
 import { button } from '../styles/button';
-let ButtomElement = class ButtomElement extends LitElement {
+let LitButton = class LitButton extends LitElement {
     constructor() {
         super(...arguments);
         this.iconBefore = false;
@@ -86,47 +86,47 @@ let ButtomElement = class ButtomElement extends LitElement {
         }
     }
 };
-ButtomElement.styles = button;
+LitButton.styles = button;
 __decorate([
     state()
-], ButtomElement.prototype, "iconBefore", void 0);
+], LitButton.prototype, "iconBefore", void 0);
 __decorate([
     state()
-], ButtomElement.prototype, "iconAfter", void 0);
+], LitButton.prototype, "iconAfter", void 0);
 __decorate([
     property({ type: String })
-], ButtomElement.prototype, "type", void 0);
+], LitButton.prototype, "type", void 0);
 __decorate([
     property({ type: String, reflect: true })
-], ButtomElement.prototype, "size", void 0);
+], LitButton.prototype, "size", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
-], ButtomElement.prototype, "disabled", void 0);
+], LitButton.prototype, "disabled", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
-], ButtomElement.prototype, "borderless", void 0);
+], LitButton.prototype, "borderless", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
-], ButtomElement.prototype, "switch", void 0);
+], LitButton.prototype, "switch", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
-], ButtomElement.prototype, "primary", void 0);
+], LitButton.prototype, "primary", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
-], ButtomElement.prototype, "secondary", void 0);
+], LitButton.prototype, "secondary", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
-], ButtomElement.prototype, "success", void 0);
+], LitButton.prototype, "success", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
-], ButtomElement.prototype, "danger", void 0);
+], LitButton.prototype, "danger", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
-], ButtomElement.prototype, "switchOn", void 0);
+], LitButton.prototype, "switchOn", void 0);
 __decorate([
     property({ type: Number })
-], ButtomElement.prototype, "tabindex", void 0);
-ButtomElement = __decorate([
+], LitButton.prototype, "tabindex", void 0);
+LitButton = __decorate([
     customElement("lit-button")
-], ButtomElement);
-export { ButtomElement };
+], LitButton);
+export { LitButton };

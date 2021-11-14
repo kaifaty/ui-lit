@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators';
 
-@customElement("table-cell")
-export class TableCell extends LitElement{
+@customElement("lit-table-cell")
+export class LitTableCell extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -19,6 +19,6 @@ export class TableCell extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'table-cell': TableCell;
+      'lit-table-cell': LitTableCell;
     }
 }

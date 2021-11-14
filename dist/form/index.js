@@ -2,7 +2,7 @@ import { __decorate } from "tslib";
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import '../label';
-let FromElement = class FromElement extends LitElement {
+let LitFrom = class LitFrom extends LitElement {
     constructor() {
         super(...arguments);
         this._elements = [];
@@ -91,11 +91,11 @@ let FromElement = class FromElement extends LitElement {
 };
 __decorate([
     property({ type: Boolean })
-], FromElement.prototype, "noValidate", void 0);
+], LitFrom.prototype, "noValidate", void 0);
 __decorate([
     property({ type: Boolean })
-], FromElement.prototype, "disabled", void 0);
-FromElement = __decorate([
+], LitFrom.prototype, "disabled", void 0);
+LitFrom = __decorate([
     customElement("lit-form")
-], FromElement);
-export { FromElement };
+], LitFrom);
+export { LitFrom };

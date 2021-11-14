@@ -2,7 +2,7 @@ import { LitElement, TemplateResult } from 'lit';
 import type { FormAssociated } from '../form-associated/interface';
 import '../icon';
 import { Ref } from 'lit/directives/ref.js';
-import { TInputMode } from '../lit-textfield/index';
+import { TInputMode } from '../textfield/index';
 export interface NumberProps extends FormAssociated {
     replaceToRange: boolean;
     useCancelButton: boolean;
@@ -16,8 +16,8 @@ export interface NumberProps extends FormAssociated {
     max: number;
     icon: string | TemplateResult;
 }
-declare const NumberField_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
-export declare class NumberField extends NumberField_base implements NumberProps {
+declare const LitNumberField_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
+export declare class LitNumberField extends LitNumberField_base implements NumberProps {
     static get styles(): import("lit").CSSResult;
     static get properties(): {
         value: {
@@ -64,7 +64,7 @@ export declare class NumberField extends NumberField_base implements NumberProps
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'lit-number': NumberField;
+        'lit-numberfield': LitNumberField;
     }
 }
 export {};

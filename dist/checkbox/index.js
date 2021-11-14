@@ -3,7 +3,7 @@ import { customElement, property } from 'lit/decorators';
 import { formAssociated } from '../form-associated/index';
 import { LitElement, html, css } from 'lit';
 import { input } from '../styles/input';
-let CheckboxElement = class CheckboxElement extends formAssociated(LitElement) {
+let LitCheckbox = class LitCheckbox extends formAssociated(LitElement) {
     constructor() {
         super(...arguments);
         this.type = "switcher";
@@ -72,7 +72,7 @@ let CheckboxElement = class CheckboxElement extends formAssociated(LitElement) {
         }));
     }
 };
-CheckboxElement.styles = [
+LitCheckbox.styles = [
     input,
     css `
         :host{
@@ -153,8 +153,8 @@ CheckboxElement.styles = [
 ];
 __decorate([
     property({ type: String, reflect: true })
-], CheckboxElement.prototype, "type", void 0);
-CheckboxElement = __decorate([
+], LitCheckbox.prototype, "type", void 0);
+LitCheckbox = __decorate([
     customElement("lit-checkbox")
-], CheckboxElement);
-export { CheckboxElement };
+], LitCheckbox);
+export { LitCheckbox };

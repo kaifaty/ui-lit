@@ -1,5 +1,5 @@
 import { noselectText } from '../styles/noselect';
-import type { SelectItem } from './select-item';
+import type { LitSelectItem } from './select-item';
 import { classMap } from 'lit/directives/class-map';
 import { styleMap } from 'lit/directives/style-map';
 import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
@@ -28,7 +28,7 @@ export interface IPropsSelect extends FormAssociatedProps{
 }
 
 @customElement("lit-select")
-export class SelectElement extends formAssociated(LitElement) implements IPropsSelect{
+export class LitSelect extends formAssociated(LitElement) implements IPropsSelect{
     static styles = css`
     :host{
         display: inline-block;
@@ -141,10 +141,10 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
         if(!this._focusController.focused && !this.open){
             return;
         }        
-        const item = this.querySelector(`lit-select-item[value="${this.value}"]`) as SelectItem;
+        const item = this.querySelector(`lit-select-item[value="${this.value}"]`) as LitSelectItem;
         const select = isNext 
-            ? item?.nextElementSibling as (SelectItem | null) 
-            : item?.previousElementSibling as (SelectItem | null);
+            ? item?.nextElementSibling as (LitSelectItem | null) 
+            : item?.previousElementSibling as (LitSelectItem | null);
 
         if(!select) return;
         this.value = select.value;
@@ -167,7 +167,7 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
             else if(this.open){
                 const focused = this.querySelector("lit-select-item:focus");
                 if(focused){
-                    this.value = (focused as SelectItem).value;
+                    this.value = (focused as LitSelectItem).value;
                     this.open = false;
                 }
             }
@@ -183,6 +183,6 @@ export class SelectElement extends formAssociated(LitElement) implements IPropsS
 
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-select': SelectElement;
+      'lit-select': LitSelect;
     }
 }

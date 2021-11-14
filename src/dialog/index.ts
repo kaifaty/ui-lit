@@ -12,9 +12,9 @@ export interface IDialogProps {
     closeBtnText: string
     useCancelBtn: boolean
 }
-let pool: DialogElement[] = [];
+let pool: LitDialog[] = [];
 @customElement('lit-dialog')
-export class DialogElement extends LitElement{
+export class LitDialog extends LitElement{
     static get styles() {
         return [DIALOG_STYLES, scrollbar];
     };
@@ -136,6 +136,6 @@ export class DialogElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-dialog': DialogElement;
+      'lit-dialog': LitDialog;
     }
 }

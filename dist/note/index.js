@@ -2,7 +2,7 @@ import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators';
 import { OuterClickRemoveController } from '../controllers/OuterClickRemoveController';
-let NoteElement = class NoteElement extends LitElement {
+let LitNote = class LitNote extends LitElement {
     constructor() {
         super(...arguments);
         this._hosted = 0;
@@ -32,7 +32,7 @@ let NoteElement = class NoteElement extends LitElement {
         }
     }
 };
-NoteElement.styles = css `
+LitNote.styles = css `
     :host{
         display: block;
         position: absolute;/*
@@ -57,7 +57,7 @@ NoteElement.styles = css `
         /*border: 1px solid var(--note-error-border-color, #ff7e6d);*/
     }
     `;
-NoteElement = __decorate([
-    customElement("note-element")
-], NoteElement);
-export { NoteElement };
+LitNote = __decorate([
+    customElement("lit-note")
+], LitNote);
+export { LitNote };

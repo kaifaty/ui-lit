@@ -1,6 +1,6 @@
 import { LitElement } from 'lit';
 import { OuterClickRemoveController } from '../controllers/OuterClickRemoveController';
-export declare class NoteElement extends LitElement {
+export declare class LitNote extends LitElement {
     static styles: import("lit").CSSResult;
     _hosted: number;
     _minShowTime: number;
@@ -16,6 +16,6 @@ export declare class NoteElement extends LitElement {
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'note-element': NoteElement;
+        'lit-note': LitNote;
     }
 }

@@ -5,7 +5,7 @@ import { formAssociated } from '../form-associated/index';
 import { noselect } from '../styles/noselect';
 import { getClientX } from 'kailib';
 /** <lit-range></lit-range> */
-let RangeElement = class RangeElement extends formAssociated(LitElement) {
+let LitRange = class LitRange extends formAssociated(LitElement) {
     constructor() {
         super(...arguments);
         this._isMoving = false;
@@ -394,32 +394,32 @@ let RangeElement = class RangeElement extends formAssociated(LitElement) {
 };
 __decorate([
     state()
-], RangeElement.prototype, "offsetX", void 0);
+], LitRange.prototype, "offsetX", void 0);
 __decorate([
     state()
-], RangeElement.prototype, "percent", void 0);
+], LitRange.prototype, "percent", void 0);
 __decorate([
     state()
-], RangeElement.prototype, "isPercentHidden", void 0);
+], LitRange.prototype, "isPercentHidden", void 0);
 __decorate([
     state()
-], RangeElement.prototype, "disabledByVol", void 0);
+], LitRange.prototype, "disabledByVol", void 0);
 __decorate([
     property({ type: Number })
-], RangeElement.prototype, "decimals", void 0);
+], LitRange.prototype, "decimals", void 0);
 __decorate([
     property({ type: Boolean })
-], RangeElement.prototype, "showPercent", void 0);
+], LitRange.prototype, "showPercent", void 0);
 __decorate([
     property({ type: Boolean })
-], RangeElement.prototype, "usePoints", void 0);
+], LitRange.prototype, "usePoints", void 0);
 __decorate([
     property({ type: Boolean })
-], RangeElement.prototype, "startFromMin", void 0);
+], LitRange.prototype, "startFromMin", void 0);
 __decorate([
     query('.track')
-], RangeElement.prototype, "_wrapper", void 0);
-RangeElement = __decorate([
+], LitRange.prototype, "_wrapper", void 0);
+LitRange = __decorate([
     customElement("lit-range")
-], RangeElement);
-export { RangeElement };
+], LitRange);
+export { LitRange };

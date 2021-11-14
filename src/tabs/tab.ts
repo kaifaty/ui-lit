@@ -1,11 +1,11 @@
-import { noselectText } from './../styles/noselect';
+import { noselectText } from '../styles/noselect';
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
-import { TTabType } from './lit-tabs';
+import { TTabType } from './tabs';
 import { KeyDownController } from '../controllers/KeyController';
 
 @customElement('lit-tab')
-export class TabItem extends LitElement{
+export class LitTab extends LitElement{
     static styles = css`
     :host{
         ${unsafeCSS(noselectText)};
@@ -90,16 +90,16 @@ export class TabItem extends LitElement{
         }
         if(this.hasAttribute('selected') && this._focused){
             if(e.key === "ArrowRight"){
-                (this.nextElementSibling as TabItem | null)?.selectNotify?.();
+                (this.nextElementSibling as LitTab | null)?.selectNotify?.();
             }
             if(e.key === "ArrowLeft"){
-                (this.previousElementSibling as TabItem | null)?.selectNotify?.();
+                (this.previousElementSibling as LitTab | null)?.selectNotify?.();
             }
         }
     }
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-tab': TabItem;
+      'lit-tab': LitTab;
     }
 }

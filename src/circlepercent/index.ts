@@ -6,7 +6,7 @@ export interface ICircleProps{
 }
 
 @customElement('lit-circle')
-export class CirclePercent extends LitElement{
+export class LitCircle extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -101,6 +101,6 @@ export class CirclePercent extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-circle': CirclePercent;
+      'lit-circle': LitCircle;
     }
 }

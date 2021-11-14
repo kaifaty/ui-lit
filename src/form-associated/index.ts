@@ -2,10 +2,10 @@ import { LitElement, html, nothing, css } from 'lit';
 import { state, property } from 'lit/decorators';
 import type { FormAssociatedElement, ProxyElement, ValidityStateFlags } from './interface';
 import { calcPositionForPopup } from '../helpers/position';
-import type { NoteElement } from '../note';
+import type { LitNote } from '../note';
 import '../note';
 import { ref, createRef } from 'lit/directives/ref.js';
-import type { LabelText } from '../label';
+import type { LitLabel } from '../label';
 
 type TValidationMessageKey = keyof ValidityStateFlags;
 type TValidationMessages = Record<TValidationMessageKey, {[k: string] : string}>
@@ -71,7 +71,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             typeMismatch: false,
             valueMissing: false,
         };
-        public noteRef = createRef<NoteElement>();
+        public noteRef = createRef<LitNote>();
         public valid: boolean = true;
         public value: string = '';
         protected customValidationMessage = '';
@@ -108,10 +108,10 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             if(this.showNote){
                 //const {x, y} = calcPositionForPopup(this, {width: 400, height: 40});
                 // style = "left: ${x}px; top: ${y + 5}px"
-                return html`<note-element 
+                return html`<lit-note 
                     @close = "${this._handleCloseNote}" 
                     style = "transform: translate(0, -100%);"
-                    class = "error" ${ref(this.noteRef)}>${this.validationMessage}</note-element>`;
+                    class = "error" ${ref(this.noteRef)}>${this.validationMessage}</lit-note>`;
             }
             return nothing;
         }
@@ -132,14 +132,14 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             this._isFirstUpdated = true
         }
 
-        public findLabel(): LabelText | null{
+        public findLabel(): LitLabel | null{
             let parent = this.parentElement;
-            if(parent?.tagName === "LABEL-TEXT"){
-                return parent as LabelText;
+            if(parent?.tagName === "lit-label"){
+                return parent as LitLabel;
             }
             while(parent){
-                if(parent?.tagName === "LABEL-TEXT"){
-                    return parent as LabelText;
+                if(parent?.tagName === "lit-label"){
+                    return parent as LitLabel;
                 }
                 parent = parent.parentElement
             }

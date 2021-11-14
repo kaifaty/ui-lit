@@ -1,14 +1,14 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { getRootElement } from 'kailib';
-import type { TextField } from '../lit-textfield/index';
-import type { NumberField } from '../number/index';
-import type { CheckboxElement } from '../checkbox/index';
+import type { LitTextField } from '../textfield/index';
+import type { LitNumberField } from '../number/index';
+import type { LitCheckbox } from '../checkbox/index';
 
-type TLabled = NumberField | TextField | CheckboxElement;
+type TLabled = LitNumberField | LitTextField | LitCheckbox;
 
-@customElement("label-text")
-export class LabelText extends LitElement{
+@customElement("lit-label")
+export class LitLabel extends LitElement{
     static styles = css``;
     @property({type: String}) for: string = '';
     _connectedNode: TLabled | HTMLInputElement | null = null;
@@ -53,6 +53,6 @@ export class LabelText extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'label-text': LabelText;
+      'lit-label': LitLabel;
     }
 }

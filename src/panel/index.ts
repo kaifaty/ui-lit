@@ -3,7 +3,7 @@ import { customElement} from 'lit/decorators';
 import { LitElement, html, css } from 'lit';
 
 @customElement('lit-panel')
-export class PanelElement extends LitElement{
+export class LitPanel extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -18,7 +18,7 @@ export class PanelElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-panel': PanelElement;
+      'lit-panel': LitPanel;
     }
     
 }

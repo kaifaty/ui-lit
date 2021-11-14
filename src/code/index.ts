@@ -4,7 +4,7 @@ import { LitElement, html, css } from 'lit';
 export * from './code-line';
 
 @customElement('lit-code')
-export class CodeElement extends LitElement{
+export class LitCode extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -24,7 +24,7 @@ export class CodeElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-code': CodeElement;
+      'lit-code': LitCode;
     }
     
 }

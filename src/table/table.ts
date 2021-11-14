@@ -181,11 +181,11 @@ export class TableElement extends LitElement{
     }
     private _headerTemplate(){
         return this.columns.map((col, i) => {
-            return html`<table-header 
+            return html`<lit-table-header 
                 @changeFilter = "${this._changeFilter}"
                 .sort = "${this.sort}"
                 .sortDirection = "${this.sortDirection}"
-                .item = "${col}"></table-header>`
+                .item = "${col}"></lit-table-header>`
         })
     }
     private _rowsTemplate(){
@@ -195,11 +195,11 @@ export class TableElement extends LitElement{
                 : this._data, 
             it => it.key, 
             it => html`
-            <table-row>
+            <lit-table-row>
                 ${this.columns.map((col, i) => {
-                    return html`<table-cell>${it[col.key]}</table-cell>`
+                    return html`<lit-table-cell>${it[col.key]}</lit-table-cell>`
                 })}
-            </table-row>`
+            </lit-table-row>`
         )
     }
 
@@ -207,9 +207,9 @@ export class TableElement extends LitElement{
         return html`
         <div class = "content" 
              @changeSort = "${this._onSortChanged}">
-            <table-row>
+            <lit-table-row>
                 ${this._headerTemplate()}
-            </table-row>
+            </lit-table-row>
             ${ this._rowsTemplate() }
         </div>
         ${this.pagination 

@@ -10,9 +10,9 @@ export interface IRangeProps extends FormAssociated {
     startFromMin: boolean;
     showPercent: boolean;
 }
-declare const RangeElement_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
+declare const LitRange_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
 /** <lit-range></lit-range> */
-export declare class RangeElement extends RangeElement_base {
+export declare class LitRange extends LitRange_base {
     static get styles(): import("lit").CSSResult[];
     static get properties(): {
         value: {
@@ -82,7 +82,7 @@ export declare class RangeElement extends RangeElement_base {
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'lit-range': RangeElement;
+        'lit-range': LitRange;
     }
 }
 export {};

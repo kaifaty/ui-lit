@@ -12,7 +12,7 @@ const Button = (data: IFormProps) =>
             <lit-textfield id = "name" value = "Mike"></lit-textfield>
 
             <label-element for = "salary">Salary:</label-element> 
-            <lit-number id = "salary" decimals = "2" icon = "USDT" min = "500" ?required = "${true}"></lit-number>
+            <lit-numberfield id = "salary" decimals = "2" icon = "USDT" min = "500" ?required = "${true}"></lit-numberfield>
             
             <label-element for = "live"></label-element>
             <input type = "checkbox">

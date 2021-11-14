@@ -5,7 +5,7 @@ export interface ILinkProps {
     rel?: string;
     target?: TLinkTartget;
 }
-export declare class LinkElement extends LitElement {
+export declare class LitLink extends LitElement {
     static styles: import("lit").CSSResult;
     href: string | undefined;
     type: "button" | "link";

@@ -1,5 +1,5 @@
 import { LitElement } from 'lit';
-import type { LabelText } from '../label/index';
+import type { LitLabel } from '../label/index';
 export interface ValidityStateFlags {
     badInput?: boolean;
     customError?: boolean;
@@ -20,7 +20,7 @@ export interface FormAssociatedProps {
     value: string;
 }
 export interface FormAssociated extends FormAssociatedProps {
-    findLabel(): LabelText | null;
+    findLabel(): LitLabel | null;
     readonly validationMessage: string;
     validity: ValidityStateFlags;
     validate(): void;

@@ -7,19 +7,19 @@ import { ITreeViewProps } from '../src/treeview';
 
  
 const TreeView = (data: ITreeViewProps) => 
-    html`<tree-view value = "${data.value}" >
-            <tree-item value = "main">Main item</tree-item>
-            <tree-item value = "second">Second item</tree-item>
-            <tree-subview label = "Third item">
-                <tree-item value = "subItem1">SubItem 1</tree-item>
-                <tree-item value = "subItem2">SubItem 2</tree-item>
+    html`<lit-tree-view value = "${data.value}" >
+            <lit-tree-item value = "main">Main item</lit-tree-item>
+            <lit-tree-item value = "second">Second item</lit-tree-item>
+            <lit-tree-subview label = "Third item">
+                <lit-tree-item value = "subItem1">SubItem 1</lit-tree-item>
+                <lit-tree-item value = "subItem2">SubItem 2</lit-tree-item>
                 
-                <tree-subview label = "Sub 2 level">
-                    <tree-item value = "subItem3">SubItem 3</tree-item>
-                    <tree-item value = "subItem4">SubItem 4</tree-item>
-                </tree-subview>
-            </tree-subview>
-        </tree-view>`;
+                <lit-tree-subview label = "Sub 2 level">
+                    <lit-tree-item value = "subItem3">SubItem 3</lit-tree-item>
+                    <lit-tree-item value = "subItem4">SubItem 4</lit-tree-item>
+                </lit-tree-subview>
+            </lit-tree-subview>
+        </lit-tree-view>`;
 
 
 const Template: Story<Partial<ITreeViewProps>> = (data) => TreeView(data as ITreeViewProps);
@@ -32,5 +32,5 @@ export default {
     title: 'Text/TreeView',
     argTypes: {
     },
-    component: 'tree-view',
+    component: 'lit-tree-view',
 } as Meta;

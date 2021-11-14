@@ -19,7 +19,7 @@ export interface ButtonProps{
 
 type TSize = 'small' | 'medium' | 'large';
 @customElement("lit-button")
-export class ButtomElement extends LitElement implements ButtonProps{
+export class LitButton extends LitElement implements ButtonProps{
     static styles = button;
     @state() iconBefore: boolean = false;
     @state() iconAfter: boolean  = false;
@@ -106,6 +106,6 @@ export class ButtomElement extends LitElement implements ButtonProps{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-button': ButtomElement;
+      'lit-button': LitButton;
     }
 }

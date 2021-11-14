@@ -10,7 +10,7 @@ export interface ISipnnerProps {
 }
 
 @customElement('lit-spinner')
-export class SpinnerElement extends LitElement{
+export class LitSpinner extends LitElement{
     static styles = css`
         :host([fullscreen]){
             position: absolute;
@@ -113,6 +113,6 @@ export class SpinnerElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-spinner': SpinnerElement;
+      'lit-spinner': LitSpinner;
     }
 }

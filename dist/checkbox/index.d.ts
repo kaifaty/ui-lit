@@ -7,8 +7,8 @@ export interface ICheckboxProps {
 }
 export declare type TCkeckboxValue = 'on' | 'off';
 export declare type TCheckboxType = "switcher" | "checkbox";
-declare const CheckboxElement_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
-export declare class CheckboxElement extends CheckboxElement_base implements ICheckboxProps {
+declare const LitCheckbox_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
+export declare class LitCheckbox extends LitCheckbox_base implements ICheckboxProps {
     static styles: import("lit").CSSResult[];
     type: TCheckboxType;
     static get properties(): {
@@ -34,7 +34,7 @@ export declare class CheckboxElement extends CheckboxElement_base implements ICh
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'lit-checkbox': CheckboxElement;
+        'lit-checkbox': LitCheckbox;
     }
 }
 export {};

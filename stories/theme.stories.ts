@@ -17,7 +17,7 @@ const Theme = (data: IThemeProps) =>
         <hr>
         <lit-header level = "3">Inputs</lit-header>
         <div style = "padding: 10px 0; display: flex; align-items: end; ">
-            <lit-number placeholder = "number"></lit-number>
+            <lit-numberfield placeholder = "number"></lit-numberfield>
             <lit-textfield placeholder = "text"></lit-textfield>
             <lit-textarea placeholder = "textarea"></lit-textarea>
         </div>
@@ -45,14 +45,14 @@ const Theme = (data: IThemeProps) =>
         
         <hr>
         <lit-header level = "3">Treeview</lit-header>
-        <tree-view value = "4">
-            <tree-item value = "1">Item 1</tree-item>
-            <tree-item value = "2">Item 2</tree-item>
-            <tree-subview label = "SubView">
-                <tree-item value = "3">Item 3</tree-item>
-                <tree-item value = "4">Item 4</tree-item>
-            </tree-subview>
-        </tree-view>
+        <lit-tree-view value = "4">
+            <lit-tree-item value = "1">Item 1</lit-tree-item>
+            <lit-tree-item value = "2">Item 2</lit-tree-item>
+            <lit-tree-subview label = "SubView">
+                <lit-tree-item value = "3">Item 3</lit-tree-item>
+                <lit-tree-item value = "4">Item 4</lit-tree-item>
+            </lit-tree-subview>
+        </lit-tree-view>
         <hr>
         <lit-header level = "3">Spinner</lit-header>
         <lit-spinner fullContent ></lit-spinner>

@@ -16,7 +16,7 @@ export type TCkeckboxValue = 'on' | 'off';
 export type TCheckboxType = "switcher" | "checkbox";
 
 @customElement("lit-checkbox")
-export class CheckboxElement extends formAssociated(LitElement) implements ICheckboxProps{
+export class LitCheckbox extends formAssociated(LitElement) implements ICheckboxProps{
     static styles = [
         input,
         css`
@@ -162,6 +162,6 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-checkbox': CheckboxElement;
+      'lit-checkbox': LitCheckbox;
     }
 }

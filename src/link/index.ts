@@ -11,7 +11,7 @@ export interface ILinkProps {
 
 }
 @customElement("lit-link")
-export class LinkElement extends LitElement{
+export class LitLink extends LitElement{
     static styles = css`
     :host{
         display: inline-block;

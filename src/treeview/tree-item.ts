@@ -1,8 +1,8 @@
 import { customElement, property } from 'lit/decorators';
 import { LitElement, html, css } from 'lit';
 
-@customElement("tree-item")
-export class TreeItem extends LitElement{
+@customElement("lit-tree-item")
+export class LitTreeItem extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -53,6 +53,6 @@ export class TreeItem extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'tree-item': TreeItem;
+      'lit-tree-item': LitTreeItem;
     }
 }

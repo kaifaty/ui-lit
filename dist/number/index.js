@@ -13,7 +13,7 @@ const CtrAvailable = [
     'a', 'v', 'c', 'x', 'z',
     86, 67, 88, 90, 65
 ];
-let NumberField = class NumberField extends formAssociated(LitElement) {
+let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
     constructor() {
         super(...arguments);
         this.min = NaN;
@@ -182,35 +182,35 @@ let NumberField = class NumberField extends formAssociated(LitElement) {
 };
 __decorate([
     property({ type: Number })
-], NumberField.prototype, "min", void 0);
+], LitNumberField.prototype, "min", void 0);
 __decorate([
     property({ type: Number })
-], NumberField.prototype, "max", void 0);
+], LitNumberField.prototype, "max", void 0);
 __decorate([
     property({ type: Number })
-], NumberField.prototype, "decimals", void 0);
+], LitNumberField.prototype, "decimals", void 0);
 __decorate([
     property({ type: Boolean })
-], NumberField.prototype, "readonly", void 0);
+], LitNumberField.prototype, "readonly", void 0);
 __decorate([
     property({ type: Boolean })
-], NumberField.prototype, "autofocus", void 0);
+], LitNumberField.prototype, "autofocus", void 0);
 __decorate([
     property({ type: Boolean })
-], NumberField.prototype, "replaceToRange", void 0);
+], LitNumberField.prototype, "replaceToRange", void 0);
 __decorate([
     property({ type: String })
-], NumberField.prototype, "placeholder", void 0);
+], LitNumberField.prototype, "placeholder", void 0);
 __decorate([
     property({ type: String })
-], NumberField.prototype, "inputmode", void 0);
+], LitNumberField.prototype, "inputmode", void 0);
 __decorate([
     property({ type: Boolean })
-], NumberField.prototype, "useCancelButton", void 0);
+], LitNumberField.prototype, "useCancelButton", void 0);
 __decorate([
     property()
-], NumberField.prototype, "icon", void 0);
-NumberField = __decorate([
-    customElement("lit-number")
-], NumberField);
-export { NumberField };
+], LitNumberField.prototype, "icon", void 0);
+LitNumberField = __decorate([
+    customElement("lit-numberfield")
+], LitNumberField);
+export { LitNumberField };

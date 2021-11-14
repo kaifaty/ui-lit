@@ -8,7 +8,7 @@ export interface IThemeProps{
 }
 
 @customElement("lit-theme")
-export class ThemeElement extends LitElement{
+export class LitTheme extends LitElement{
     static styles = css`
         :host{
             --h: 240;
@@ -71,6 +71,6 @@ export class ThemeElement extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-theme': ThemeElement;
+      'lit-theme': LitTheme;
     }
 }

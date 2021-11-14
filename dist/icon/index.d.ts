@@ -3,7 +3,7 @@ export interface IIconProps {
     material: boolean;
     icon: string;
 }
-export declare class IconElement extends LitElement {
+export declare class LitIcon extends LitElement {
     static iconsMap: Record<string, number>;
     static defaultIcons: Record<string, string>;
     icon: string;
@@ -14,6 +14,6 @@ export declare class IconElement extends LitElement {
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'lit-icon': IconElement;
+        'lit-icon': LitIcon;
     }
 }

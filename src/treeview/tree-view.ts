@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { TSelectItem } from '../select';
 import '../icon';
-import type { TreeItem } from './tree-item';
+import type { LitTreeItem } from './tree-item';
 
 
 export interface ITreeViewProps {
@@ -11,8 +11,8 @@ export interface ITreeViewProps {
     value: string
 }
 
-@customElement("tree-view")
-export class Treeview extends LitElement{
+@customElement("lit-tree-view")
+export class LitTreeview extends LitElement{
     static styles = css`
     :host{
         display: inline-block;
@@ -35,10 +35,10 @@ export class Treeview extends LitElement{
     }
     
     updated(){
-        this.querySelectorAll("tree-subview").forEach(it => {
+        this.querySelectorAll("lit-tree-subview").forEach(it => {
             it.updateSelection(false);
         })
-        this.querySelectorAll("tree-item").forEach(it => {            
+        this.querySelectorAll("lit-tree-item").forEach(it => {            
             it.updateSelection(this.value);
         })
     }
@@ -50,6 +50,6 @@ export class Treeview extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'tree-view': Treeview;
+      'lit-tree-view': LitTreeview;
     }
 }

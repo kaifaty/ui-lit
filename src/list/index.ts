@@ -3,7 +3,7 @@ import { customElement} from 'lit/decorators';
 import { LitElement, html, css } from 'lit';
 
 @customElement('lit-list-item')
-export class ListItem extends LitElement{
+export class LitListItem extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -25,7 +25,7 @@ export class ListItem extends LitElement{
     }
 }
 @customElement('lit-list')
-export class ListElement extends LitElement{
+export class LitList extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -38,7 +38,7 @@ export class ListElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-list-item': ListItem;
-      'lit-list': ListElement;
+      'lit-list-item': LitListItem;
+      'lit-list': LitList;
     }
 }

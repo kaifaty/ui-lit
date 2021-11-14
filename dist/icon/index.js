@@ -1,8 +1,8 @@
-var IconElement_1;
+var LitIcon_1;
 import { __decorate } from "tslib";
 import { LitElement, css, } from 'lit';
 import { property, customElement } from 'lit/decorators';
-let IconElement = IconElement_1 = class IconElement extends LitElement {
+let LitIcon = LitIcon_1 = class LitIcon extends LitElement {
     constructor() {
         super(...arguments);
         this.icon = '';
@@ -15,19 +15,19 @@ let IconElement = IconElement_1 = class IconElement extends LitElement {
             this.classList.remove("material");
     }
     render() {
-        const code = IconElement_1.iconsMap[this.icon];
+        const code = LitIcon_1.iconsMap[this.icon];
         if (!this.material) {
             if (code) {
                 return String.fromCharCode(code);
             }
-            if (IconElement_1.defaultIcons[this.icon]) {
-                return IconElement_1.defaultIcons[this.icon];
+            if (LitIcon_1.defaultIcons[this.icon]) {
+                return LitIcon_1.defaultIcons[this.icon];
             }
         }
         return this.icon;
     }
 };
-IconElement.iconsMap = {
+LitIcon.iconsMap = {
     "help": parseInt(`006E`, 16),
     "dropdown": parseInt(`0069`, 16),
     "dropup": parseInt(`0060`, 16),
@@ -112,7 +112,7 @@ IconElement.iconsMap = {
     "column-one": parseInt(`0023`, 16),
     "column-two": parseInt(`0024`, 16),
 };
-IconElement.defaultIcons = {
+LitIcon.defaultIcons = {
     "remove": "❌",
     "info": "ℹ️",
     "config": "⚙️",
@@ -120,7 +120,7 @@ IconElement.defaultIcons = {
     "message": "✉️",
     "email": "📧",
 };
-IconElement.styles = css `
+LitIcon.styles = css `
     :host{
         cursor: pointer;
         display: inline-block;
@@ -171,11 +171,11 @@ IconElement.styles = css `
     `;
 __decorate([
     property({ type: String })
-], IconElement.prototype, "icon", void 0);
+], LitIcon.prototype, "icon", void 0);
 __decorate([
     property({ type: Boolean })
-], IconElement.prototype, "material", void 0);
-IconElement = IconElement_1 = __decorate([
+], LitIcon.prototype, "material", void 0);
+LitIcon = LitIcon_1 = __decorate([
     customElement("lit-icon")
-], IconElement);
-export { IconElement };
+], LitIcon);
+export { LitIcon };

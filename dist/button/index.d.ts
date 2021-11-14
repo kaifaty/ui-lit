@@ -12,7 +12,7 @@ export interface ButtonProps {
     switchOn?: boolean;
 }
 declare type TSize = 'small' | 'medium' | 'large';
-export declare class ButtomElement extends LitElement implements ButtonProps {
+export declare class LitButton extends LitElement implements ButtonProps {
     static styles: import("lit").CSSResult[];
     iconBefore: boolean;
     iconAfter: boolean;
@@ -46,7 +46,7 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'lit-button': ButtomElement;
+        'lit-button': LitButton;
     }
 }
 export {};

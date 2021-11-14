@@ -24,7 +24,7 @@ export interface TextProps extends FormAssociated{
 }
 
 @customElement("lit-textfield")
-export class TextField extends formAssociated(LitElement) implements TextProps{
+export class LitTextField extends formAssociated(LitElement) implements TextProps{
     static get styles (){
         return input
     };
@@ -165,6 +165,6 @@ export class TextField extends formAssociated(LitElement) implements TextProps{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-textfield': TextField;
+      'lit-textfield': LitTextField;
     }
 }

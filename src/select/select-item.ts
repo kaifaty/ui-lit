@@ -2,7 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 
 @customElement("lit-select-item")
-export class SelectItem extends LitElement{
+export class LitSelectItem extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -52,6 +52,6 @@ export class SelectItem extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-select-item': SelectItem;
+      'lit-select-item': LitSelectItem;
     }
 }

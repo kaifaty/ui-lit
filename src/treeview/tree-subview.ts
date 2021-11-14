@@ -2,8 +2,8 @@ import { classMap } from 'lit/directives/class-map';
 import { html, LitElement, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 
-@customElement("tree-subview")
-export class TreeSubView extends LitElement{
+@customElement("lit-tree-subview")
+export class LitTreeSubView extends LitElement{
     static styles = css`
     :host{
         display: block;
@@ -69,6 +69,6 @@ export class TreeSubView extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'tree-subview': TreeSubView;
+      'lit-tree-subview': LitTreeSubView;
     }
 }

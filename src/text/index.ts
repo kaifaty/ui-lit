@@ -9,7 +9,7 @@ export interface ITextProps {
 }
 
 @customElement('lit-text')
-export class TextStatusedElement extends LitElement{
+export class LitText extends LitElement{
     static styles = [
         css`
         :host{
@@ -56,6 +56,6 @@ export class TextStatusedElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'text-statused': TextStatusedElement;
+      'text-statused': LitText;
     }
 }

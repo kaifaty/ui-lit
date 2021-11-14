@@ -2,7 +2,7 @@ import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
 import { property, customElement } from 'lit/decorators';
 import { ifDefined } from 'lit/directives/if-defined';
-let LinkElement = class LinkElement extends LitElement {
+let LitLink = class LitLink extends LitElement {
     constructor() {
         super(...arguments);
         this.href = undefined;
@@ -17,7 +17,7 @@ let LinkElement = class LinkElement extends LitElement {
                     href = "${ifDefined(this.href)}"><slot></slot></a>`;
     }
 };
-LinkElement.styles = css `
+LitLink.styles = css `
     :host{
         display: inline-block;
         box-sizing: border-box;
@@ -45,17 +45,17 @@ LinkElement.styles = css `
     `;
 __decorate([
     property({ type: String })
-], LinkElement.prototype, "href", void 0);
+], LitLink.prototype, "href", void 0);
 __decorate([
     property({ type: String })
-], LinkElement.prototype, "type", void 0);
+], LitLink.prototype, "type", void 0);
 __decorate([
     property({ type: String })
-], LinkElement.prototype, "rel", void 0);
+], LitLink.prototype, "rel", void 0);
 __decorate([
     property({ type: String })
-], LinkElement.prototype, "target", void 0);
-LinkElement = __decorate([
+], LitLink.prototype, "target", void 0);
+LitLink = __decorate([
     customElement("lit-link")
-], LinkElement);
-export { LinkElement };
+], LitLink);
+export { LitLink };

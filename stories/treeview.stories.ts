@@ -7,7 +7,7 @@ import { ITreeViewProps } from '../src/treeview';
 
  
 const TreeView = (data: ITreeViewProps) => 
-    html`<tree-view selected = "${data.selected}" >
+    html`<tree-view value = "${data.value}" >
             <tree-item value = "main">Main item</tree-item>
             <tree-item value = "second">Second item</tree-item>
             <tree-subview label = "Third item">
@@ -26,7 +26,7 @@ const Template: Story<Partial<ITreeViewProps>> = (data) => TreeView(data as ITre
 
 export const Default = Template.bind({});
 Default.args = {
-    selected: "main",
+    value: "main",
 }
 export default {
     title: 'Text/TreeView',

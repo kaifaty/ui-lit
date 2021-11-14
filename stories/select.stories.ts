@@ -8,17 +8,17 @@ import type { IPropsSelect } from '../src/select';
 const Select = (data: IPropsSelect) => 
     html`
     <div>
-        <select-element 
+        <lit-select 
             .value = "${data.value}"
             .disabled = "${data.disabled}"
             .optionsWidth = "${data.optionsWidth}"
             .optionsHeight = "${data.optionsHeight}">
-            <select-item value = "1">Item 1</select-item>
-            <select-item value = "2">Item 2</select-item>
-            <select-item value = "3">Item 3</select-item>
-            <select-item value = "4">Item 4</select-item>
-            <select-item value = "5">Item 5</select-item>
-        </select-element>
+            <lit-select-item value = "1">Item 1</lit-select-item>
+            <lit-select-item value = "2">Item 2</lit-select-item>
+            <lit-select-item value = "3">Item 3</lit-select-item>
+            <lit-select-item value = "4">Item 4</lit-select-item>
+            <lit-select-item value = "5">Item 5</lit-select-item>
+        </lit-select>
     </div>
     `;
 

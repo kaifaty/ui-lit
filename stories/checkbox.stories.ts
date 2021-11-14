@@ -5,12 +5,12 @@ import { Story, Meta } from '@storybook/web-components';
 import './assets/style.css'
 
 const Number = (data: ICheckboxProps) => 
-    html`<checkbox-element 
+    html`<lit-checkbox 
         ?checked = "${data.checked}"
         ?readonly = "${data.readonly}"
         .value = "${data.value || ''}"
         .type = "${data.type}"
-    ></checkbox-element>`;
+    ></lit-checkbox>`;
 
 
 const Template: Story<Partial<ICheckboxProps>> = (args) => Number(args as ICheckboxProps);

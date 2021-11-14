@@ -6,10 +6,10 @@ import type { IIconProps } from '../src/icon';
 
 
 const Icon = (data: IIconProps) => 
-    html`<icon-element 
+    html`<lit-icon 
         .icon = "${data.icon}"
         .material = "${data.material}"
-    ></icon-element>`;
+    ></lit-icon>`;
 
 
 const Template: Story<Partial<IIconProps>> = (args) => Icon(args as IIconProps);
@@ -24,5 +24,5 @@ export default {
     argTypes: {
             
     },
-    component: 'icon-element',
+    component: 'lit-icon',
 } as Meta;

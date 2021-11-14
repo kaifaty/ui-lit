@@ -17,7 +17,7 @@ export class TreeSubView extends LitElement{
     .content{
         margin-left: 25px;
     }
-    icon-element{
+    lit-icon{
         margin-right: 5px;
     }
     :host(:not([opened])) .content{
@@ -53,9 +53,9 @@ export class TreeSubView extends LitElement{
             dropup: this.opened,
             "icon-before": true
         }
-        return html`<icon-element 
+        return html`<lit-icon 
                         icon = "dropdown" 
-                        class = "${classMap(data)}"></icon-element>`;
+                        class = "${classMap(data)}"></lit-icon>`;
     }
     private _toggle(){
         this.opened = !this.opened;

@@ -7,11 +7,11 @@ import { Story, Meta } from '@storybook/web-components';
 
 
 const Link = (data: ILinkProps) => 
-    html`<link-element 
+    html`<lit-link 
         .rel = "${data.rel}"
         .target = "${data.target}"
         .href = "${data.href ? data.href : undefined}"
-    >Link Element</link-element>`;
+    >Link Element</lit-link>`;
 
 
 const Template: Story<Partial<ILinkProps>> = (args) => Link(args as ILinkProps);

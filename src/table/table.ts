@@ -31,7 +31,7 @@ export type TColumnItem = {
 export type TSortDirections = 'ascend' | 'descend';
 
 
-@customElement("table-element")
+@customElement("lit-table")
 export class TableElement extends LitElement{
     static get properties(){
         return {
@@ -57,7 +57,7 @@ export class TableElement extends LitElement{
         align-content: start;
         overflow-y: auto;
     }
-    pagination-element{
+    lit-pagination{
         display: flex;
         align-content: end;
     }
@@ -213,12 +213,12 @@ export class TableElement extends LitElement{
             ${ this._rowsTemplate() }
         </div>
         ${this.pagination 
-            ? html`<pagination-element 
+            ? html`<lit-pagination 
                         @changed = "${this._onPageChanged}"
                         .length = "${this._data.length}"
                         .pageLength = "${this.pageLength}" 
                         .page = "${this.page}"
-                ></pagination-element>` 
+                ></lit-pagination>` 
             : nothing
         }`;
     }
@@ -237,6 +237,6 @@ export class TableElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'table-element': TableElement;
+      'lit-table': TableElement;
     }
 }

@@ -6,11 +6,11 @@ import type { IPaginationProps } from '../src/pagination';
 
 
 const Pagination = (data: IPaginationProps) => 
-    html`<pagination-element 
+    html`<lit-pagination 
         .page = "${data.page}"
         .limit = "${data.pageLength}"
         .length = "${data.length}"
-    ></pagination-element>`;
+    ></lit-pagination>`;
 
 
 const Template: Story<Partial<IPaginationProps>> = (args) => Pagination(args as IPaginationProps);
@@ -26,5 +26,5 @@ export default {
     argTypes: {
             
     },
-    component: 'pagination-element',
+    component: 'lit-pagination',
 } as Meta;

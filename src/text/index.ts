@@ -8,7 +8,7 @@ export interface ITextProps {
     pulse: boolean
 }
 
-@customElement('text-element')
+@customElement('lit-text')
 export class TextStatusedElement extends LitElement{
     static styles = [
         css`

@@ -15,7 +15,7 @@ export interface ICheckboxProps{
 export type TCkeckboxValue = 'on' | 'off';
 export type TCheckboxType = "switcher" | "checkbox";
 
-@customElement("checkbox-element")
+@customElement("lit-checkbox")
 export class CheckboxElement extends formAssociated(LitElement) implements ICheckboxProps{
     static styles = [
         input,
@@ -39,13 +39,13 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
             border: 1px solid var(--checkbox-border, #999);
             position: relative;
             cursor: pointer;
+            background-color: var(--checkbox-background, white);
             
         }
         .checkbox:hover{
             box-shadow: 0 0 2px var(--checkbox-border, #999);
         }
         .checkbox.on{
-            background-color: var(--checkbox-off-background, white);
         }
         .checkbox.on:after{
             content:'';
@@ -67,7 +67,6 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
             height: var(--checkbox-switcher-height);
             border-radius: 16px;
             z-index: 2;
-            background-color: var(--checkbox-off-background, hsl(0, 65%, 55%));
             transition: background-color ease 0.2s;
             box-shadow: var(--checkbox-switcher-shadow, inset 1px 1px 2px rgba(0,0,0,0.7));
         }
@@ -84,7 +83,10 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
             transition: transform ease 0.2s;
         }
         .switcher.on {
-            background-color: var(--checkbox-on-background, hsl(110, 65%, 50%));
+            background-color: var(--switcher-on-background, hsl(110, 65%, 50%));
+        }
+        .switcher.off {
+            background-color: var(--switcher-off-background, hsl(0, 65%, 55%));
         }
         .switcher.on .control{
             transform: translateX(calc(var(--checkbox-switcher-width) - var(--checkbox-control-size) + 1px));
@@ -95,7 +97,7 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
         `
     ];
 
-    @property({type: String}) type: TCheckboxType = "switcher";
+    @property({type: String, reflect: true}) type: TCheckboxType = "switcher";
     static get properties(){        
         return {
             ...super.properties,
@@ -160,6 +162,6 @@ export class CheckboxElement extends formAssociated(LitElement) implements IChec
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'checkbox-element': CheckboxElement;
+      'lit-checkbox': CheckboxElement;
     }
 }

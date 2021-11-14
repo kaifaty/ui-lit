@@ -9,7 +9,7 @@ export interface IPaginationProps{
     length: number
 }
 
-@customElement("pagination-element")
+@customElement("lit-pagination")
 export class PaginationElement extends LitElement{
     @property({type: Number}) page: number = 0;
     @property({type: Number}) pageLength: number = 5;
@@ -21,7 +21,7 @@ export class PaginationElement extends LitElement{
             align-items: center;
             box-sizing: border-box;
         }
-        number-field{
+        lit-number{
             --input-align: center;
             --input-font-size: 12px;
             width: 40px;
@@ -114,19 +114,19 @@ export class PaginationElement extends LitElement{
         return html`
         <button @click = "${this._decrementPage}" 
                 type = "button">
-            <icon-element class = "arrow-left" icon = "arrow-down-2"></icon-element>
+            <lit-icon class = "arrow-left" icon = "arrow-down-2"></lit-icon>
         </button>
-        <number-field 
+        <lit-number 
             type = "number"
             .min = "${1}"
             .max = "${this.pageCount + 1}"
             .value = "${(this.page + 1).toFixed(0)}"
             @changed = "${this._onInputChange}"
             .decimals = "${0}"
-        ></number-field>                
+        ></lit-number>                
         <button @click = "${this._incrementPage}" 
                 type = "button">
-            <icon-element class = "arrow-right" icon = "arrow-down-2"></icon-element>
+            <lit-icon class = "arrow-right" icon = "arrow-down-2"></lit-icon>
         </button>
         <div class = "page-list">${this._pagesTemplate()}</div>`;
     }
@@ -148,6 +148,6 @@ export class PaginationElement extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'pagination-element': PaginationElement;
+      'lit-pagination': PaginationElement;
     }
 }

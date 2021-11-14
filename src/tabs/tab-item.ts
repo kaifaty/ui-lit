@@ -1,27 +1,35 @@
 import { noselectText } from './../styles/noselect';
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
-import { TTabType } from './tabs-element';
+import { TTabType } from './lit-tabs';
 import { KeyDownController } from '../controllers/KeyController';
 
-@customElement('tab-item')
+@customElement('lit-tab')
 export class TabItem extends LitElement{
     static styles = css`
     :host{
         ${unsafeCSS(noselectText)};
         cursor: pointer;
+        color: var(--tab-color);
+        --icon-color: var(--tab-color, var(--icon-color));
+        background-color: var(--tab-background);
     }
     :host([type="button"]){
-        border: 1px solid var(--tab-border, tomato);
+        border: var(--tab-border, 1px solid  tomato);
         padding: var(--tab-button-padding, 5px 14px);
     }
     :host([type="tab"]){
         padding: var(--tab-padding, 5px 14px);
         border: 1px solid transparent;
-        border-bottom: 1px solid var(--tab-border, tomato);
+        border-left: none;
+        border-right: none;
+        border-bottom: var(--tab-border,  1px solid  tomato);
+        
     }
     :host([selected]){
-        background-color: tomato;
+        background-color: var(--tab-background-selected, tomato);
+        color: var(--tab-color-selected, black);
+        --icon-color: var(--tab-color-selected, black);
     }
     :host(:not([disabled]):focus){
         outline: 1px solid var(--tab-border, tomato);
@@ -92,6 +100,6 @@ export class TabItem extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'tab-item': TabItem;
+      'lit-tab': TabItem;
     }
 }

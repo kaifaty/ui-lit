@@ -11,7 +11,7 @@ export interface IRangeProps extends FormAssociated {
     showPercent: boolean;
 }
 declare const RangeElement_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
-/** <range-element></range-element> */
+/** <lit-range></lit-range> */
 export declare class RangeElement extends RangeElement_base {
     static get styles(): import("lit").CSSResult[];
     static get properties(): {
@@ -82,7 +82,7 @@ export declare class RangeElement extends RangeElement_base {
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'range-element': RangeElement;
+        'lit-range': RangeElement;
     }
 }
 export {};

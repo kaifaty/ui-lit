@@ -94,13 +94,13 @@ CheckboxElement.styles = [
             border: 1px solid var(--checkbox-border, #999);
             position: relative;
             cursor: pointer;
+            background-color: var(--checkbox-background, white);
             
         }
         .checkbox:hover{
             box-shadow: 0 0 2px var(--checkbox-border, #999);
         }
         .checkbox.on{
-            background-color: var(--checkbox-off-background, white);
         }
         .checkbox.on:after{
             content:'';
@@ -122,7 +122,6 @@ CheckboxElement.styles = [
             height: var(--checkbox-switcher-height);
             border-radius: 16px;
             z-index: 2;
-            background-color: var(--checkbox-off-background, hsl(0, 65%, 55%));
             transition: background-color ease 0.2s;
             box-shadow: var(--checkbox-switcher-shadow, inset 1px 1px 2px rgba(0,0,0,0.7));
         }
@@ -139,7 +138,10 @@ CheckboxElement.styles = [
             transition: transform ease 0.2s;
         }
         .switcher.on {
-            background-color: var(--checkbox-on-background, hsl(110, 65%, 50%));
+            background-color: var(--switcher-on-background, hsl(110, 65%, 50%));
+        }
+        .switcher.off {
+            background-color: var(--switcher-off-background, hsl(0, 65%, 55%));
         }
         .switcher.on .control{
             transform: translateX(calc(var(--checkbox-switcher-width) - var(--checkbox-control-size) + 1px));
@@ -150,9 +152,9 @@ CheckboxElement.styles = [
         `
 ];
 __decorate([
-    property({ type: String })
+    property({ type: String, reflect: true })
 ], CheckboxElement.prototype, "type", void 0);
 CheckboxElement = __decorate([
-    customElement("checkbox-element")
+    customElement("lit-checkbox")
 ], CheckboxElement);
 export { CheckboxElement };

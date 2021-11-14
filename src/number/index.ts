@@ -7,7 +7,7 @@ import { input } from '../styles/input';
 import { live } from 'lit//directives/live';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
 import {inputDirective} from './inputValueDirective';
-import { TInputMode } from '../text-field/index';
+import { TInputMode } from '../lit-textfield/index';
 
 
 export interface NumberProps  extends FormAssociated{
@@ -31,7 +31,7 @@ const CtrAvailable: (number | string)[] = [
     86, 67, 88, 90, 65
 ];
 
-@customElement("number-field")
+@customElement("lit-number")
 export class NumberField extends formAssociated(LitElement) implements NumberProps{
     static get styles (){
         return input
@@ -112,10 +112,10 @@ export class NumberField extends formAssociated(LitElement) implements NumberPro
     }
     private _cancelIconTemplate(){
         if(!this.useCancelButton ||  !this.value) return nothing;
-        return html`<icon-element 
+        return html`<lit-icon 
                         @click = "${this._clearValue}"
                         icon = "remove" 
-                        class = "danger icon"></icon-element>`;
+                        class = "danger icon"></lit-icon>`;
     }
     willUpdate(){
         this._selectionBeforeRender = this.inputRef.value?.selectionStart || 0;
@@ -208,6 +208,6 @@ export class NumberField extends formAssociated(LitElement) implements NumberPro
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'number-field': NumberField;
+      'lit-number': NumberField;
     }
 }

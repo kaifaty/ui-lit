@@ -46,7 +46,7 @@ export declare class ButtomElement extends LitElement implements ButtonProps {
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'button-element': ButtomElement;
+        'lit-button': ButtomElement;
     }
 }
 export {};

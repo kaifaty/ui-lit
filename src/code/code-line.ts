@@ -22,13 +22,13 @@ export class CodeLine extends LitElement{
     `;
     @state() number: number = 0;
     get root(){        
-        return getParentTagName(this, 'code-element') as CodeElement | null; 
+        return getParentTagName(this, 'lit-code') as CodeElement | null; 
     }
     connectedCallback(){
         super.connectedCallback();
         const root = this.root;
         if(!root){
-            console.warn('Code line must be child of code-element');
+            console.warn('Code line must be child of lit-code');
             return
         }
         this.number = root.inc()

@@ -8,12 +8,12 @@ import { ISipnnerProps } from '../dist/spinner/index';
 
 const Layaout = (data: ISipnnerProps) => 
     html`<div style = "width: 600px; height: 600px; border: 1px dashed red;">
-        <spinner-element 
+        <lit-spinner 
             ?big = "${data.big}"
             ?small = "${data.small}"
             ?fullContent = "${data.fullContent}"
             ?fullscreen = "${data.fullscreen}"
-        ></spinner-element>
+        ></lit-spinner>
     </div>`;
 
 
@@ -31,5 +31,5 @@ export default {
     argTypes: {
             
     },
-    component: 'spinner-element',
+    component: 'lit-spinner',
 } as Meta;

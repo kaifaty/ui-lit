@@ -56,7 +56,7 @@ export declare class TextField extends TextField_base implements TextProps {
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'text-field': TextField;
+        'lit-textfield': TextField;
     }
 }
 export {};

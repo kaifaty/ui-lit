@@ -32,7 +32,7 @@ export declare class FromElement extends LitElement implements IFormElement, IFo
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'form-element': FromElement;
+        'lit-form': FromElement;
     }
 }
 export {};

@@ -6,14 +6,14 @@ import { ITabs } from '../src/tabs';
 
 
 const Tabs = (data: ITabs) => 
-    html`<tabs-element 
+    html`<lit-tabs 
         selected = "${data.value}"
         type = "${data.type}"
         ?disabled = "${data.disabled}">
-        <tab-item value = "1">Tab 1</tab-item>
-        <tab-item value = "2">Tab 2</tab-item>
-        <tab-item value = "3">Tab 3</tab-item>
-    </tabs-element>`;
+        <lit-tab value = "1">Tab 1</lit-tab>
+        <lit-tab value = "2">Tab 2</lit-tab>
+        <lit-tab value = "3">Tab 3</lit-tab>
+    </lit-tabs>`;
 
 const Template: Story<Partial<ITabs>> = (args) => Tabs(args as ITabs);
 

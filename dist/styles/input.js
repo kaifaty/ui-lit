@@ -32,10 +32,11 @@ input, textarea{
     width: 100%;
     font-size: var(--input-font-size, inherit);
     box-sizing: border-box;
-    padding: var(--input-padding, 2px 8px);
-    border: 1px solid var(--input-border, hsla(222, 20%, 60%, 0.5));
+    padding: var(--input-padding, 6px 8px);
+    border: var(--input-border, 1px solid hsla(222, 20%, 60%, 0.5));
     text-align: var(--input-align, initial);
     background-color: var(--input-background, #fff);
+    color: var(--input-color, inherit);
 }
 
 input:focus, 

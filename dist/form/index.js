@@ -96,6 +96,6 @@ __decorate([
     property({ type: Boolean })
 ], FromElement.prototype, "disabled", void 0);
 FromElement = __decorate([
-    customElement("form-element")
+    customElement("lit-form")
 ], FromElement);
 export { FromElement };

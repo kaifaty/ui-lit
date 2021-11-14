@@ -5,9 +5,7 @@ export const button = [
     css`
     :host{
         display: var(--button-display, inline-block);
-        height: var(--button-height);
     }
-    
     
     .wrapper{
         cursor: pointer;
@@ -22,7 +20,7 @@ export const button = [
         outline: var(--button-outline, none);
         border-radius: var(--button-radius, 1px);
         color: var(--button-color, hsl(222, 20%, 35%));
-        background-color: var(--button-backround, hsl(222, 20%, 99%));
+        background-color: var(--button-background, hsl(222, 20%, 99%));
         --icon-fill: var(--button-color);
         font-weight: var(--button-weight, 600);
     }
@@ -34,7 +32,7 @@ export const button = [
         background-color: var(--button-background-hover,  hsl(222, 20%, 96%));
     }
     :host(:not([disabled])) .wrapper:focus{
-        background-color: var(--button-background-focus, var(--button-backround, hsl(222,20%, 99%)));
+        background-color: var(--button-background-focus, var(--button-background, hsl(222,20%, 99%)));
         outline: var(--button-outline-focus, 1px solid hsla(222, 20%, 60%, 0.5));
         
     }
@@ -83,8 +81,9 @@ export const button = [
     }
 
     :host([switch][switchOn]) .wrapper{
-        background-color: var(--button-switch-backround, hsl(222, 80%, 60%));
+        background-color: var(--button-switch-background, hsl(222, 80%, 60%));
         color: var(--button-switch-color, hsl(222, 80%, 98%));
+        --icon-color: var(--button-switch-color, hsl(222, 80%, 98%));
     }
     :host([switch]) .wrapper:focus{
         outline: none;
@@ -103,13 +102,13 @@ export const button = [
         font-size: 1.3rem;
     }
     :host([borderless]) .wrapper,
+    :host([borderless]) .wrapper:hover,
     :host([borderless]) .wrapper:focus{
         border: 1px solid transparent;
-        outline: none;
+        background-color: transparent;
+        
     }
-    :host([borderless]) .wrapper:focus{
-        background-color: var(--button-background-hover,  hsl(222, 20%, 96%));
-    }
+    
 
     .wrapper.icon-before, 
     .wrapper.icon-after{

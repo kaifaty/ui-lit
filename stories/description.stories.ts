@@ -7,7 +7,7 @@ import '../dist/description';
 const Layaout = () => 
     html`<div>
         <h3>Header 3</h3>
-        <description-element>Some description</description-element>
+        <lit-description>Some description</lit-description>
     </div>`;
 
 

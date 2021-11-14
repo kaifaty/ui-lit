@@ -4,7 +4,7 @@ import { customElement, property, state, query } from 'lit/decorators';
 import { formAssociated } from '../form-associated/index';
 import { noselect } from '../styles/noselect';
 import { getClientX } from 'kailib';
-/** <range-element></range-element> */
+/** <lit-range></lit-range> */
 let RangeElement = class RangeElement extends formAssociated(LitElement) {
     constructor() {
         super(...arguments);
@@ -420,6 +420,6 @@ __decorate([
     query('.track')
 ], RangeElement.prototype, "_wrapper", void 0);
 RangeElement = __decorate([
-    customElement("range-element")
+    customElement("lit-range")
 ], RangeElement);
 export { RangeElement };

@@ -109,6 +109,8 @@ IconElement.iconsMap = {
     "sun": parseInt(`0022`, 16),
     "moon": parseInt(`0021`, 16),
     "mail": parseInt(`006c`, 16),
+    "column-one": parseInt(`0023`, 16),
+    "column-two": parseInt(`0024`, 16),
 };
 IconElement.defaultIcons = {
     "remove": "❌",
@@ -174,6 +176,6 @@ __decorate([
     property({ type: Boolean })
 ], IconElement.prototype, "material", void 0);
 IconElement = IconElement_1 = __decorate([
-    customElement("icon-element")
+    customElement("lit-icon")
 ], IconElement);
 export { IconElement };

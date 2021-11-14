@@ -6,9 +6,9 @@ import type { IQRCodeProps } from '../src/qrcode';
 
 
 const QRCode = (data: IQRCodeProps) => 
-    html`<qrcode-element 
+    html`<lit-qrcode 
         .value = "${data.value}"
-    ></qrcode-element>`;
+    ></lit-qrcode>`;
 
 
 const Template: Story<Partial<IQRCodeProps>> = (args) => QRCode(args as IQRCodeProps);
@@ -22,5 +22,5 @@ export default {
     argTypes: {
             
     },
-    component: 'qrcode-element',
+    component: 'lit-qrcode',
 } as Meta;

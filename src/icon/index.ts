@@ -6,7 +6,7 @@ export interface IIconProps{
     icon: string
 }
 
-@customElement("icon-element")
+@customElement("lit-icon")
 export class IconElement extends LitElement{
     static iconsMap: Record<string, number> = {
         "help": parseInt(`006E`, 16),
@@ -90,6 +90,8 @@ export class IconElement extends LitElement{
         "sun": parseInt(`0022`, 16),
         "moon": parseInt(`0021`, 16),
         "mail": parseInt(`006c`, 16),
+        "column-one": parseInt(`0023`, 16),
+        "column-two": parseInt(`0024`, 16),
     }
     static defaultIcons: Record<string, string> = {
         "remove": "❌",
@@ -169,6 +171,6 @@ export class IconElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'icon-element': IconElement;
+      'lit-icon': IconElement;
     }
 }

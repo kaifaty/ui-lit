@@ -5,7 +5,7 @@ import '../dist/panel';
 
 
 const panel = (text: string) => 
-    html`<panel-element >${text}</panel-element>`;
+    html`<lit-panel >${text}</lit-panel>`;
 
 
 const Template: Story<Partial<{text: string}>> = (data) => panel(data.text);
@@ -19,5 +19,5 @@ export default {
     argTypes: {
             
     },
-    component: 'panel-element',
+    component: 'lit-panel',
 } as Meta;

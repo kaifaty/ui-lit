@@ -6,20 +6,20 @@ import { Story, Meta } from '@storybook/web-components';
 
 
 const open = () => {
-    document.querySelector("dialog-element").open();
+    document.querySelector("lit-dialog").open();
 }
 const Link = (data: IDialogProps) => 
     html`
-    <button-element @click = "${open}">Open</button-element>
-    <dialog-element 
+    <lit-button @click = "${open}">Open</lit-button>
+    <lit-dialog 
         style = "margin-left: -15px;"
         ?useCancelBtn = "${data.useCancelBtn}"
         >
         <h2 slot = "header">Header</h2>
-        <header-element level = "5">Confirm otp please</header-element>
+        <lit-header level = "5">Confirm otp please</lit-header>
         <test-dialog></test-dialog>
-        <button-element slot = "footer" primary confirm>Confirm</button-element>
-    </dialog-element>`;
+        <lit-button slot = "footer" primary confirm>Confirm</lit-button>
+    </lit-dialog>`;
 
 
 const Template: Story<Partial<IDialogProps>> = (args) => Link(args as IDialogProps);

@@ -1,5 +1,5 @@
 import { LitElement } from 'lit';
-import type { TextField } from '../text-field/index';
+import type { TextField } from '../lit-textfield/index';
 import type { NumberField } from '../number/index';
 import type { CheckboxElement } from '../checkbox/index';
 declare type TLabled = NumberField | TextField | CheckboxElement;

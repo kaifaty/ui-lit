@@ -6,10 +6,10 @@ import { ICircleProps } from '../src/circlepercent';
 
  
 const Circle = (data: ICircleProps) => 
-    html`<circle-percent 
+    html`<lit-circle 
             style = "--circle-color: #d11198;"
             size = "77" 
-            percent = "${data.percent}"></circle-percent>`;
+            percent = "${data.percent}"></lit-circle>`;
 
 
 const Template: Story<Partial<ICircleProps>> = (data) => 
@@ -26,5 +26,5 @@ export default {
         status: {
         }
     },
-    component: 'text-element',
+    component: 'lit-text',
 } as Meta;

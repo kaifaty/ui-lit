@@ -34,7 +34,7 @@ export declare class CheckboxElement extends CheckboxElement_base implements ICh
 }
 declare global {
     interface HTMLElementTagNameMap {
-        'checkbox-element': CheckboxElement;
+        'lit-checkbox': CheckboxElement;
     }
 }
 export {};

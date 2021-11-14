@@ -5,11 +5,11 @@ import '../dist/list';
 
 
 const panel = (text: string) => 
-    html`<list-element>
-        <list-item>List item 1</list-item>
-        <list-item>List item 2</list-item>
-        <list-item>List item 3</list-item>
-    </list-element>`;
+    html`<lit-list>
+        <lit-list-item>List item 1</lit-list-item>
+        <lit-list-item>List item 2</lit-list-item>
+        <lit-list-item>List item 3</lit-list-item>
+    </lit-list>`;
 
 
 const Template: Story<Partial<{text: string}>> = (data) => panel(data.text);
@@ -22,5 +22,5 @@ export default {
     argTypes: {
             
     },
-    component: 'list-element',
+    component: 'lit-list',
 } as Meta;

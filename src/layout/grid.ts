@@ -18,7 +18,7 @@ export interface ILayoutElementProps extends TPosition{
     name: string
 }
 
-@customElement("layout-grid")
+@customElement("lit-layout-grid")
 export class LayoutGrid extends LitElement{
     static styles = [
         css`
@@ -117,12 +117,12 @@ export class LayoutGrid extends LitElement{
     private _onStartMove(e: CustomEvent){
         this._onStart(e);
         this.isMoving = true;
-        this.querySelectorAll('layout-element').forEach(el => el.classList.add('move'));
+        this.querySelectorAll('lit-layout').forEach(el => el.classList.add('move'));
     }
     private _onStartResize(e: CustomEvent){
         this._onStart(e);
         this.isResizing = true;
-        this.querySelectorAll('layout-element').forEach(el => el.classList.add('resize'));
+        this.querySelectorAll('lit-layout').forEach(el => el.classList.add('resize'));
     }
     private _onEndMove(e: Event){
         if(this.isMoving){
@@ -138,7 +138,7 @@ export class LayoutGrid extends LitElement{
         this.shadowY = 0;
         this.shadowWidth = 0;
         this.shadowHeight = 0;
-        this.querySelectorAll('layout-element').forEach(el => (el.classList.remove('move'), el.classList.remove('resize')));
+        this.querySelectorAll('lit-layout').forEach(el => (el.classList.remove('move'), el.classList.remove('resize')));
     }
     private _onMove(e: MouseEvent){
         if(!this.layoutElementData) return;
@@ -200,7 +200,7 @@ export class LayoutGrid extends LitElement{
     }
     private _getPositions(){
         const data: {[key: string]: TPosition} = {};
-        this.querySelectorAll("layout-element").forEach(el => {
+        this.querySelectorAll("lit-layout").forEach(el => {
             data[el.name] = {
                 width: el.width,
                 height: el.height,
@@ -243,7 +243,7 @@ export class LayoutGrid extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'layout-grid': LayoutGrid;
+      'lit-layout-grid': LayoutGrid;
     }
     
 }

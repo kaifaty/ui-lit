@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { getRootElement } from 'kailib';
-import type { TextField } from '../text-field/index';
+import type { TextField } from '../lit-textfield/index';
 import type { NumberField } from '../number/index';
 import type { CheckboxElement } from '../checkbox/index';
 

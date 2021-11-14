@@ -56,6 +56,6 @@ __decorate([
     property({ type: String })
 ], LinkElement.prototype, "target", void 0);
 LinkElement = __decorate([
-    customElement("link-element")
+    customElement("lit-link")
 ], LinkElement);
 export { LinkElement };

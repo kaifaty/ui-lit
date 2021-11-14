@@ -8,7 +8,7 @@ import type { TreeItem } from './tree-item';
 export interface ITreeViewProps {
     items: TSelectItem[]
     opened: boolean
-    selected: string
+    value: string
 }
 
 @customElement("tree-view")
@@ -17,9 +17,11 @@ export class Treeview extends LitElement{
     :host{
         display: inline-block;
         font-size: var(--treeview-font-size, 14px);
+        color: var(--treeitem-color, inherit);
+        --icon-color: var(--treeitem-color, inherit);
     }
     `;
-    @property({type: String, reflect: true}) selected: string = '';
+    @property({type: String, reflect: true}) value: string = '';
     connectedCallback(){
         super.connectedCallback();
         this.addEventListener('changed', this._onChanged as EventListener);
@@ -29,7 +31,7 @@ export class Treeview extends LitElement{
         this.removeEventListener('changed', this._onChanged as EventListener);
     }
     private _onChanged(e: CustomEvent){
-        this.selected = e.detail;
+        this.value = e.detail;
     }
     
     updated(){
@@ -37,7 +39,7 @@ export class Treeview extends LitElement{
             it.updateSelection(false);
         })
         this.querySelectorAll("tree-item").forEach(it => {            
-            it.updateSelection(this.selected);
+            it.updateSelection(this.value);
         })
     }
     render(){

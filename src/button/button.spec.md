@@ -1,4 +1,4 @@
-# button-element
+# lit-button
 
 ## Params
 

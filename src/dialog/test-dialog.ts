@@ -13,18 +13,18 @@ class TestDialog extends LitElement{
 
     render(){
         return html`
-        <button-element @click = "${this.confirm}">Confirm OTP</button-element>
+        <lit-button @click = "${this.confirm}">Confirm OTP</lit-button>
         <dialog-element>
-            <form-element>
+            <lit-form>
                 <slot></slot>
-                <text-field 
+                <lit-textfield 
                     placeholder = "otp" 
                     minlength = "6" 
                     maxlength = "6" 
                     required 
-                    name = "otp"></text-field>
-                <button-element confirm>Confirm</button-element>
-            </form-element>
+                    name = "otp"></lit-textfield>
+                <lit-button confirm>Confirm</lit-button>
+            </lit-form>
         </dialog-element>
         `;
     }

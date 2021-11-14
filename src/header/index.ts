@@ -5,7 +5,7 @@ export interface IHeaderProps {
     level: number
 }
 
-@customElement('header-element')
+@customElement('lit-header')
 export class HeaderElement extends LitElement{
     static styles = [
         css`
@@ -32,7 +32,7 @@ export class HeaderElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'header-element': HeaderElement;
+      'lit-header': HeaderElement;
     }
     
 }

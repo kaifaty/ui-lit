@@ -1,11 +1,11 @@
 import { TemplateResult, html } from 'lit';
-import '../dist/text-field';
-import type { TextProps } from '../src/text-field';
+import '../dist/textfield';
+import type { TextProps } from '../src/textfield';
 import { Story, Meta } from '@storybook/web-components';
 import './assets/style.css'
 
 const Text = (data: TextProps) => 
-    html`<text-field 
+    html`<lit-textfield 
         .value = "${data.value || ''}"
         .minlength = "${data.minlength}"
         .maxlength = "${data.maxlength}"
@@ -21,7 +21,7 @@ const Text = (data: TextProps) =>
         icon = "${data.icon}"
         type = "${data.type}"
         size = "${data.size}"
-    ></text-field>`;
+    ></lit-textfield>`;
 
 
 const Template: Story<Partial<TextProps>> = (args) => Text(args as TextProps);

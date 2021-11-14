@@ -4,22 +4,22 @@ import type { IFormProps } from '../src/form';
 import { Story, Meta } from '@storybook/web-components';
 
 const Button = (data: IFormProps) => 
-    html`<form-element 
+    html`<lit-form 
         style = "width: 350px; display: grid; gap: 10px; grid-template-columns: auto auto;"
         ?disabled = "${data.disabled}"
         ?noValidate = "${data.noValidate}">
             <label-element for = "name">Name:</label-element> 
-            <text-field id = "name" value = "Mike"></text-field>
+            <lit-textfield id = "name" value = "Mike"></lit-textfield>
 
             <label-element for = "salary">Salary:</label-element> 
-            <number-field id = "salary" decimals = "2" icon = "USDT" min = "500" ?required = "${true}"></number-field>
+            <lit-number id = "salary" decimals = "2" icon = "USDT" min = "500" ?required = "${true}"></lit-number>
             
             <label-element for = "live"></label-element>
             <input type = "checkbox">
             <div style = "grid-column: 1/3;">
-                <button-element type = "submit">Submit</button-element>
+                <lit-button type = "submit">Submit</lit-button>
             </div>
-    </form-element>`;
+    </lit-form>`;
 
 
 const Template: Story<Partial<IFormProps>> = (args) => Button(args as IFormProps);

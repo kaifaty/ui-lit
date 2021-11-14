@@ -3,7 +3,7 @@ import { customElement, property, state } from 'lit/decorators';
 import '../icon';
 import type { LayoutGrid } from './grid';
 
-@customElement("layout-element")
+@customElement("lit-layout")
 export class LayoutElement extends LitElement{
   static styles = css`
     :host{
@@ -18,7 +18,7 @@ export class LayoutElement extends LitElement{
       z-index: var(--z-index, 1);
     }
     .wrapper{
-      background-color: var(--layout-element-background, #cd85fd);
+      background-color: var(--lit-layout-background, #cd85fd);
       padding: 3px 6px;
       box-sizing: border-box;
       height: 100%;
@@ -85,14 +85,14 @@ export class LayoutElement extends LitElement{
     <div @click = "${this._onSetMaxZindex}" class = "wrapper">
       <slot></slot>
     </div>
-    <icon-element 
+    <lit-icon 
         @pointerdown = "${this._onStartMove}" 
         class = "move" 
-        icon = "move"></icon-element>
-    <icon-element 
+        icon = "move"></lit-icon>
+    <lit-icon 
         @pointerdown = "${this._onResize}"
         class = "resize" 
-        icon = "resize"></icon-element>
+        icon = "resize"></lit-icon>
     `;
   }
 
@@ -147,7 +147,7 @@ export class LayoutElement extends LitElement{
 
 declare global {
     interface HTMLElementTagNameMap {
-      'layout-element': LayoutElement;
+      'lit-layout': LayoutElement;
     }
     
 }

@@ -7,7 +7,7 @@ export interface IQRCodeProps{
     value: string
 }
 
-@customElement('qrcode-element')
+@customElement('lit-qrcode')
 export class QRCodeElement extends LitElement{
     @query('canvas') canvas!: HTMLCanvasElement;
     static styles = css`
@@ -32,6 +32,6 @@ export class QRCodeElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'qrcode-element': QRCodeElement;
+      'lit-qrcode': QRCodeElement;
     }
 }

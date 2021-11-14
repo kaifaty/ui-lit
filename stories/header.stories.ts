@@ -7,7 +7,7 @@ import { IHeaderProps } from '../src/header';
 
  
 const Header = (data: IHeaderProps) => 
-    html`<header-element level = "${data.level}">Header of ${data.level} level</header-element>`;
+    html`<lit-header level = "${data.level}">Header of ${data.level} level</lit-header>`;
 
 
 const Template: Story<Partial<IHeaderProps>> = (data) => Header(data as IHeaderProps);
@@ -24,5 +24,5 @@ export default {
             control: { type: 'radio' }
         }
     },
-    component: 'header-element',
+    component: 'lit-header',
 } as Meta;

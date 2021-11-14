@@ -7,11 +7,11 @@ import { ITextProps } from '../src/text';
 
  
 const Text = (data: ITextProps) => 
-    html`<text-element 
+    html`<lit-text 
         status = "${data.status}"
         ?center = "${data.center}"
         ?pulse = "${data.pulse}"
-    >Some text</text-element>`;
+    >Some text</lit-text>`;
 
 
 const Template: Story<Partial<ITextProps>> = (data) => Text(data as ITextProps);
@@ -30,5 +30,5 @@ export default {
             control: { type: 'radio' }
         }
     },
-    component: 'text-element',
+    component: 'lit-text',
 } as Meta;

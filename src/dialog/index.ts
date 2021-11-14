@@ -13,7 +13,7 @@ export interface IDialogProps {
     useCancelBtn: boolean
 }
 let pool: DialogElement[] = [];
-@customElement('dialog-element')
+@customElement('lit-dialog')
 export class DialogElement extends LitElement{
     static get styles() {
         return [DIALOG_STYLES, scrollbar];
@@ -32,9 +32,9 @@ export class DialogElement extends LitElement{
             this.useCancelBtn 
             ? html`<div @click = "${this.close}" class = "closebtn-wrapper">
                         <slot name = "closeBtn">
-                            <button-element 
+                            <lit-button 
                                     type = "button"
-                                    class = "button">${this.closeBtnText}</button-element>
+                                    class = "button">${this.closeBtnText}</lit-button>
                         </slot>
                     </div>`
             : nothing
@@ -50,16 +50,16 @@ export class DialogElement extends LitElement{
                         @slotchange = "${this._headerChanged}"></slot>
                 </header>
                 ${pool.length > 1 
-                    ? html`<icon-element 
+                    ? html`<lit-icon 
                         class = "arrow-back" 
                         icon = "dropdown"
                         @click = "${this.close}"
-                        ></icon-element>` 
+                        ></lit-icon>` 
                     : nothing}
-                <icon-element 
+                <lit-icon 
                         icon = "cancel" 
                         class = "close-icon" 
-                        @click = "${this.close}"></icon-element>
+                        @click = "${this.close}"></lit-icon>
                 <main class = "ff-scrollbar"><slot></slot></main>
                 <footer>${this._footerTemplate()}</footer>
             </div>
@@ -97,7 +97,7 @@ export class DialogElement extends LitElement{
         pool[pool.length - 1]?.setAttribute('opened', '');
     }
     public confirm(){
-        const data = this.querySelector('form-element');
+        const data = this.querySelector('lit-form');
         if(data){
             const result = data.submit();
             if(result){
@@ -136,6 +136,6 @@ export class DialogElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'dialog-element': DialogElement;
+      'lit-dialog': DialogElement;
     }
 }

@@ -1,20 +1,21 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 
-@customElement("select-item")
+@customElement("lit-select-item")
 export class SelectItem extends LitElement{
     static styles = css`
     :host{
         display: block;
         padding: var(--select-padding, 5px 10px);
         cursor: pointer;
+        background-color: var(--lit-select-item-background);
     }
     
     :host(:focus){
         outline: 2px solid var(--select-outline-focus, #ccc);
     }
     :host(:hover){
-        background-color: var(--option-hover, #eee);
+        background-color: var(--lit-select-item-background-hover, #eee);
     }
     `;
     @property({type: String}) value: string = '';
@@ -51,6 +52,6 @@ export class SelectItem extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'select-item': SelectItem;
+      'lit-select-item': SelectItem;
     }
 }

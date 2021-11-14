@@ -6,7 +6,7 @@ import type { IRangeProps } from '../src/range';
 
 
 const Range = (data: IRangeProps) => 
-    html`<range-element 
+    html`<lit-range 
         .value = "${data.value}"
         .valueAsNumber = "${data.valueAsNumber}"
         .min = "${data.min}"
@@ -15,7 +15,7 @@ const Range = (data: IRangeProps) =>
         .startFromMin = "${data.startFromMin}"
         .disabled = "${data.disabled}"
         .showPercent = "${data.showPercent}"
-    ></range-element>`;
+    ></lit-range>`;
 
 
 const Template: Story<Partial<IRangeProps>> = (args) => Range(args as IRangeProps);
@@ -52,11 +52,11 @@ export default {
         },
         docs: {
             description: {
-                component: '### Usage: \n `<range-element></range-element>`',
+                component: '### Usage: \n `<lit-range></lit-range>`',
             },
         },
     },
-    component: 'range-element',
+    component: 'lit-range',
     
     
     

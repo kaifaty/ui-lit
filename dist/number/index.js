@@ -92,10 +92,10 @@ let NumberField = class NumberField extends formAssociated(LitElement) {
     _cancelIconTemplate() {
         if (!this.useCancelButton || !this.value)
             return nothing;
-        return html `<icon-element 
+        return html `<lit-icon 
                         @click = "${this._clearValue}"
                         icon = "remove" 
-                        class = "danger icon"></icon-element>`;
+                        class = "danger icon"></lit-icon>`;
     }
     willUpdate() {
         var _a;
@@ -211,6 +211,6 @@ __decorate([
     property()
 ], NumberField.prototype, "icon", void 0);
 NumberField = __decorate([
-    customElement("number-field")
+    customElement("lit-number")
 ], NumberField);
 export { NumberField };

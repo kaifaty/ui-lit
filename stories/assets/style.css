@@ -11,5 +11,11 @@
     font-style: normal;
     font-weight: 400;
     src: url('material.woff2') format('woff2');
-  }
-  
+}
+
+body, html{
+    margin: 0;
+}
+hr{
+    margin: 30px 0;
+}

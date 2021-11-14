@@ -5,11 +5,11 @@ import { Story, Meta } from '@storybook/web-components';
 import './assets/style.css'
 
 const Text = (data: ITextareaProps) => 
-    html`<textarea-field 
+    html`<lit-textarea 
         value = "${data.value}"
         name = "${data.name}"
         placeholder = "${data.placeholder}"
-    ></textarea-field>`;
+    ></lit-textarea>`;
 
 
 const Template: Story<Partial<ITextareaProps>> = (args) => Text(args as ITextareaProps);

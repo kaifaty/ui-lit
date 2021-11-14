@@ -1,4 +1,4 @@
-import { noselectText } from './../styles/noselect';
+import { noselectText } from '../styles/noselect';
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, css, unsafeCSS, html, TemplateResult } from 'lit';
 import { formAssociated } from '../form-associated/index';
@@ -19,7 +19,7 @@ export interface ITabs extends FormAssociatedProps{
 
 }
 
-@customElement("tabs-element")
+@customElement("lit-tabs")
 export class TabsElement extends formAssociated(LitElement) implements ITabs{
     static styles = css`
     :host{
@@ -29,27 +29,6 @@ export class TabsElement extends formAssociated(LitElement) implements ITabs{
     .content{
         display: flex;
     }
-    /*.type-button .tab{
-        border: 1px solid var(--tab-border, tomato);
-        padding: var(--tab-button-padding, 5px 14px);
-    }
-    .type-tab .tab{
-        padding: var(--tab-padding, 5px 14px);
-        border: 1px solid transparent;
-        border-bottom: 1px solid var(--tab-border, tomato);
-        
-    }
-    .type-tab .tab.selected{
-        border-top: 1px solid var(--tab-border, tomato);
-        border-left: 1px solid var(--tab-border, tomato);
-        border-right: 1px solid var(--tab-border, tomato);
-        border-bottom: 1px solid transparent;
-    }
-    .tab{
-        background-color: var(--tab-background);
-        color: var(--tab-color);
-        cursor: pointer;
-    }*/
     .tab.selected, 
     :not(.disabled) .tab:not(:focus):hover, 
     :not(.disabled) :focus{
@@ -60,7 +39,7 @@ export class TabsElement extends formAssociated(LitElement) implements ITabs{
     }`;    
     @property({type: Array}) items: TTab[] = [];
     @property({type: String, reflect: true}) type: TTabType = 'button';
-    @property({type: String}) selected: string = '';
+    @property({type: String}) value: string = '';
 
 
     connectedCallback(){
@@ -73,15 +52,15 @@ export class TabsElement extends formAssociated(LitElement) implements ITabs{
     }
 
     private _handleSelect(e: CustomEvent){
-        this.selected = e.detail;
+        this.value = e.detail;
     }
     private _updateTabs(){
-        this.querySelectorAll("tab-item").forEach(it => {
+        this.querySelectorAll("lit-tab").forEach(it => {
             this.disabled 
                 ? it.setAttribute("disabled", "") 
                 : it.removeAttribute("disabled") ;
             it.type = this.type 
-            it.value === this.selected 
+            it.value === this.value 
                 ? it.select() 
                 : it.unselect()
             }
@@ -104,6 +83,6 @@ export class TabsElement extends formAssociated(LitElement) implements ITabs{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'tabs-element': TabsElement;
+      'lit-tabs': TabsElement;
     }
 }

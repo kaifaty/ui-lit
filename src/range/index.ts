@@ -16,8 +16,8 @@ export interface IRangeProps extends FormAssociated {
     showPercent: boolean
 }
 
-/** <range-element></range-element> */
-@customElement("range-element")
+/** <lit-range></lit-range> */
+@customElement("lit-range")
 export class RangeElement extends formAssociated(LitElement){
     
     static get styles () {
@@ -420,6 +420,6 @@ export class RangeElement extends formAssociated(LitElement){
 
 declare global {
     interface HTMLElementTagNameMap {
-      'range-element': RangeElement;
+      'lit-range': RangeElement;
     }
 }

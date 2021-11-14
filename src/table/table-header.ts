@@ -4,7 +4,7 @@ import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
 import { TColumnItem, TFilterItem } from './table';
 import { noselect } from '../styles/noselect';
-import '../text-field';
+import '../textfield';
 import '../number';
 import { ClickController } from '../controllers/ClickController';
 import { isClickInElement } from 'kailib';
@@ -37,8 +37,8 @@ export class TableHeader extends LitElement{
         align-items: center;
         line-height: 0.9;
     }
-    :host([sortDirection = "descend"]) .sorted icon-element[icon = "dropdown"],
-    :host([sortDirection = "ascend"]) .sorted icon-element[icon = "dropup"],
+    :host([sortDirection = "descend"]) .sorted lit-icon[icon = "dropdown"],
+    :host([sortDirection = "ascend"]) .sorted lit-icon[icon = "dropup"],
     .filters-checked
     {
         --icon-color: hsl(210, 90%, 60%);
@@ -130,10 +130,10 @@ export class TableHeader extends LitElement{
             return html`<div class = "sort-icons">
                 ${this.directions.map(it => {
                     if(it ==='ascend'){
-                        return html`<icon-element icon = "dropup"></icon-element>`;
+                        return html`<lit-icon icon = "dropup"></lit-icon>`;
                     }
                     else {
-                        return html`<icon-element icon = "dropdown"></icon-element>`
+                        return html`<lit-icon icon = "dropdown"></lit-icon>`
                     }
                 })}
             </div>`;
@@ -144,10 +144,10 @@ export class TableHeader extends LitElement{
         const map = {
             "filters-checked": this.item.filters.filter(it => it.checked).length
         }
-        return html`<icon-element 
+        return html`<lit-icon 
                         @click = "${this._onFilterToggle}" 
                         class = "${classMap(map)}"
-                        icon = "filter"></icon-element>`;
+                        icon = "filter"></lit-icon>`;
     }
     private _filterItemTemplate(item: TFilterItem, i: number){
         if(item.type === 'checkbox' || !item.type){
@@ -162,44 +162,44 @@ export class TableHeader extends LitElement{
             return html`
                 <label-text>
                     ${item.text}
-                    <number-field 
+                    <lit-number 
                         name = "${i}" 
                         value = "${item.value}"
-                        placeholder = "${ifDefined(item.placeholder)}"></number-field>
+                        placeholder = "${ifDefined(item.placeholder)}"></lit-number>
                 </label-text>`;
         }
         if(item.type === 'input'){
             return html`
                 <label-text>
                     ${item.text}
-                    <text-field 
+                    <lit-textfield 
                         name = "${i}" 
                         value = "${item.value}"
-                        placeholder = "${ifDefined(item.placeholder)}"></text-field>
+                        placeholder = "${ifDefined(item.placeholder)}"></lit-textfield>
                 </label-text>`;
         }
         return nothing;
     }
     private _filterTemplate(){
         if(!this.filterVisible) return nothing;
-        return html`<form-element 
+        return html`<lit-form 
                     @submit = "${this._onSubmitFilter}"
                     class = "filter-template">
                 <div class = "rows">
                     ${this.item!.filters!.map((it, i) => html`<div class = "row">${this._filterItemTemplate(it, i)}</div>`)}
                 </div>
                 <footer>
-                    <button-element 
+                    <lit-button 
                         @click = "${this._onReset}"
                         borderless
                         type = "button"
-                        size = "small">Reset</button-element>
-                    <button-element 
+                        size = "small">Reset</lit-button>
+                    <lit-button 
                         type = "submit"
                         primary 
-                        size = "small">OK</button-element>
+                        size = "small">OK</lit-button>
                 </footer>
-            </form-element>`;
+            </lit-form>`;
     }
     render(){
         const map = {

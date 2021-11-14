@@ -15,7 +15,7 @@ export interface IFormElement{
     submit(): void
 }
 type TReturnData = Record<string, string | boolean | number>;
-@customElement("form-element")
+@customElement("lit-form")
 export class FromElement extends LitElement implements IFormElement, IFormProps{
     _elements: FormAssociatedElement[] = []
 
@@ -110,6 +110,6 @@ export class FromElement extends LitElement implements IFormElement, IFormProps{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'form-element': FromElement;
+      'lit-form': FromElement;
     }
 }

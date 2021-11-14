@@ -127,6 +127,6 @@ __decorate([
     property({ type: Number })
 ], ButtomElement.prototype, "tabindex", void 0);
 ButtomElement = __decorate([
-    customElement("button-element")
+    customElement("lit-button")
 ], ButtomElement);
 export { ButtomElement };

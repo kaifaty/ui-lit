@@ -1,2 +1,2 @@
-export * from './tabs-element'
+export * from './tabs'
 export * from './tab-item'

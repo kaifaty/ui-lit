@@ -87,10 +87,10 @@ let TextField = class TextField extends formAssociated(LitElement) {
     _cancelIconTemplate() {
         if (!this.useCancelButton || !this.value)
             return nothing;
-        return html `<icon-element 
+        return html `<lit-icon 
                         @click = "${this.clearValue}"
                         icon = "cancel" 
-                        class = "danger icon"></icon-element>`;
+                        class = "danger icon"></lit-icon>`;
     }
     render() {
         return html `
@@ -176,6 +176,6 @@ __decorate([
     property()
 ], TextField.prototype, "icon", void 0);
 TextField = __decorate([
-    customElement("text-field")
+    customElement("lit-textfield")
 ], TextField);
 export { TextField };

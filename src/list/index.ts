@@ -2,7 +2,7 @@
 import { customElement} from 'lit/decorators';
 import { LitElement, html, css } from 'lit';
 
-@customElement('list-item')
+@customElement('lit-list-item')
 export class ListItem extends LitElement{
     static styles = css`
     :host{
@@ -14,17 +14,17 @@ export class ListItem extends LitElement{
     :host(:hover){
         background-color: var(--list-background-hover, #eee);
     }
-    icon-element{
+    lit-icon{
         margin-right: 10px;
         transform: rotate(-90deg);
         opacity: 0.5;
     }
     `;
     render(){
-        return html`<icon-element icon = "dropdown"></icon-element> <slot></slot>`;
+        return html`<lit-icon icon = "dropdown"></lit-icon> <slot></slot>`;
     }
 }
-@customElement('list-element')
+@customElement('lit-list')
 export class ListElement extends LitElement{
     static styles = css`
     :host{
@@ -38,7 +38,7 @@ export class ListElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'list-item': ListItem;
-      'list-element': ListElement;
+      'lit-list-item': ListItem;
+      'lit-list': ListElement;
     }
 }

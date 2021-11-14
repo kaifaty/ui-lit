@@ -2,7 +2,7 @@ import { customElement } from 'lit/decorators';
 import { LitElement, html, css } from 'lit';
 
 
-@customElement('description-element')
+@customElement('lit-description')
 export class DescriptionElement extends LitElement{
     static styles = css`
     :host{
@@ -17,7 +17,7 @@ export class DescriptionElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'description-element': DescriptionElement;
+      'lit-description': DescriptionElement;
     }
     
 }

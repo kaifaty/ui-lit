@@ -53,7 +53,7 @@ const dataSource = [...Array(35)].map((it, i) =>
 
 const Table = (text: string) => 
     html`
-    <table-element
+    <lit-table
         style = "width: 400px; height: 400px;"
         pagination
         paginationToHeight        
@@ -61,7 +61,7 @@ const Table = (text: string) =>
         .dataSource = "${dataSource}"
         .columns = "${columns}"
         rowHeight = "50"
-    ></table-element>`;
+    ></lit-table>`;
 
 
 const Template: Story<Partial<{text: string}>> = (data) => Table(data.text);
@@ -74,5 +74,5 @@ export default {
     argTypes: {
             
     },
-    component: 'table-element',
+    component: 'lit-table',
 } as Meta;

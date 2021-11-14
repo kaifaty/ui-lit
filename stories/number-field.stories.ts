@@ -5,7 +5,7 @@ import { Story, Meta } from '@storybook/web-components';
 import './assets/style.css'
 
 const Number = (data: NumberProps) => 
-    html`<number-field 
+    html`<lit-number 
         .value = "${data.value || ''}"
         .min = "${data.min}"
         .max = "${data.max}"
@@ -17,7 +17,7 @@ const Number = (data: NumberProps) =>
         ?useCancelButton = "${data.useCancelButton}"
         ?replaceToRange = "${data.replaceToRange}"
         inputmode = "${data.inputmode}"
-    ></number-field>`;
+    ></lit-number>`;
 
 
 const Template: Story<Partial<NumberProps>> = (args) => Number(args as NumberProps);

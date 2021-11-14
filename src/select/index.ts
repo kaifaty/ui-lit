@@ -1,2 +1,2 @@
-export * from './select-element';
+export * from './select';
 export * from './select-item';

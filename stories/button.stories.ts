@@ -7,7 +7,7 @@ interface IProps extends ButtonProps{
     label: string | TemplateResult
 }
 const Button = (data: IProps) => 
-    html`<button-element 
+    html`<lit-button 
         type = "${data.type}"
         ?primary = "${!!data.primary}"
         ?disabled = "${!!data.disabled}"
@@ -18,7 +18,7 @@ const Button = (data: IProps) =>
         ?switchOn = "${!!data.switchOn}"
         size = "${data.size}"        
 
-    >${data.label}</button-element>`;
+    >${data.label}</lit-button>`;
 
 
 const Template: Story<Partial<IProps>> = (args) => Button(args as IProps);
@@ -72,7 +72,7 @@ Error_.args = {
 }
 export default {
     title: 'Form assosiated/Button',
-    component: 'button-element',
+    component: 'lit-button',
     argTypes: {
         type: {
           options: ['button', 'submit'],

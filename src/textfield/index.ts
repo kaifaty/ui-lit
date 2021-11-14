@@ -23,7 +23,7 @@ export interface TextProps extends FormAssociated{
     type: 'text' | 'password',
 }
 
-@customElement("text-field")
+@customElement("lit-textfield")
 export class TextField extends formAssociated(LitElement) implements TextProps{
     static get styles (){
         return input
@@ -106,10 +106,10 @@ export class TextField extends formAssociated(LitElement) implements TextProps{
     }
     private _cancelIconTemplate(){
         if(!this.useCancelButton ||  !this.value) return nothing;
-        return html`<icon-element 
+        return html`<lit-icon 
                         @click = "${this.clearValue}"
                         icon = "cancel" 
-                        class = "danger icon"></icon-element>`;
+                        class = "danger icon"></lit-icon>`;
     }
     render(){
         return html`
@@ -165,6 +165,6 @@ export class TextField extends formAssociated(LitElement) implements TextProps{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'text-field': TextField;
+      'lit-textfield': TextField;
     }
 }

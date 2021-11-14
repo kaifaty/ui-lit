@@ -6,8 +6,8 @@ import { ILayoutElementProps } from '../src/layout/grid';
 
 
 const Layaout = (data: ILayoutElementProps) => 
-    html`<layout-grid style = "height: 800px;">
-        <layout-element 
+    html`<lit-layout-grid style = "height: 800px;">
+        <lit-layout 
             .top = "${data.top}"
             .left = "${data.left}"
             .width = "${data.width}"
@@ -17,8 +17,8 @@ const Layaout = (data: ILayoutElementProps) =>
             .minHeight = "${data.minHeight}"
             .maxHeight = "${data.maxHeight}"
             .zIndex = "${data.zIndex}"
-            name = "test">Layout element</layout-element>
-    </layout-grid>`;
+            name = "test">Layout element</lit-layout>
+    </lit-layout-grid>`;
 
 
 const Template: Story<Partial<ILayoutElementProps>> = (data) => Layaout(data as ILayoutElementProps);

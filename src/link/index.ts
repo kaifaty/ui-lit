@@ -10,7 +10,7 @@ export interface ILinkProps {
     target?: TLinkTartget
 
 }
-@customElement("link-element")
+@customElement("lit-link")
 export class LinkElement extends LitElement{
     static styles = css`
     :host{

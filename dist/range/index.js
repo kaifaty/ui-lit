@@ -1,4 +1,5 @@
 import { __decorate } from "tslib";
+import { ResizeObserverController } from './../controllers/ResizeObserverController';
 import { LitElement, html, nothing, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators';
 import { formAssociated } from '../form-associated/index';
@@ -17,6 +18,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this.showPercent = false;
         this.usePoints = true;
         this.startFromMin = false;
+        this.RO = new ResizeObserverController(this);
         this._points = [0, 25, 50, 75, 100];
         this._timeout = 0;
         this._trackSize = 0;
@@ -58,6 +60,11 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this._handlePointLeave = (e) => {
             e.preventDefault();
             this._hidePercent();
+        };
+        this._onChangeSize = (rect) => {
+            console.log('_onChangeSize');
+            this._trackSize = this._calcTackWidth(rect);
+            this._trackStartX = this._calcTrackStartX(rect);
         };
     }
     static get styles() {
@@ -207,9 +214,9 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         return this.disabled || this.max < this.min;
     }
     willUpdate() {
-        const rect = this.getBoundingClientRect();
-        this._trackSize = this._calcTackWidth(rect);
-        this._trackStartX = this._calcTrackStartX(rect);
+        //const rect = this.getBoundingClientRect()
+        //this._trackSize = this._calcTackWidth(rect);
+        //this._trackStartX = this._calcTrackStartX(rect);
         this._value = this._calcValueByPercent(this.percent).toFixed(this.decimals);
         this._updateOffset();
     }
@@ -234,10 +241,10 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     }
     // ==== Actions ==== 
     _calcTrackStartX(rect) {
-        return rect.x + this._padding;
+        return rect.x + 2 * this._padding;
     }
     _calcTackWidth(rect) {
-        return rect.width - this._padding * 2;
+        return rect.width;
     }
     _calcOffset(e) {
         const xPosition = getClientX(e);
@@ -301,12 +308,9 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             return this.max;
         }
         return value;
-        ;
     }
     _updateOffset() {
-        const rect = this.getBoundingClientRect();
-        const width = rect.width - this._padding * 2; //  this._thumbSize / 2
-        const offsetX = Math.round(width * this.percent / 100 * 1e2) / 1e2;
+        const offsetX = Math.round((this._trackSize) * this.percent / 100 * 1e2) / 1e2;
         if (offsetX !== this.offsetX) {
             this.offsetX = offsetX;
         }
@@ -360,6 +364,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     render() {
         return html `
         <div class = "track ${this.isDisabled() ? 'disabled' : ''}"
+            ${this.RO.observe(this._onChangeSize)}
             @mousedown = "${this._handlePointerDown}"
             @mouserover = "${this._handlePointOver}"
             @mouseleave = "${this._handlePointLeave}"
@@ -378,11 +383,9 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         document.addEventListener("touchend", this._handlePointerUp);
         document.addEventListener("mousemove", this._handlePointerMove, { passive: false });
         document.addEventListener("mouseup", this._handlePointerUp);
-        const rect = this.getBoundingClientRect();
-        this._trackSize = this._calcTackWidth(rect);
-        this._trackStartX = this._calcTrackStartX(rect);
         this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
+        console.log('connectedCallback');
     }
     disconnectedCallback() {
         document.removeEventListener("touchmove", this._handlePointerMove);

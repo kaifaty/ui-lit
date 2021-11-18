@@ -14,9 +14,9 @@ export type TTab = {
 }
 
 export interface ITabs extends FormAssociatedProps{
-    items: TTab[],
+    //items: TTab[],
     type: TTabType;
-
+    value: string;
 }
 
 @customElement("lit-tabs")
@@ -37,7 +37,7 @@ export class LitTabs extends formAssociated(LitElement) implements ITabs{
     :host([disabled]){
         opacity: 0.5;
     }`;    
-    @property({type: Array}) items: TTab[] = [];
+    //@property({type: Array}) items: TTab[] = [];
     @property({type: String, reflect: true}) type: TTabType = 'button';
     @property({type: String}) value: string = '';
 

@@ -1,9 +1,36 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, css, html, noChange } from 'lit';
 import {property, customElement, query} from 'lit/decorators'
+import { Directive, PartInfo, PartType, ElementPart, directive } from 'lit/directive';
 
 export interface ICircleProps{
     percent: number
 }
+class CanvasDirective extends Directive{
+    _inited = false;
+    _ctx: CanvasRenderingContext2D | null = null;
+    _color = "#aaa";
+
+    constructor(partInfo: PartInfo){
+        super(partInfo);
+        if (partInfo.type !== PartType.ELEMENT) {
+            throw new Error('Must be element');
+        }
+    }
+    render(f: Function, size: number, ratio: number){
+        return noChange;
+    }
+    update(part: ElementPart, args: [Function, number, number]){
+        if(!this._ctx){
+            const styles = window.getComputedStyle(part.element);
+            this._color = styles.getPropertyValue("--circle-color");
+            this._ctx = (part.element as HTMLCanvasElement).getContext('2d')!;
+            this._ctx.canvas.height = args[1] * args[2];
+            this._ctx.canvas.width = args[1] * args[2];
+        }
+        args[0](this._ctx, this._color);
+    }
+}
+const canvasDirective = directive(CanvasDirective);
 
 @customElement('lit-circle')
 export class LitCircle extends LitElement{
@@ -31,71 +58,49 @@ export class LitCircle extends LitElement{
     set percent(value: number){
         if(value > 100) value = 100;
         this._percent = value;
-        this.renderCircle();
+        this.requestUpdate();
     }
-
-    @property({type: Number, attribute: true}) size: number = 0;
+    _color: string = "#aaa";
+    @property({type: Number, attribute: true}) size: number = 14;
     @property({type: Number, attribute: true}) ratio: number = 2;
-    @query('canvas') canvas!: HTMLCanvasElement;
-    _ctx: CanvasRenderingContext2D | null = null;
 
-    private _init(){
-        this._ctx = this.canvas.getContext('2d')!;
-        this._ctx.canvas.height = this.clientHeight * this.ratio;
-        this._ctx.canvas.width = this.clientWidth * this.ratio;
-        this._ctx.lineWidth = this.lineWidth;
-    }
     get lineWidth() {
         return 1 * this.ratio;
     }
     get radius(){
         return this.size * this.ratio / 2 ;
     }
-    getColor(): string{
-        const styles = window.getComputedStyle(this.canvas);
-        const color = styles.getPropertyValue("--circle-color");        
-        return color || "#aaa"; 
-    }
-    renderCircle(){
-        if(!this._ctx) return;
-        const color = this.getColor();
-        this._ctx.strokeStyle = color;
-        this._ctx.fillStyle = color;
-        this._ctx.clearRect(0, 0, this.radius * 2, this.radius * 2);    
-        this._ctx.lineWidth = 0;
-
+    renderCircle = (ctx: CanvasRenderingContext2D) => {
+        if(!ctx) return;
+        ctx.strokeStyle = this._color;
+        ctx.fillStyle = this._color;
+        ctx.clearRect(0, 0, this.radius * 2, this.radius * 2);    
+        ctx.lineWidth = 0;
         if(this.percent){
-            this._ctx.beginPath();
-            this._ctx.moveTo(this.radius, this.radius);
-            this._ctx.lineTo(this.radius, 0);
-            this._ctx.arc(
+            ctx.beginPath();
+            ctx.moveTo(this.radius, this.radius);
+            ctx.lineTo(this.radius, 0);
+            ctx.arc(
                 this.radius, 
                 this.radius,
                 this.radius -  this.ratio, 
                 -Math.PI / 2,
                 (this.percent / 100) * 2 * Math.PI - Math.PI / 2
             );
-            this._ctx.fill();
+            ctx.fill();
         }
-        
-         this._ctx.beginPath();
-         this._ctx.arc(this.radius, this.radius, this.radius - this.lineWidth - 1, 0, 2 * Math.PI);
-         this._ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(this.radius, this.radius, this.radius - this.lineWidth - 1, 0, 2 * Math.PI);
+        ctx.stroke();
     }
     render(){
-        return html`<canvas></canvas>`;
+        return html`<canvas ${canvasDirective(this.renderCircle, this.size, this.ratio)}></canvas>`;
     }
-    updated(){
-        this.renderCircle();
-    }
-    firstUpdated(){
-        if(this.size){
-            this.style.setProperty('--percent-size', this.size + "px");
-        }
-        else{
-            this.size = parseInt(this.style.getPropertyValue('--percent-size')) || 14;
-        }
-        this._init();
+    connectedCallback(){
+        super.connectedCallback();
+        //this.size = this.clientWidth;
+        const styles = window.getComputedStyle(this);
+        this._color = styles.getPropertyValue("--circle-color");
     }
 }
 

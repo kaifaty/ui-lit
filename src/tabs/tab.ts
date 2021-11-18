@@ -11,7 +11,7 @@ export class LitTab extends LitElement{
         ${unsafeCSS(noselectText)};
         cursor: pointer;
         color: var(--tab-color);
-        --icon-color: var(--tab-color, var(--icon-color));
+        --icon-color: var(--tab-color);
         background-color: var(--tab-background);
     }
     :host([type="button"]){
@@ -23,7 +23,7 @@ export class LitTab extends LitElement{
         border: 1px solid transparent;
         border-left: none;
         border-right: none;
-        border-bottom: var(--tab-border,  1px solid  tomato);
+        border-bottom: 1px solid var(--tab-border, tomato);
         
     }
     :host([selected]){
@@ -33,6 +33,7 @@ export class LitTab extends LitElement{
     }
     :host(:not([disabled]):focus){
         outline: 1px solid var(--tab-border, tomato);
+        z-index: 1;
     }
     
     `;

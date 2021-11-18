@@ -25,7 +25,7 @@ export class LitTableHeader extends LitElement{
         width: 1px;
         height: 50%;
         display: inline-block;
-        background-color: rgba(0,0,0,0.1);
+        background-color: var(--table-header-separator, rgba(0,0,0,0.1));
         top: 50%;
         right: 0;
         transform: translate(0, -50%);

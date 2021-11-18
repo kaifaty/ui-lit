@@ -1,11 +1,11 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { LitElement, html, css, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
 import { repeat } from 'lit/directives/repeat';
 import '../pagination';
 
 export type ISourceItem = {
     key: string;
-    [key: string]: string | number;
+    [key: string]: string | number ;
 }
 export type TFilterType = 'checkbox' | 'input';
 export interface TFilterItem {
@@ -22,6 +22,7 @@ interface IFilters extends TFilterItem{
 export type TColumnItem = {
     title: string;
     key: string;
+    valueFn?: (data: ISourceItem) => string | TemplateResult
     filters?: TFilterItem[];
     //onFilter?: (value: string, record: ISourceItem) => boolean;
     sorter?: boolean | ((a: ISourceItem, b: ISourceItem, direction: TSortDirections) => number); 
@@ -79,7 +80,7 @@ export class TableElement extends LitElement{
         const oldValue = this._headerHeight;
         this._headerHeight = value;
         if(oldValue !== value){
-            this.style.setProperty('--row-height', this._headerHeight + "px");
+            this.style.setProperty('--header-height', this._headerHeight + "px");
         }
         this.requestUpdate('headerHeight', value)
     }
@@ -197,7 +198,7 @@ export class TableElement extends LitElement{
             it => html`
             <lit-table-row>
                 ${this.columns.map((col, i) => {
-                    return html`<lit-table-cell>${it[col.key]}</lit-table-cell>`
+                    return html`<lit-table-cell>${col.valueFn ? col.valueFn(it) : it[col.key]}</lit-table-cell>`
                 })}
             </lit-table-row>`
         )

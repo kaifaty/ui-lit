@@ -1,11 +1,17 @@
 {
   "name": "ui-lit",
-  "version": "0.0.15",
+  "version": "0.0.20",
   "description": "UI Elements on LIT",
   
   "main": "dist/index.js",
   "module": "dist/index.es6.js",
   "types": "dist/types.d.ts",
+  "exports": {
+    ".": {
+      "development": "./dist/lit-html.js",
+      "default": "./index.js"
+    }
+  },
   "browserslist": [
     "since 2017-06"
   ],
@@ -25,8 +31,6 @@
     "parcel-watch": "parcel  ./src/index.ts -d ./pages/ --out-file index.js"
   },
   "files": [
-    "/demo/",
-    "/src/",
     "/dist/"
   ],
   "keywords": [

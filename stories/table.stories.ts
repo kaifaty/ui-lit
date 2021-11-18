@@ -26,6 +26,7 @@ const columns = [
     title: 'Age',
     dataIndex: 'age',
     key: 'age',
+    valueFn: (item) => item.age + "y.", 
     sorter: true,
     filters: [
       {
@@ -61,6 +62,7 @@ const Table = (text: string) =>
         .dataSource = "${dataSource}"
         .columns = "${columns}"
         rowHeight = "50"
+        headerHeight = "20"
     ></lit-table>`;
 
 

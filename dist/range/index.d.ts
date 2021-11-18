@@ -1,3 +1,4 @@
+import { ResizeObserverController } from './../controllers/ResizeObserverController';
 import { LitElement, TemplateResult } from 'lit';
 import type { FormAssociated } from '../form-associated/interface';
 export interface IRangeProps extends FormAssociated {
@@ -36,6 +37,7 @@ export declare class LitRange extends LitRange_base {
     usePoints: boolean;
     startFromMin: boolean;
     _wrapper: HTMLElement;
+    RO: ResizeObserverController;
     _points: number[];
     _timeout: number;
     _trackSize: number;
@@ -77,6 +79,7 @@ export declare class LitRange extends LitRange_base {
     private _blockedVolume;
     private _thumbTemplate;
     render(): TemplateResult<1>;
+    _onChangeSize: (rect: DOMRect) => void;
     connectedCallback(): void;
     disconnectedCallback(): void;
 }

@@ -6587,10 +6587,10 @@
   "resolved" "https://registry.npmjs.org/junk/-/junk-3.1.0.tgz"
   "version" "3.1.0"
 
-"kailib@^1.0.30":
-  "integrity" "sha512-dKclT1z7Lvxy3vd/7QWaZZ72Ol9ZJeMANbu26ThyhjEZ5krwvqlxr9w9JXPCmJmH9koVXsqn5DuYe5hnLVxCVA=="
-  "resolved" "https://registry.npmjs.org/kailib/-/kailib-1.0.30.tgz"
-  "version" "1.0.30"
+"kailib@^1.0.32":
+  "integrity" "sha512-4gENogAMBz8E12VN8eENNpOpZ0TbU0LlwlB/nqqH7TzbyiOASs134aX5aHW4O/U/aXD7cArMB6JjAy+92MrzUQ=="
+  "resolved" "https://registry.npmjs.org/kailib/-/kailib-1.0.32.tgz"
+  "version" "1.0.32"
 
 "kind-of@^3.0.2":
   "integrity" "sha1-MeohpzS6ubuw8yRm2JOupR5KPGQ="

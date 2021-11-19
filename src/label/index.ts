@@ -14,7 +14,6 @@ export class LitLabel extends LitElement{
     _connectedNode: TLabled | HTMLInputElement | null = null;
     connectedCallback(){
         super.connectedCallback();
-        this.appendConnectedField(this._findConnectedField());
         this.addEventListener('click', this._handleClick);
     }
     disconnectedCallback(){
@@ -22,10 +21,14 @@ export class LitLabel extends LitElement{
         this._connectedNode = null;
         this.removeEventListener('click', this._handleClick);
     }
+    firstUpdated(){
+        this.appendConnectedField(this._findConnectedField());
+    }
     render(){
         return html`<slot></slot>`
     }
     public appendConnectedField(el: TLabled | HTMLInputElement | null){
+        console.log(el)
         if(!this._connectedNode && el){
             this._connectedNode = el;
         }
@@ -43,11 +46,24 @@ export class LitLabel extends LitElement{
                 return node as TLabled | HTMLInputElement;
             }
         }
+        else{
+            for(const node of this.childNodes){
+                if ((node as any)._formAssiciated){
+                    return node as TLabled;
+                }
+            }
+        }
         return null;
     }
 
-    _handleClick = () => {
+    _handleClick = (e: Event) => {
         this._connectedNode?.focus();
+        if(
+            this._connectedNode?.tagName.toLowerCase() === 'lit-checkbox' 
+            && (e.target as LitCheckbox)?.tagName.toLowerCase() !== 'lit-checkbox'
+        ){
+            (this._connectedNode as LitCheckbox).toggle();
+        }
     }
 }
 

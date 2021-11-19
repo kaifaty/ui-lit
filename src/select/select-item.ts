@@ -8,14 +8,15 @@ export class LitSelectItem extends LitElement{
         display: block;
         padding: var(--select-padding, 5px 10px);
         cursor: pointer;
-        background-color: var(--lit-select-item-background);
+        background-color: var(--select-item-background);
+        
     }
     
     :host(:focus){
         outline: 2px solid var(--select-outline-focus, #ccc);
     }
     :host(:hover){
-        background-color: var(--lit-select-item-background-hover, #eee);
+        background-color: var(--select-item-background-hover, #eee);
     }
     `;
     @property({type: String}) value: string = '';

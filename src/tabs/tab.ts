@@ -26,6 +26,9 @@ export class LitTab extends LitElement{
         border-bottom: 1px solid var(--tab-border, tomato);
         
     }
+    :host(:not([selected]):hover){
+        outline: 1px solid var(--tab-outline-hover, inherit);
+    }
     :host([selected]){
         background-color: var(--tab-background-selected, tomato);
         color: var(--tab-color-selected, black);

@@ -6,7 +6,7 @@ import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
 import { formAssociated } from '../form-associated/index';
 import { customElement, property, state } from 'lit/decorators';
 import { input } from '../styles/input';
-import { getEventDataset, isChildOfElement } from 'kailib';
+import { getEventDataset, isChildOfHost } from 'kailib';
 import { ClickController } from '../controllers/ClickController';
 import { KeyDownController } from '../controllers/KeyController';
 import { calcPositionForPopup } from '../helpers/position';
@@ -29,7 +29,7 @@ export interface IPropsSelect extends FormAssociatedProps{
 
 @customElement("lit-select")
 export class LitSelect extends formAssociated(LitElement) implements IPropsSelect{
-    static styles = css`
+    static styles = [css`
     :host{
         display: inline-block;
         position: relative;
@@ -46,8 +46,9 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         align-items: center;
         justify-content: space-between;
         background-color: var(--select-background);
-        border: var(--select-border, 1px solid  #ccc);
+        border: 1px solid  var(--select-border,  #ccc);
         padding: var(--select-padding, 5px 10px);
+        cursor: pointer;
     }
     .items.open{
         display: block;
@@ -55,7 +56,11 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     .items{
         display: none;
         position: absolute;
-        border: var(--select-border, 1px solid #ccc);
+        border: 1px solid  var(--select-border, #ccc);
+        background-color: var(--select-item-background);
+        z-index: var(--select-items-zindex, 20);
+        overflow-y: auto;
+        overflow-x: hidden;
     }
     .items.above{
         top: 0;
@@ -69,7 +74,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         opacity: 0.5;
         ${unsafeCSS(noselectText)};
     }
-    `;
+    `, scrollbar];
     
     private _clickController = new ClickController(this);
     private _keyPressController = new KeyDownController(this);
@@ -127,12 +132,18 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         `;
     }
     render(){
+        const stylesData = {
+            height: this.optionsHeight ? this.optionsHeight + "px" : 'initial',
+            width: this.optionsWidth ? this.optionsWidth + "px" : '100%'
+        };
+        
         return html`
         <div class = "selected" 
              @click = "${this._toggle}">
             ${this._selectedTemplate()}
         </div>
-        <div class = "items below ${this.open ? 'open' : ''}">
+        <div style = "${styleMap(stylesData)}" 
+             class = "items ff-scrollbar below ${this.open ? 'open' : ''}" >
             <slot></slot>
         </div>`;
     }
@@ -174,7 +185,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         }
     }
     handleDocumentClick(e: Event){
-        const isChild = isChildOfElement(e.target as HTMLElement, this);
+        const isChild = isChildOfHost(e.composedPath()[0] as HTMLElement, this);
         if(!isChild){
             this.open = false;
         }

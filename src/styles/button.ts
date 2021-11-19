@@ -11,17 +11,18 @@ export const button = [
         cursor: pointer;
         display: grid;
         gap: var(--button-icon-gap, 4px);
+        justify-content: var(--button-justify);
         box-sizing: border-box;
         align-items: center;
         grid-template-columns: auto;
         height: 100%;
         padding: var(--button-padding, 6px 18px);
-        border: var(--button-border, 1px solid  hsl(222, 20%, 65%));
+        border: 1px solid  var(--button-border,  hsl(222, 20%, 65%));
         outline: var(--button-outline, none);
         border-radius: var(--button-radius, 1px);
         color: var(--button-color, hsl(222, 20%, 35%));
         background-color: var(--button-background, hsl(222, 20%, 99%));
-        --icon-fill: var(--button-color);
+        --icon-color: var(--button-color);
         font-weight: var(--button-weight, 600);
     }
 
@@ -33,7 +34,7 @@ export const button = [
     }
     :host(:not([disabled])) .wrapper:focus{
         background-color: var(--button-background-focus, var(--button-background, hsl(222,20%, 99%)));
-        outline: var(--button-outline-focus, 1px solid hsla(222, 20%, 60%, 0.5));
+        outline: 1px solid  var(--button-outline-focus, hsla(222, 20%, 60%, 0.5));
         
     }
 
@@ -41,43 +42,46 @@ export const button = [
         color: var(--button-primary, hsl(222, 95%, 98%));
         background-color: var(--button-primary-background, hsl(222, 95%, 65%));
         border: 1px solid var(--button-primary-border,  hsl(222, 95%, 45%));
-        --icon-fill: var(--button-primary);
+        --icon-color: var(--button-primary);
     }
     :host(:not([disabled])[primary]) .wrapper:hover{
         background-color: var(--button-primary-background-hover,  hsl(222, 95%, 60%));
     }
     :host(:not([disabled])[primary]) .wrapper:focus{
         background-color: var(--button-primary-background-focus,  var(--button-primary-background, hsl(222, 95%, 65%)));
-        outline: var(--button-primary-outline-focus, 1px solid  hsl(222, 95%, 45%));
+        outline: 1px solid  var(--button-primary-outline-focus,  hsl(222, 95%, 45%));
     }
 
 
+    .checkmark{
+        --icon-color: var(--button-success-background, hsl(110, 85%, 70%));
+    }
     :host([success]) .wrapper{
         color: var(--button-success, hsl(120, 95%, 15%));
         background-color: var(--button-success-background, hsl(110, 85%, 70%));
-        border: var(--button-success-border, 1px solid hsl(120, 95%, 45%));
-        --icon-fill: var(--button-success);
+        border:  1px solid var(--button-success-border, hsl(120, 95%, 45%));
+        --icon-color: var(--button-success);
     }
     :host(:not([disabled])[success]) .wrapper:hover{
         background-color: var(--button-success-background-hover, hsl(120, 95%, 80%));
     }
     :host(:not([disabled])[success]) .wrapper:focus{
         background-color: var(--button-success-background-focus, hsl(120, 95%, 70%));
-        outline: var(--button-success-outline-focus, 1px solid hsl(120, 95%, 50%));
+        outline: 1px solid var(--button-success-outline-focus,  hsl(120, 95%, 50%));
     }
 
     :host([danger]) .wrapper{
         color: var(--button-danger, hsl(1, 95%, 15%));
         background-color: var(--button-danger-background, hsl(1, 95%, 80%));
         border: 1px solid var(--button-danger-border, hsl(1, 95%, 55%));
-        --icon-fill: var(--button-danger);
+        --icon-color: var(--button-danger);
     }
     :host(:not([disabled])[danger]) .wrapper:hover{
         background-color: var(--button-danger-background-hover,  hsl(1, 95%, 75%));
     }
     :host(:not([disabled])[danger]) .wrapper:focus{
         background-color: var(--button-danger-background-hover,  hsl(1, 95%, 80%));
-        outline: var(--button-danger-outline-focus, 1px solid  hsl(1, 95%, 55%));
+        outline: 1px solid var(--button-danger-outline-focus,  hsl(1, 95%, 55%));
     }
 
     :host([switch][switchOn]) .wrapper{

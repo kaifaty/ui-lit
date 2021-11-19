@@ -16,6 +16,7 @@ const Button = (data: IProps) =>
         ?success = "${!!data.success}"
         ?danger = "${!!data.danger}"
         ?switchOn = "${!!data.switchOn}"
+        ?notifyOnClick = "${!!data.notifyOnClick}"
         size = "${data.size}"        
 
     >${data.label}</lit-button>`;
@@ -33,6 +34,7 @@ Default.args = {
     success: false,
     danger: false,
     switchOn: false,
+    notifyOnClick: false,
     type: 'button',
     size: 'medium',
 }

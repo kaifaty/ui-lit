@@ -31,6 +31,7 @@ export declare class LitCheckbox extends LitCheckbox_base implements ICheckboxPr
     private _checkboxTemplate;
     render(): import("lit-html").TemplateResult<1>;
     private _handleClick;
+    toggle(): void;
 }
 declare global {
     interface HTMLElementTagNameMap {

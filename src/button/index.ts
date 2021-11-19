@@ -15,6 +15,7 @@ export interface ButtonProps{
     success?: boolean
     danger?: boolean
     switchOn?: boolean
+    notifyOnClick?: boolean
 }
 
 type TSize = 'small' | 'medium' | 'large';
@@ -23,6 +24,7 @@ export class LitButton extends LitElement implements ButtonProps{
     static styles = button;
     @state() iconBefore: boolean = false;
     @state() iconAfter: boolean  = false;
+    @state() _notifyIcon: boolean  = false;
     @property({type: String}) type: 'submit' | 'button' = 'button';
     @property({type: String, reflect: true}) size: TSize = 'medium';
     @property({type: Boolean, reflect: true}) disabled:  boolean = false;
@@ -33,10 +35,12 @@ export class LitButton extends LitElement implements ButtonProps{
     @property({type: Boolean, reflect: true}) success: boolean = false;
     @property({type: Boolean, reflect: true}) danger: boolean = false;
     @property({type: Boolean, reflect: true}) switchOn: boolean = true;
+    @property({type: Boolean, reflect: true}) notifyOnClick: boolean = true;
 
     @property({type: Number}) tabindex: number = 0;
 
     enter = new KeyDownController(this);
+    notifyTimeout = 0;
 
     connectedCallback(){
         super.connectedCallback();
@@ -52,16 +56,31 @@ export class LitButton extends LitElement implements ButtonProps{
             "icon-after": !!this.iconAfter,
         };
     }
+    willUpdate(){
+        if(this._notifyIcon){
+            this.style.width = this.clientWidth + "px";
+            this.style.height = this.clientHeight + "px";
+            this.style.setProperty("--button-justify", 'center');
+        }
+        else if(this.notifyTimeout > 0){
+            this.style.width = "initial";
+            this.style.height = "initial";
+            this.style.setProperty("--button-justify", 'initial');
+        }
+    }
     render(){
         return html`
         <div tabIndex = "${this.tabindex}" 
             class = "${classMap(this.classes)}" 
             @click = "${this._click}"
-            ><slot @slotchange = "${this._onIconBefore}" 
-                  name = "icon-before"
-            ></slot><div
-            ><slot></slot></div><slot @slotchange = "${this._onIconAfter}"
-                  name = "icon-after"></slot></div>`;
+            >
+            ${this._notifyIcon 
+                ? html`<lit-icon class = "checkmark" icon = "checkmark"></lit-icon>` 
+                : html`<slot 
+                    @slotchange = "${this._onIconBefore}" 
+                    name = "icon-before"></slot><div
+                ><slot></slot></div><slot @slotchange = "${this._onIconAfter}"
+                    name = "icon-after"></slot></div>`}`;
     }
 
     // ==== Events ====
@@ -78,6 +97,7 @@ export class LitButton extends LitElement implements ButtonProps{
     }
     private _click(){
         if(this.disabled) return;
+        
         if(this.switch){
             this.toggleSwitch();
         }
@@ -100,6 +120,13 @@ export class LitButton extends LitElement implements ButtonProps{
                 bubbles: true,
                 composed: true,
             }));
+        }
+        if(this.notifyOnClick){
+            this._notifyIcon = true;
+            clearTimeout(this.notifyTimeout);
+            this.notifyTimeout = window.setTimeout(() => {
+                this._notifyIcon = false;
+            }, 1000)
         }
     }
 }

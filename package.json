@@ -1,8 +1,7 @@
 {
   "name": "ui-lit",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "UI Elements on LIT",
-  
   "main": "dist/index.js",
   "module": "dist/index.es6.js",
   "types": "dist/types.d.ts",
@@ -38,7 +37,7 @@
     "lit-element",
     "lit",
     "UI",
-    "UI kit",    
+    "UI kit",
     "LitElement"
   ],
   "homepage": "https://github.com/kaifaty/ui-lit/#readme",
@@ -64,7 +63,7 @@
   },
   "dependencies": {
     "@swc/helpers": "^0.2.13",
-    "kailib": "^1.0.30",
+    "kailib": "^1.0.32",
     "lit": "^2.0.2",
     "qrcode": "^1.4.4"
   }

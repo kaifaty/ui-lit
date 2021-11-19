@@ -9,11 +9,12 @@ export declare class LitLabel extends LitElement {
     _connectedNode: TLabled | HTMLInputElement | null;
     connectedCallback(): void;
     disconnectedCallback(): void;
+    firstUpdated(): void;
     render(): import("lit-html").TemplateResult<1>;
     appendConnectedField(el: TLabled | HTMLInputElement | null): void;
     removeConnectedField(el?: TLabled | HTMLInputElement | null): void;
     private _findConnectedField;
-    _handleClick: () => void;
+    _handleClick: (e: Event) => void;
 }
 declare global {
     interface HTMLElementTagNameMap {

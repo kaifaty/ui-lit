@@ -33,7 +33,7 @@ input, textarea{
     font-size: var(--input-font-size, inherit);
     box-sizing: border-box;
     padding: var(--input-padding, 6px 8px);
-    border: var(--input-border, 1px solid hsla(222, 20%, 60%, 0.5));
+    border: 1px solid var(--input-border, hsla(222, 20%, 60%, 0.5));
     text-align: var(--input-align, initial);
     background-color: var(--input-background, #fff);
     color: var(--input-color, inherit);
@@ -41,7 +41,7 @@ input, textarea{
 
 input:focus, 
 textarea:focus{
-    outline: var(--input-outline-focus, 1px solid hsla(222, 20%, 60%, 0.5));
+    outline:  1px solid var(--input-outline-focus, hsla(222, 20%, 60%, 0.5));
 }
 input:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.3s ease;}
 input:focus::-moz-placeholder          {opacity: 0; transition: opacity 0.3s ease;}

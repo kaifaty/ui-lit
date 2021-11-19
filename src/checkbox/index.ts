@@ -159,6 +159,9 @@ export class LitCheckbox extends formAssociated(LitElement) implements ICheckbox
             }
         }))
     }
+    public toggle(){
+        this.checked = !this.checked;
+    }
 }
 declare global {
     interface HTMLElementTagNameMap {

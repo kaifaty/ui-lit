@@ -7,14 +7,17 @@ let LitLabel = class LitLabel extends LitElement {
         super(...arguments);
         this.for = '';
         this._connectedNode = null;
-        this._handleClick = () => {
-            var _a;
+        this._handleClick = (e) => {
+            var _a, _b, _c;
             (_a = this._connectedNode) === null || _a === void 0 ? void 0 : _a.focus();
+            if (((_b = this._connectedNode) === null || _b === void 0 ? void 0 : _b.tagName.toLowerCase()) === 'lit-checkbox'
+                && ((_c = e.target) === null || _c === void 0 ? void 0 : _c.tagName.toLowerCase()) !== 'lit-checkbox') {
+                this._connectedNode.toggle();
+            }
         };
     }
     connectedCallback() {
         super.connectedCallback();
-        this.appendConnectedField(this._findConnectedField());
         this.addEventListener('click', this._handleClick);
     }
     disconnectedCallback() {
@@ -22,10 +25,14 @@ let LitLabel = class LitLabel extends LitElement {
         this._connectedNode = null;
         this.removeEventListener('click', this._handleClick);
     }
+    firstUpdated() {
+        this.appendConnectedField(this._findConnectedField());
+    }
     render() {
         return html `<slot></slot>`;
     }
     appendConnectedField(el) {
+        console.log(el);
         if (!this._connectedNode && el) {
             this._connectedNode = el;
         }
@@ -41,6 +48,13 @@ let LitLabel = class LitLabel extends LitElement {
             const node = root.querySelector(`#${this.for}`);
             if (node && node._formAssiciated || node instanceof HTMLInputElement) {
                 return node;
+            }
+        }
+        else {
+            for (const node of this.childNodes) {
+                if (node._formAssiciated) {
+                    return node;
+                }
             }
         }
         return null;

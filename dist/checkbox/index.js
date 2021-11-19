@@ -71,6 +71,9 @@ let LitCheckbox = class LitCheckbox extends formAssociated(LitElement) {
             }
         }));
     }
+    toggle() {
+        this.checked = !this.checked;
+    }
 };
 LitCheckbox.styles = [
     input,

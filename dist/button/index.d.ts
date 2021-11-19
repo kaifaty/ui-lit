@@ -10,12 +10,14 @@ export interface ButtonProps {
     success?: boolean;
     danger?: boolean;
     switchOn?: boolean;
+    notifyOnClick?: boolean;
 }
 declare type TSize = 'small' | 'medium' | 'large';
 export declare class LitButton extends LitElement implements ButtonProps {
     static styles: import("lit").CSSResult[];
     iconBefore: boolean;
     iconAfter: boolean;
+    _notifyIcon: boolean;
     type: 'submit' | 'button';
     size: TSize;
     disabled: boolean;
@@ -26,8 +28,10 @@ export declare class LitButton extends LitElement implements ButtonProps {
     success: boolean;
     danger: boolean;
     switchOn: boolean;
+    notifyOnClick: boolean;
     tabindex: number;
     enter: KeyDownController;
+    notifyTimeout: number;
     connectedCallback(): void;
     disconnectedCallback(): void;
     get classes(): {
@@ -36,6 +40,7 @@ export declare class LitButton extends LitElement implements ButtonProps {
         "icon-before": boolean;
         "icon-after": boolean;
     };
+    willUpdate(): void;
     render(): TemplateResult<1>;
     private _onIconBefore;
     private _onIconAfter;

@@ -49,3 +49,9 @@ export class LitLink extends LitElement{
                     href = "${ifDefined(this.href)}"><slot></slot></a>`;
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+      'lit-link': LitLink;
+    }
+}

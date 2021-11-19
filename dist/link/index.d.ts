@@ -13,3 +13,8 @@ export declare class LitLink extends LitElement {
     target: TLinkTartget;
     render(): import("lit-html").TemplateResult<1>;
 }
+declare global {
+    interface HTMLElementTagNameMap {
+        'lit-link': LitLink;
+    }
+}

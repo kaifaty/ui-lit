@@ -395,7 +395,6 @@ export class LitRange extends formAssociated(LitElement){
         `;
     }
     _onChangeSize = (rect: DOMRect) => {
-        console.log('_onChangeSize')
         this._trackSize = this._calcTackWidth(rect);
         this._trackStartX = this._calcTrackStartX(rect);
     }
@@ -407,7 +406,6 @@ export class LitRange extends formAssociated(LitElement){
         document.addEventListener("mouseup", this._handlePointerUp as EventListener);
         this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
-        console.log('connectedCallback')
         
         
     }

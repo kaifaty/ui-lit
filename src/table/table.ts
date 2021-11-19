@@ -47,14 +47,15 @@ export class TableElement extends LitElement{
         --cells: 4;
         --row-height: 30px;
         --header-height: 50px;
+        font-size: var(--table-font-size);
     }
     :host([pagination]){
         display: grid;
-        grid-template-rows: auto 40px;
+        grid-template-rows: auto 26px;
     }
     .content{
         display: grid;
-        grid-template-columns: repeat(var(--cells), auto);
+        grid-template-columns: var(--table-cells, repeat(var(--cells), auto));
         align-content: start;
         overflow-y: auto;
     }
@@ -108,7 +109,7 @@ export class TableElement extends LitElement{
 
     private recalcPageLength(){
         if(!this.paginationToHeight || !this.pagination) return;
-        const paginationHeight = 40;
+        const paginationHeight = 26;
         const availableHeight = this.clientHeight - paginationHeight - this.headerHeight; 
         this.pageLength = Math.floor(availableHeight / this.rowHeight);
     }
@@ -128,7 +129,9 @@ export class TableElement extends LitElement{
     connectedCallback(){
         super.connectedCallback()
         const data = this.columns.filter(it => it.defaultSort)[0];
-        this.sort = data.key;
+        if(data){
+            this.sort = data.key;
+        }
     }
     hasFilters(){
         return !!this.columns.map(it => it.filters?.filter(it => it.checked).length).filter(it => it).length;

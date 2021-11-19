@@ -62,7 +62,6 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             this._hidePercent();
         };
         this._onChangeSize = (rect) => {
-            console.log('_onChangeSize');
             this._trackSize = this._calcTackWidth(rect);
             this._trackStartX = this._calcTrackStartX(rect);
         };
@@ -385,7 +384,6 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         document.addEventListener("mouseup", this._handlePointerUp);
         this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
-        console.log('connectedCallback');
     }
     disconnectedCallback() {
         document.removeEventListener("touchmove", this._handlePointerMove);

@@ -21,6 +21,8 @@ export * from './select';
 export * from './spinner';
 export * from './tabs';
 export * from './text';
+export * from './table';
 export * from './textfield';
 export * from './textarea';
 export * from './treeview';
+export * from './theme';

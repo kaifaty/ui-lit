@@ -107,8 +107,8 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
                 border-radius: 100%;
                 width: 100%;
                 height: 100%;
-                background-color: var(--range-thumb, #111);
-                box-shadow: 0 0 0 var(--pointer-border) var(--range-points-border-color, #111);
+                background-color: var(--lit-range-thumb, #111);
+                box-shadow: 0 0 0 var(--lit-pointer-border) var(--lit-range-points-border-color, #111);
                 
             }
             .percent{
@@ -135,7 +135,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             }
             .track-line{
                 width: calc(100% );
-                background-color: var(--range-track, #999);
+                background-color: var(--lit-range-track, #999);
                 height: var(--line-height);
                 margin: var(--top-margin) auto;
                 border-radius: 2px
@@ -143,7 +143,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             .blocked-track{
                 position: absolute;
                 left: 5px;
-                background-color: var(--range-track-blocked, #999);
+                background-color: var(--lit-range-track-blocked, #999);
                 height: var(--lineHeigh);
                 top: var(--top-margin);
                 border-radius: 2px
@@ -154,8 +154,8 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
                 width: var(--pointer);
                 height: var(--pointer);
                 border-radius: var(--pointer);
-                background-color: var(--range-points-background, #fff);
-                box-shadow: 0 0 0 var(--pointer-border) var(--range-points-border-color, #444);
+                background-color: var(--lit-range-points-background, #fff);
+                box-shadow: 0 0 0 var(--pointer-border) var(--lit-range-points-border-color, #444);
                 transform: translate(-50%, 0);
                 z-index: 1;
             }

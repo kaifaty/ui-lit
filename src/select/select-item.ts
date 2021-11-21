@@ -6,17 +6,17 @@ export class LitSelectItem extends LitElement{
     static styles = css`
     :host{
         display: block;
-        padding: var(--select-padding, 5px 10px);
+        padding: var(--lit-select-padding, 5px 10px);
         cursor: pointer;
-        background-color: var(--select-item-background, #fff);
+        background-color: var(--lit-select-item-background, #fff);
         
     }
     
     :host(:focus){
-        outline: 2px solid var(--select-outline-focus, #ccc);
+        outline: 2px solid var(--lit-select-outline-focus, #ccc);
     }
     :host(:hover){
-        background-color: var(--select-item-background-hover, #eee);
+        background-color: var(--lit-select-item-background-hover, #eee);
     }
     `;
     @property({type: String}) value: string = '';

@@ -35,7 +35,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         position: relative;
     }
     :host(:not([disabled]):focus){
-        outline: 1px solid var(--select-outline-focus, #ccc);
+        outline: 1px solid var(--lit-select-outline-focus, #ccc);
     }
     .icon-dropdown{
         margin-left: 10px;
@@ -45,9 +45,9 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         display: flex;
         align-items: center;
         justify-content: space-between;
-        background-color: var(--select-background);
-        border: 1px solid  var(--select-border,  #ccc);
-        padding: var(--select-padding, 5px 10px);
+        background-color: var(--lit-select-background);
+        border: 1px solid  var(--lit-select-border,  #ccc);
+        padding: var(--lit-select-padding, 5px 10px);
         cursor: pointer;
     }
     .items.open{
@@ -56,9 +56,9 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     .items{
         display: none;
         position: absolute;
-        border: 1px solid  var(--select-border, #ccc);
-        background-color: var(--select-item-background);
-        z-index: var(--select-items-zindex, 20);
+        border: 1px solid var(--lit-select-border, #ccc);
+        background-color: var(--lit-select-item-background);
+        z-index: var(--lit-select-items-zindex, 20);
         overflow-y: auto;
         overflow-x: hidden;
         box-sizing: border-box;

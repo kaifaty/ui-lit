@@ -17,7 +17,7 @@ export class LitQRCode extends LitElement{
     }
     canvas{
         display: block;
-        width: var(--qrcode-width, 200px);
+        width: var(--lit-qrcode-width, 200px);
     }`;
     @property({type: String}) value: string = '';
     private _setQRCode(){

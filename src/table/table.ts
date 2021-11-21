@@ -44,7 +44,7 @@ export class TableElement extends LitElement{
     static styles = css`
     :host{
         display: block;
-        --cells: 4;
+        --lit-cells: 4;
         --row-height: 30px;
         --header-height: 50px;
         font-size: var(--lit-table-font-size);
@@ -69,7 +69,7 @@ export class TableElement extends LitElement{
         const oldValue = this._columns;
         this._columns = value;
         if(oldValue.length !== value.length){
-            this.style.setProperty('--cells', this.columns.length.toString());
+            this.style.setProperty('--lit-cells', this.columns.length.toString());
         }
         this.requestUpdate('columns', oldValue);
     }

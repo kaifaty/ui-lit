@@ -25,7 +25,7 @@ export class LitSpinner extends LitElement{
         z-index: 1000;
         height: 100vh;
         width: 100%;
-        background-color: var(--spinner-background);
+        background-color: var(--lit-spinner-background);
     }
     :host([fullContent]){    
         position: absolute;
@@ -34,7 +34,7 @@ export class LitSpinner extends LitElement{
         z-index: 10;
         height: 100%;
         width: 100%;
-        background-color: var(--spinner-background);
+        background-color: var(--lit-spinner-background);
     }
     :host(.container){
         display: flex;
@@ -58,7 +58,7 @@ export class LitSpinner extends LitElement{
         height: 50px;
     }
     .bounce {
-        background-color: var(--spinner-color, rgba(0,0,0,0.5));
+        background-color: var(--lit-spinner-color, rgba(0,0,0,0.5));
         width: 100%;
         height: 100%;
         border-radius: 50%;

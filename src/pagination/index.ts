@@ -23,8 +23,8 @@ export class LitPagination extends LitElement{
             
         }
         lit-numberfield{
-            --input-align: center;
-            --input-font-size: 12px;
+            --lit-input-align: center;
+            --lit-input-font-size: 12px;
             width: 40px;
         }
         button{
@@ -33,17 +33,17 @@ export class LitPagination extends LitElement{
             outline: none;
             border: none;
             background: transparent;
-            color: var(--font-color, black);
+            color: var(--lit-font-color, black);
             margin: 0 1px;
             cursor: pointer;
             border-radius: 2px;
-            font-size: var(--font-size, 12px);
+            font-size: var(--lit-font-size, 12px);
         }
         button.selected{
-            background-color: var(--button-background, #eee);
+            background-color: var(--lit-button-background, #eee);
         }
         button:not(:focus):hover{
-            background-color: var(--button-background-hover, #eee);
+            background-color: var(--lit-button-background-hover, #eee);
         }
         .arrow-right{
             transform-origin: center;
@@ -55,7 +55,7 @@ export class LitPagination extends LitElement{
         }
         .page-list{
             margin-left: 5px;
-            font-size: var(--font-size, 12px);
+            font-size: var(--lit-font-size, 12px);
         }
     `
     ];

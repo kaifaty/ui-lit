@@ -16,8 +16,8 @@ export class LitTableHeader extends LitElement{
         padding: var(--lit-cell-header-padding, 0 15px);
         font-weight: 600;
         position: relative;
-        --icon-font-size: 8px;
-        --icon-color: rgba(0,0,0,0.2);
+        --lit-icon-font-size: 8px;
+        --lit-icon-color: var(--lit-table-icon-color, rgba(0,0,0,0.2));
     }
     :host(:not(:last-child))::after{
         content: '';
@@ -41,15 +41,15 @@ export class LitTableHeader extends LitElement{
     :host([sortDirection = "ascend"]) .sorted lit-icon[icon = "dropup"],
     .filters-checked
     {
-        --icon-color: hsl(210, 90%, 60%);
+        --lit-icon-color: var(--lit-table-sort-icon-color, hsl(210, 90%, 60%));
     }
     [icon = "filter"]{
         padding: 6px 5px ;
         border-radius: 3px;
     }
     [icon = "filter"]:hover{
-        background-color: rgba(0, 0, 0, 0.1);
-        --icon-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--lit-table-filter-icon-background-hover, rgba(0, 0, 0, 0.1));;
+        --lit-icon-color: var(--lit-table-filter-icon-color-hover, rgba(0, 0, 0, 0.5));;
     }
     .sorter{
         cursor: pointer;

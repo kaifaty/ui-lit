@@ -7,10 +7,10 @@ export class LitPanel extends LitElement{
     static styles = css`
     :host{
         display: block;
-        background-color: var(--panel-background, hsl(299, 80%, 70%));
-        color: var(--panel-color, var(--app-font-color, hsl(299, 70%, 10%)));
-        padding: var(--panel-padding, 10px 15px);
-        border: 1px solid var(--panel-border, initial);
+        background-color: var(--lit-panel-background, hsl(299, 80%, 70%));
+        color: var(--lit-panel-color, var(--app-font-color, hsl(299, 70%, 10%)));
+        padding: var(--lit-panel-padding, 10px 15px);
+        border: 1px solid var(--lit-panel-border, initial);
     }`;
     render(){
         return html`<slot></slot>`;

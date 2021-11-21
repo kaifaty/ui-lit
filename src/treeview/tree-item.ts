@@ -10,8 +10,8 @@ export class LitTreeItem extends LitElement{
         cursor: pointer;
     }
     :host([selected]){
-        background-color: var(--treeitem-selected-background, rgba(0, 0, 0, 0.05));
-        color: var(--treeitem-selected-color, tomato);
+        background-color: var(--lit-treeitem-selected-background, rgba(0, 0, 0, 0.05));
+        color: var(--lit-treeitem-selected-color, tomato);
     }
     `;
     @property() value: string = '';

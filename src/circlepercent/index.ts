@@ -37,8 +37,8 @@ export class LitCircle extends LitElement{
     static styles = css`
     :host{
         display: block;
-        height: var(--percent-size, 14px);
-        width: var(--percent-size, 14px);
+        height: var(--lit-percent-size, 14px);
+        width: var(--lit-percent-size, 14px);
     }
     canvas{
         width: 100%;
@@ -100,7 +100,7 @@ export class LitCircle extends LitElement{
         super.connectedCallback();
         //this.size = this.clientWidth;
         const styles = window.getComputedStyle(this);
-        this._color = styles.getPropertyValue("--circle-color");
+        this._color = styles.getPropertyValue("--lit-circle-color");
     }
 }
 

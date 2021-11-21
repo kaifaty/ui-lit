@@ -149,9 +149,13 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
     }
     private clearValue(){
         this.value = '';
+        this.dispatchEvent(new CustomEvent("changed", {
+            detail: this.value,
+            bubbles: true,
+        }))
     }
 
-    // 
+    
     private _onChange(e: Event){
         this.reportValidity();
     }

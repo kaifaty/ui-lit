@@ -7,7 +7,7 @@ export class LitDescription extends LitElement{
     static styles = css`
     :host{
         display: block;
-        padding: 10px 0;
+        padding: var(--lit-description-padding, 10px 0);
         font-style: italic;
     }
     `;

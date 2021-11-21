@@ -7,12 +7,12 @@ export class LitListItem extends LitElement{
     static styles = css`
     :host{
         display: block;
-        border-bottom: 1px solid var(--list-border, #999);
-        padding: var(--list-padding, 10px 15px);
+        border-bottom: 1px solid var(--lit-list-border, #999);
+        padding: var(--lit-list-padding, 10px 15px);
         
     }
     :host(:hover){
-        background-color: var(--list-background-hover, #eee);
+        background-color: var(--lit-list-background-hover, #eee);
     }
     lit-icon{
         margin-right: 10px;
@@ -29,7 +29,7 @@ export class LitList extends LitElement{
     static styles = css`
     :host{
         display: block;
-        font-size: var(--list-font-size);
+        font-size: var(--lit-list-font-size);
     }`;
     
     render(){

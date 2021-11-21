@@ -24,7 +24,7 @@ export class LitTreeSubView extends LitElement{
         display: none;
     }
     :host([selected]) .label{
-        color: var(--treeitem-selected-color, tomato);
+        color: var(--lit-treeitem-selected-color, tomato);
     }
     `;
     @property({type: String}) label: string = '';

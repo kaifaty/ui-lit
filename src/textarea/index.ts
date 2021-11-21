@@ -21,7 +21,7 @@ export class LitTextarea extends formAssociated(LitElement){
         width: 100%;
         display: inline-block;
         margin: 0;
-        resize: var(--textarea-resize, none);
+        resize: var(--lit-textarea-resize, none);
     }
     `];
     static get properties(){

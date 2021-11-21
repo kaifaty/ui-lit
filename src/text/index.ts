@@ -17,16 +17,16 @@ export class LitText extends LitElement{
         }
         :host([status="error"]),
         :host([status="danger"]){
-            color: var(--error-color, red);
+            color: var(--lit-error-color, red);
         }
         :host([status="attention"]){
-            color: var(--attention-color, #c4c10d);
+            color: var(--lit-attention-color, #c4c10d);
         }
         :host([status="success"]){
-            color: var(--success-color, #24d40d);
+            color: var(--lit-success-color, #24d40d);
         }
         :host([status="accented"]){
-            color: var(--accented-color, #24d40d);
+            color: var(--lit-accented-color, #24d40d);
         }
         :host([center]){
             text-align: center;
@@ -56,6 +56,6 @@ export class LitText extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'text-statused': LitText;
+      'lit-text': LitText;
     }
 }

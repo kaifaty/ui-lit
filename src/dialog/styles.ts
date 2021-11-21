@@ -8,13 +8,14 @@ export const DIALOG_STYLES = css`
     display: flex;
     --dialog-z-index: 125;
     margin: 0;
+    left: 0;
     top: 0;
     padding: 0;
     width: 100%;
     height: 100%;
     position: fixed;
-    z-index: var(--dialog-z-index, 100);
-    background-color: var(--dialog-overlap, rgba(0,0,0,0.7));
+    z-index: var(--lit-dialog-z-index, 100);
+    background-color: var(--lit-dialog-overlap, rgba(0,0,0,0.7));
     visibility: hidden;
 }
 :host([opened]) .overlap{
@@ -23,29 +24,30 @@ export const DIALOG_STYLES = css`
     justify-content: center;
 }
 :host([opened]) main{
-    padding: var(--dialog-main-padding, var(--dialog-padding, 15px 20px));
+    padding: var(--lit-dialog-main-padding, 15px 20px);
 }
 :host([opened]) header{
-    padding: var(--dialog-header-padding, var(--dialog-padding, 15px 20px));
+    padding: var(--lit-dialog-header-padding, 15px 20px);
 }
 :host([opened]) footer{
-    padding: var(--dialog-footer-padding, var(--dialog-padding, 15px 20px));
+    padding: var(--lit-dialog-footer-padding, 15px 20px);
 }
 .dialog{          
-    max-height: var(--dialog-max-height, initial);
-    width: var(--dialog-width, 600px);
-    height: var(--dialog-height, 300px);
-    z-index: calc(var(--dialog-z-index, 100) + 1);
+    max-height: var(--lit-dialog-max-height, initial);
+    width: var(--lit-dialog-width, 600px);
+    height: var(--lit-dialog-height, 300px);
+    min-height: var(--lit-dialog-minHeight, initial);
+    z-index: calc(var(--lit-dialog-z-index, 100) + 1);
     color: black;
-    color: var(--dialog-color, black);
-    background-color: var(--dialog-background, #fefefe);
-    border-radius: 3px;
+    color: var(--lit-dialog-color, black);
+    background-color: var(--lit-dialog-background, #fefefe);
+    border-radius: var(--lit-dialog-radius, 3px);
     box-sizing: border-box;
     word-wrap: break-word;
     display: flex;
     flex-direction: column;
     position: relative;
-    box-shadow: 1px 1px 8px var(--dialog-boxshadow, rgba(0,0,0,0.7));
+    box-shadow: 1px 1px 8px var(--lit-dialog-boxshadow, rgba(0,0,0,0.7));
 }
 
 header ::slotted(h1), 
@@ -61,8 +63,8 @@ main{
 }
 header{
     position: relative;
-    background-color: var(--dialog-header-background, #111);
-    color: var(--dialog-header-color, #fefefe);
+    background-color: var(--lit-dialog-header-background, #111);
+    color: var(--lit-dialog-header-color, #fefefe);
     font-size: 16px;
     display: none;
 }
@@ -84,14 +86,11 @@ footer{
     right: 2px;
     top: -2px;
     cursor: pointer;
-    color: #aaa;
+    color: var(--lit-dialog-control-icons, #aaa);
     --icon-font-size: 18px;
 }
 .arrow-back{
     right: 30px;
     transform-origin: center;
     transform: rotate(90deg);
-}
-.close-icon svg{
-    fill: var(--dialog-icon-fill, #888);
 }`

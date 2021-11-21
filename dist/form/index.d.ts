@@ -12,6 +12,7 @@ export interface IFormElement {
 }
 declare type TReturnData = Record<string, string | boolean | number>;
 export declare class LitFrom extends LitElement implements IFormElement, IFormProps {
+    static styles: import("lit").CSSResult;
     _elements: FormAssociatedElement[];
     get length(): number;
     get elements(): FormAssociatedElement[];

@@ -20,6 +20,7 @@ export class LitPagination extends LitElement{
             display: flex;
             align-items: center;
             box-sizing: border-box;
+            
         }
         lit-numberfield{
             --input-align: center;

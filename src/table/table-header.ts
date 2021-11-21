@@ -13,7 +13,7 @@ import { isClickInElement } from 'kailib';
 export class LitTableHeader extends LitElement{
     static styles = [css`
     :host{
-        padding: var(--cell-header-padding, 0 15px);
+        padding: var(--lit-cell-header-padding, 0 15px);
         font-weight: 600;
         position: relative;
         --icon-font-size: 8px;
@@ -25,7 +25,7 @@ export class LitTableHeader extends LitElement{
         width: 1px;
         height: 50%;
         display: inline-block;
-        background-color: var(--table-header-separator, rgba(0,0,0,0.1));
+        background-color: var(--lit-table-header-separator, rgba(0,0,0,0.1));
         top: 50%;
         right: 0;
         transform: translate(0, -50%);

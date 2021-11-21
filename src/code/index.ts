@@ -8,7 +8,7 @@ export class LitCode extends LitElement{
     static styles = css`
     :host{
         display: block;
-        background-color: var(--code-background, rgba(0,0,0,0.05));
+        background-color: var(--lit-code-background, rgba(0,0,0,0.05));
         padding: 10px;
         margin: 10px 0;
         font-family: monospace;

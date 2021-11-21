@@ -67,10 +67,10 @@ Success.args = {
     label: 'Success',
     success: true
 }
-export const Error_ = Template.bind({});
-Error_.args = {
-    label: 'Error',
-    error: true
+export const Danger = Template.bind({});
+Danger.args = {
+    label: 'Danger',
+    danger: true
 }
 export default {
     title: 'Form assosiated/Button',

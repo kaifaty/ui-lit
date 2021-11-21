@@ -47,7 +47,7 @@ export class TableElement extends LitElement{
         --cells: 4;
         --row-height: 30px;
         --header-height: 50px;
-        font-size: var(--table-font-size);
+        font-size: var(--lit-table-font-size);
     }
     :host([pagination]){
         display: grid;
@@ -55,7 +55,7 @@ export class TableElement extends LitElement{
     }
     .content{
         display: grid;
-        grid-template-columns: var(--table-cells, repeat(var(--cells), auto));
+        grid-template-columns: var(--lit-table-cells, repeat(var(--lit-cells), auto));
         align-content: start;
         overflow-y: auto;
     }

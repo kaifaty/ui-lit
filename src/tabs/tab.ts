@@ -10,32 +10,33 @@ export class LitTab extends LitElement{
     :host{
         ${unsafeCSS(noselectText)};
         cursor: pointer;
-        color: var(--tab-color);
-        --icon-color: var(--tab-color);
-        background-color: var(--tab-background);
+        color: var(--lit-tab-color);
+        --icon-color: var(--lit-tab-color);
+        background-color: var(--lit-tab-background);
     }
     :host([type="button"]){
-        border: var(--tab-border, 1px solid  tomato);
-        padding: var(--tab-button-padding, 5px 14px);
+        border: var(--lit-tab-border, 1px solid  tomato);
+        padding: var(--lit-tab-button-padding, 5px 14px);
     }
     :host([type="tab"]){
-        padding: var(--tab-padding, 5px 14px);
+        padding: var(--lit-tab-padding, 5px 14px);
         border: 1px solid transparent;
         border-left: none;
         border-right: none;
-        border-bottom: 1px solid var(--tab-border, tomato);
+        border-bottom: 1px solid var(--lit-tab-border, tomato);
         
     }
     :host(:not([selected]):hover){
-        outline: 1px solid var(--tab-outline-hover, inherit);
+        outline: 1px solid var(--lit-tab-outline-hover, inherit);
+        z-index: 1;
     }
     :host([selected]){
-        background-color: var(--tab-background-selected, tomato);
-        color: var(--tab-color-selected, black);
-        --icon-color: var(--tab-color-selected, black);
+        background-color: var(--lit-tab-background-selected, tomato);
+        color: var(--lit-tab-color-selected, black);
+        --icon-color: var(--lit-tab-color-selected, black);
     }
     :host(:not([disabled]):focus){
-        outline: 1px solid var(--tab-border, tomato);
+        outline: 1px solid var(--lit-tab-border, tomato);
         z-index: 1;
     }
     

@@ -32,7 +32,7 @@ export class LitLayoutGrid extends LitElement{
             width: 100%;
             height: 100%;
             position: relative;
-            background-color: #333;
+            background-color: var(--lit-layout-grid-background, #333);
             
         }
         .wrapper.move{
@@ -41,7 +41,7 @@ export class LitLayoutGrid extends LitElement{
         .shadow{
             display: none;
             position: absolute;
-            background-color: var(--layout-shadow-background, #fff);
+            background-color: var(--lit-layout-shadow-background, #fff);
             z-index: 0;
             top: 0;
             left: 0;

@@ -61,6 +61,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         z-index: var(--select-items-zindex, 20);
         overflow-y: auto;
         overflow-x: hidden;
+        box-sizing: border-box;
     }
     .items.above{
         top: 0;

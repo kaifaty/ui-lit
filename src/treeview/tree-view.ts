@@ -16,9 +16,9 @@ export class LitTreeview extends LitElement{
     static styles = css`
     :host{
         display: inline-block;
-        font-size: var(--treeview-font-size, 14px);
-        color: var(--treeitem-color, inherit);
-        --icon-color: var(--treeitem-color, inherit);
+        font-size: var(--lit-treeview-font-size, 14px);
+        color: var(--lit-treeitem-color, inherit);
+        --icon-color: var(--lit-treeitem-color, inherit);
     }
     `;
     @property({type: String, reflect: true}) value: string = '';

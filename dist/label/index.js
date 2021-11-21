@@ -32,7 +32,6 @@ let LitLabel = class LitLabel extends LitElement {
         return html `<slot></slot>`;
     }
     appendConnectedField(el) {
-        console.log(el);
         if (!this._connectedNode && el) {
             this._connectedNode = el;
         }
@@ -60,7 +59,11 @@ let LitLabel = class LitLabel extends LitElement {
         return null;
     }
 };
-LitLabel.styles = css ``;
+LitLabel.styles = css `
+    :host{
+        display: inline-flex;
+        align-items: center;
+    }`;
 __decorate([
     property({ type: String })
 ], LitLabel.prototype, "for", void 0);

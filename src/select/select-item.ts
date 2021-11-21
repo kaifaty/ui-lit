@@ -8,7 +8,7 @@ export class LitSelectItem extends LitElement{
         display: block;
         padding: var(--select-padding, 5px 10px);
         cursor: pointer;
-        background-color: var(--select-item-background);
+        background-color: var(--select-item-background, #fff);
         
     }
     

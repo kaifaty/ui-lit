@@ -4,13 +4,13 @@ export const scrollbar = css`
   width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--scrollbar-track, #f1f1f1);
+  background: var(--lit-scrollbar-track, #f1f1f1);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb, #888);;
+  background: var(--lit-scrollbar-thumb, #888);;
 }
 :host, .ff-scrollbar{  
-  scrollbar-color: var(--scrollbar-thumb, #888) var(--scrollbar-track, #f1f1f1) ;
+  scrollbar-color: var(--lit-scrollbar-thumb, #888) var(--lit-scrollbar-track, #f1f1f1) ;
   scrollbar-width: thin;
 }
 `;

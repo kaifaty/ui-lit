@@ -1,6 +1,6 @@
 {
   "name": "ui-lit",
-  "version": "0.0.22",
+  "version": "0.0.33",
   "description": "UI Elements on LIT",
   "main": "dist/index.js",
   "module": "dist/index.es6.js",

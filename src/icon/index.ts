@@ -110,9 +110,9 @@ export class LitIcon extends LitElement{
         cursor: pointer;
         font-style: normal;
         font-weight: normal;
-        font-family: var(--icon-font-family, 'Icons');
-        color: var(--icon-color, #000);
-        font-size: var(--icon-font-size, 12px);
+        font-family: var(--lit-icon-font-family, 'Icons');
+        color: var(--lit-icon-color, #000);
+        font-size: var(--lit-icon-font-size, 12px);
         -webkit-touch-callout: none; /* iOS Safari */
         -webkit-user-select: none; /* Safari */
             -khtml-user-select: none; /* Konqueror HTML */

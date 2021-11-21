@@ -43,7 +43,6 @@ NoPoints.args = {
 export default {
     title: 'Form Assosiated/Range',
     argTypes: {
-        backgroundColor: { control: 'color' },
             
     },
     parameters: {

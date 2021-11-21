@@ -11,7 +11,7 @@ export class LitLayout extends LitElement{
       box-sizing: border-box;
       width: var(--width, 200px);
       height: var(--height, 200px);
-      padding: var(--layout-padding-background, 2px);
+      padding: var(--lit-layout-padding-background, 2px);
       position: absolute;
       left: var(--left, 0);
       top: var(--top, 0);

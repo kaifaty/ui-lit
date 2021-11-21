@@ -1,5 +1,5 @@
 import { __decorate } from "tslib";
-import { LitElement, html } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import '../label';
 let LitFrom = class LitFrom extends LitElement {
@@ -89,6 +89,11 @@ let LitFrom = class LitFrom extends LitElement {
     reset() {
     }
 };
+LitFrom.styles = css `
+    :host{
+        display: block;
+    }
+    `;
 __decorate([
     property({ type: Boolean })
 ], LitFrom.prototype, "noValidate", void 0);

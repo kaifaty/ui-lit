@@ -17,7 +17,7 @@ export class LitCodeLine extends LitElement{
         grid-template-columns: 25px auto;
     }
     .line-number{
-        color: #777;
+        color: var(--lit-code-number, #777);
     }
     `;
     @state() number: number = 0;

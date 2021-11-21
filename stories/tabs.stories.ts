@@ -7,7 +7,7 @@ import { ITabs } from '../src/tabs';
 
 const Tabs = (data: ITabs) => 
     html`<lit-tabs 
-        selected = "${data.value}"
+        value = "${data.value}"
         type = "${data.type}"
         ?disabled = "${data.disabled}">
         <lit-tab value = "1">Tab 1</lit-tab>

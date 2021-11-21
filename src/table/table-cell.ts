@@ -6,7 +6,7 @@ export class LitTableCell extends LitElement{
     static styles = css`
     :host{
         display: block;
-        padding: var(--cell-padding, 0 15px);
+        padding: var(--lit-cell-padding, 0 15px);
         transition: background-color 0.3s ease;
         height: var(--row-height, 30px);
         display: inline-flex;

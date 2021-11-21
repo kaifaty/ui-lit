@@ -23,42 +23,42 @@ export class LitTheme extends LitElement{
         :host([theme = "dark"]){
             color: hsl(var(--h), var(--s), 99%);;
             /* Button */
-            --button-color: var(--dark-button-color, hsl(var(--h), var(--s), 99%));
-            --button-background: var(--dark-button-background, hsl(var(--h), var(--s), 35%));
-            --button-border: var(--dark-button-border, 1px solid hsl(var(--h), var(--s), 50%));
-            --button-background-hover: var(--dark-button-background-hover, hsl(var(--h), var(--s), 45%));
+            --lit-button-color: var(--dark-button-color, hsl(var(--h), var(--s), 99%));
+            --lit-button-background: var(--dark-button-background, hsl(var(--h), var(--s), 35%));
+            --lit-button-border: var(--dark-button-border, 1px solid hsl(var(--h), var(--s), 50%));
+            --lit-button-background-hover: var(--dark-button-background-hover, hsl(var(--h), var(--s), 45%));
 
             /** Input  */
-            --input-background: var(--dark-input-background, hsl(var(--h), var(--s), 99%));
-            --input-border: var(--dark-input-border, 1px solid hsl(var(--h), var(--s), 50%));
-            --input-color: var(--dark-input-color, hsl(var(--h), var(--s), 10%));
+            --lit-input-background: var(--dark-input-background, hsl(var(--h), var(--s), 99%));
+            --lit-input-border: var(--dark-input-border, 1px solid hsl(var(--h), var(--s), 50%));
+            --lit-input-color: var(--dark-input-color, hsl(var(--h), var(--s), 10%));
 
             /** Checkbox */
-            --switcher-off-background: var(--dark-switcher-off-background, hsl(0, 80%, 60%));
-            --switcher-on-background: var(--dark-switcher-on-background, hsl(110, 80%, 60%));
+            --lit-switcher-off-background: var(--dark-switcher-off-background, hsl(0, 80%, 60%));
+            --lit-switcher-on-background: var(--dark-switcher-on-background, hsl(110, 80%, 60%));
 
 
             /** Tabs */
-            --tab-background: var(--dark-tab-background, transparent);
-            --tab-background-selected: var(--dark-tab-background-selected, hsl(var(--h), var(--s), 50%));
-            --tab-border: var(--dark-tab-border, 1px solid hsl(var(--h), var(--s), 50%));
-            --tab-color-selected: var(--dark-tab-color-selected, hsl(var(--h), var(--s), 99%));
+            --lit-tab-background: var(--dark-tab-background, transparent);
+            --lit-tab-background-selected: var(--dark-tab-background-selected, hsl(var(--h), var(--s), 50%));
+            --lit-tab-border: var(--dark-tab-border, 1px solid hsl(var(--h), var(--s), 50%));
+            --lit-tab-color-selected: var(--dark-tab-color-selected, hsl(var(--h), var(--s), 99%));
 
             /** Selected */
 
-            --select-background: var(--dark-select-background, hsl(var(--h), var(--s), 50%));
-            --select-border: 1px solid hsl(var(--h), var(--s), 50%);
-            --select-outline-focus: 1px solid hsl(var(--h), var(--s), 60%);
+            --lit-select-background: var(--dark-select-background, hsl(var(--h), var(--s), 50%));
+            --lit-select-border: 1px solid hsl(var(--h), var(--s), 50%);
+            --lit-select-outline-focus: 1px solid hsl(var(--h), var(--s), 60%);
             --lit-select-item-background: hsl(var(--h), var(--s), 10%);
             --lit-select-item-background-hover: hsl(var(--h), var(--s), 50%);
             
             /** TreeView */
-            --treeitem-selected-color: hsl(var(--h), var(--s), 98%);
-            --treeitem-selected-background: hsl(var(--h), var(--s), 50%);
+            --lit-treeitem-selected-color: hsl(var(--h), var(--s), 98%);
+            --lit-treeitem-selected-background: hsl(var(--h), var(--s), 50%);
 
             /** Spinner */
-            --spinner-color: white;
-            --circle-color: white;
+            --lit-spinner-color: white;
+            --lit-circle-color: white;
 
             background-color: black;
         }

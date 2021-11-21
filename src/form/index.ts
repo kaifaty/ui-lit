@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { FormAssociatedElement } from '../form-associated/interface';
 import '../label';
@@ -17,6 +17,11 @@ export interface IFormElement{
 type TReturnData = Record<string, string | boolean | number>;
 @customElement("lit-form")
 export class LitFrom extends LitElement implements IFormElement, IFormProps{
+    static styles = css`
+    :host{
+        display: block;
+    }
+    `;
     _elements: FormAssociatedElement[] = []
 
     get length(){

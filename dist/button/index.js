@@ -46,9 +46,9 @@ let LitButton = class LitButton extends LitElement {
             this.style.setProperty("--button-justify", 'center');
         }
         else if (this.notifyTimeout > 0) {
-            this.style.width = "initial";
-            this.style.height = "initial";
-            this.style.setProperty("--button-justify", 'initial');
+            this.style.removeProperty("width");
+            this.style.removeProperty("height");
+            this.style.removeProperty("--button-justify");
         }
     }
     render() {
@@ -63,7 +63,8 @@ let LitButton = class LitButton extends LitElement {
                     @slotchange = "${this._onIconBefore}" 
                     name = "icon-before"></slot><div
                 ><slot></slot></div><slot @slotchange = "${this._onIconAfter}"
-                    name = "icon-after"></slot></div>`}`;
+                    name = "icon-after"></slot></div>`}
+        </div>`;
     }
     // ==== Events ====
     _onIconBefore(e) {

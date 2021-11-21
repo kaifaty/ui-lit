@@ -12,13 +12,13 @@ export class LitNote extends LitElement{
         visibility: hidden;
         opacity: 0;*/
         transition: 0.4s ease-in;
-        border: 1px solid var(--note-border-color);
+        border: 1px solid var(--lit-note-border-color);
         z-index: 10;
         padding: 5px;
         border-radius: 1px;
         box-sizing: border-box;
-        background-color: var(--note-background-color, rgba(255,255,255,0.85));
-        color: var(--note-color);
+        background-color: var(--lit-note-background-color, rgba(255,255,255,0.85));
+        color: var(--lit-note-color);
     }
     :host(.visible){
         visibility: visible;
@@ -26,7 +26,7 @@ export class LitNote extends LitElement{
     }
     :host(.error){
         /*background-color: var(--note-error-background-color, #fff);*/
-        color: var(--note-error-color, red);
+        color: var(--lit-note-error-color, red);
         /*border: 1px solid var(--note-error-border-color, #ff7e6d);*/
     }
     `;

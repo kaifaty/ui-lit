@@ -23,21 +23,16 @@ export interface ITabs extends FormAssociatedProps{
 export class LitTabs extends formAssociated(LitElement) implements ITabs{
     static styles = css`
     :host{
-        
-        display: inline-block;        
+        display: inline-block;   
+        padding: 1px;
+        box-sizing: border-box;     
     }
     .content{
         display: flex;
     }
-    .tab.selected, 
-    :not(.disabled) .tab:not(:focus):hover, 
-    :not(.disabled) :focus{
-        background-color: tomato;
-    }
     :host([disabled]){
         opacity: 0.5;
     }`;    
-    //@property({type: Array}) items: TTab[] = [];
     @property({type: String, reflect: true}) type: TTabType = 'button';
     @property({type: String}) value: string = '';
 

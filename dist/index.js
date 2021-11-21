@@ -26,3 +26,4 @@ export * from './textfield';
 export * from './textarea';
 export * from './treeview';
 export * from './theme';
+export * from './divider';

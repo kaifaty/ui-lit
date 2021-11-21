@@ -9,7 +9,11 @@ type TLabled = LitNumberField | LitTextField | LitCheckbox;
 
 @customElement("lit-label")
 export class LitLabel extends LitElement{
-    static styles = css``;
+    static styles = css`
+    :host{
+        display: inline-flex;
+        align-items: center;
+    }`;
     @property({type: String}) for: string = '';
     _connectedNode: TLabled | HTMLInputElement | null = null;
     connectedCallback(){
@@ -28,7 +32,6 @@ export class LitLabel extends LitElement{
         return html`<slot></slot>`
     }
     public appendConnectedField(el: TLabled | HTMLInputElement | null){
-        console.log(el)
         if(!this._connectedNode && el){
             this._connectedNode = el;
         }

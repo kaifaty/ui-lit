@@ -8,18 +8,22 @@ interface IProps extends ButtonProps{
 }
 const Button = (data: IProps) => 
     html`<lit-button 
-        type = "${data.type}"
-        ?primary = "${!!data.primary}"
-        ?disabled = "${!!data.disabled}"
-        ?borderless = "${!!data.borderless}"
-        ?switch = "${!!data.switch}"
-        ?success = "${!!data.success}"
-        ?danger = "${!!data.danger}"
-        ?switchOn = "${!!data.switchOn}"
-        ?notifyOnClick = "${!!data.notifyOnClick}"
-        size = "${data.size}"        
-
-    >${data.label}</lit-button>`;
+            type = "${data.type}"
+            ?primary = "${!!data.primary}"
+            ?disabled = "${!!data.disabled}"
+            ?borderless = "${!!data.borderless}"
+            ?switch = "${!!data.switch}"
+            ?success = "${!!data.success}"
+            ?danger = "${!!data.danger}"
+            ?switchOn = "${!!data.switchOn}"
+            ?notifyOnClick = "${!!data.notifyOnClick}"
+            ?loading = "${!!data.loading}"
+            size = "${data.size}"
+        >
+        <lit-icon icon = "user" slot = "icon-after"></lit-icon>
+        ${data.label}
+        <lit-icon icon = "edit" slot = "icon-before"></lit-icon>
+    </lit-button>`;
 
 
 const Template: Story<Partial<IProps>> = (args) => Button(args as IProps);
@@ -35,6 +39,7 @@ Default.args = {
     danger: false,
     switchOn: false,
     notifyOnClick: false,
+    loading: false,
     type: 'button',
     size: 'medium',
 }
@@ -71,6 +76,11 @@ export const Danger = Template.bind({});
 Danger.args = {
     label: 'Danger',
     danger: true
+}
+export const Loading = Template.bind({});
+Loading.args = {
+    label: 'Loading',
+    loading: true
 }
 export default {
     title: 'Form assosiated/Button',

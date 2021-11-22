@@ -1,5 +1,6 @@
 import { TemplateResult, LitElement } from 'lit';
 import { KeyDownController } from '../controllers/KeyController';
+import '../spinner';
 export interface ButtonProps {
     type?: 'button' | 'submit';
     size?: TSize;
@@ -11,6 +12,8 @@ export interface ButtonProps {
     danger?: boolean;
     switchOn?: boolean;
     notifyOnClick?: boolean;
+    center?: boolean;
+    loading?: boolean;
 }
 declare type TSize = 'small' | 'medium' | 'large';
 export declare class LitButton extends LitElement implements ButtonProps {
@@ -29,6 +32,8 @@ export declare class LitButton extends LitElement implements ButtonProps {
     danger: boolean;
     switchOn: boolean;
     notifyOnClick: boolean;
+    center: boolean;
+    loading: boolean;
     tabindex: number;
     enter: KeyDownController;
     notifyTimeout: number;
@@ -41,6 +46,7 @@ export declare class LitButton extends LitElement implements ButtonProps {
         "icon-after": boolean;
     };
     willUpdate(): void;
+    private _contentTemplate;
     render(): TemplateResult<1>;
     private _onIconBefore;
     private _onIconAfter;

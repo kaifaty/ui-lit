@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators';
 import { classMap } from 'lit/directives/class-map';
 import { KeyDownController } from '../controllers/KeyController';
 import { button } from '../styles/button';
+import '../spinner';
 
 
 export interface ButtonProps{
@@ -16,6 +17,8 @@ export interface ButtonProps{
     danger?: boolean
     switchOn?: boolean
     notifyOnClick?: boolean
+    center?: boolean
+    loading?: boolean
 }
 
 type TSize = 'small' | 'medium' | 'large';
@@ -35,7 +38,9 @@ export class LitButton extends LitElement implements ButtonProps{
     @property({type: Boolean, reflect: true}) success: boolean = false;
     @property({type: Boolean, reflect: true}) danger: boolean = false;
     @property({type: Boolean, reflect: true}) switchOn: boolean = true;
-    @property({type: Boolean, reflect: true}) notifyOnClick: boolean = true;
+    @property({type: Boolean, reflect: true}) notifyOnClick: boolean = false;
+    @property({type: Boolean, reflect: true}) center: boolean = false;
+    @property({type: Boolean, reflect: true}) loading: boolean = false;
 
     @property({type: Number}) tabindex: number = 0;
 
@@ -52,12 +57,12 @@ export class LitButton extends LitElement implements ButtonProps{
         return {
             wrapper: true,
             noselect: true,
-            "icon-before": !!this.iconBefore,
-            "icon-after": !!this.iconAfter,
+            "icon-before": !!this.iconBefore && !this.loading,
+            "icon-after": !!this.iconAfter && !this.loading,
         };
     }
     willUpdate(){
-        if (this._notifyIcon) {
+        if (this._notifyIcon || this.loading) {
             this.style.width = this.clientWidth + "px";
             this.style.height = this.clientHeight + "px";
             this.style.setProperty("--button-justify", 'center');
@@ -68,19 +73,25 @@ export class LitButton extends LitElement implements ButtonProps{
             this.style.removeProperty("--button-justify");
         }
     }
+    private _contentTemplate(){
+        return this._notifyIcon 
+        ? html`<lit-icon class = "checkmark" 
+                         icon = "checkmark"></lit-icon>` 
+        : html`
+            <slot @slotchange = "${this._onIconBefore}" 
+                  name = "icon-before"></slot>
+            <slot></slot>
+            <slot @slotchange = "${this._onIconAfter}"
+                  name = "icon-after"></slot>`;
+    }
     render(){
         return html`
         <div tabIndex = "${this.tabindex}" 
             class = "${classMap(this.classes)}" 
             @click = "${this._click}"
-            >
-            ${this._notifyIcon 
-                ? html`<lit-icon class = "checkmark" icon = "checkmark"></lit-icon>` 
-                : html`<slot 
-                    @slotchange = "${this._onIconBefore}" 
-                    name = "icon-before"></slot><div
-                ><slot></slot></div><slot @slotchange = "${this._onIconAfter}"
-                    name = "icon-after"></slot></div>`}
+            >${this.loading 
+                ? html`<lit-spinner small></lit-spinner>` 
+                : this._contentTemplate()}
         </div>`;
     }
 

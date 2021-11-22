@@ -4,6 +4,7 @@ import { customElement, property, state } from 'lit/decorators';
 import { classMap } from 'lit/directives/class-map';
 import { KeyDownController } from '../controllers/KeyController';
 import { button } from '../styles/button';
+import '../spinner';
 let LitButton = class LitButton extends LitElement {
     constructor() {
         super(...arguments);
@@ -20,7 +21,9 @@ let LitButton = class LitButton extends LitElement {
         this.success = false;
         this.danger = false;
         this.switchOn = true;
-        this.notifyOnClick = true;
+        this.notifyOnClick = false;
+        this.center = false;
+        this.loading = false;
         this.tabindex = 0;
         this.enter = new KeyDownController(this);
         this.notifyTimeout = 0;
@@ -35,12 +38,12 @@ let LitButton = class LitButton extends LitElement {
         return {
             wrapper: true,
             noselect: true,
-            "icon-before": !!this.iconBefore,
-            "icon-after": !!this.iconAfter,
+            "icon-before": !!this.iconBefore && !this.loading,
+            "icon-after": !!this.iconAfter && !this.loading,
         };
     }
     willUpdate() {
-        if (this._notifyIcon) {
+        if (this._notifyIcon || this.loading) {
             this.style.width = this.clientWidth + "px";
             this.style.height = this.clientHeight + "px";
             this.style.setProperty("--button-justify", 'center');
@@ -51,19 +54,25 @@ let LitButton = class LitButton extends LitElement {
             this.style.removeProperty("--button-justify");
         }
     }
+    _contentTemplate() {
+        return this._notifyIcon
+            ? html `<lit-icon class = "checkmark" 
+                         icon = "checkmark"></lit-icon>`
+            : html `
+            <slot @slotchange = "${this._onIconBefore}" 
+                  name = "icon-before"></slot>
+            <slot></slot>
+            <slot @slotchange = "${this._onIconAfter}"
+                  name = "icon-after"></slot>`;
+    }
     render() {
         return html `
         <div tabIndex = "${this.tabindex}" 
             class = "${classMap(this.classes)}" 
             @click = "${this._click}"
-            >
-            ${this._notifyIcon
-            ? html `<lit-icon class = "checkmark" icon = "checkmark"></lit-icon>`
-            : html `<slot 
-                    @slotchange = "${this._onIconBefore}" 
-                    name = "icon-before"></slot><div
-                ><slot></slot></div><slot @slotchange = "${this._onIconAfter}"
-                    name = "icon-after"></slot></div>`}
+            >${this.loading
+            ? html `<lit-spinner small></lit-spinner>`
+            : this._contentTemplate()}
         </div>`;
     }
     // ==== Events ====
@@ -155,6 +164,12 @@ __decorate([
 __decorate([
     property({ type: Boolean, reflect: true })
 ], LitButton.prototype, "notifyOnClick", void 0);
+__decorate([
+    property({ type: Boolean, reflect: true })
+], LitButton.prototype, "center", void 0);
+__decorate([
+    property({ type: Boolean, reflect: true })
+], LitButton.prototype, "loading", void 0);
 __decorate([
     property({ type: Number })
 ], LitButton.prototype, "tabindex", void 0);

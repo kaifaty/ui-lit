@@ -16,3 +16,9 @@ export class LitDivider extends LitElement{
         margin: var(--lit-divider-margin, 10px 0);
     }`;
 }
+declare global {
+    interface HTMLElementTagNameMap {
+      'lit-divider': LitDivider;
+    }
+    
+}

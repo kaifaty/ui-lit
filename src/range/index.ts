@@ -143,13 +143,15 @@ export class LitRange extends formAssociated(LitElement){
     _trackStartX: number = 0;
     _thumbSize: number = 0;
     _padding: number = 0;
-
+    _rect: DOMRect | null = null;
     _min: number = 0;
     get min() {
         return this._min;
     }
     set min(value: number){
         const oldValue = this._min;
+        
+        if(oldValue === value) return;
         if(value < 0){
             console.warn("Min value must be => 0, replaced to 0.");
             value = 0;
@@ -165,6 +167,7 @@ export class LitRange extends formAssociated(LitElement){
     }
     set max(value: number){
         const oldValue = this._max;
+        if(oldValue === value) return;
         this._max = value;
         this.percent = this._calcPercentByValue();
         this.requestUpdate('max', oldValue);        
@@ -184,6 +187,7 @@ export class LitRange extends formAssociated(LitElement){
     }
     set value(value: string){
         const oldValue = this._value;
+        if(oldValue === value) return;
         this._value = value;
         this.percent = this._calcPercentByValue();
         this.requestUpdate('value', oldValue);        
@@ -231,7 +235,7 @@ export class LitRange extends formAssociated(LitElement){
     }
     private _calcOffset(e: IUIEvent){
         const xPosition = getClientX(e);
-        return xPosition -  this._trackStartX  ; //  - this._trackStartX - this._thumbSize / 2;
+        return xPosition -  this._trackStartX - this._rect!.left - this._padding; //  - this._trackStartX - this._thumbSize / 2;
     }
     private _calcPercentByOffset(offset: number){
         let percent = Math.round(offset / (this._trackSize ) * 100 * 10) / 10;
@@ -395,6 +399,7 @@ export class LitRange extends formAssociated(LitElement){
         `;
     }
     _onChangeSize = (rect: DOMRect) => {
+        this._rect = this.getBoundingClientRect();
         this._trackSize = this._calcTackWidth(rect);
         this._trackStartX = this._calcTrackStartX(rect);
     }
@@ -406,8 +411,6 @@ export class LitRange extends formAssociated(LitElement){
         document.addEventListener("mouseup", this._handlePointerUp as EventListener);
         this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
-        
-        
     }
     disconnectedCallback(){
         document.removeEventListener("touchmove", this._handlePointerMove);

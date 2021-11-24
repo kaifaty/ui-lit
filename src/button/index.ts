@@ -37,7 +37,7 @@ export class LitButton extends LitElement implements ButtonProps{
     @property({type: Boolean, reflect: true}) secondary: boolean = false;
     @property({type: Boolean, reflect: true}) success: boolean = false;
     @property({type: Boolean, reflect: true}) danger: boolean = false;
-    @property({type: Boolean, reflect: true}) switchOn: boolean = true;
+    @property({type: Boolean, reflect: true}) switchOn: boolean = false;
     @property({type: Boolean, reflect: true}) notifyOnClick: boolean = false;
     @property({type: Boolean, reflect: true}) center: boolean = false;
     @property({type: Boolean, reflect: true}) loading: boolean = false;

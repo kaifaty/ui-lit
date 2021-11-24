@@ -65,7 +65,13 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
         return this._valueAsNumber;
     }
     set valueAsNumber(value: number){
-        this.value = value.toFixed(this.decimals);
+        if(typeof value === 'number'){
+            this.value = value.toFixed(this.decimals);
+        }
+        else if(typeof value === 'string'){
+            this.value = value;
+        }
+        
     }
 
     _value: string = '';
@@ -135,7 +141,7 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
                    ${ref(this.inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
-            ${this._iconTemplate()}
+            <div class = "icon"><slot name = icon></slot></div>
         </div>`;
     }
     updated(props: Map<string | number | symbol, unknown>){

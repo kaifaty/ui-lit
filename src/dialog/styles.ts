@@ -2,6 +2,9 @@ import { css } from 'lit';
 
 export const DIALOG_STYLES = css`
 :host{
+    display: none;
+}
+:host([opened]){
     display: block;
 }
 .overlap{

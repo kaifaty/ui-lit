@@ -11,6 +11,9 @@ export interface IDialogProps {
     opened: boolean
     closeBtnText: string
     useCancelBtn: boolean
+    back(): void
+    open(): void
+    close(): void
 }
 let pool: LitDialog[] = [];
 @customElement('lit-dialog')
@@ -22,10 +25,11 @@ export class LitDialog extends LitElement{
     @property({type: Boolean, attribute: true, reflect: true}) opened: boolean = false;
     @property({type: Boolean, attribute: true, reflect: true}) useCancelBtn: boolean = true;
     @property({type: Object, attribute: false}) content: string | TemplateResult= "";
+
     @state() headerVisible = false;
     private _keyPressController = new KeyDownController(this);
 
-    _resolve: Function | null = null;
+    resolve: Function | null = null;
 
     private _footerTemplate(){
         return html`${
@@ -53,7 +57,7 @@ export class LitDialog extends LitElement{
                     ? html`<lit-icon 
                         class = "arrow-back" 
                         icon = "dropdown"
-                        @click = "${this.close}"
+                        @click = "${this.back}"
                         ></lit-icon>` 
                     : nothing}
                 <lit-icon 
@@ -84,33 +88,47 @@ export class LitDialog extends LitElement{
         pool.push(this);
         this.opened = true;
         this._show();
+        
+        this.dispatchEvent(new CustomEvent('dialogOpened'));
         return new Promise(r => {
-            this._resolve = r;
+            this.resolve = r;
         });
+    }
+    public back(){
+        this.opened = false;
+        this._hide();
+        this.resolve?.(false);
+        this.resolve = null;
+        pool = pool.filter(it => it !== this);
+        pool[pool.length - 1]?.setAttribute('opened', '');
+        this.dispatchEvent(new CustomEvent('dialogBack'));
     }
     public close(){
         this.opened = false;
         this._hide();
-        this._resolve?.(false);
-        this._resolve = null;
-        pool = pool.filter(it => it !== this);
-        pool[pool.length - 1]?.setAttribute('opened', '');
+        pool.forEach(it => {
+            it.resolve?.(false);
+            it.resolve = null;
+        });
+        pool = [];
+        this.dispatchEvent(new CustomEvent('dialogClose'));
     }
     public confirm(){
         const data = this.querySelector('lit-form');
         if(data){
             const result = data.submit();
             if(result){
-                this._resolve?.(result);
+                this.resolve?.(result);
             }
             else{
                 return;
             }
         }
         else{
-            this._resolve?.(true);
+            this.resolve?.(true);
         }
-        this._resolve = null;
+        this.resolve = null;
+        this.dispatchEvent(new CustomEvent('dialogConfirm'));
         this.close();
         
     }

@@ -128,7 +128,7 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
                    ${ref(this.inputRef)}
                    .value = "${this.value}">
             ${this._cancelIconTemplate()}
-            ${this._iconTemplate()}
+            <div class = "icon"><slot name = icon></slot></div>
         </div>`;
     }
     updated(_changedProperties: Map<string | number | symbol, unknown>){
@@ -152,12 +152,16 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
         this.dispatchEvent(new CustomEvent("changed", {
             detail: this.value,
             bubbles: true,
-        }))
+        }));
     }
 
     
     private _onChange(e: Event){
         this.reportValidity();
+        this.dispatchEvent(new CustomEvent("change", {
+            detail: this.value,
+            bubbles: true,
+        }));
     }
     private _onInput(e: Event){        
         this.value = (e.target as HTMLInputElement).value as string;

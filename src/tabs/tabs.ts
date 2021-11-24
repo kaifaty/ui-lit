@@ -24,7 +24,6 @@ export class LitTabs extends formAssociated(LitElement) implements ITabs{
     static styles = css`
     :host{
         display: inline-block;   
-        padding: 1px;
         box-sizing: border-box;     
     }
     .content{

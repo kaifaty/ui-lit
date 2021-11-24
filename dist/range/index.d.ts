@@ -44,6 +44,7 @@ export declare class LitRange extends LitRange_base {
     _trackStartX: number;
     _thumbSize: number;
     _padding: number;
+    _rect: DOMRect | null;
     _min: number;
     get min(): number;
     set min(value: number);

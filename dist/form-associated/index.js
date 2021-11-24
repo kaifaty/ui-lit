@@ -144,6 +144,7 @@ export const formAssociated = (superClass) => {
                 min: this.min,
                 max: this.max,
                 step: this.step,
+                pattern: this.pattern,
             };
             return text.replace(/\$\{([a-zA-Z0-9_.,=)( ]+)\}/g, (m, n) => {
                 let value = data[n];

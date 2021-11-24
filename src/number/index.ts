@@ -65,8 +65,8 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
         return this._valueAsNumber;
     }
     set valueAsNumber(value: number){
-        if(typeof value === 'number'){
-            this.value = value.toFixed(this.decimals);
+        if(typeof value === 'number'){            
+            this.value = value ? value.toFixed(this.decimals) : '';
         }
         else if(typeof value === 'string'){
             this.value = value;

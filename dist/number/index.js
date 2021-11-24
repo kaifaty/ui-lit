@@ -46,7 +46,12 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
         return this._valueAsNumber;
     }
     set valueAsNumber(value) {
-        this.value = value.toFixed(this.decimals);
+        if (typeof value === 'number') {
+            this.value = value ? value.toFixed(this.decimals) : '';
+        }
+        else if (typeof value === 'string') {
+            this.value = value;
+        }
     }
     get value() {
         return this._value;
@@ -117,7 +122,7 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
                    ${ref(this.inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
-            ${this._iconTemplate()}
+            <div class = "icon"><slot name = icon></slot></div>
         </div>`;
     }
     updated(props) {

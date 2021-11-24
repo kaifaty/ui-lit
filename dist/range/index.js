@@ -25,6 +25,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this._trackStartX = 0;
         this._thumbSize = 0;
         this._padding = 0;
+        this._rect = null;
         this._min = 0;
         this._max = 100;
         this._value = '0';
@@ -62,6 +63,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             this._hidePercent();
         };
         this._onChangeSize = (rect) => {
+            this._rect = this.getBoundingClientRect();
             this._trackSize = this._calcTackWidth(rect);
             this._trackStartX = this._calcTrackStartX(rect);
         };
@@ -175,6 +177,8 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     }
     set min(value) {
         const oldValue = this._min;
+        if (oldValue === value)
+            return;
         if (value < 0) {
             console.warn("Min value must be => 0, replaced to 0.");
             value = 0;
@@ -188,6 +192,8 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     }
     set max(value) {
         const oldValue = this._max;
+        if (oldValue === value)
+            return;
         this._max = value;
         this.percent = this._calcPercentByValue();
         this.requestUpdate('max', oldValue);
@@ -205,6 +211,8 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     }
     set value(value) {
         const oldValue = this._value;
+        if (oldValue === value)
+            return;
         this._value = value;
         this.percent = this._calcPercentByValue();
         this.requestUpdate('value', oldValue);
@@ -247,7 +255,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     }
     _calcOffset(e) {
         const xPosition = getClientX(e);
-        return xPosition - this._trackStartX; //  - this._trackStartX - this._thumbSize / 2;
+        return xPosition - this._trackStartX - this._rect.left - this._padding; //  - this._trackStartX - this._thumbSize / 2;
     }
     _calcPercentByOffset(offset) {
         let percent = Math.round(offset / (this._trackSize) * 100 * 10) / 10;

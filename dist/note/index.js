@@ -52,9 +52,9 @@ LitNote.styles = css `
         opacity: 1;
     }
     :host(.error){
-        background-color: var(--note-error-background, #fff);
+        background-color: var(--lit-note-error-background, #fff);
         color: var(--lit-note-error-color, red);
-        border: 1px solid var(--note-error-border, #ff7e6d);
+        border: 1px solid var(--lit-note-error-border, #ff7e6d);
     }
     `;
 LitNote = __decorate([

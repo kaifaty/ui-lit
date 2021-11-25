@@ -61,7 +61,7 @@ const Table = (text: string) =>
         defaultSort = "age"
         .dataSource = "${dataSource}"
         .columns = "${columns}"
-        rowHeight = "50"
+        rowHeight = "20"
         headerHeight = "20"
     ></lit-table>`;
 

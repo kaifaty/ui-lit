@@ -25,6 +25,7 @@ export class LitPagination extends LitElement{
         lit-numberfield{
             --lit-input-align: center;
             --lit-input-font-size: 12px;
+            --lit-input-padding: 3px 6px;
             width: 40px;
         }
         button{

@@ -2,6 +2,8 @@ import { LitElement, html, css, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
 import { repeat } from 'lit/directives/repeat';
 import '../pagination';
+import { scrollbar } from '../styles/scrollbar';
+import { ResizeObserverController } from '../controllers/ResizeObserverController';
 
 export type ISourceItem = {
     key: string;
@@ -41,7 +43,7 @@ export class TableElement extends LitElement{
             headerHeight: {type: Number},
         }
     }
-    static styles = css`
+    static styles = [css`
     :host{
         display: block;
         --lit-cells: 4;
@@ -63,7 +65,8 @@ export class TableElement extends LitElement{
         display: flex;
         align-content: end;
     }
-    `;
+    `, scrollbar];
+    RO = new ResizeObserverController(this);
     _columns: TColumnItem[] = [];
     set columns(value: TColumnItem[]){
         const oldValue = this._columns;
@@ -106,11 +109,12 @@ export class TableElement extends LitElement{
     @state() sortDirection: TSortDirections = 'descend';
     @state() page: number = 0;
     _data: Array<ISourceItem> = [];
+    _rect: DOMRect | null = null;
 
     private recalcPageLength(){
-        if(!this.paginationToHeight || !this.pagination) return;
+        if(!this.paginationToHeight || !this.pagination || !this._rect) return;
         const paginationHeight = 26;
-        const availableHeight = this.clientHeight - paginationHeight - this.headerHeight; 
+        const availableHeight = this._rect!.height - this.headerHeight; 
         this.pageLength = Math.floor(availableHeight / this.rowHeight);
     }
     private sortFunction(
@@ -168,7 +172,6 @@ export class TableElement extends LitElement{
         
     }
     willUpdate(){
-        this.recalcPageLength();
         const dataSource = this.getFilteredData();
         if(this.sort){
             const data = this.columns.filter(it => it.key === this.sort)[0];
@@ -207,9 +210,14 @@ export class TableElement extends LitElement{
         )
     }
 
+    private _onResize = (rect: DOMRect) => {
+        this._rect = rect;
+        this.recalcPageLength();
+    }
     render(){
         return html`
         <div class = "content" 
+            ${this.RO.observe(this._onResize)}
              @changeSort = "${this._onSortChanged}">
             <lit-table-row>
                 ${this._headerTemplate()}

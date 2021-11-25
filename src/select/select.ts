@@ -6,7 +6,7 @@ import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
 import { formAssociated } from '../form-associated/index';
 import { customElement, property, state } from 'lit/decorators';
 import { input } from '../styles/input';
-import { getEventDataset, isChildOfHost } from 'kailib';
+import { getEventDataset, isChildOfHost, isClickInElement } from 'kailib';
 import { ClickController } from '../controllers/ClickController';
 import { KeyDownController } from '../controllers/KeyController';
 import { calcPositionForPopup } from '../helpers/position';
@@ -124,7 +124,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     }
     private _selectedTemplate(){
         return html`
-        <slot name = "selected">${this._slot}</slot>
+        ${this._slot ? html`<div>${this._slot}</div>` : html`<slot name = "selected">-</slot>`}
         <slot name = "icon">
             <div class = "icon-dropdown"><lit-icon 
                 class = "${this.open ? 'dropup' : ''}" 
@@ -186,7 +186,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         }
     }
     handleDocumentClick(e: Event){
-        const isChild = isChildOfHost(e.composedPath()[0] as HTMLElement, this);
+        const isChild = isClickInElement(e, this);
         if(!isChild){
             this.open = false;
         }

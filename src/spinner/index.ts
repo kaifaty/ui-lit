@@ -17,6 +17,8 @@ export class LitSpinner extends LitElement{
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        height: 100%;
     }
     :host([fullscreen]){
         position: absolute;
@@ -47,9 +49,6 @@ export class LitSpinner extends LitElement{
         position: relative;
     }
     :host([small]) .pulsor{
-        position: absolute;
-        left: calc(50% - 7.5px);
-        top: calc(50% - 7.5px);
         width: 15px;
         height: 15px;
     }

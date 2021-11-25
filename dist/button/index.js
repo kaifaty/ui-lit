@@ -43,7 +43,7 @@ let LitButton = class LitButton extends LitElement {
         };
     }
     willUpdate() {
-        if (this._notifyIcon || this.loading) {
+        if (this._notifyIcon || (this.loading && this.clientWidth)) {
             this.style.width = this.clientWidth + "px";
             this.style.height = this.clientHeight + "px";
             this.style.setProperty("--button-justify", 'center');

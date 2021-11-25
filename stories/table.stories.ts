@@ -31,13 +31,22 @@ const columns = [
     sorter: true,
     filters: [
       {
-        text: '22',
+        text: 'Age = 22',
         value: 22,
       },
       {
+        text: 'More then', 
         placeholder: '> then',       
         type: 'input',
         onFilter: (value: unknown, row: ISourceItem) => row.age > value
+      },
+      {     
+        type: 'checkbox',
+        text: '> 10 && < 15',
+        onFilter: (value: unknown, row: ISourceItem) => {
+            console.log(value)
+            return row.age > 10 && row.age < 15
+        }
       },
     ],
 },
@@ -50,7 +59,8 @@ const columns = [
 ];
 
 const dataSource = [...Array(35)].map((it, i) => 
-    ({...data, key: i, age: i, address: i * 2, name: data.name + i})).sort((a, b, direction) => {
+    ({...data, key: i, age: i, address: i * 2, name: data.name + i}))
+    .sort((a, b, direction) => {
         if(a.name > b.name) return direction === 'ascend' ? 1 : -1;
         if(a.name < b.name) return direction === 'ascend' ? -1 : 1;
         return 0;

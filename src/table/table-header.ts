@@ -65,7 +65,7 @@ export class LitTableHeader extends LitElement{
         left: 0;
         font-weight: 400;
         padding: 10px;
-        width: 120px;
+        width: 160px;
         border-radius: 5px;
         background-color: #fff;
         box-shadow: 2px 2px 10px rgba(0,0,0,0.13);
@@ -76,8 +76,6 @@ export class LitTableHeader extends LitElement{
         
     }
     .filter-template footer{
-
-        
         display: flex;
         justify-content: space-between;
 
@@ -89,8 +87,13 @@ export class LitTableHeader extends LitElement{
         display: flex;
         align-items: center;
     }
+    .rows{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
     .row{
-        padding: 5px 0;
+        display: contents;
     }
     `, noselect];
     @property({type: Object}) item?: TColumnItem = undefined;
@@ -155,32 +158,33 @@ export class LitTableHeader extends LitElement{
     }
     private _filterItemTemplate(item: TFilterItem, i: number){
         if(item.type === 'checkbox' || !item.type){
-            return html`<div class = "flex-center">
-                <checkbox-element 
+            return html`
+                <lit-label>
+                    ${item.text}
+                </lit-label>
+                <lit-checkbox 
                     .checked = "${item.checked || false}"
-                    name = "${i}" 
-                    type = "checkbox"></checkbox-element> ${item.text}
-            </div>`;
+                    name = "${i}"></lit-checkbox>`;
         }
         if(item.type === 'input' && typeof item.value === 'number'){
             return html`
                 <lit-label>
                     ${item.text}
-                    <lit-numberfield 
-                        name = "${i}" 
-                        value = "${item.value}"
-                        placeholder = "${ifDefined(item.placeholder)}"></lit-numberfield>
-                </lit-label>`;
+                </lit-label>
+                <lit-numberfield 
+                    name = "${i}" 
+                    value = "${item.value}"
+                    placeholder = "${ifDefined(item.placeholder)}"></lit-numberfield>`;
         }
         if(item.type === 'input'){
             return html`
                 <lit-label>
                     ${item.text}
-                    <lit-textfield 
-                        name = "${i}" 
-                        value = "${item.value}"
-                        placeholder = "${ifDefined(item.placeholder)}"></lit-textfield>
-                </lit-label>`;
+                </lit-label>
+                <lit-textfield 
+                    name = "${i}" 
+                    value = "${item.value}"
+                    placeholder = "${ifDefined(item.placeholder)}"></lit-textfield>`;
         }
         return nothing;
     }
@@ -246,7 +250,6 @@ export class LitTableHeader extends LitElement{
             }
             return {
                 ...it, 
-                checked: !!data[i],
                 value: data[i]
             }
         });

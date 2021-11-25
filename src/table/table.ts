@@ -152,7 +152,11 @@ export class TableElement extends LitElement{
             filters.forEach(filter => {
                 const rowValue = it[filter.key];
                 if(!filter.type || filter.type === 'checkbox'){
-                    rowFilters.push(rowValue === filter.value);
+                    rowFilters.push(
+                        filter.onFilter 
+                            ? filter.onFilter(filter.value, it)
+                            : rowValue === filter.value
+                    );
                 }
                 else if(filter.type === 'input' && filter.value){
                     if(filter.onFilter){

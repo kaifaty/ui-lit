@@ -64,8 +64,8 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         const data: TReturnData = {};
 
         this._elements.forEach(it => {
-            if(it.tagName.toLocaleLowerCase() === "checkbox-element"){
-                data[it.name] = Number((it as LitCheckbox).checked);
+            if(it.tagName.toLocaleLowerCase() === "lit-checkbox"){
+                data[it.name] = (it as LitCheckbox).checked;
             }
             else if(it.name){
                 data[it.name] = it.value;

@@ -44,8 +44,8 @@ let LitFrom = class LitFrom extends LitElement {
     _getData() {
         const data = {};
         this._elements.forEach(it => {
-            if (it.tagName.toLocaleLowerCase() === "checkbox-element") {
-                data[it.name] = Number(it.checked);
+            if (it.tagName.toLocaleLowerCase() === "lit-checkbox") {
+                data[it.name] = it.checked;
             }
             else if (it.name) {
                 data[it.name] = it.value;

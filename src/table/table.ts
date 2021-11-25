@@ -113,7 +113,6 @@ export class TableElement extends LitElement{
 
     private recalcPageLength(){
         if(!this.paginationToHeight || !this.pagination || !this._rect) return;
-        const paginationHeight = 26;
         const availableHeight = this._rect!.height - this.headerHeight; 
         this.pageLength = Math.floor(availableHeight / this.rowHeight);
     }
@@ -174,6 +173,7 @@ export class TableElement extends LitElement{
     willUpdate(){
         const dataSource = this.getFilteredData();
         if(this.sort){
+            
             const data = this.columns.filter(it => it.key === this.sort)[0];
             const sorter = (a: ISourceItem, b: ISourceItem) => {
                 if(typeof data.sorter === 'function'){
@@ -193,7 +193,7 @@ export class TableElement extends LitElement{
                 .sort = "${this.sort}"
                 .sortDirection = "${this.sortDirection}"
                 .item = "${col}"></lit-table-header>`
-        })
+        });
     }
     private _rowsTemplate(){
         return repeat(
@@ -209,14 +209,13 @@ export class TableElement extends LitElement{
             </lit-table-row>`
         )
     }
-
     private _onResize = (rect: DOMRect) => {
         this._rect = rect;
         this.recalcPageLength();
     }
     render(){
         return html`
-        <div class = "content" 
+        <div class = "content ff-scrollbar" 
             ${this.RO.observe(this._onResize)}
              @changeSort = "${this._onSortChanged}">
             <lit-table-row>

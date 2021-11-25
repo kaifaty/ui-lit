@@ -2,7 +2,7 @@ import { ifDefined } from 'lit/directives/if-defined';
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
-import { TColumnItem, TFilterItem } from './table';
+import { TColumnItem, TFilterItem, TSortDirections } from './table';
 import { noselect } from '../styles/noselect';
 import '../textfield';
 import '../number';
@@ -97,6 +97,8 @@ export class LitTableHeader extends LitElement{
     @property({type: String}) sort: string = '';
     @property({type: String, reflect: true}) sortDirection: string = 'descend';
     _filterVisible = false;
+    _clickController = new ClickController(this);
+    
     get filterVisible(){
         return this._filterVisible;
     }
@@ -106,8 +108,6 @@ export class LitTableHeader extends LitElement{
         this.requestUpdate('filterVisible', oldValue);
     }
     
-    _clickController = new ClickController(this);
-    
 
     get directions() {
         return this.item?.sortDirections || ['ascend', 'descend'];
@@ -115,18 +115,22 @@ export class LitTableHeader extends LitElement{
 
     private _getNewDirection(){
         const directions = this.directions;
-
-        if(this.isSort && directions.length > 1){
-            return this.sortDirection === 'descend' ? "ascend" : "descend";
+        const index = directions.indexOf(this.sortDirection as TSortDirections);
+        
+        if(index === -1 || !this.isSort){
+            return directions[0];
         }
-        return directions[0];
+        if(directions.length - 1 < index){
+            return '';
+        }
+        return directions[index + 1];
     }
     get isSort(){
         return this.sort === this.item?.key;
     }
     private _sortTemplate(){
         if(this.item?.sorter){
-            
+        
             return html`<div class = "sort-icons">
                 ${this.directions.map(it => {
                     if(it ==='ascend'){
@@ -213,8 +217,7 @@ export class LitTableHeader extends LitElement{
             class = "${classMap(map)}">
             <div>${this.item?.title}</div>${this._sortTemplate()}${this._filterIconTemplate()}
         </div>
-        ${this._filterTemplate()}
-        `;
+        ${this._filterTemplate()}`;
     }
     private _onFilterToggle(e: Event){
         e.stopPropagation();
@@ -222,10 +225,11 @@ export class LitTableHeader extends LitElement{
     }
     private _onChangeSort(){
         if(!this.item?.sorter) return;
+        const direction = this._getNewDirection();
         this.dispatchEvent(new CustomEvent("changeSort", {
             detail: {
-                sort: this.item!.key,
-                direction: this._getNewDirection()
+                sort: direction ? this.item!.key : '',
+                direction
             },
             bubbles: true
         }));

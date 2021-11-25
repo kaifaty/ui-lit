@@ -21,6 +21,7 @@ const columns = [
         if(a.name < b.name) return direction === 'ascend' ? -1 : 1;
         return 0;
     },
+    //defaultSort: true
 },
 { 
     title: 'Age',
@@ -39,7 +40,6 @@ const columns = [
         onFilter: (value: unknown, row: ISourceItem) => row.age > value
       },
     ],
-    defaultSort: true
 },
 {
     title: 'Address',
@@ -50,7 +50,11 @@ const columns = [
 ];
 
 const dataSource = [...Array(35)].map((it, i) => 
-    ({...data, key: i, age: i, address: i * 2, name: data.name + i})) as any;
+    ({...data, key: i, age: i, address: i * 2, name: data.name + i})).sort((a, b, direction) => {
+        if(a.name > b.name) return direction === 'ascend' ? 1 : -1;
+        if(a.name < b.name) return direction === 'ascend' ? -1 : 1;
+        return 0;
+    }) as any;
 
 const Table = (text: string) => 
     html`

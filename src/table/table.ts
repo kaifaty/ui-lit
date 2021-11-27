@@ -65,6 +65,10 @@ export class TableElement extends LitElement{
         display: flex;
         align-content: end;
     }
+    footer{
+        display: flex;
+        justify-content: space-between;
+    }
     `, scrollbar];
     RO = new ResizeObserverController(this);
     _columns: TColumnItem[] = [];
@@ -235,7 +239,7 @@ export class TableElement extends LitElement{
             </lit-table-row>
             ${ this._rowsTemplate() }
         </div>
-        <div>
+        <footer>
             ${this.pagination
                 ? html `<lit-pagination 
                             @changed = "${this._onPageChanged}"
@@ -246,7 +250,7 @@ export class TableElement extends LitElement{
                 : nothing
             }
             <slot></slot>
-        </div>`;
+        </footer>`;
     }
     private _changeFilter(e: CustomEvent){
         const item = e.detail;

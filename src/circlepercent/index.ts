@@ -96,6 +96,8 @@ export class LitCircle extends LitElement{
     firstUpdated(){
         const styles = window.getComputedStyle(this);
         this._color = styles.getPropertyValue("--lit-circle-color");
+        
+        this.requestUpdate();
     }
 }
 

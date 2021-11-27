@@ -32,24 +32,29 @@ export class LitTableHeader extends LitElement{
     }
     .sort-icons{
         display: flex;
-        padding: 0 5px 0 10px;
+        padding: var(--lit-table-sort-padding, 0 5px );
         flex-direction: column;
         align-items: center;
         line-height: 0.9;
+        margin-left: 4px;
+    }
+    .sort-icons:hover {
+        background-color: var(--lit-table-icon-background-hover, rgba(0, 0, 0, 0.1));
+        --lit-icon-color: var(--lit-table-icon-color-hover, rgba(0, 0, 0, 0.5));
     }
     :host([sortDirection = "descend"]) .sorted lit-icon[icon = "dropdown"],
     :host([sortDirection = "ascend"]) .sorted lit-icon[icon = "dropup"],
     .filters-checked
     {
-        --lit-icon-color: var(--lit-table-sort-icon-color, hsl(210, 90%, 60%));
+        --lit-icon-color: var(--lit-table-icon-color-selected, hsl(210, 90%, 60%));
     }
     [icon = "filter"]{
-        padding: 6px 5px ;
+        padding: var(--lit-table-filter-padding, 6px 4px);
         border-radius: 3px;
     }
     [icon = "filter"]:hover{
-        background-color: var(--lit-table-filter-icon-background-hover, rgba(0, 0, 0, 0.1));;
-        --lit-icon-color: var(--lit-table-filter-icon-color-hover, rgba(0, 0, 0, 0.5));;
+        background-color: var(--lit-table-icon-background-hover, rgba(0, 0, 0, 0.1));
+        --lit-icon-color: var(--lit-table-icon-color-hover, rgba(0, 0, 0, 0.5));
     }
     .sorter{
         cursor: pointer;
@@ -67,7 +72,7 @@ export class LitTableHeader extends LitElement{
         padding: 10px;
         width: 160px;
         border-radius: 5px;
-        background-color: #fff;
+        background-color: var(--lit-table-filter-content-background, #fff);
         box-shadow: 2px 2px 10px rgba(0,0,0,0.13);
         z-index: 1;
         display: grid;
@@ -91,6 +96,7 @@ export class LitTableHeader extends LitElement{
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
+        align-items: center;
     }
     .row{
         display: contents;
@@ -132,8 +138,7 @@ export class LitTableHeader extends LitElement{
         return this.sort === this.item?.key;
     }
     private _sortTemplate(){
-        if(this.item?.sorter){
-        
+        if(this.item?.sorter){        
             return html`<div class = "sort-icons">
                 ${this.directions.map(it => {
                     if(it ==='ascend'){
@@ -250,7 +255,8 @@ export class LitTableHeader extends LitElement{
             }
             return {
                 ...it, 
-                value: data[i]
+                value: data[i], 
+                checked: !!data[i]
             }
         });
         this.dispatchEvent(new CustomEvent("changeFilter", {

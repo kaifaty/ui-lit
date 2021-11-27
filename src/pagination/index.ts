@@ -13,7 +13,11 @@ export interface IPaginationProps{
 export class LitPagination extends LitElement{
     @property({type: Number}) page: number = 0;
     @property({type: Number}) pageLength: number = 5;
-    @property({type: Number}) length: number = 20;
+    static get properties(){
+        return {
+            length: {type: Number}
+        }
+    }
     static styles = [
         css`
         :host{
@@ -60,9 +64,18 @@ export class LitPagination extends LitElement{
         }
     `
     ];
+    _length: number = 20;
 
+    get length(){
+        return this._length;
+    }
+    set length(value: number){
+        const oldValues = this._length;
+        this._length = value
+        this.requestUpdate('length', oldValues);
+    }
     get pageCount(){
-        return Math.ceil(this.length / this.pageLength) - 1;
+        return Math.max(Math.ceil(this.length / this.pageLength) - 1, 0);
     }
     get pageList(){
         const pagesCount = this.pageCount;

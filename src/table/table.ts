@@ -7,7 +7,7 @@ import { ResizeObserverController } from '../controllers/ResizeObserverControlle
 
 export type ISourceItem = {
     key: string;
-    [key: string]: string | number ;
+    [key: string]: string | number | Record<string, any>;
 }
 export type TFilterType = 'checkbox' | 'input';
 export interface TFilterItem {
@@ -24,7 +24,7 @@ interface IFilters extends TFilterItem{
 export type TColumnItem = {
     title: string;
     key: string;
-    valueFn?: (data: ISourceItem) => string | TemplateResult
+    valueFn?: (data: any) => string | TemplateResult
     filters?: TFilterItem[];
     //onFilter?: (value: string, record: ISourceItem) => boolean;
     sorter?: boolean | ((a: ISourceItem, b: ISourceItem, direction: TSortDirections) => number); 
@@ -137,39 +137,48 @@ export class TableElement extends LitElement{
         }
     }
     hasFilters(){
-        return !!this.columns.map(it => it.filters?.filter(it => it.checked).length).filter(it => it).length;
+        return !!this.columns
+                    .map(it => it.filters?.filter(it => it.checked).length)
+                    .filter(it => it).length;
     }
     getFilteredData(){
         if(!this.hasFilters()){
             return [...this.dataSource];
         }
-        
-        const filters: IFilters[] = [];
-        this.columns.forEach(col => col.filters?.forEach(f => f.checked ? filters.push({...f, key: col.key}) : ''));
+        const cols: Record<string, TFilterItem[]> = {};
 
-        return this.dataSource.filter(it => {
-            const rowFilters: boolean[] = [];
-            filters.forEach(filter => {
-                const rowValue = it[filter.key];
-                if(!filter.type || filter.type === 'checkbox'){
-                    rowFilters.push(
-                        filter.onFilter 
-                            ? filter.onFilter(filter.value, it)
-                            : rowValue === filter.value
-                    );
-                }
-                else if(filter.type === 'input' && filter.value){
-                    if(filter.onFilter){
-                        rowFilters.push(filter.onFilter(filter.value, it));
-                    }
-                    else{
-                        rowFilters.push(rowValue == filter.value);
-                    }
-                }
-            });
-            if(!rowFilters.filter(it => it)[0]){
-                return false;
+        this.columns.forEach?.(col => col.filters?.forEach(f => {
+            if(f.checked){
+                if(!cols[col.key]) cols[col.key] = [];
+                cols[col.key].push(f);
             }
+        }));
+        return this.dataSource.filter(it => {
+            const keys = Object.keys(cols);
+            for(const key of keys){
+                const rowFilters: boolean[] = [];
+                const rowValue = it[key];
+                cols[key].forEach(f => {
+                    if(!f.type || f.type === 'checkbox'){
+                        rowFilters.push(
+                            f.onFilter 
+                                ? f.onFilter(f.value, it)
+                                : rowValue === f.value
+                        );
+                    }
+                    else if(f.type === 'input' && f.value){
+                        if(f.onFilter){
+                            rowFilters.push(f.onFilter(f.value, it));
+                        }
+                        else{
+                            rowFilters.push(rowValue == f.value);
+                        }
+                    }
+                });
+                if(!rowFilters.filter(it => it)[0]){
+                    return false;
+                }
+            };
             return true;
         });
         
@@ -177,7 +186,6 @@ export class TableElement extends LitElement{
     willUpdate(){
         const dataSource = this.getFilteredData();
         if(this.sort){
-            
             const data = this.columns.filter(it => it.key === this.sort)[0];
             const sorter = (a: ISourceItem, b: ISourceItem) => {
                 if(typeof data.sorter === 'function'){
@@ -227,19 +235,23 @@ export class TableElement extends LitElement{
             </lit-table-row>
             ${ this._rowsTemplate() }
         </div>
-        ${this.pagination 
-            ? html`<lit-pagination 
-                        @changed = "${this._onPageChanged}"
-                        .length = "${this._data.length}"
-                        .pageLength = "${this.pageLength}" 
-                        .page = "${this.page}"
-                ></lit-pagination>` 
-            : nothing
-        }`;
+        <div>
+            ${this.pagination
+                ? html `<lit-pagination 
+                            @changed = "${this._onPageChanged}"
+                            .length = "${this._data.length}"
+                            .pageLength = "${this.pageLength}" 
+                            .page = "${this.page}"
+                    ></lit-pagination>`
+                : nothing
+            }
+            <slot></slot>
+        </div>`;
     }
     private _changeFilter(e: CustomEvent){
         const item = e.detail;
         this.columns = this.columns.map(it => it.key === item.key ? item : it);
+        
     }
     private _onSortChanged(e: CustomEvent){
         this.sort = e.detail.sort;

@@ -35,6 +35,7 @@ LitLink.styles = css `
         cursor: pointer;
         display: inline-flex;
         align-items: center;
+        width: 100%;
     }
     a:hover:not(:focus){
         color: var(--lit-link-color-hover, hsl(200, 80%, 60%));

@@ -26,15 +26,6 @@ export const DIALOG_STYLES = css`
     align-items: center;
     justify-content: center;
 }
-:host([opened]) main{
-    padding: var(--lit-dialog-main-padding, 15px 20px);
-}
-:host([opened]) header{
-    padding: var(--lit-dialog-header-padding, 15px 20px);
-}
-:host([opened]) footer{
-    padding: var(--lit-dialog-footer-padding, 15px 20px);
-}
 .dialog{          
     max-height: var(--lit-dialog-max-height, initial);
     width: var(--lit-dialog-width, 600px);
@@ -53,30 +44,27 @@ export const DIALOG_STYLES = css`
     box-shadow: 1px 1px 8px var(--lit-dialog-boxshadow, rgba(0,0,0,0.7));
 }
 
-header ::slotted(h1), 
-header ::slotted(h2), 
-header ::slotted(h3), 
-header ::slotted(h4){
+slot[name = header]::slotted(*){
+    padding: var(--lit-dialog-header-padding, 15px 20px);
+    position: relative;
+    background-color: var(--lit-dialog-header-background, #111);
+    color: var(--lit-dialog-header-color, #fefefe);
+    font-size: 16px;
+}
+
+slot[name = header]::slotted(lit-header){
     margin: 0;
 }
 main{
     flex: 1 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
-}
-header{
-    position: relative;
-    background-color: var(--lit-dialog-header-background, #111);
-    color: var(--lit-dialog-header-color, #fefefe);
-    font-size: 16px;
-    display: none;
-}
-header.visible{
-    display: block;
+    padding: var(--lit-dialog-main-padding, 15px 20px);
 }
 footer{
     display: flex;
     justify-content: space-between;
+    padding: var(--lit-dialog-footer-padding, 15px 20px);
 }
 .closebtn-wrapper{
     display: flex;

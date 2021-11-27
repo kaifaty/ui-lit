@@ -8,7 +8,6 @@ export interface ICircleProps{
 class CanvasDirective extends Directive{
     _inited = false;
     _ctx: CanvasRenderingContext2D | null = null;
-    _color = "#aaa";
 
     constructor(partInfo: PartInfo){
         super(partInfo);
@@ -21,13 +20,11 @@ class CanvasDirective extends Directive{
     }
     update(part: ElementPart, args: [Function, number, number]){
         if(!this._ctx){
-            const styles = window.getComputedStyle(part.element);
-            this._color = styles.getPropertyValue("--circle-color");
             this._ctx = (part.element as HTMLCanvasElement).getContext('2d')!;
             this._ctx.canvas.height = args[1] * args[2];
             this._ctx.canvas.width = args[1] * args[2];
         }
-        args[0](this._ctx, this._color);
+        args[0](this._ctx);
     }
 }
 const canvasDirective = directive(CanvasDirective);
@@ -96,9 +93,7 @@ export class LitCircle extends LitElement{
     render(){
         return html`<canvas ${canvasDirective(this.renderCircle, this.size, this.ratio)}></canvas>`;
     }
-    connectedCallback(){
-        super.connectedCallback();
-        //this.size = this.clientWidth;
+    firstUpdated(){
         const styles = window.getComputedStyle(this);
         this._color = styles.getPropertyValue("--lit-circle-color");
     }

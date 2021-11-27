@@ -38,14 +38,15 @@ const columns = [
         text: 'More then', 
         placeholder: '> then',       
         type: 'input',
-        onFilter: (value: unknown, row: ISourceItem) => row.age > value
+        onFilter: (value: unknown, row: ISourceItem) => {
+            return row.age > value
+        }
       },
       {     
         type: 'checkbox',
-        text: '> 10 && < 15',
+        text: '> 1 && < 5',
         onFilter: (value: unknown, row: ISourceItem) => {
-            console.log(value)
-            return row.age > 10 && row.age < 15
+            return row.age > 1 && row.age < 5
         }
       },
     ],
@@ -54,7 +55,16 @@ const columns = [
     title: 'Address',
     dataIndex: 'address',
     key: 'address',
-    sorter: true
+    sorter: true,
+    filters: [
+      {     
+        type: 'checkbox',
+        text: '> 10 && < 15',
+        onFilter: (value: unknown, row: ISourceItem) => {
+            return row.age > 3 && row.age < 8
+        }
+      },
+    ],
 },
 ];
 

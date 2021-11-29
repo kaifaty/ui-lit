@@ -103,7 +103,6 @@ export const button = [
 
     :host([size = "small"]) .wrapper{
         padding: 4px 6px;
-        font-size: 0.9rem;
     }
     :host([size = "large"]) .wrapper{
         padding: 8px 16px;

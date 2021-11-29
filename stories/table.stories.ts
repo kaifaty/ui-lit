@@ -75,7 +75,7 @@ const dataSource = [...Array(35)].map((it, i) =>
         if(a.name < b.name) return direction === 'ascend' ? -1 : 1;
         return 0;
     }) as any;
-
+// dataSource
 const Table = (text: string) => 
     html`
     <lit-table
@@ -83,7 +83,7 @@ const Table = (text: string) =>
         pagination
         paginationToHeight        
         defaultSort = "age"
-        .dataSource = "${dataSource}"
+        .dataSource = "${[]}"
         .columns = "${columns}"
         rowHeight = "20"
         headerHeight = "20"

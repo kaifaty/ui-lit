@@ -255,7 +255,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     }
     _calcOffset(e) {
         const xPosition = getClientX(e);
-        return xPosition - this._trackStartX - this._rect.left - this._padding; //  - this._trackStartX - this._thumbSize / 2;
+        return xPosition - this._trackStartX - this._rect.left + this._padding; //  - this._trackStartX - this._thumbSize / 2;
     }
     _calcPercentByOffset(offset) {
         let percent = Math.round(offset / (this._trackSize) * 100 * 10) / 10;

@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing, TemplateResult } from 'lit';
+import { LitElement, html, css, nothing, TemplateResult, svg } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
 import { repeat } from 'lit/directives/repeat';
 import '../pagination';
@@ -33,6 +33,10 @@ export type TColumnItem = {
 }
 export type TSortDirections = 'ascend' | 'descend';
 
+const nodataSVG = svg`
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M117.92 114.453L12.7467 9.22665L5.92 16L16 26.1333V101.333C16 104.162 17.1238 106.875 19.1242 108.876C21.1246 110.876 23.8377 112 26.6667 112H101.867L111.147 121.227L117.92 114.453ZM26.6667 101.333V36.7467L91.2533 101.333H26.6667ZM43.7333 26.6667L33.0667 16H101.333C104.162 16 106.875 17.1238 108.876 19.1242C110.876 21.1246 112 23.8377 112 26.6667V94.9333L101.333 84.2667V26.6667H43.7333Z" fill="black"/>
+</svg>`;
 
 @customElement("lit-table")
 export class TableElement extends LitElement{
@@ -61,9 +65,28 @@ export class TableElement extends LitElement{
         align-content: start;
         overflow-y: auto;
     }
+    .content.nodata{
+        align-content: stretch;
+        grid-template-rows: var(--header-height) auto;
+    }
     lit-pagination{
         display: flex;
         align-content: end;
+    }
+    footer{
+        display: flex;
+        justify-content: space-between;
+    }
+    .flex-content{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        grid-column: 1 / calc(var(--lit-cells) + 1);
+        opacity: 0.1;
+    }
+    .flex-content svg{
+        fill: var(--lit-icon-color);
     }
     `, scrollbar];
     RO = new ResizeObserverController(this);
@@ -226,16 +249,23 @@ export class TableElement extends LitElement{
         this.recalcPageLength();
     }
     render(){
+        console.log(this._data.length )
         return html`
-        <div class = "content ff-scrollbar" 
+        <div class = "content ff-scrollbar ${!this._data.length ? 'nodata' : ''}" 
             ${this.RO.observe(this._onResize)}
              @changeSort = "${this._onSortChanged}">
             <lit-table-row>
                 ${this._headerTemplate()}
             </lit-table-row>
-            ${ this._rowsTemplate() }
+            ${
+                !this._data.length 
+                    ? html`<div class = "flex-content">
+                                ${nodataSVG}
+                           </div>` 
+                    : this._rowsTemplate()
+            }
         </div>
-        <div>
+        <footer>
             ${this.pagination
                 ? html `<lit-pagination 
                             @changed = "${this._onPageChanged}"
@@ -246,7 +276,7 @@ export class TableElement extends LitElement{
                 : nothing
             }
             <slot></slot>
-        </div>`;
+        </footer>`;
     }
     private _changeFilter(e: CustomEvent){
         const item = e.detail;

@@ -235,7 +235,7 @@ export class LitRange extends formAssociated(LitElement){
     }
     private _calcOffset(e: IUIEvent){
         const xPosition = getClientX(e);
-        return xPosition -  this._trackStartX - this._rect!.left - this._padding; //  - this._trackStartX - this._thumbSize / 2;
+        return xPosition -  this._trackStartX - this._rect!.left + this._padding; //  - this._trackStartX - this._thumbSize / 2;
     }
     private _calcPercentByOffset(offset: number){
         let percent = Math.round(offset / (this._trackSize ) * 100 * 10) / 10;

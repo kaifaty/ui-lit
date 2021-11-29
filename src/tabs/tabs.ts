@@ -26,9 +26,6 @@ export class LitTabs extends formAssociated(LitElement) implements ITabs{
         display: inline-block;   
         box-sizing: border-box;     
     }
-    .content{
-        display: flex;
-    }
     :host([disabled]){
         opacity: 0.5;
     }`;    
@@ -60,19 +57,12 @@ export class LitTabs extends formAssociated(LitElement) implements ITabs{
             }
         )
     }
-
     updated(){
         if(this.disabled) return;
         this._updateTabs();
     }
     render(){
-        const map = {
-            content: true,
-            type: this.type,
-            disabled: this.disabled,
-            ["type-"+ this.type]: true,
-        };
-        return html`<div class = "${classMap(map)}"><slot></slot></div>`;
+        return html`<slot></slot>`;
     }
 }
 declare global {

@@ -98,11 +98,14 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             .thumb-wrapper{
                 position: absolute;
                 z-index: 3;
+                left: calc(var(--size) / 2 * -1);
                 top: calc(var(--top-margin) - var(--size) / 2 + var(--line-height) / 2);
                 width: var(--size, 14px);
                 height: var(--size, 14px);
-                transform-origin: center;
-                transform: translateX(-50%);
+                /*transform-origin: center;
+                transform: translateX(-50%);*/
+                will-change: transform;
+
                 
             }
             .thumb{
@@ -121,8 +124,10 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
                 text-align: center;
                 transform-origin: center;
                 font-size: 12px;
-                transform-origin: center;
-                transform: translate(calc(-50% + 4px));
+                will-change: transform;
+                left: calc(var(--size) / 2 * -1);
+                /*transform-origin: center;
+                transform: translate(calc(-50% + 4px));*/
             }
             .percent.hidden{
                 opacity: 0;
@@ -352,7 +357,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         if (!this.showPercent)
             return nothing;
         const left = this.offsetX + this._padding - this._thumbSize * this.percent / 100;
-        return html `<div style = "left: ${left}px;"
+        return html `<div style = "transform: translateX(${left}px);"
                         class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this.percent}%</div> `;
     }
     _blockedVolume() {
@@ -364,7 +369,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     _thumbTemplate() {
         const offset = (this.offsetX).toFixed(1);
         return html `<div class = "thumb-wrapper" 
-            style = "left: ${offset}px">
+            style = "transform: translateX(${offset}px);">
             ${this.isDisabled() ? nothing : html `<slot><div class = "thumb"></div></slot>`}       
         </div>`;
     }

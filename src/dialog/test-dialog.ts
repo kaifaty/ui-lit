@@ -6,9 +6,6 @@ class TestDialog extends LitElement{
     @state() opened = false;
     confirm(){
         this.opened = true;
-        this.shadowRoot!.querySelector("lit-dialog")!.open().then(r => {
-            
-        });
     }
 
     render(){

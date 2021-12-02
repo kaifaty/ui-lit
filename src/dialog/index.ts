@@ -84,6 +84,8 @@ export class LitDialog extends LitElement{
         document.body.style.overflow = 'initial';
     }
     public open(){
+        const opened = pool.filter(d => d === this)[0];
+        if(opened) return;
         pool.forEach(it => it.removeAttribute('opened'));
         pool.push(this);
         this.opened = true;

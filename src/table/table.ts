@@ -34,8 +34,8 @@ export type TColumnItem = {
 export type TSortDirections = 'ascend' | 'descend';
 
 const nodataSVG = svg`
-<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M117.92 114.453L12.7467 9.22665L5.92 16L16 26.1333V101.333C16 104.162 17.1238 106.875 19.1242 108.876C21.1246 110.876 23.8377 112 26.6667 112H101.867L111.147 121.227L117.92 114.453ZM26.6667 101.333V36.7467L91.2533 101.333H26.6667ZM43.7333 26.6667L33.0667 16H101.333C104.162 16 106.875 17.1238 108.876 19.1242C110.876 21.1246 112 23.8377 112 26.6667V94.9333L101.333 84.2667V26.6667H43.7333Z" fill="black"/>
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+<path d="M117.92 114.453L12.7467 9.22665L5.92 16L16 26.1333V101.333C16 104.162 17.1238 106.875 19.1242 108.876C21.1246 110.876 23.8377 112 26.6667 112H101.867L111.147 121.227L117.92 114.453ZM26.6667 101.333V36.7467L91.2533 101.333H26.6667ZM43.7333 26.6667L33.0667 16H101.333C104.162 16 106.875 17.1238 108.876 19.1242C110.876 21.1246 112 23.8377 112 26.6667V94.9333L101.333 84.2667V26.6667H43.7333Z" />
 </svg>`;
 
 @customElement("lit-table")
@@ -157,6 +157,7 @@ export class TableElement extends LitElement{
         const data = this.columns.filter(it => it.defaultSort)[0];
         if(data){
             this.sort = data.key;
+            this.sortDirection = data.sortDirections?.[0] || 'descend';
         }
     }
     hasFilters(){
@@ -249,7 +250,6 @@ export class TableElement extends LitElement{
         this.recalcPageLength();
     }
     render(){
-        console.log(this._data.length )
         return html`
         <div class = "content ff-scrollbar ${!this._data.length ? 'nodata' : ''}" 
             ${this.RO.observe(this._onResize)}
@@ -280,8 +280,7 @@ export class TableElement extends LitElement{
     }
     private _changeFilter(e: CustomEvent){
         const item = e.detail;
-        this.columns = this.columns.map(it => it.key === item.key ? item : it);
-        
+        this.columns = this.columns.map(it => it.key === item.key ? item : it);        
     }
     private _onSortChanged(e: CustomEvent){
         this.sort = e.detail.sort;

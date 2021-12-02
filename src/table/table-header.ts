@@ -104,9 +104,15 @@ export class LitTableHeader extends LitElement{
     `, noselect];
     @property({type: Object}) item?: TColumnItem = undefined;
     @property({type: String}) sort: string = '';
-    @property({type: String, reflect: true}) sortDirection: string = 'descend';
+    @property({type: String, reflect: true}) sortDirection: string = 'ascend';
     _filterVisible = false;
     _clickController = new ClickController(this);
+    
+    
+    connectedCallback(){
+        super.connectedCallback();
+        this.sortDirection = this.directions[0] || 'ascend';
+    }
     
     get filterVisible(){
         return this._filterVisible;

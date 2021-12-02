@@ -132,9 +132,6 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
             (_a = this.inputRef.value) === null || _a === void 0 ? void 0 : _a.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
         }
         this.validate();
-        if (props.has("value")) {
-            this.dispatchEvent(new CustomEvent("changed", { detail: this.value, bubbles: true }));
-        }
     }
     async firstUpdated(props) {
         super.firstUpdated(props);
@@ -174,7 +171,11 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
         this.reportValidity();
     }
     _handleInput(e) {
+        const oldValue = this._value;
         this.value = e.target.value;
+        if (oldValue !== this._value) {
+            this.dispatchEvent(new CustomEvent("changed", { detail: this.value, bubbles: true }));
+        }
     }
     _handleKeyDown(e) {
         if (!AvailabledKeys.includes(e.key) &&

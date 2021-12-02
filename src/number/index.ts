@@ -150,9 +150,6 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
             this.inputRef.value?.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
         }
         this.validate();
-        if(props.has("value")){
-            this.dispatchEvent(new CustomEvent("changed", {detail: this.value, bubbles: true}));
-        }
         
     }
     async firstUpdated(props: Map<string | number | symbol, unknown>){
@@ -196,7 +193,12 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
         this.reportValidity();
     }
     private _handleInput(e: Event){
+        const oldValue = this._value;
         this.value = (e.target as HTMLInputElement).value as string;
+        if(oldValue !== this._value){
+            this.dispatchEvent(new CustomEvent("changed", {detail: this.value, bubbles: true}));
+        }
+        
     }
     private _handleKeyDown(e: KeyboardEvent){
         if(

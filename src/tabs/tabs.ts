@@ -23,7 +23,7 @@ export interface ITabs extends FormAssociatedProps{
 export class LitTabs extends formAssociated(LitElement) implements ITabs{
     static styles = css`
     :host{
-        display: inline-block;   
+        display: flex;   
         box-sizing: border-box;     
     }
     :host([disabled]){

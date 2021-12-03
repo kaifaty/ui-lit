@@ -102,3 +102,8 @@ export class ToolTip extends LitElement{
     }
     
 }
+declare global {
+    interface HTMLElementTagNameMap {
+      'lit-tooltip': ToolTip;
+    }
+}

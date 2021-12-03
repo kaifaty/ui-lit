@@ -19,25 +19,26 @@ export class TooltimItem extends LitElement{
         max-width: 280px;
         opacity: 0;
         z-index: 1;
-    }
-    lit-icon{
-        position: absolute;
-        right: -5px;
-        top: -5px;
-        border-radius: 12px;
-        padding: 2px;
-        background-color: var(--tooltip-background, white);
-
+        font-size: var(--tooltip-font-size, 12px);
+        font-weight: var(--tooltip-weight, normal);
+        transition: opacity 0.3s ease-out;
     }
     :host(.visible){
         opacity: 1;
+    }
+    lit-icon{
+        position: absolute;
+        right: -8px;
+        top: -8px;
+        border-radius: 12px;
+        padding: 2px;
     }
     `;
     firstUpdated(){
         setTimeout(() => {
            this.dispatch();
            this.classList.add('visible');
-        }, 100)
+        }, 1)
     }
     
     render(){
@@ -60,5 +61,10 @@ export class TooltimItem extends LitElement{
     }
     private _onClose(){
         this.dispatchEvent(new CustomEvent("close"))
+    }
+}
+declare global {
+    interface HTMLElementTagNameMap {
+      'tooltip-item': TooltimItem;
     }
 }

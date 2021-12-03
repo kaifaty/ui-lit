@@ -29,7 +29,6 @@ export declare class LitRange extends LitRange_base {
     };
     private _isMoving;
     offsetX: number;
-    percent: number;
     isPercentHidden: boolean;
     disabledByVol: boolean;
     decimals: number;
@@ -46,6 +45,7 @@ export declare class LitRange extends LitRange_base {
     _padding: number;
     _rect: DOMRect | null;
     _min: number;
+    _percent: number;
     get min(): number;
     set min(value: number);
     _max: number;
@@ -58,6 +58,7 @@ export declare class LitRange extends LitRange_base {
     set value(value: string);
     isDisabled(): boolean;
     willUpdate(): void;
+    dispatch: () => void;
     updated(props: Map<string, string | number | unknown>): void;
     get minPercent(): number;
     private _calcTrackStartX;

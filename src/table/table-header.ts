@@ -146,7 +146,7 @@ export class LitTableHeader extends LitElement{
     private _sortTemplate(){
         if(this.item?.sorter){        
             return html`<div class = "sort-icons">
-                ${this.directions.map(it => {
+                ${this.directions.sort().map(it => {
                     if(it ==='ascend'){
                         return html`<lit-icon icon = "dropup"></lit-icon>`;
                     }

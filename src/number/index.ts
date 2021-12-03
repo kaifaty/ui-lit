@@ -141,7 +141,7 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
                    ${ref(this.inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
-            <div class = "icon"><slot name = icon></slot></div>
+            <div class = "icon"><slot name = "icon"></slot></div>
         </div>`;
     }
     updated(props: Map<string | number | symbol, unknown>){

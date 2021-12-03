@@ -122,7 +122,7 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
                    ${ref(this.inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
-            <div class = "icon"><slot name = icon></slot></div>
+            <div class = "icon"><slot name = "icon"></slot></div>
         </div>`;
     }
     updated(props) {

@@ -133,7 +133,6 @@ export class LitRange extends formAssociated(LitElement){
     }
     private _isMoving: boolean = false;
     @state() offsetX: number = 0;
-    @state() percent: number = 0;
     @state() isPercentHidden: boolean = true;
     @state() disabledByVol: boolean = true;
     @property({type: Number}) decimals: number = 8;
@@ -150,6 +149,7 @@ export class LitRange extends formAssociated(LitElement){
     _padding: number = 0;
     _rect: DOMRect | null = null;
     _min: number = 0;
+    _percent: number = 0;
     get min() {
         return this._min;
     }
@@ -162,7 +162,7 @@ export class LitRange extends formAssociated(LitElement){
             value = 0;
         }
         this._min = value;
-        this.percent = this._calcPercentByValue();
+        this._percent = this._calcPercentByValue();
         this.requestUpdate('max', oldValue);        
     }
 
@@ -174,7 +174,7 @@ export class LitRange extends formAssociated(LitElement){
         const oldValue = this._max;
         if(oldValue === value) return;
         this._max = value;
-        this.percent = this._calcPercentByValue();
+        this._percent = this._calcPercentByValue();
         this.requestUpdate('max', oldValue);        
     }
 
@@ -185,6 +185,9 @@ export class LitRange extends formAssociated(LitElement){
         if(typeof value === 'number'){
             this.value = value.toFixed(this.decimals);
         }
+        else if (typeof value === 'string'){
+            this.value = value
+        }
     }
     _value: string = '0';
     get value() {
@@ -194,7 +197,7 @@ export class LitRange extends formAssociated(LitElement){
         const oldValue = this._value;
         if(oldValue === value) return;
         this._value = value;
-        this.percent = this._calcPercentByValue();
+        this._percent = this._calcPercentByValue();
         this.requestUpdate('value', oldValue);        
     }
     
@@ -206,15 +209,29 @@ export class LitRange extends formAssociated(LitElement){
         //const rect = this.getBoundingClientRect()
         //this._trackSize = this._calcTackWidth(rect);
         //this._trackStartX = this._calcTrackStartX(rect);
-        this._value = this._calcValueByPercent(this.percent).toFixed(this.decimals);
+       
+        this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
     }
+    
+    dispatch = () => {
+        this.dispatchEvent(new CustomEvent("changed", {
+            detail: {
+                value: this.value,
+                percent: this._percent,
+                valueAsNumber: this.valueAsNumber,
+                type: 'range'
+            },
+            bubbles: true,
+        }));
+    }
+
     updated(props: Map<string, string | number | unknown>){
         super.updated(props);
         this.dispatchEvent(new CustomEvent("changed", {
             detail: {
                 value: this.value,
-                percent: this.percent,
+                percent: this._percent,
                 valueAsNumber: this.valueAsNumber,
                 type: 'range'
             },
@@ -277,10 +294,10 @@ export class LitRange extends formAssociated(LitElement){
         else{
             value =  Math.round((this.valueAsNumber / this.max) * 100 * 10) / 10;
         }
-        if(value < this.min){
+        if(value < 0){
             return 0;
         }
-        if(value > this.max){
+        if(value > 100){
             return 100;
         }
         return value;
@@ -303,7 +320,7 @@ export class LitRange extends formAssociated(LitElement){
     }
     
     private _updateOffset(){
-        const offsetX = Math.round((this._trackSize ) * this.percent / 100 * 1e2) / 1e2;
+        const offsetX = Math.round((this._trackSize ) * this._percent / 100 * 1e2) / 1e2;
         if(offsetX !== this.offsetX){
             this.offsetX = offsetX;
         }
@@ -317,13 +334,16 @@ export class LitRange extends formAssociated(LitElement){
     private _movePosition(e: IUIEvent){
         requestAnimationFrame(() => {
              const offset =  this._calcOffset(e);
-             this.percent = this._calcPercentByOffset(offset);
+             this._percent = this._calcPercentByOffset(offset);
+             this._value = this._calcValueByPercent(this._percent).toString();
+             this._updateOffset();
+             this.dispatch();
          })
         e.preventDefault();
     }
 
     public setPercent(value: number){
-        this.percent = value;
+        this._percent = value;
     }
     
     // ==== Events ==== 
@@ -371,9 +391,9 @@ export class LitRange extends formAssociated(LitElement){
     }
     private _percentTemplate(){
         if(!this.showPercent) return nothing;
-        const left = this.offsetX + this._padding - this._thumbSize * this.percent / 100;
+        const left = this.offsetX + this._padding - this._thumbSize * this._percent / 100;
         return  html`<div style = "transform: translateX(${left}px);"
-                        class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this.percent}%</div> `
+                        class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `
     }
     private _blockedVolume(){
         if(!this.startFromMin) return nothing;
@@ -407,6 +427,7 @@ export class LitRange extends formAssociated(LitElement){
         this._rect = this.getBoundingClientRect();
         this._trackSize = this._calcTackWidth(rect);
         this._trackStartX = this._calcTrackStartX(rect);
+        this._updateOffset();
     }
     connectedCallback(){
         super.connectedCallback();

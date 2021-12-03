@@ -11,7 +11,6 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         super(...arguments);
         this._isMoving = false;
         this.offsetX = 0;
-        this.percent = 0;
         this.isPercentHidden = true;
         this.disabledByVol = true;
         this.decimals = 8;
@@ -27,8 +26,20 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this._padding = 0;
         this._rect = null;
         this._min = 0;
+        this._percent = 0;
         this._max = 100;
         this._value = '0';
+        this.dispatch = () => {
+            this.dispatchEvent(new CustomEvent("changed", {
+                detail: {
+                    value: this.value,
+                    percent: this._percent,
+                    valueAsNumber: this.valueAsNumber,
+                    type: 'range'
+                },
+                bubbles: true,
+            }));
+        };
         // ==== Events ==== 
         this._handlePointerDown = (e) => {
             if (this.isDisabled())
@@ -66,6 +77,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             this._rect = this.getBoundingClientRect();
             this._trackSize = this._calcTackWidth(rect);
             this._trackStartX = this._calcTrackStartX(rect);
+            this._updateOffset();
         };
     }
     static get styles() {
@@ -189,7 +201,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             value = 0;
         }
         this._min = value;
-        this.percent = this._calcPercentByValue();
+        this._percent = this._calcPercentByValue();
         this.requestUpdate('max', oldValue);
     }
     get max() {
@@ -200,7 +212,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         if (oldValue === value)
             return;
         this._max = value;
-        this.percent = this._calcPercentByValue();
+        this._percent = this._calcPercentByValue();
         this.requestUpdate('max', oldValue);
     }
     get valueAsNumber() {
@@ -209,6 +221,9 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     set valueAsNumber(value) {
         if (typeof value === 'number') {
             this.value = value.toFixed(this.decimals);
+        }
+        else if (typeof value === 'string') {
+            this.value = value;
         }
     }
     get value() {
@@ -219,7 +234,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         if (oldValue === value)
             return;
         this._value = value;
-        this.percent = this._calcPercentByValue();
+        this._percent = this._calcPercentByValue();
         this.requestUpdate('value', oldValue);
     }
     isDisabled() {
@@ -229,7 +244,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         //const rect = this.getBoundingClientRect()
         //this._trackSize = this._calcTackWidth(rect);
         //this._trackStartX = this._calcTrackStartX(rect);
-        this._value = this._calcValueByPercent(this.percent).toFixed(this.decimals);
+        this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
     }
     updated(props) {
@@ -237,7 +252,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this.dispatchEvent(new CustomEvent("changed", {
             detail: {
                 value: this.value,
-                percent: this.percent,
+                percent: this._percent,
                 valueAsNumber: this.valueAsNumber,
                 type: 'range'
             },
@@ -297,10 +312,10 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         else {
             value = Math.round((this.valueAsNumber / this.max) * 100 * 10) / 10;
         }
-        if (value < this.min) {
+        if (value < 0) {
             return 0;
         }
-        if (value > this.max) {
+        if (value > 100) {
             return 100;
         }
         return value;
@@ -322,7 +337,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         return value;
     }
     _updateOffset() {
-        const offsetX = Math.round((this._trackSize) * this.percent / 100 * 1e2) / 1e2;
+        const offsetX = Math.round((this._trackSize) * this._percent / 100 * 1e2) / 1e2;
         if (offsetX !== this.offsetX) {
             this.offsetX = offsetX;
         }
@@ -336,12 +351,15 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     _movePosition(e) {
         requestAnimationFrame(() => {
             const offset = this._calcOffset(e);
-            this.percent = this._calcPercentByOffset(offset);
+            this._percent = this._calcPercentByOffset(offset);
+            this._value = this._calcValueByPercent(this._percent).toString();
+            this._updateOffset();
+            this.dispatch();
         });
         e.preventDefault();
     }
     setPercent(value) {
-        this.percent = value;
+        this._percent = value;
     }
     // ==== templates ==== 
     _pointersTemplate() {
@@ -356,9 +374,9 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     _percentTemplate() {
         if (!this.showPercent)
             return nothing;
-        const left = this.offsetX + this._padding - this._thumbSize * this.percent / 100;
+        const left = this.offsetX + this._padding - this._thumbSize * this._percent / 100;
         return html `<div style = "transform: translateX(${left}px);"
-                        class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this.percent}%</div> `;
+                        class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `;
     }
     _blockedVolume() {
         if (!this.startFromMin)
@@ -409,9 +427,6 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
 __decorate([
     state()
 ], LitRange.prototype, "offsetX", void 0);
-__decorate([
-    state()
-], LitRange.prototype, "percent", void 0);
 __decorate([
     state()
 ], LitRange.prototype, "isPercentHidden", void 0);

@@ -32,6 +32,7 @@ export type TColumnItem = {
     sortDirections?: TSortDirections[];
     defaultSort?: boolean
     ellipses?: boolean
+    halfHidden?: (data: any) => boolean
 }
 export type TSortDirections = 'ascend' | 'descend';
 
@@ -243,7 +244,8 @@ export class TableElement extends LitElement{
             <lit-table-row>
                 ${this.columns.map((col, i) => {
                     const classes = {
-                        ellipses: !!col.ellipses
+                        ellipses: !!col.ellipses,
+                        'half-hidden': col.halfHidden ? col.halfHidden(it) : false
                     }                    
                     return html`<lit-table-cell class = "${classMap(classes)}">${col.valueFn ? col.valueFn(it) : it[col.key]}</lit-table-cell>`
                 })}

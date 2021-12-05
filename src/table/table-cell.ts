@@ -12,6 +12,16 @@ export class LitTableCell extends LitElement{
         display: inline-flex;
         align-items: center;
     }
+    :host(.half-hidden){
+        opacity: 0.5;
+    }
+    :host(.ellipses), 
+    .ellipses
+    {
+        text-overflow: ellipsis;
+        overflow: hidden; 
+        white-space: nowrap;
+    }
     `;
     render(){
         return html`<slot></slot>`;

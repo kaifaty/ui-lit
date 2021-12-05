@@ -60,7 +60,7 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
     private _handleFormDettached = (e: CustomEvent) => {
         this._elements.filter(it => e.detail !== it);
     }
-    private _getData(){
+    getData(){
         const data: TReturnData = {};
 
         this._elements.forEach(it => {
@@ -102,7 +102,7 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         if(!this.noValidate && !this.reportValidity()){
             return false;
         }
-        const data = this._getData();
+        const data = this.getData();
         this.dispatchEvent(new CustomEvent('submit', {
             detail: { data },
             bubbles: true

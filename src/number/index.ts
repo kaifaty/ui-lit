@@ -111,10 +111,6 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
         }
         return value;
     }
-    private _iconTemplate(){
-        if(!this.icon) return nothing;
-        return html`<div class = "icon">${this.icon}</div>`;
-    }
     private _cancelIconTemplate(){
         if(!this.useCancelButton ||  !this.value) return nothing;
         return html`<lit-icon 

@@ -10,11 +10,11 @@ export const input = css`
 :host(.error-valid) input:focus{
     outline: 1px solid var(--lit-error-border, #ff7e6d);
 }
-:host(.disabled){
-    opacity: 0.8;
+:host([disabled]){
+    opacity: 0.5;
 }
-:host(.readonly){
-    opacity: 0.9;
+:host([readonly]){
+    opacity: 0.5;
 }
 .wrapper{
     position: relative;

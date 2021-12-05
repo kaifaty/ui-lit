@@ -1,3 +1,4 @@
+import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing, TemplateResult, svg } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
 import { repeat } from 'lit/directives/repeat';
@@ -30,6 +31,7 @@ export type TColumnItem = {
     sorter?: boolean | ((a: ISourceItem, b: ISourceItem, direction: TSortDirections) => number); 
     sortDirections?: TSortDirections[];
     defaultSort?: boolean
+    ellipses?: boolean
 }
 export type TSortDirections = 'ascend' | 'descend';
 
@@ -240,7 +242,10 @@ export class TableElement extends LitElement{
             it => html`
             <lit-table-row>
                 ${this.columns.map((col, i) => {
-                    return html`<lit-table-cell>${col.valueFn ? col.valueFn(it) : it[col.key]}</lit-table-cell>`
+                    const classes = {
+                        ellipses: !!col.ellipses
+                    }                    
+                    return html`<lit-table-cell class = "${classMap(classes)}">${col.valueFn ? col.valueFn(it) : it[col.key]}</lit-table-cell>`
                 })}
             </lit-table-row>`
         )
@@ -248,6 +253,9 @@ export class TableElement extends LitElement{
     private _onResize = (rect: DOMRect) => {
         this._rect = rect;
         this.recalcPageLength();
+        this.dispatchEvent(new CustomEvent('tableResize', {
+            detail: rect
+        }));
     }
     render(){
         return html`

@@ -89,11 +89,6 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
         }
         return value;
     }
-    _iconTemplate() {
-        if (!this.icon)
-            return nothing;
-        return html `<div class = "icon">${this.icon}</div>`;
-    }
     _cancelIconTemplate() {
         if (!this.useCancelButton || !this.value)
             return nothing;

@@ -41,7 +41,7 @@ let LitFrom = class LitFrom extends LitElement {
         this.removeEventListener("fromAttached", this._handleFormAttached);
         this.removeEventListener("fromDettached", this._handleFormDettached);
     }
-    _getData() {
+    getData() {
         const data = {};
         this._elements.forEach(it => {
             if (it.tagName.toLocaleLowerCase() === "lit-checkbox") {
@@ -79,7 +79,7 @@ let LitFrom = class LitFrom extends LitElement {
         if (!this.noValidate && !this.reportValidity()) {
             return false;
         }
-        const data = this._getData();
+        const data = this.getData();
         this.dispatchEvent(new CustomEvent('submit', {
             detail: { data },
             bubbles: true

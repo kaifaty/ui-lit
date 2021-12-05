@@ -247,18 +247,6 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
     }
-    updated(props) {
-        super.updated(props);
-        this.dispatchEvent(new CustomEvent("changed", {
-            detail: {
-                value: this.value,
-                percent: this._percent,
-                valueAsNumber: this.valueAsNumber,
-                type: 'range'
-            },
-            bubbles: true,
-        }));
-    }
     get minPercent() {
         if (!this.startFromMin) {
             return 0;

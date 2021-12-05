@@ -122,7 +122,6 @@ LitCheckbox.styles = [
             width: var(--switcher-width);
             height: var(--switcher-height);
             border-radius: 16px;
-            z-index: 2;
             transition: background-color ease 0.2s;
             box-shadow: inset 1px 1px 2px var(--lit-checkbox-switcher-shadow, rgba(0,0,0,0.7));
         }

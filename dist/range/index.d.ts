@@ -59,7 +59,6 @@ export declare class LitRange extends LitRange_base {
     isDisabled(): boolean;
     willUpdate(): void;
     dispatch: () => void;
-    updated(props: Map<string, string | number | unknown>): void;
     get minPercent(): number;
     private _calcTrackStartX;
     private _calcTackWidth;

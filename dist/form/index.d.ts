@@ -24,7 +24,7 @@ export declare class LitFrom extends LitElement implements IFormElement, IFormPr
     private _handleSubmit;
     private _handleFormAttached;
     private _handleFormDettached;
-    private _getData;
+    getData(): TReturnData;
     checkValidity(): boolean;
     reportValidity(): boolean;
     updated(props: Map<string, string | boolean>): void;

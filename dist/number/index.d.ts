@@ -49,7 +49,6 @@ export declare class LitNumberField extends LitNumberField_base implements Numbe
     connectedCallback(): void;
     disconnectedCallback(): void;
     private _valueResolve;
-    private _iconTemplate;
     private _cancelIconTemplate;
     willUpdate(): void;
     render(): TemplateResult<1>;

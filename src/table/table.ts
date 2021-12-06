@@ -91,6 +91,12 @@ export class TableElement extends LitElement{
     .flex-content svg{
         fill: var(--lit-icon-color);
     }
+    .ellipses
+    {
+        text-overflow: ellipsis;
+        overflow: hidden; 
+        white-space: nowrap;
+    }
     `, scrollbar];
     RO = new ResizeObserverController(this);
     _columns: TColumnItem[] = [];
@@ -132,7 +138,7 @@ export class TableElement extends LitElement{
     @property({type: Boolean}) paginationToHeight: boolean = false;
     @property({type: Number}) pageLength: number = 5;
     @state() sort: string = '';
-    @state() sortDirection: TSortDirections = 'descend';
+    @state() sortDirection: TSortDirections = 'ascend';
     @state() page: number = 0;
     _data: Array<ISourceItem> = [];
     _rect: DOMRect | null = null;
@@ -160,7 +166,7 @@ export class TableElement extends LitElement{
         const data = this.columns.filter(it => it.defaultSort)[0];
         if(data){
             this.sort = data.key;
-            this.sortDirection = data.sortDirections?.[0] || 'descend';
+            this.sortDirection = data.sortDirections?.[0] || 'ascend';
         }
     }
     hasFilters(){

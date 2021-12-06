@@ -83,6 +83,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     @property({type: Number}) optionsWidth: number = 0;
     @property({type: Number}) optionsHeight: number = 0;
     @property({type: String}) value: string = '';
+    @property({type: String}) staticLabel: string | TemplateResult = '';
     @state() open: boolean = false;
     @state() _slot: DocumentFragment | null = null;
     tabIndex = 0;
@@ -124,7 +125,13 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     }
     private _selectedTemplate(){
         return html`
-        ${this._slot ? html`<div>${this._slot}</div>` : html`<slot name = "selected">-</slot>`}
+        ${
+            this.staticLabel 
+                ? this.staticLabel
+                : (this._slot 
+                    ? html`<div>${this._slot}</div>` 
+                    : html`<slot name = "selected">-</slot>`)
+        }
         <slot name = "icon">
             <div class = "icon-dropdown"><lit-icon 
                 class = "${this.open ? 'dropup' : ''}" 

@@ -15,9 +15,7 @@ export class LitTableCell extends LitElement{
     :host(.half-hidden){
         opacity: 0.5;
     }
-    :host(.ellipses), 
-    .ellipses
-    {
+    :host(.ellipses){
         text-overflow: ellipsis;
         overflow: hidden; 
         white-space: nowrap;

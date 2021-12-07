@@ -18,15 +18,19 @@ export class LitText extends LitElement{
         :host([status="error"]),
         :host([status="danger"]){
             color: var(--lit-error-color, red);
+            --lit-icon-color: var(--lit-error-color);
         }
         :host([status="attention"]){
             color: var(--lit-attention-color, #c4c10d);
+            --lit-icon-color: var(--lit-attention-color);
         }
         :host([status="success"]){
             color: var(--lit-success-color, #24d40d);
+            --lit-icon-color: var(--lit-success-color);
         }
         :host([status="accented"]){
             color: var(--lit-accented-color, #24d40d);
+            --lit-icon-color: var(--lit-accented-color);
         }
         :host([center]){
             text-align: center;

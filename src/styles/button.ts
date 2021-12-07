@@ -16,7 +16,6 @@ export const button = [
         align-items: center;
         grid-template-columns: auto;
         height: 100%;
-        padding: var(--lit-button-padding, 6px 18px);
         border: 1px solid  var(--lit-button-border,  hsl(222, 20%, 65%));
         outline: var(--lit-button-outline, none);
         border-radius: var(--lit-button-radius, 1px);
@@ -102,11 +101,16 @@ export const button = [
     }
 
     :host([size = "small"]) .wrapper{
-        padding: 4px 6px;
+        padding: var(--lit-button-small-padding, 4px 6px);
+        font-size: var(--lit-button-small-font-size);
+    }
+    :host([size = "medium"]) .wrapper{
+        padding: var(--lit-button-padding, 6px 14px);
+        font-size: var(--lit-button-font-size);
     }
     :host([size = "large"]) .wrapper{
-        padding: 8px 16px;
-        font-size: 1.3rem;
+        padding: var(--lit-button-large-padding,  8px 20px);
+        font-size: var(--lit-button-large-font-size, 1.1rem);
     }
     :host([borderless]) .wrapper,
     :host([borderless]) .wrapper:hover,

@@ -16,6 +16,7 @@ export class LitTableHeader extends LitElement{
         padding: var(--lit-cell-header-padding, 0 15px);
         font-weight: 600;
         position: relative;
+        display: flex;
         --lit-icon-font-size: 8px;
         --lit-icon-color: var(--lit-table-icon-color, rgba(0,0,0,0.2));
     }
@@ -101,7 +102,15 @@ export class LitTableHeader extends LitElement{
     .row{
         display: contents;
     }
+    :host([align = center]){
+        justify-content: center;
+    }
+    :host([align = right]){
+        justify-content: right;
+    }
     `, noselect];
+    
+    @property({type: String, reflect: true}) align: string = 'left';
     @property({type: Object}) item?: TColumnItem = undefined;
     @property({type: String}) sort: string = '';
     @property({type: String, reflect: true}) sortDirection: string = 'ascend';

@@ -31,14 +31,15 @@ export type TColumnItem = {
     sorter?: boolean | ((a: ISourceItem, b: ISourceItem, direction: TSortDirections) => number); 
     sortDirections?: TSortDirections[];
     defaultSort?: boolean
+    align?: string
     ellipses?: boolean
     halfHidden?: (data: any) => boolean
 }
 export type TSortDirections = 'ascend' | 'descend';
 
 const nodataSVG = svg`
-<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
-<path d="M117.92 114.453L12.7467 9.22665L5.92 16L16 26.1333V101.333C16 104.162 17.1238 106.875 19.1242 108.876C21.1246 110.876 23.8377 112 26.6667 112H101.867L111.147 121.227L117.92 114.453ZM26.6667 101.333V36.7467L91.2533 101.333H26.6667ZM43.7333 26.6667L33.0667 16H101.333C104.162 16 106.875 17.1238 108.876 19.1242C110.876 21.1246 112 23.8377 112 26.6667V94.9333L101.333 84.2667V26.6667H43.7333Z" />
+<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M46.0625 44.7083L4.97917 3.60416L2.3125 6.24999L6.25 10.2083V39.5833C6.25 40.6884 6.68899 41.7482 7.47039 42.5296C8.25179 43.311 9.3116 43.75 10.4167 43.75H39.7917L43.4167 47.3542L46.0625 44.7083ZM10.4167 39.5833V14.3542L35.6458 39.5833H10.4167ZM17.0833 10.4167L12.9167 6.24999H39.5833C40.6884 6.24999 41.7482 6.68898 42.5296 7.47038C43.311 8.25178 43.75 9.31159 43.75 10.4167V37.0833L39.5833 32.9167V10.4167H17.0833Z" fill="black"/>
 </svg>`;
 
 @customElement("lit-table")
@@ -96,6 +97,13 @@ export class TableElement extends LitElement{
         text-overflow: ellipsis;
         overflow: hidden; 
         white-space: nowrap;
+    }
+    lit-table-cell .full-content{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
     }
     `, scrollbar];
     RO = new ResizeObserverController(this);
@@ -253,7 +261,9 @@ export class TableElement extends LitElement{
                         ellipses: !!col.ellipses,
                         'half-hidden': col.halfHidden ? col.halfHidden(it) : false
                     }                    
-                    return html`<lit-table-cell class = "${classMap(classes)}">${col.valueFn ? col.valueFn(it) : it[col.key]}</lit-table-cell>`
+                    return html`<lit-table-cell 
+                                    .align = "${col.align || "left"}"
+                                    class = "${classMap(classes)}">${col.valueFn ? col.valueFn(it) : it[col.key]}</lit-table-cell>`
                 })}
             </lit-table-row>`
         )

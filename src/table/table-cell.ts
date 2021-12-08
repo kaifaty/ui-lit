@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators';
 
 @customElement("lit-table-cell")
 export class LitTableCell extends LitElement{

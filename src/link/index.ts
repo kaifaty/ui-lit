@@ -26,6 +26,7 @@ export class LitLink extends LitElement{
     }
     a{
         color: var(--lit-link-color, hsl(200, 80%, 55%));
+        --lit-icon-color: var(--lit-link-color);
         text-decoration: none;
         cursor: pointer;
         display: inline-flex;

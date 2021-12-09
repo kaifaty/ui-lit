@@ -5,22 +5,24 @@ import { customElement, property } from 'lit/decorators';
 export class LitTableCell extends LitElement{
     static styles = css`
     :host{
-        display: block;
         padding: var(--lit-cell-padding, 0 15px);
         transition: background-color 0.3s ease;
         height: var(--row-height, 30px);
-        display: inline-flex;
+        display: flex;
         align-items: center;
     }
     :host(.half-hidden){
         opacity: 0.5;
     }
-    :host(.ellipses){
-        text-overflow: ellipsis;
-        overflow: hidden; 
-        white-space: nowrap;
+    :host([align = center]){
+        justify-content: center;
+    }
+    :host([align = right]){
+        justify-content: right;
     }
     `;
+    
+    @property({type: String, reflect: true}) align: string = 'left';
     render(){
         return html`<slot></slot>`;
     }

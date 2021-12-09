@@ -30,6 +30,7 @@ export type TColumnItem = {
     //onFilter?: (value: string, record: ISourceItem) => boolean;
     sorter?: boolean | ((a: ISourceItem, b: ISourceItem, direction: TSortDirections) => number); 
     sortDirections?: TSortDirections[];
+    width?: number
     defaultSort?: boolean
     align?: string
     ellipses?: boolean
@@ -92,8 +93,12 @@ export class TableElement extends LitElement{
     .flex-content svg{
         fill: var(--lit-icon-color);
     }
+    
     .ellipses
     {
+        overflow: hidden; 
+    }
+    .ellipses > div{
         text-overflow: ellipsis;
         overflow: hidden; 
         white-space: nowrap;
@@ -243,6 +248,8 @@ export class TableElement extends LitElement{
         return this.columns.map((col, i) => {
             return html`<lit-table-header 
                 @changeFilter = "${this._changeFilter}"
+                style = "min-width: ${col.width ? col.width + "px" : "auto" }"
+                .align = "${col.align || "left"}"
                 .sort = "${this.sort}"
                 .sortDirection = "${this.sortDirection}"
                 .item = "${col}"></lit-table-header>`
@@ -255,7 +262,9 @@ export class TableElement extends LitElement{
                 : this._data, 
             it => it.key, 
             it => html`
-            <lit-table-row>
+            <lit-table-row 
+            
+            >
                 ${this.columns.map((col, i) => {
                     const classes = {
                         ellipses: !!col.ellipses,
@@ -274,6 +283,9 @@ export class TableElement extends LitElement{
         this.dispatchEvent(new CustomEvent('tableResize', {
             detail: rect
         }));
+        Promise.resolve().then(() => {
+            this.recalcPageLength();
+        })
     }
     render(){
         return html`

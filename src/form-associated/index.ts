@@ -6,6 +6,7 @@ import type { LitNote } from '../note';
 import '../note';
 import { ref, createRef } from 'lit/directives/ref.js';
 import type { LitLabel } from '../label';
+import { LitFrom } from '../form/index';
 
 type TValidationMessageKey = keyof ValidityStateFlags;
 type TValidationMessages = Record<TValidationMessageKey, {[k: string] : string}>
@@ -80,6 +81,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         public max?: number = NaN;
         public step?: number = NaN;
         public pattern?: string = '';
+        _submitForm: LitFrom | null = null;
 
         
         constructor(...args: any[]) {
@@ -93,7 +95,12 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             this.dispatchEvent(new CustomEvent("fromAttached", {
                 bubbles: true,
                 composed: true,
-                detail: this,
+                detail: {
+                    element: this,
+                    onAttatch: (form: LitFrom) => {
+                        this._submitForm = form;
+                    }
+                }
             }));
         }
         public disconnectedCallback(){

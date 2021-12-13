@@ -14,10 +14,9 @@ let LitFrom = class LitFrom extends LitElement {
             this.submit();
         };
         this._handleFormAttached = (e) => {
-            this._elements.push(e.detail);
-        };
-        this._handleFormDettached = (e) => {
-            this._elements.filter(it => e.detail !== it);
+            var _a, _b;
+            this._elements.push(e.detail.element);
+            (_b = (_a = e.detail).onAttatch) === null || _b === void 0 ? void 0 : _b.call(_a, this);
         };
     }
     get length() {
@@ -33,13 +32,16 @@ let LitFrom = class LitFrom extends LitElement {
         super.connectedCallback();
         this.addEventListener("submitForm", this._handleSubmit);
         this.addEventListener("fromAttached", this._handleFormAttached);
-        this.addEventListener("fromDettached", this._handleFormDettached);
+        //this.addEventListener("fromDettached", this._handleFormDettached as EventListener);
     }
     disconnectedCallback() {
         super.disconnectedCallback();
         this.removeEventListener("submitForm", this._handleSubmit);
         this.removeEventListener("fromAttached", this._handleFormAttached);
-        this.removeEventListener("fromDettached", this._handleFormDettached);
+        //this.removeEventListener("fromDettached", this._handleFormDettached as EventListener);
+    }
+    detatchElement(el) {
+        this._elements.filter(it => el !== it);
     }
     getData() {
         const data = {};

@@ -40,13 +40,13 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         super.connectedCallback();
         this.addEventListener("submitForm", this._handleSubmit)
         this.addEventListener("fromAttached", this._handleFormAttached as EventListener);
-        this.addEventListener("fromDettached", this._handleFormDettached as EventListener);
+        //this.addEventListener("fromDettached", this._handleFormDettached as EventListener);
     }
     disconnectedCallback(){
         super.disconnectedCallback();
         this.removeEventListener("submitForm", this._handleSubmit)
         this.removeEventListener("fromAttached", this._handleFormAttached as EventListener);
-        this.removeEventListener("fromDettached", this._handleFormDettached as EventListener);
+        //this.removeEventListener("fromDettached", this._handleFormDettached as EventListener);
     }
 
     // ==== Events ==== 
@@ -55,10 +55,12 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         this.submit();
     }
     private _handleFormAttached = (e: CustomEvent) => {
-        this._elements.push(e.detail);
+        this._elements.push(e.detail.element);
+        e.detail.onAttatch?.(this);
+
     } 
-    private _handleFormDettached = (e: CustomEvent) => {
-        this._elements.filter(it => e.detail !== it);
+    detatchElement(el: HTMLElement){
+        this._elements.filter(it => el !== it);
     }
     getData(){
         const data: TReturnData = {};

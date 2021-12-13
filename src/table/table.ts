@@ -69,6 +69,7 @@ export class TableElement extends LitElement{
         grid-template-columns: var(--lit-table-cells, repeat(var(--lit-cells), auto));
         align-content: start;
         overflow-y: auto;
+        height: 100%;
     }
     .content.nodata{
         align-content: stretch;
@@ -119,6 +120,7 @@ export class TableElement extends LitElement{
         if(oldValue.length !== value.length){
             this.style.setProperty('--lit-cells', this.columns.length.toString());
         }
+        this._updateSort();
         this.requestUpdate('columns', oldValue);
     }
     get columns(){
@@ -174,10 +176,9 @@ export class TableElement extends LitElement{
         }
         return 0;
     }
-    connectedCallback(){
-        super.connectedCallback()
+    private _updateSort(){
         const data = this.columns.filter(it => it.defaultSort)[0];
-        if(data){
+        if(data?.key !== this.sort){
             this.sort = data.key;
             this.sortDirection = data.sortDirections?.[0] || 'ascend';
         }
@@ -233,13 +234,15 @@ export class TableElement extends LitElement{
         const dataSource = this.getFilteredData();
         if(this.sort){
             const data = this.columns.filter(it => it.key === this.sort)[0];
-            const sorter = (a: ISourceItem, b: ISourceItem) => {
-                if(typeof data.sorter === 'function'){
-                    return data.sorter(a, b, this.sortDirection);
+            if(data){
+                const sorter = (a: ISourceItem, b: ISourceItem) => {
+                    if(typeof data.sorter === 'function'){
+                        return data.sorter(a, b, this.sortDirection);
+                    }
+                    return this.sortFunction(a, b, this.sortDirection);
                 }
-                return this.sortFunction(a, b, this.sortDirection);
+                dataSource.sort(sorter);
             }
-            dataSource.sort(sorter);
         }
         this._data = dataSource;
 

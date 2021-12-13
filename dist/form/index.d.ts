@@ -23,7 +23,7 @@ export declare class LitFrom extends LitElement implements IFormElement, IFormPr
     disconnectedCallback(): void;
     private _handleSubmit;
     private _handleFormAttached;
-    private _handleFormDettached;
+    detatchElement(el: HTMLElement): void;
     getData(): TReturnData;
     checkValidity(): boolean;
     reportValidity(): boolean;

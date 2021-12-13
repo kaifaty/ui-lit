@@ -66,6 +66,7 @@ export const formAssociated = (superClass) => {
             this.max = NaN;
             this.step = NaN;
             this.pattern = '';
+            this._submitForm = null;
             this.required = false;
         }
         static get properties() {
@@ -79,7 +80,12 @@ export const formAssociated = (superClass) => {
             this.dispatchEvent(new CustomEvent("fromAttached", {
                 bubbles: true,
                 composed: true,
-                detail: this,
+                detail: {
+                    element: this,
+                    onAttatch: (form) => {
+                        this._submitForm = form;
+                    }
+                }
             }));
         }
         disconnectedCallback() {

@@ -73,6 +73,9 @@ export class LitPagination extends LitElement{
         const oldValues = this._length;
         this._length = value
         this.requestUpdate('length', oldValues);
+        if(this.page * this.pageLength > this.length ){
+            this.setPage(Math.floor(this.length / this.pageLength))
+        }
     }
     get pageCount(){
         return Math.max(Math.ceil(this.length / this.pageLength) - 1, 0);

@@ -83,7 +83,7 @@ const Table = (text: string) =>
         pagination
         paginationToHeight        
         defaultSort = "age"
-        .dataSource = "${[]}"
+        .dataSource = "${dataSource}"
         .columns = "${columns}"
         rowHeight = "20"
         headerHeight = "20"

@@ -23,6 +23,7 @@ export const button = [
         background-color: var(--lit-button-background, hsl(222, 20%, 99%));
         --icon-color: var(--lit-button-color);
         font-weight: var(--lit-button-weight, 600);
+        padding: var(--lit-button-padding, 6px 14px);
     }
 
     :host([center]) .wrapper{

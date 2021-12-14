@@ -60,7 +60,7 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
 
     } 
     detatchElement(el: HTMLElement){
-        this._elements.filter(it => el !== it);
+        this._elements = this._elements.filter(it => el !== it);
     }
     getData(){
         const data: TReturnData = {};

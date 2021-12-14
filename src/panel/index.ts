@@ -11,7 +11,12 @@ export class LitPanel extends LitElement{
         color: var(--lit-panel-color, var(--app-font-color, hsl(299, 70%, 10%)));
         padding: var(--lit-panel-padding, 10px 15px);
         border: 1px solid var(--lit-panel-border, initial);
-    }`;
+    }
+    :host([danger]){
+        background-color: var(--lit-panel-danger-background, hsl(0, 80%, 70%));
+        color: var(--lit-panel-danger-color, hsl(0, 80%, 95%));
+    }
+    `;
     render(){
         return html`<slot></slot>`;
     }

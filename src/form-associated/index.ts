@@ -105,11 +105,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         }
         public disconnectedCallback(){
             super.disconnectedCallback();
-            this.dispatchEvent(new CustomEvent("fromDettached", {
-                bubbles: true,
-                composed: true,
-                detail: this,
-            }));
+            this._submitForm?.detatchElement(this);
         }
         render(){
             if(this.showNote){

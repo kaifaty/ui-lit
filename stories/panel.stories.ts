@@ -4,15 +4,17 @@ import { Story, Meta } from '@storybook/web-components';
 import '../dist/panel';
 
 
-const panel = (text: string) => 
-    html`<lit-panel >${text}</lit-panel>`;
+const panel = ({text, danger}) => 
+    html`<lit-panel ?danger = "${danger}">${text}</lit-panel>`;
 
 
-const Template: Story<Partial<{text: string}>> = (data) => panel(data.text);
+const Template: Story<Partial<{text: string}>> = (data) => panel(data);
 
 export const Default = Template.bind({});
 Default.args = {
-    text: 'Panel text'
+    text: 'Panel text',
+    danger: false
+
 }
 export default {
     title: 'Text/Panel',

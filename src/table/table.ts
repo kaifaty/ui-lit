@@ -39,8 +39,8 @@ export type TColumnItem = {
 export type TSortDirections = 'ascend' | 'descend';
 
 const nodataSVG = svg`
-<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M46.0625 44.7083L4.97917 3.60416L2.3125 6.24999L6.25 10.2083V39.5833C6.25 40.6884 6.68899 41.7482 7.47039 42.5296C8.25179 43.311 9.3116 43.75 10.4167 43.75H39.7917L43.4167 47.3542L46.0625 44.7083ZM10.4167 39.5833V14.3542L35.6458 39.5833H10.4167ZM17.0833 10.4167L12.9167 6.24999H39.5833C40.6884 6.24999 41.7482 6.68898 42.5296 7.47038C43.311 8.25178 43.75 9.31159 43.75 10.4167V37.0833L39.5833 32.9167V10.4167H17.0833Z" fill="black"/>
+<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<path d="M46.0625 44.7083L4.97917 3.60416L2.3125 6.24999L6.25 10.2083V39.5833C6.25 40.6884 6.68899 41.7482 7.47039 42.5296C8.25179 43.311 9.3116 43.75 10.4167 43.75H39.7917L43.4167 47.3542L46.0625 44.7083ZM10.4167 39.5833V14.3542L35.6458 39.5833H10.4167ZM17.0833 10.4167L12.9167 6.24999H39.5833C40.6884 6.24999 41.7482 6.68898 42.5296 7.47038C43.311 8.25178 43.75 9.31159 43.75 10.4167V37.0833L39.5833 32.9167V10.4167H17.0833Z"/>
 </svg>`;
 
 @customElement("lit-table")
@@ -178,7 +178,7 @@ export class TableElement extends LitElement{
     }
     private _updateSort(){
         const data = this.columns.filter(it => it.defaultSort)[0];
-        if(data?.key !== this.sort){
+        if(data && data?.key !== this.sort){
             this.sort = data.key;
             this.sortDirection = data.sortDirections?.[0] || 'ascend';
         }

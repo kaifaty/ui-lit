@@ -41,7 +41,7 @@ let LitFrom = class LitFrom extends LitElement {
         //this.removeEventListener("fromDettached", this._handleFormDettached as EventListener);
     }
     detatchElement(el) {
-        this._elements.filter(it => el !== it);
+        this._elements = this._elements.filter(it => el !== it);
     }
     getData() {
         const data = {};

@@ -89,12 +89,9 @@ export const formAssociated = (superClass) => {
             }));
         }
         disconnectedCallback() {
+            var _a;
             super.disconnectedCallback();
-            this.dispatchEvent(new CustomEvent("fromDettached", {
-                bubbles: true,
-                composed: true,
-                detail: this,
-            }));
+            (_a = this._submitForm) === null || _a === void 0 ? void 0 : _a.detatchElement(this);
         }
         render() {
             if (this.showNote) {

@@ -107,7 +107,8 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     willUpdate(){
         this._update();
     }
-    firstUpdated(){
+    firstUpdated(d: any){
+        super.firstUpdated(d);
         this._update();
     }
     private _onChanged(e: CustomEvent){

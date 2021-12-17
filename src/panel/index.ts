@@ -15,6 +15,7 @@ export class LitPanel extends LitElement{
     :host([danger]){
         background-color: var(--lit-panel-danger-background, hsl(0, 80%, 70%));
         color: var(--lit-panel-danger-color, hsl(0, 80%, 95%));
+        border: 1px solid var(--lit-panel-danger-border, initial);
     }
     `;
     render(){

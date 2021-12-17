@@ -45,6 +45,7 @@ export const formAssociated = (superClass) => {
             this.required = false;
             this.readonly = false;
             this.name = '';
+            this.valid = true;
             this.validity = {
                 badInput: false,
                 customError: false,
@@ -58,7 +59,6 @@ export const formAssociated = (superClass) => {
                 valueMissing: false,
             };
             this.noteRef = createRef();
-            this.valid = true;
             this.value = '';
             this.customValidationMessage = '';
             this._isFirstUpdated = false;
@@ -170,14 +170,6 @@ export const formAssociated = (superClass) => {
             if (!this._isFirstUpdated)
                 return false;
             this.valid = !Object.values(this.validity).filter(it => it).length;
-            if (this.isConnected) {
-                if (this.valid) {
-                    this.classList.remove("error-valid");
-                }
-                else {
-                    this.classList.add("error-valid");
-                }
-            }
             return this.valid;
         }
         reportValidity() {
@@ -228,6 +220,9 @@ export const formAssociated = (superClass) => {
     __decorate([
         property({ type: String })
     ], FormAssociated.prototype, "name", void 0);
+    __decorate([
+        property({ type: Boolean, reflect: true })
+    ], FormAssociated.prototype, "valid", void 0);
     ;
     return FormAssociated;
     ;

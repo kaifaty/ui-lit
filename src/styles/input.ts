@@ -4,10 +4,10 @@ export const input = css`
     display: var(--lit-input-display, inline-block);
     height: var(--lit-input-height);
 }
-:host(.error-valid) input{
+:host([valid]) input{
     border: 1px solid var(--lit-error-border, #ff7e6d);
 }
-:host(.error-valid) input:focus{
+:host([valid]) input:focus{
     outline: 1px solid var(--lit-error-border, #ff7e6d);
 }
 :host([disabled]){

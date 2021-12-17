@@ -60,6 +60,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         @property({type: Boolean}) required: boolean = false;
         @property({type: Boolean}) readonly: boolean = false;
         @property({type: String}) name: string = '';
+        @property({type: Boolean, reflect: true}) valid: boolean = true;
         public validity: ValidityStateFlags = {
             badInput: false,
             customError: false,
@@ -73,7 +74,6 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             valueMissing: false,
         };
         public noteRef = createRef<LitNote>();
-        public valid: boolean = true;
         public value: string = '';
         protected customValidationMessage = '';
         _isFirstUpdated = false;
@@ -184,14 +184,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         checkValidity(){
             if(!this._isFirstUpdated) return false;
             this.valid = !Object.values(this.validity).filter(it => it).length;
-            if(this.isConnected){
-                if(this.valid){
-                    this.classList.remove("error-valid");
-                }
-                else{
-                    this.classList.add("error-valid");
-                }
-            }
+            
             return this.valid;
         }
         reportValidity(){            

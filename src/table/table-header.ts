@@ -15,6 +15,7 @@ export class LitTableHeader extends LitElement{
     :host{
         padding: var(--lit-cell-header-padding, 0 15px);
         font-weight: 600;
+        font-size: var(--lit-table-header-font-size, inherit);
         position: relative;
         display: flex;
         --lit-icon-font-size: 8px;

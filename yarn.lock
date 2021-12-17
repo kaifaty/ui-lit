@@ -6759,6 +6759,11 @@ kailib@^1.0.32:
   resolved "https://registry.npmjs.org/kailib/-/kailib-1.0.32.tgz"
   integrity sha512-4gENogAMBz8E12VN8eENNpOpZ0TbU0LlwlB/nqqH7TzbyiOASs134aX5aHW4O/U/aXD7cArMB6JjAy+92MrzUQ==
 
+kailib@^1.0.33:
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/kailib/-/kailib-1.0.33.tgz#20d905f715425bd815dd6d762015ca45e77bd064"
+  integrity sha512-jNwLe9q/Gc3CwXHIIn09F0TbezeEDWM89nc3IZNZ0sJ8EKrWOrVJUXWO/w0LgmbMrdrSuS0q4J/APVFKGAV7tQ==
+
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"
   resolved "https://registry.npmjs.org/kind-of/-/kind-of-3.2.2.tgz"
@@ -10007,6 +10012,16 @@ uglify-js@^3.1.4:
   version "3.14.3"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.14.3.tgz#c0f25dfea1e8e5323eccf59610be08b6043c15cf"
   integrity sha512-mic3aOdiq01DuSVx0TseaEzMIVqebMZ0Z3vaeDhFEh9bsc24hV1TFvN74reA2vs08D0ZWfNjAcJ3UbVLaBss+g==
+
+ui-lit@^0.0.68:
+  version "0.0.68"
+  resolved "https://registry.yarnpkg.com/ui-lit/-/ui-lit-0.0.68.tgz#4d91bdf8b209e4daad6d56ec5f5d226060149499"
+  integrity sha512-XcGVr35nzqiW2zImmpJVBdh1RAFN0exS74mMVaFf20D3fuFhjwOsEUshyIg5qpnMq9dHEUzpY45WyhIpYVszig==
+  dependencies:
+    "@swc/helpers" "^0.2.13"
+    kailib "^1.0.33"
+    lit "^2.0.2"
+    qrcode "^1.4.4"
 
 unbox-primitive@^1.0.1:
   version "1.0.1"

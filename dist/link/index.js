@@ -9,6 +9,7 @@ let LitLink = class LitLink extends LitElement {
         this.type = 'link';
         this.rel = "nofollow";
         this.target = "_self";
+        this.underlined = false;
     }
     render() {
         return html `<a 
@@ -22,12 +23,8 @@ LitLink.styles = css `
         display: inline-block;
         box-sizing: border-box;
     }
-    :host(.underlined) a{
+    :host([underlined]) a{
         border-bottom: 1px solid var(--lit-link-color, hsl(200, 80%, 55%));
-    }
-    a:focus{
-        outline: 1px solid var(--lit-link-color, hsl(200, 80%, 55%));
-        border-bottom: 1px solid transparent;
     }
     a{
         color: var(--lit-link-color, hsl(200, 80%, 55%));
@@ -57,6 +54,9 @@ __decorate([
 __decorate([
     property({ type: String })
 ], LitLink.prototype, "target", void 0);
+__decorate([
+    property({ type: Boolean, reflect: true })
+], LitLink.prototype, "underlined", void 0);
 LitLink = __decorate([
     customElement("lit-link")
 ], LitLink);

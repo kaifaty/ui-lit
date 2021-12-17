@@ -17,12 +17,8 @@ export class LitLink extends LitElement{
         display: inline-block;
         box-sizing: border-box;
     }
-    :host(.underlined) a{
+    :host([underlined]) a{
         border-bottom: 1px solid var(--lit-link-color, hsl(200, 80%, 55%));
-    }
-    a:focus{
-        outline: 1px solid var(--lit-link-color, hsl(200, 80%, 55%));
-        border-bottom: 1px solid transparent;
     }
     a{
         color: var(--lit-link-color, hsl(200, 80%, 55%));
@@ -44,6 +40,7 @@ export class LitLink extends LitElement{
     @property({type: String}) type: "button" | "link" = 'link';
     @property({type: String}) rel?: string = "nofollow";
     @property({type: String}) target: TLinkTartget = "_self";
+    @property({type: Boolean, reflect: true}) underlined: boolean = false
     render(){
         return html`<a 
                     rel = "${ifDefined(this.rel)}"

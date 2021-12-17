@@ -11,6 +11,7 @@ export declare class LitLink extends LitElement {
     type: "button" | "link";
     rel?: string;
     target: TLinkTartget;
+    underlined: boolean;
     render(): import("lit-html").TemplateResult<1>;
 }
 declare global {

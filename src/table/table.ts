@@ -90,6 +90,7 @@ export class TableElement extends LitElement{
         height: 100%;
         grid-column: 1 / calc(var(--lit-cells) + 1);
         opacity: 0.1;
+        min-height: 100px;
     }
     .flex-content svg{
         fill: var(--lit-icon-color);

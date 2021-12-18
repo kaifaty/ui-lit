@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators';
 import { FormAssociatedElement } from '../form-associated/interface';
 import '../label';
 import type { LitCheckbox } from '../checkbox/index';
+import { LitNumberField } from '../number/index';
 
 export interface IFormProps {
     disabled: boolean
@@ -64,12 +65,15 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
     }
     getData(){
         const data: TReturnData = {};
-
         this._elements.forEach(it => {
-            if(it.tagName.toLocaleLowerCase() === "lit-checkbox" && it.name){
+            if(!it.name || it.disabled) return;
+            if(it.tagName.toLocaleLowerCase() === "lit-checkbox"){
                 data[it.name] = (it as LitCheckbox).checked;
             }
-            else if(it.name){
+            else if(it.tagName.toLocaleLowerCase() === "lit-numberfiled"){
+                data[it.name] = (it as LitNumberField).valueAsNumber;
+            }
+            else{
                 data[it.name] = it.value;
             }
         })

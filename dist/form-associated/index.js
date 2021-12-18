@@ -61,7 +61,7 @@ export const formAssociated = (superClass) => {
             this.noteRef = createRef();
             this.value = '';
             this.customValidationMessage = '';
-            this._isFirstUpdated = false;
+            this.isFirstUpdated = false;
             this.min = NaN;
             this.max = NaN;
             this.step = NaN;
@@ -118,7 +118,7 @@ export const formAssociated = (superClass) => {
         }
         async firstUpdated() {
             await this.updateComplete;
-            this._isFirstUpdated = true;
+            this.isFirstUpdated = true;
         }
         findLabel() {
             let parent = this.parentElement;
@@ -167,7 +167,7 @@ export const formAssociated = (superClass) => {
             return "";
         }
         checkValidity() {
-            if (!this._isFirstUpdated)
+            if (!this.isFirstUpdated)
                 return false;
             this.valid = !Object.values(this.validity).filter(it => it).length;
             return this.valid;

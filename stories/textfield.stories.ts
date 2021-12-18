@@ -57,7 +57,7 @@ export default {
     title: 'Form assosiated/Text field',
     argTypes: {
         type: {
-          options: ['text', 'password'],
+          options: ['text', 'password', 'date'],
           control: { type: 'select' }
         },
         inputmode: {

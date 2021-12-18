@@ -76,7 +76,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         public noteRef = createRef<LitNote>();
         public value: string = '';
         protected customValidationMessage = '';
-        _isFirstUpdated = false;
+        public isFirstUpdated = false;
         public min?: number = NaN;
         public max?: number = NaN;
         public step?: number = NaN;
@@ -132,7 +132,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         }
         async firstUpdated(){
             await this.updateComplete;
-            this._isFirstUpdated = true
+            this.isFirstUpdated = true
         }
 
         public findLabel(): LitLabel | null{
@@ -182,7 +182,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             return "";
         }
         checkValidity(){
-            if(!this._isFirstUpdated) return false;
+            if(!this.isFirstUpdated) return false;
             this.valid = !Object.values(this.validity).filter(it => it).length;
             
             return this.valid;

@@ -1,5 +1,5 @@
 import { LitElement, html, css, nothing, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property, state } from 'lit/decorators';
 import { formAssociated } from '../form-associated/index';
 import type { FormAssociated } from '../form-associated/interface';
 import '../icon';
@@ -7,6 +7,9 @@ import { input } from '../styles/input';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
 
 export type TInputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'
+
+export type TFileldTypes = 'text' | 'password' | 'date'
+
 export interface TextProps extends FormAssociated{
     size: number,
     minlength: number,
@@ -20,7 +23,7 @@ export interface TextProps extends FormAssociated{
     pattern: string,
     value: string ,
     icon: string | TemplateResult,
-    type: 'text' | 'password',
+    type: TFileldTypes,
 }
 
 @customElement("lit-textfield")
@@ -45,13 +48,34 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
     @property({type: String}) pattern: string = '';
     @property({type: String}) placeholder: string = '';
     @property({type: String}) inputmode: TInputMode = 'text';
-    @property({type: String}) type: 'text' | 'password' = 'text';
+    @property({type: String}) type: TFileldTypes = 'text';
 
     @property({type: Boolean}) useCancelButton: boolean = false;
     @property() icon: string | TemplateResult = '';
     inputRef: Ref<HTMLInputElement> = createRef();
 
+    @state() hiddenPassword = true
 
+    set valueAsDate(value: Date){
+        if(this.type === 'date'){
+            this.value = (value).toISOString().substring(0, 10);
+        }
+    }
+
+    get valueAsNumber(){
+        if(this.type === 'date'){
+            return this.value ? (new Date(this.value)).getTime() : 0;
+        }
+        return Number(this.value);
+    }
+    set valueAsNumber(value: number){
+        if(this.type === 'date'){
+            this.value = (new Date(value)).toISOString().substring(0, 10);
+        }
+        else{
+            this.value = value.toString();
+        }
+    }
 
     _value: string = '';
     get value(){
@@ -59,8 +83,15 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
     }
     set value(value: string){
         const oldValue = this._value;
-        this._value = value;;
+        this._value = value;
         this.requestUpdate('value', oldValue);
+    }
+    
+    private _getType(){
+        if(this.type === 'password'){
+            return this.hiddenPassword ? 'password' : 'text'
+        }
+        return this.type
     }
 
     public connectedCallback(): void {
@@ -73,6 +104,9 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
     }
 
     public validate(){
+        if(this.type === 'date'){
+            return;
+        }
         super.validate();
         if(!isNaN(this.minlength)){
             if(this.value.length < this.minlength){
@@ -100,12 +134,20 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
             }
         }
     }
-    private _iconTemplate(){
-        if(!this.icon) return nothing;
-        return html`<div class = "icon">${this.icon}</div>`;
-    }
-    private _cancelIconTemplate(){
-        if(!this.useCancelButton ||  !this.value) return nothing;
+    private _iconslotTemplate(){
+        if(!this.useCancelButton) {
+            if(this.type === 'password'){
+                return html`<div class = "icon" @click = "${this.toggleHiddenPassword}">
+                    <lit-icon icon = "${this.hiddenPassword ? 'show' : 'hide'}"></lit-icon>
+                </div>`;
+            }
+
+            return html`
+            <div class = "icon">
+                <slot name = icon></slot>
+            </div>`;
+        };
+        if(!this.value) return nothing;
         return html`<lit-icon 
                         @click = "${this.clearValue}"
                         icon = "cancel" 
@@ -115,7 +157,7 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
         return html`
         ${super.render()}
         <div class = "wrapper" >
-            <input type = "${this.type}" 
+            <input type = "${this._getType()}" 
                    placeholder = "${this.placeholder}"
                    spellcheck = "${this.spellcheck}"
                    inputmode = "${this.inputmode}"
@@ -127,8 +169,7 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
                    @change = "${this._onChange}"
                    ${ref(this.inputRef)}
                    .value = "${this.value}">
-            ${this._cancelIconTemplate()}
-            <div class = "icon"><slot name = icon></slot></div>
+            ${this._iconslotTemplate()}
         </div>`;
     }
     updated(_changedProperties: Map<string | number | symbol, unknown>){
@@ -155,7 +196,9 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
         }));
     }
 
-    
+    private toggleHiddenPassword(e: Event){
+        this.hiddenPassword = !this.hiddenPassword;
+    }
     private _onChange(e: Event){
         this.reportValidity();
         this.dispatchEvent(new CustomEvent("change", {

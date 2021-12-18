@@ -4,10 +4,10 @@ export const input = css`
     display: var(--lit-input-display, inline-block);
     height: var(--lit-input-height);
 }
-:host([valid]) input{
+:host(:not([valid])) input{
     border: 1px solid var(--lit-error-border, #ff7e6d);
 }
-:host([valid]) input:focus{
+:host(:not([valid])) input:focus{
     outline: 1px solid var(--lit-error-border, #ff7e6d);
 }
 :host([disabled]){
@@ -26,6 +26,8 @@ export const input = css`
     right: 5px;
     top: 50%;
     transform: translateY(-50%);
+    display: flex;
+    align-items: center;
 }
 input, textarea{
     height: 100%;

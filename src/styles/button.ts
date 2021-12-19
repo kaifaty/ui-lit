@@ -24,6 +24,7 @@ export const button = [
         --icon-color: var(--lit-button-color);
         font-weight: var(--lit-button-weight, 600);
         padding: var(--lit-button-padding, 6px 14px);
+        text-transform: var(--lit-button-text-transform, uppercase);
     }
 
     :host([center]) .wrapper{

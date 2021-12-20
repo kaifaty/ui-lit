@@ -73,6 +73,13 @@ let LitCheckbox = class LitCheckbox extends formAssociated(LitElement) {
     }
     toggle() {
         this.checked = !this.checked;
+        this.dispatchEvent(new CustomEvent("changed", {
+            bubbles: true,
+            detail: {
+                value: this.value,
+                checked: this.checked
+            }
+        }));
     }
 };
 LitCheckbox.styles = [

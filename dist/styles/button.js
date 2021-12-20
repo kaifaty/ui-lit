@@ -10,11 +10,12 @@ export const button = [
     .wrapper{
         cursor: pointer;
         display: grid;
+        
         gap: var(--lit-button-icon-gap, 4px);
         justify-content: var(--button-justify);
         box-sizing: border-box;
         align-items: center;
-        grid-template-columns: auto;
+        grid-auto-flow: column;
         height: 100%;
         border: 1px solid  var(--lit-button-border,  hsl(222, 20%, 65%));
         outline: var(--lit-button-outline, none);
@@ -24,6 +25,7 @@ export const button = [
         --icon-color: var(--lit-button-color);
         font-weight: var(--lit-button-weight, 600);
         padding: var(--lit-button-padding, 6px 14px);
+        text-transform: var(--lit-button-text-transform, uppercase);
     }
 
     :host([center]) .wrapper{
@@ -121,14 +123,6 @@ export const button = [
         
     }
     
-
-    .wrapper.icon-before, 
-    .wrapper.icon-after{
-        grid-template-columns: auto auto;
-    }
-    .wrapper.icon-before.icon-after{
-        grid-template-columns: auto auto auto;
-    }
     .icon{
         align-self: center;
         justify-self: center;

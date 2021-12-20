@@ -23,10 +23,10 @@ LitLink.styles = css `
         display: inline-block;
         box-sizing: border-box;
     }
-    :host([underlined]) a{
+    :host([underlined]:not(type=button)) a{
         border-bottom: 1px solid var(--lit-link-color, hsl(200, 80%, 55%));
     }
-    a{
+    :host(:not([type=button])) a{
         color: var(--lit-link-color, hsl(200, 80%, 55%));
         --lit-icon-color: var(--lit-link-color);
         text-decoration: none;
@@ -35,7 +35,7 @@ LitLink.styles = css `
         align-items: center;
         width: 100%;
     }
-    a:hover:not(:focus){
+    :host(:not([type=button])) a:hover:not(:focus){
         color: var(--lit-link-color-hover, hsl(200, 80%, 60%));
         box-shadow: 0 4px 4px -4px  hsl(200, 80%, 55%);
         -webkit--shadow: 0 4px 4px -4px  hsl(200, 80%, 55%);
@@ -46,7 +46,7 @@ __decorate([
     property({ type: String })
 ], LitLink.prototype, "href", void 0);
 __decorate([
-    property({ type: String })
+    property({ type: String, reflect: true })
 ], LitLink.prototype, "type", void 0);
 __decorate([
     property({ type: String })

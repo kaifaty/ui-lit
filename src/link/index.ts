@@ -20,7 +20,7 @@ export class LitLink extends LitElement{
     :host([underlined]:not(type=button)) a{
         border-bottom: 1px solid var(--lit-link-color, hsl(200, 80%, 55%));
     }
-    :host(:not(type=button)) a{
+    :host(:not([type=button])) a{
         color: var(--lit-link-color, hsl(200, 80%, 55%));
         --lit-icon-color: var(--lit-link-color);
         text-decoration: none;
@@ -29,7 +29,7 @@ export class LitLink extends LitElement{
         align-items: center;
         width: 100%;
     }
-    :host(:not(type=button)) a:hover:not(:focus){
+    :host(:not([type=button])) a:hover:not(:focus){
         color: var(--lit-link-color-hover, hsl(200, 80%, 60%));
         box-shadow: 0 4px 4px -4px  hsl(200, 80%, 55%);
         -webkit--shadow: 0 4px 4px -4px  hsl(200, 80%, 55%);

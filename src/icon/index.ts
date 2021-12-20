@@ -50,7 +50,7 @@ export class LitIcon extends LitElement{
         "orderbook-mode-userOrders": parseInt(`0064`, 16),
         "orderbook-mode-percentPrice": parseInt(`0025`, 16),
         "orderbook-mode-avPrice": parseInt(`0059`, 16),
-        "user": parseInt(`0064`, 16),
+        "user": parseInt(`00A1`, 16),
         "hide": parseInt(`0065`, 16),
         "show": parseInt(`0066`, 16),
         //"filter": parseInt(`0067`, 16),
@@ -140,8 +140,10 @@ export class LitIcon extends LitElement{
     }
     :host(.text-danger),
     :host(.danger),
-    :host(.error){
-        color: var(--error-color, red);
+    :host(.error),
+    :host([error])
+    {
+        color: var(--lit-error-color, red);
     }
     :host(.back){
         transform-origin: center;

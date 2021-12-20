@@ -12,15 +12,15 @@ export class TooltimItem extends LitElement{
         left: 0;
         padding: 4px 10px;
         box-sizing: border-box;
-        border: 1px solid var(--tooltip-border, #333);
+        border: 1px solid var(--lit-tooltip-border, #333);
         border-radius: 5px;
-        background-color: var(--tooltip-background, white);
-        color: var(--tooltip-color);
+        background-color: var(--lit-tooltip-background, white);
+        color: var(--lit-tooltip-color);
         max-width: 280px;
         opacity: 0;
         z-index: 1;
-        font-size: var(--tooltip-font-size, 12px);
-        font-weight: var(--tooltip-weight, normal);
+        font-size: var(--lit-tooltip-font-size, 12px);
+        font-weight: var(--lit-tooltip-weight, normal);
         transition: opacity 0.3s ease-out;
     }
     :host(.visible){

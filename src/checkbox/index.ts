@@ -158,6 +158,13 @@ export class LitCheckbox extends formAssociated(LitElement) implements ICheckbox
     }
     public toggle(){
         this.checked = !this.checked;
+        this.dispatchEvent(new CustomEvent("changed", {
+            bubbles: true,
+            detail: {
+                value: this.value,
+                checked: this.checked
+            }
+        }))
     }
 }
 declare global {

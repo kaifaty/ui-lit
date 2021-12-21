@@ -77,8 +77,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     }
     `, scrollbar];
     
-    private _clickController = new ClickController(this);
-    private _keyPressController = new KeyDownController(this);
+    //private _clickController = new ClickController(this);
     private _focusController = new FocusController(this);
     @property({type: Number}) optionsWidth: number = 0;
     @property({type: Number}) optionsHeight: number = 0;
@@ -88,6 +87,9 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     @state() _slot: DocumentFragment | null = null;
     tabIndex = 0;
     
+    _clickHandleFn: Function | null = null;
+    _keyHandleFn: Function | null = null;
+
     connectedCallback(){
         super.connectedCallback();
         this.addEventListener('selectChanged', this._onChanged as EventListener);
@@ -114,16 +116,41 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     private _onChanged(e: CustomEvent){
         this.value = e.detail.value;
         this._slot = e.detail.slot;
-        this.open = false;
+        this._hide()
         this.dispatchEvent(new CustomEvent("changed", {
             detail: this.value,
             bubbles: true
         }))
     }
+
     private _toggle(){
         if(this.disabled) return;
-        this.open = !this.open;
+        if(this.open){
+            this._hide();
+        }
+        else{
+            this._show();
+        }
     }
+
+    private _hide = () => {
+        this.open = false;
+        document.removeEventListener('click', this._clickHandleFn as EventListener);
+        this._clickHandleFn = null;
+    }
+
+    private _show = () => {
+        this.open = true;
+        if(!this._clickHandleFn){
+            this._clickHandleFn = (e: Event) => this.handleClick(e);
+            document.addEventListener('click', this._clickHandleFn as EventListener);
+        }
+        if(!this._keyHandleFn){
+            this._keyHandleFn = (e: KeyboardEvent) => this.handlekeyDown(e)            
+            document.addEventListener('keydown', this._keyHandleFn as EventListener);
+        }
+    }
+
     private _selectedTemplate(){
         return html`
         ${
@@ -156,6 +183,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
             <slot></slot>
         </div>`;
     }
+
     private _select(isNext: boolean){            
         if(this.disabled) return;
         if(!this._focusController.focused && !this.open){
@@ -173,6 +201,12 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         }
     
     }
+
+    handleClick(e: Event){
+        if(!isClickInElement(e, this)){
+            this._hide()
+        }
+    }
     handlekeyDown(e: KeyboardEvent){
         if(e.key === "ArrowDown"){
             this._select(true)
@@ -188,15 +222,9 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
                 const focused = this.querySelector("lit-select-item:focus");
                 if(focused){
                     this.value = (focused as LitSelectItem).value;
-                    this.open = false;
+                    this._hide()
                 }
             }
-        }
-    }
-    handleDocumentClick(e: Event){
-        const isChild = isClickInElement(e, this);
-        if(!isChild){
-            this.open = false;
         }
     }
 }

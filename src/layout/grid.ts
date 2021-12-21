@@ -67,26 +67,14 @@ export class LitLayoutGrid extends LitElement{
         layerX: number,
         layerY: number
     } = null;
-    __onEndMove = this._onEndMove.bind(this);
     @state() shadowX: number = 0;
     @state() shadowY: number = 0;
     @state() shadowWidth: number = 0;
     @state() shadowHeight: number = 0;
-    @state() maxIndex: number = 3;
+    
+    _maxIndex: number = 2;
 
     
-    connectedCallback(){
-        super.connectedCallback();
-        document.addEventListener('mouseup', this.__onEndMove);
-        setTimeout(() => {
-            this.maxIndex = this._getMaxZIndex() + 1;
-        }, 200)
-    }
-    disconnectedCallback(){
-        document.removeEventListener('mouseup', this.__onEndMove);
-        super.disconnectedCallback();
-    }
-
     shadowTemplate(){
         const width = this.shadowWidth || this.layoutElementData?.element.width || 0;
         const height = this.shadowHeight || this.layoutElementData?.element.height || 0;
@@ -94,25 +82,36 @@ export class LitLayoutGrid extends LitElement{
         const left = this.shadowX || this.layoutElementData?.element.left || 0;
         return html`        
         <div class = "shadow ${this.isMoving || this.isResizing? 'show' : ''}" 
-             style = "z-index: ${this.maxIndex - 2}; width: ${width}px; height: ${height}px; left: ${left}px; top: ${top}px"></div>`;
+             style = "z-index: ${this._maxIndex - 1}; width: ${width}px; height: ${height}px; left: ${left}px; top: ${top}px"></div>`;
     }
     render(){
         return html`
         <div class = "wrapper ff-scrollbar ${this.isMoving ? 'move' : ''} " 
+            @raise = "${this._onRaize}"
             @startmove = "${this._onStartMove}"
             @startResize = "${this._onStartResize}"
-            @mousemove = "${this._onMove}">
-            
+            @mousemove = "${this._onMove}">            
             <slot></slot>
             ${this.shadowTemplate()}
         </div>`;
     }
+    private _raize(node: LitLayout){
+        this._maxIndex = this._getMaxZIndex() + 1
+        node.zIndex = this._maxIndex
+    }
+    private _onRaize(e: CustomEvent){
+        this._raize(e.detail);
+    }
 
     private _onStart(e: CustomEvent){
         this.layoutElementData = e.detail;
-        this.layoutElementData!.element.zIndex = this.maxIndex++;
+
+        this._normalize();
+        this._raize(this.layoutElementData!.element)
         this.shadowX = this.layoutElementData!.element.left;
         this.shadowY = this.layoutElementData!.element.top;
+        document.addEventListener('mouseup', this._onEndMove);
+        
     }
     private _onStartMove(e: CustomEvent){
         this._onStart(e);
@@ -124,7 +123,7 @@ export class LitLayoutGrid extends LitElement{
         this.isResizing = true;
         this.querySelectorAll('lit-layout').forEach(el => el.classList.add('resize'));
     }
-    private _onEndMove(e: Event){
+    private _onEndMove = (e: Event) => {
         if(this.isMoving){
             this.isMoving = false;
             this.layoutElementData?.element.setPosition(this.shadowX, this.shadowY);
@@ -139,6 +138,8 @@ export class LitLayoutGrid extends LitElement{
         this.shadowWidth = 0;
         this.shadowHeight = 0;
         this.querySelectorAll('lit-layout').forEach(el => (el.classList.remove('move'), el.classList.remove('resize')));
+        
+        document.removeEventListener('mouseup', this._onEndMove);
     }
     private _onMove(e: MouseEvent){
         if(!this.layoutElementData) return;
@@ -195,10 +196,21 @@ export class LitLayoutGrid extends LitElement{
         this.layoutElementData.element.setPosition(x, y);
         this.showShadow({x, y});
     }
-    private _getMaxZIndex(){
-        return Math.max(...Object.values(this._getPositions()).map(it => it.zIndex));
+    
+    private _normalize(){
+        [...this.querySelectorAll("lit-layout")]
+        .map(n => ({name: n.name, zIndex: n.zIndex, node: n}))
+        .sort((a, b) => {
+            if(a.zIndex > b.zIndex) return 1;
+            if(a.zIndex < b.zIndex) return -1;
+            return 0;
+        })
+        .forEach((it, i) => it.node.zIndex = i)        
     }
-    private _getPositions(){
+    private _getMaxZIndex(){
+        return Math.max(...Object.values(this.getPositions()).map(it => it.zIndex));
+    }
+    public getPositions(){
         const data: {[key: string]: TPosition} = {};
         this.querySelectorAll("lit-layout").forEach(el => {
             data[el.name] = {
@@ -213,28 +225,6 @@ export class LitLayoutGrid extends LitElement{
                 left: el.left,
             }
         });
-        return data;
-    }
-    public getPositions(){
-        return this._normalizeZindex(this._getPositions());
-    }
-    private _normalizeZindex(data: {[key: string]: TPosition}): {[key: string]: TPosition}{
-        let index = 1;
-        Object.keys(data).map(it => ({...data[it], key: it})).sort((a, b) => {
-            if(a.zIndex > b.zIndex){
-                return 1;
-            }
-            if(a.zIndex < b.zIndex){
-                return -1;
-            }
-            return 0
-        }).map(it => {
-            if(it.zIndex > index){
-                index++;
-                data[it.key].zIndex = index;
-                // it.zIndex = index;
-            }
-        })
         return data;
     }
 

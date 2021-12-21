@@ -72,6 +72,17 @@ export class LitLayout extends LitElement{
     super.connectedCallback();
     this.width = (this.parentElement as LitLayoutGrid).getNewPosition(this.width);
     this.height = (this.parentElement as LitLayoutGrid).getNewPosition(this.height);
+    this.addEventListener('click', this._onClick);
+  }
+  disconnectedCallback(): void {
+    this.removeEventListener('click', this._onClick);
+    super.disconnectedCallback()
+  }
+  _onClick = () => {
+    this.dispatchEvent(new CustomEvent("raise", {
+      bubbles: true,
+      detail: this
+    }))
   }
   willUpdate(){
     this._setStyleValue('--width', this.width);
@@ -80,9 +91,10 @@ export class LitLayout extends LitElement{
     this._setStyleValue('--top', this.top);
     this._setStyleValue('--z-index', this.zIndex);
   }
+
   render(){
     return html`
-    <div @click = "${this._onSetMaxZindex}" class = "wrapper">
+    <div class = "wrapper">
       <slot></slot>
     </div>
     <lit-icon 
@@ -97,10 +109,6 @@ export class LitLayout extends LitElement{
   }
 
   /** Events */
-  private _onSetMaxZindex(){
-    this.zIndex = (this.parentElement as LitLayoutGrid).maxIndex + 1;
-    (this.parentElement as LitLayoutGrid).maxIndex = this.zIndex;
-  }
   private _onResize(e: MouseEvent){
     this.dispatchEvent(new CustomEvent("startResize", {
       detail: {

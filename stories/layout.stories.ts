@@ -18,6 +18,17 @@ const Layaout = (data: ILayoutElementProps) =>
             .maxHeight = "${data.maxHeight}"
             .zIndex = "${data.zIndex}"
             name = "test">Layout element</lit-layout>
+        <lit-layout 
+            .top = "${200}"
+            .left = "${700}"
+            .width = "${data.width}"
+            .minWidth = "${data.minWidth}"
+            .maxWidth = "${data.maxWidth}"
+            .height = "${data.height}"
+            .minHeight = "${data.minHeight}"
+            .maxHeight = "${data.maxHeight}"
+            .zIndex = "${data.zIndex}"
+            name = "test2">Layout element</lit-layout>
     </lit-layout-grid>`;
 
 

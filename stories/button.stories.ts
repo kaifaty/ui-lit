@@ -20,7 +20,7 @@ const Button = (data: IProps) =>
             ?loading = "${!!data.loading}"
             size = "${data.size}"
         >
-        <lit-icon icon = "user" slot = "icon-after"></lit-icon>
+        <lit-icon icon = "account" slot = "icon-after"></lit-icon>
         ${data.label}
         <lit-icon icon = "edit" slot = "icon-before"></lit-icon>
     </lit-button>`;

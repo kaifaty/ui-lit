@@ -62,6 +62,7 @@ LitIcon.iconsMap = {
     "share": parseInt(`005A`, 16),
     "resize": parseInt(`005B`, 16),
     "move": parseInt(`005C`, 16),
+    "save": parseInt(`005D`, 16),
     "filter": parseInt(`005f`, 16),
     "orderbook-mode-sym1sum": parseInt(`0061`, 16),
     "orderbook-mode-sym2sum": parseInt(`0062`, 16),
@@ -69,7 +70,7 @@ LitIcon.iconsMap = {
     "orderbook-mode-userOrders": parseInt(`0064`, 16),
     "orderbook-mode-percentPrice": parseInt(`0025`, 16),
     "orderbook-mode-avPrice": parseInt(`0059`, 16),
-    "user": parseInt(`00A1`, 16),
+    "user": parseInt(`0064`, 16),
     "hide": parseInt(`0065`, 16),
     "show": parseInt(`0066`, 16),
     //"filter": parseInt(`0067`, 16),
@@ -127,6 +128,7 @@ LitIcon.styles = css `
         cursor: pointer;
         font-style: normal;
         font-weight: normal;
+        text-transform: none !important;
         font-family: var(--lit-icon-font-family, 'Icons');
         color: var(--lit-icon-color, #000);
         font-size: var(--lit-icon-font-size, 12px);

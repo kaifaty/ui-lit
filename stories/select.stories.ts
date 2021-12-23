@@ -9,15 +9,11 @@ const Select = (data: IPropsSelect) =>
     html`
     <div>
         <lit-select 
+            .items = "${data.items}"
             .value = "${data.value}"
             .disabled = "${data.disabled}"
             .optionsWidth = "${data.optionsWidth}"
             .optionsHeight = "${data.optionsHeight}">
-            <lit-select-item value = "1">Item 1</lit-select-item>
-            <lit-select-item value = "2">Item 2</lit-select-item>
-            <lit-select-item value = "3">Item 3</lit-select-item>
-            <lit-select-item value = "4">Item 4</lit-select-item>
-            <lit-select-item value = "5">Item 5</lit-select-item>
         </lit-select>
     </div>
     `;
@@ -31,6 +27,7 @@ Default.args = {
     readonly:  false,
     optionsWidth:  0,
     optionsHeight:  0,
+    items: [...Array(5)].map((it, i) => ({value: i, content: `Item ${i}`}))
 }
 export default {
     title: 'Form Assosiated/Select',

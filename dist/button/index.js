@@ -38,8 +38,6 @@ let LitButton = class LitButton extends LitElement {
         return {
             wrapper: true,
             noselect: true,
-            "icon-before": !!this.iconBefore && !this.loading,
-            "icon-after": !!this.iconAfter && !this.loading,
         };
     }
     willUpdate() {
@@ -59,11 +57,9 @@ let LitButton = class LitButton extends LitElement {
             ? html `<lit-icon class = "checkmark" 
                          icon = "checkmark"></lit-icon>`
             : html `
-            <slot @slotchange = "${this._onIconBefore}" 
-                  name = "icon-before"></slot>
+            <slot name = "icon-before"></slot>
             <slot></slot>
-            <slot @slotchange = "${this._onIconAfter}"
-                  name = "icon-after"></slot>`;
+            <slot name = "icon-after"></slot>`;
     }
     render() {
         return html `
@@ -76,12 +72,6 @@ let LitButton = class LitButton extends LitElement {
         </div>`;
     }
     // ==== Events ====
-    _onIconBefore(e) {
-        this.iconBefore = true;
-    }
-    _onIconAfter(e) {
-        this.iconAfter = true;
-    }
     handlekeyDown(e) {
         if (e.key === "Enter" && document.activeElement === this) {
             this.submit();

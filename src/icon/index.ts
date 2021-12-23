@@ -44,6 +44,7 @@ export class LitIcon extends LitElement{
         "resize": parseInt(`005B`, 16),
         "move": parseInt(`005C`, 16),
         "save": parseInt(`005D`, 16),
+        "default": parseInt(`005E`, 16),
         "filter": parseInt(`005f`, 16),
         "orderbook-mode-sym1sum": parseInt(`0061`, 16),
         "orderbook-mode-sym2sum": parseInt(`0062`, 16),

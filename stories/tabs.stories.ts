@@ -7,12 +7,13 @@ import { ITabs } from '../src/tabs';
 
 const Tabs = (data: ITabs) => 
     html`<lit-tabs 
+        style = "width: 250px;"
         value = "${data.value}"
         type = "${data.type}"
         ?disabled = "${data.disabled}">
-        <lit-tab value = "1">Tab 1</lit-tab>
-        <lit-tab value = "2">Tab 2</lit-tab>
-        <lit-tab value = "3">Tab 3</lit-tab>
+        <lit-tab value = "1">Tab test 1</lit-tab>
+        <lit-tab value = "2">Tab test 2</lit-tab>
+        <lit-tab value = "3">Tab test fgqwega 3</lit-tab>
     </lit-tabs>`;
 
 const Template: Story<Partial<ITabs>> = (args) => Tabs(args as ITabs);

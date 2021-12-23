@@ -4,7 +4,7 @@ import { LitElement, css, unsafeCSS, html, TemplateResult } from 'lit';
 import { formAssociated } from '../form-associated/index';
 import { property, customElement } from 'lit/decorators';
 import { FormAssociatedProps } from '../form-associated/interface';
-import { KeyDownController } from '../controllers/KeyController';
+import { scrollbar } from '../styles/scrollbar';
 
 export type TTabType = 'button' | 'tab';
 export type TTab = {
@@ -21,14 +21,16 @@ export interface ITabs extends FormAssociatedProps{
 
 @customElement("lit-tabs")
 export class LitTabs extends formAssociated(LitElement) implements ITabs{
-    static styles = css`
+    static styles = [css`
     :host{
         display: flex;   
         box-sizing: border-box;     
+        white-space: nowrap;
+        overflow-x: auto;
     }
     :host([disabled]){
         opacity: 0.5;
-    }`;    
+    }`, scrollbar];    
     @property({type: String, reflect: true}) type: TTabType = 'button';
     @property({type: String}) value: string = '';
 

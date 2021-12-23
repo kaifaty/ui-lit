@@ -57,8 +57,6 @@ export class LitButton extends LitElement implements ButtonProps{
         return {
             wrapper: true,
             noselect: true,
-            "icon-before": !!this.iconBefore && !this.loading,
-            "icon-after": !!this.iconAfter && !this.loading,
         };
     }
     willUpdate(){
@@ -78,11 +76,9 @@ export class LitButton extends LitElement implements ButtonProps{
         ? html`<lit-icon class = "checkmark" 
                          icon = "checkmark"></lit-icon>` 
         : html`
-            <slot @slotchange = "${this._onIconBefore}" 
-                  name = "icon-before"></slot>
+            <slot name = "icon-before"></slot>
             <slot></slot>
-            <slot @slotchange = "${this._onIconAfter}"
-                  name = "icon-after"></slot>`;
+            <slot name = "icon-after"></slot>`;
     }
     render(){
         return html`
@@ -96,12 +92,6 @@ export class LitButton extends LitElement implements ButtonProps{
     }
 
     // ==== Events ====
-    private _onIconBefore(e: Event){
-        this.iconBefore = true;
-    }
-    private _onIconAfter(e: Event){
-        this.iconAfter = true;
-    }
     handlekeyDown(e: KeyboardEvent){
         if(e.key === "Enter" && document.activeElement === this){
             this.submit();

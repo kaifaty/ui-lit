@@ -42,14 +42,10 @@ export declare class LitButton extends LitElement implements ButtonProps {
     get classes(): {
         wrapper: boolean;
         noselect: boolean;
-        "icon-before": boolean;
-        "icon-after": boolean;
     };
     willUpdate(): void;
     private _contentTemplate;
     render(): TemplateResult<1>;
-    private _onIconBefore;
-    private _onIconAfter;
     handlekeyDown(e: KeyboardEvent): void;
     private _click;
     toggleSwitch(): void;

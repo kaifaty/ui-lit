@@ -1,27 +1,23 @@
 import { noselectText } from '../styles/noselect';
-import type { LitSelectItem } from './select-item';
-import { classMap } from 'lit/directives/class-map';
 import { styleMap } from 'lit/directives/style-map';
+import { unsafeHTML } from 'lit/directives/unsafe-html';
 import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
 import { formAssociated } from '../form-associated/index';
 import { customElement, property, state } from 'lit/decorators';
-import { input } from '../styles/input';
-import { getEventDataset, isChildOfHost, isClickInElement } from 'kailib';
-import { ClickController } from '../controllers/ClickController';
-import { KeyDownController } from '../controllers/KeyController';
-import { calcPositionForPopup } from '../helpers/position';
+import { isClickInElement } from 'kailib';
 import { scrollbar } from '../styles/scrollbar';
 import { FormAssociatedProps } from '../form-associated/interface';
 import { FocusController } from '../controllers/FocusContriller';
 
 
 export type TSelectItem = {
-    text: string | TemplateResult
+    content: string | TemplateResult
     value: string
 }
 
+
 export interface IPropsSelect extends FormAssociatedProps{
-    // items: TSelectItem[],
+    items: TSelectItem[],
     disabled: boolean
     optionsWidth: number
     optionsHeight: number
@@ -75,52 +71,40 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         opacity: 0.5;
         ${unsafeCSS(noselectText)};
     }
+    .item{
+        display: block;
+        padding: var(--lit-select-padding, 5px 10px);
+        cursor: pointer;
+        background-color: var(--lit-select-item-background, #fff);
+    }
+    .item:focus{
+        outline: 2px solid var(--lit-select-outline-focus, #ccc);
+    }
+    .item:hover{
+        background-color: var(--lit-select-item-background-hover, #eee);
+    }
     `, scrollbar];
     
-    //private _clickController = new ClickController(this);
     private _focusController = new FocusController(this);
+    @property({type: Array}) items: TSelectItem[] = [];
     @property({type: Number}) optionsWidth: number = 0;
     @property({type: Number}) optionsHeight: number = 0;
     @property({type: String}) value: string = '';
     @property({type: String}) staticLabel: string | TemplateResult = '';
     @state() open: boolean = false;
-    @state() _slot: DocumentFragment | null = null;
+    
     tabIndex = 0;
     
     _clickHandleFn: Function | null = null;
     _keyHandleFn: Function | null = null;
 
-    connectedCallback(){
-        super.connectedCallback();
-        this.addEventListener('selectChanged', this._onChanged as EventListener);
-    }
-    disconnectedCallback(){
-        super.disconnectedCallback();
-        this.removeEventListener('selectChanged', this._onChanged as EventListener);
-    }
-
-    private _update(){
-        this.querySelectorAll("lit-select-item").forEach(it => {
-            if(it.value === this.value){
-                this._slot = it.getConent();
-            }
-        })
-    }
-    willUpdate(){
-        this._update();
-    }
-    firstUpdated(d: any){
-        super.firstUpdated(d);
-        this._update();
-    }
-    private _onChanged(e: CustomEvent){
-        this.value = e.detail.value;
-        this._slot = e.detail.slot;
-        this._hide()
+    setValue(value: string){
+        this.value = value;
         this.dispatchEvent(new CustomEvent("changed", {
             detail: this.value,
             bubbles: true
-        }))
+        }));
+        this._hide();
     }
 
     private _toggle(){
@@ -152,21 +136,18 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     }
 
     private _selectedTemplate(){
+        const selected = this.items.filter(it => it.value == this.value)[0];
         return html`
-        ${
-            this.staticLabel 
-                ? this.staticLabel
-                : (this._slot 
-                    ? html`<div>${this._slot}</div>` 
-                    : html`<slot name = "selected">-</slot>`)
-        }
+        <slot name = "selected">
+            ${selected ? selected.content : '-' }
+        </slot>
         <slot name = "icon">
             <div class = "icon-dropdown"><lit-icon 
                 class = "${this.open ? 'dropup' : ''}" 
                 icon = "dropdown"></lit-icon></div>
-        </slot>
-        `;
+        </slot>`;
     }
+
     render(){
         const stylesData = {
             height: this.optionsHeight ? this.optionsHeight + "px" : 'initial',
@@ -180,7 +161,12 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         </div>
         <div style = "${styleMap(stylesData)}" 
              class = "items ff-scrollbar below ${this.open ? 'open' : ''}" >
-            <slot></slot>
+            ${this.items.map(it => 
+                html`<div class = "item "
+                          tabIndex = "0"
+                          data-value = "${it.value}"
+                          @click = "${() => this.setValue(it.value)}" >${it.content}</div>`
+            )}
         </div>`;
     }
 
@@ -189,25 +175,27 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         if(!this._focusController.focused && !this.open){
             return;
         }        
-        const item = this.querySelector(`lit-select-item[value="${this.value}"]`) as LitSelectItem;
+        const item = this.shadowRoot!.querySelector(`.item[data-value="${this.value}"]`) as HTMLElement;
         const select = isNext 
-            ? item?.nextElementSibling as (LitSelectItem | null) 
-            : item?.previousElementSibling as (LitSelectItem | null);
+            ? item?.nextElementSibling as (HTMLElement | null) 
+            : item?.previousElementSibling as (HTMLElement | null);
 
         if(!select) return;
-        this.value = select.value;
+
+        this.value = select.dataset!.value!;
+
         if(this.open){
             select.focus();
         }
-    
     }
 
-    handleClick(e: Event){
+    private handleClick(e: Event){
         if(!isClickInElement(e, this)){
             this._hide()
         }
     }
-    handlekeyDown(e: KeyboardEvent){
+
+    private handlekeyDown(e: KeyboardEvent){
         if(e.key === "ArrowDown"){
             this._select(true)
         }
@@ -219,10 +207,10 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
                 this.open = true;
             }
             else if(this.open){
-                const focused = this.querySelector("lit-select-item:focus");
-                if(focused){
-                    this.value = (focused as LitSelectItem).value;
-                    this._hide()
+                const focused = this.shadowRoot!.querySelector(".item:focus");
+                const value = (focused as HTMLElement)?.dataset.value;
+                if(value){
+                    this.setValue(value);
                 }
             }
         }

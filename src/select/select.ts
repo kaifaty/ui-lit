@@ -29,6 +29,7 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     :host{
         display: inline-block;
         position: relative;
+        color: var(--lit-select-color, black);
     }
     :host(:not([disabled]):focus){
         outline: 1px solid var(--lit-select-outline-focus, #ccc);
@@ -45,6 +46,10 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         border: 1px solid  var(--lit-select-border,  #ccc);
         padding: var(--lit-select-padding, 5px 10px);
         cursor: pointer;
+        height: 100%;
+        box-sizing: border-box;
+        text-transform: uppercase;
+        font-weight: bold;
     }
     .items.open{
         display: block;

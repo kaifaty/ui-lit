@@ -54,7 +54,7 @@ export class TableElement extends LitElement{
     }
     static styles = [css`
     :host{
-        display: block;
+        display: grid;
         --lit-cells: 4;
         --row-height: 30px;
         --header-height: 50px;
@@ -100,7 +100,7 @@ export class TableElement extends LitElement{
     {
         overflow: hidden; 
     }
-    .ellipses > div{
+    .ellipses > *{
         text-overflow: ellipsis;
         overflow: hidden; 
         white-space: nowrap;

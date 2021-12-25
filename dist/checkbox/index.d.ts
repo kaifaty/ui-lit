@@ -15,6 +15,9 @@ export declare class LitCheckbox extends LitCheckbox_base implements ICheckboxPr
         value: {
             type: StringConstructor;
         };
+        name: {
+            type: StringConstructor;
+        };
         checked: {
             type: BooleanConstructor;
         };

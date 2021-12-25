@@ -27,7 +27,6 @@ export declare class LitRange extends LitRange_base {
             type: NumberConstructor;
         };
     };
-    private _isMoving;
     offsetX: number;
     isPercentHidden: boolean;
     disabledByVol: boolean;
@@ -70,6 +69,12 @@ export declare class LitRange extends LitRange_base {
     private _hidePercent;
     private _movePosition;
     setPercent(value: number): void;
+    private _touchStart;
+    private _touchMove;
+    private _touchEnd;
+    private _mouserDown;
+    private _mouseMove;
+    private _mouseUp;
     private _handlePointerDown;
     private _handlePointerMove;
     private _handlePointerUp;

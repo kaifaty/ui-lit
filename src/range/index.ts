@@ -131,7 +131,7 @@ export class LitRange extends formAssociated(LitElement){
             max: {type: Number},
         }
     }
-    private _isMoving: boolean = false;
+    // private _isMoving: boolean = false;
     @state() offsetX: number = 0;
     @state() isPercentHidden: boolean = true;
     @state() disabledByVol: boolean = true;
@@ -241,9 +241,8 @@ export class LitRange extends formAssociated(LitElement){
     private _calcTackWidth(rect: DOMRect){
         return rect.width;
     }
-    private _calcOffset(e: IUIEvent){
-        const xPosition = getClientX(e);
-        return xPosition -  this._trackStartX - this._rect!.left + this._padding; //  - this._trackStartX - this._thumbSize / 2;
+    private _calcOffset(x: number){
+        return x - this._trackStartX - this._rect!.left + this._padding; 
     }
     private _calcPercentByOffset(offset: number){
         let percent = Math.round(offset / (this._trackSize ) * 100 * 10) / 10;
@@ -291,7 +290,7 @@ export class LitRange extends formAssociated(LitElement){
     private _calcValueByPercent(percent: number){
         let value = 0;
         if(this.startFromMin){
-            value = this.min + (this.max - this.min)  * (percent / 100);
+            value = (this.max - this.min)  * (percent / 100);
          }
          else{
             value = this.max * (percent / 100);
@@ -317,41 +316,76 @@ export class LitRange extends formAssociated(LitElement){
             this.isPercentHidden = true;
         }, 800);
     }
-    private _movePosition(e: IUIEvent){
+    
+    private _movePosition(x: number){
         requestAnimationFrame(() => {
-             const offset =  this._calcOffset(e);
+             const offset =  this._calcOffset(x);
              this._percent = this._calcPercentByOffset(offset);
              this._value = this._calcValueByPercent(this._percent).toString();
              this._updateOffset();
              this.dispatch();
          })
-        e.preventDefault();
     }
 
     public setPercent(value: number){
         this._percent = value;
     }
     
+    /*getClientX = (e: MouseEvent | TouchEvent) => {
+        (e as TouchEvent)
+        const clientx =  e.clientX || e.targetTouches?.[0].clientX || 0; 
+        return clientx;
+    };*/
     // ==== Events ==== 
-    private _handlePointerDown = (e: IUIEvent) => {
+
+    private _touchStart = (e: TouchEvent) => {
+        document.addEventListener('touchmove', this._touchMove);
+        document.addEventListener('touchend', this._touchEnd);
+        e.preventDefault();
+        this._handlePointerDown();
+        this._handlePointerMove(e.touches[0].clientX);
+        
+    }
+    private _touchMove = (e: TouchEvent) => {
+        e.preventDefault();
+        this._handlePointerMove(e.touches[0].clientX);
+    }
+    private _touchEnd = (e: TouchEvent) => {
+        document.removeEventListener('touchmove', this._touchMove);
+        document.removeEventListener('touchend', this._touchEnd);
+        e.preventDefault();
+    }
+
+    private _mouserDown = (e: MouseEvent) => {
+        document.addEventListener('mousemove', this._mouseMove);
+        document.addEventListener('mouseup', this._mouseUp);
+        e.preventDefault();
+        this._handlePointerDown();
+    }
+    private _mouseMove = (e: MouseEvent) => {
+        this._handlePointerMove(e.clientX);
+        e.preventDefault();
+    }
+
+    private _mouseUp = (e: MouseEvent) => {
+        document.removeEventListener('mousemove', this._mouseMove);
+        document.removeEventListener('mouseup', this._mouseUp);
+        e.preventDefault();
+        this._handlePointerUp(e.clientX);
+    }
+
+    private _handlePointerDown = () => {
         if(this.isDisabled()) return;
-        this._isMoving = true;
         this.isPercentHidden = false;
     }
-    private _handlePointerMove = (e: Event) => {
-        if(this._isMoving === true){        
-            this._movePosition(e as IUIEvent);
-            this.isPercentHidden = false;
-            e.preventDefault();
-        }
+
+    private _handlePointerMove = (x: number) => {
+        this._movePosition(x);
+        this.isPercentHidden = false;
     }
-    private _handlePointerUp = (e: IUIEvent) => {
-        if(this._isMoving === true){
-            this._isMoving = false;
-            this._hidePercent();
-            this._movePosition(e as IUIEvent);
-            e.preventDefault();
-        }
+    private _handlePointerUp = (x: number) => {
+        this._hidePercent();
+        this._movePosition(x);
     }
     private _handlePointOver = (e: Event) => {
         if(this.isDisabled()) return;
@@ -397,10 +431,10 @@ export class LitRange extends formAssociated(LitElement){
         return html`
         <div class = "track ${this.isDisabled() ? 'disabled' : ''}"
             ${this.RO.observe(this._onChangeSize)}
-            @mousedown = "${this._handlePointerDown}"
+            @mousedown = "${this._mouserDown}"
             @mouserover = "${this._handlePointOver}"
             @mouseleave = "${this._handlePointLeave}"
-            @touchstart = "${this._handlePointerDown}">
+            @touchstart = "${this._touchStart}">
             ${this._thumbTemplate()}
             <div class = "track-line"></div>
             ${this._pointersTemplate()}
@@ -415,20 +449,21 @@ export class LitRange extends formAssociated(LitElement){
         this._trackStartX = this._calcTrackStartX(rect);
         this._updateOffset();
     }
+
     connectedCallback(){
         super.connectedCallback();
-        document.addEventListener("touchmove", this._handlePointerMove, {passive: false});
-        document.addEventListener("touchend", this._handlePointerUp as EventListener);
-        document.addEventListener("mousemove", this._handlePointerMove, {passive: false});
-        document.addEventListener("mouseup", this._handlePointerUp as EventListener);
+        //document.addEventListener("touchmove", this._handlePointerMove, {passive: false});
+        //document.addEventListener("touchend", this._handlePointerUp as EventListener);
+        //document.addEventListener("mousemove", this._handlePointerMove, {passive: false});
+        //document.addEventListener("mouseup", this._handlePointerUp as EventListener);
         this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
     }
     disconnectedCallback(){
-        document.removeEventListener("touchmove", this._handlePointerMove);
-        document.removeEventListener("touchend", this._handlePointerUp as EventListener);
-        document.removeEventListener("mousemove", this._handlePointerMove);
-        document.removeEventListener("mouseup", this._handlePointerUp as EventListener);
+        //document.removeEventListener("touchmove", this._handlePointerMove);
+        //document.removeEventListener("touchend", this._handlePointerUp as EventListener);
+        //document.removeEventListener("mousemove", this._handlePointerMove);
+        //document.removeEventListener("mouseup", this._handlePointerUp as EventListener);
         super.disconnectedCallback()
     }
 }

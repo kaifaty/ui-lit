@@ -7,6 +7,11 @@ export interface IHeaderProps {
 
 @customElement('lit-header')
 export class LitHeader extends LitElement{
+    static get properties(){
+        return {
+            center: {type: Boolean}
+        }
+    }
     static styles = [
         css`
         :host{

@@ -99,7 +99,9 @@ export class LitCheckbox extends formAssociated(LitElement) implements ICheckbox
         return {
             ...super.properties,
             value: {type: String},
+            name: {type: String},
             checked: {type: Boolean},
+
         }
     }
     _checked: boolean = false;

@@ -213,17 +213,7 @@ export class LitLayoutGrid extends LitElement{
     public getPositions(){
         const data: {[key: string]: TPosition} = {};
         this.querySelectorAll("lit-layout").forEach(el => {
-            data[el.name] = {
-                width: el.width,
-                height: el.height,
-                minWidth: el.minWidth,
-                minHeight: el.minHeight,
-                maxWidth: el.maxWidth,
-                maxHeight: el.maxHeight,
-                zIndex: el.zIndex,
-                top: el.top,
-                left: el.left,
-            }
+            data[el.name] = el.getPosition();
         });
         return data;
     }

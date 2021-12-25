@@ -14,6 +14,7 @@ let LitCheckbox = class LitCheckbox extends formAssociated(LitElement) {
         return {
             ...super.properties,
             value: { type: String },
+            name: { type: String },
             checked: { type: Boolean },
         };
     }

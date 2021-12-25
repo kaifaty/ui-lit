@@ -108,29 +108,29 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
             return;
         }
         super.validate();
-        if(!isNaN(this.minlength)){
-            if(this.value.length < this.minlength){
-                this.setValidity({tooShort: true})
+        if (!isNaN(this.minlength)) {
+            if (this.value && this.value.length < this.minlength) {
+                this.setValidity({ tooShort: true });
             }
-            else if(this.validity.tooShort){
-                this.setValidity({tooShort: false})
-            }
-        }
-        if(!isNaN(this.maxlength)){
-            if(this.value.length > this.maxlength){
-                this.setValidity({tooLong: true})
-            }
-            else if(this.validity.tooLong){
-                this.setValidity({tooLong: false})
+            else if (this.validity.tooShort) {
+                this.setValidity({ tooShort: false });
             }
         }
-        if(this.pattern){
+        if (!isNaN(this.maxlength)) {
+            if (this.value && this.value.length > this.maxlength) {
+                this.setValidity({ tooLong: true });
+            }
+            else if (this.validity.tooLong) {
+                this.setValidity({ tooLong: false });
+            }
+        }
+        if (this.pattern) {
             const patten = (new RegExp(this.pattern));
-            if(!patten.test(this.value)){
-                this.setValidity({patternMismatch: true})
+            if (this.value && !patten.test(this.value)) {
+                this.setValidity({ patternMismatch: true });
             }
-            else if(this.validity.patternMismatch){
-                this.setValidity({patternMismatch: false})
+            else if (this.validity.patternMismatch) {
+                this.setValidity({ patternMismatch: false });
             }
         }
     }

@@ -11,7 +11,7 @@ export class LitLayout extends LitElement{
       box-sizing: border-box;
       width: var(--width, 200px);
       height: var(--height, 200px);
-      padding: var(--lit-layout-padding-background, 2px);
+      padding: var(--lit-layout-padding, 2px);
       position: absolute;
       left: var(--left, 0);
       top: var(--top, 0);
@@ -131,6 +131,20 @@ export class LitLayout extends LitElement{
   }
 
   /** Actions */
+  public getPosition(){
+      const data =  {
+          width: this.width,
+          height: this.height,
+          minWidth: this.minWidth,
+          minHeight: this.minHeight,
+          maxWidth: this.maxWidth,
+          maxHeight: this.maxHeight,
+          zIndex: this.zIndex,
+          top: this.top,
+          left: this.left
+      }
+      return data;
+  }
   setPosition(x: number, y: number){
     if(x !== this.left || y !== this.top){
       this.top = y;

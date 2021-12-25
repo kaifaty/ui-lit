@@ -4,12 +4,11 @@ import { LitElement, html, nothing, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators';
 import { formAssociated } from '../form-associated/index';
 import { noselect } from '../styles/noselect';
-import { getClientX } from 'kailib';
 /** <lit-range></lit-range> */
 let LitRange = class LitRange extends formAssociated(LitElement) {
     constructor() {
         super(...arguments);
-        this._isMoving = false;
+        // private _isMoving: boolean = false;
         this.offsetX = 0;
         this.isPercentHidden = true;
         this.disabledByVol = true;
@@ -40,27 +39,56 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
                 bubbles: true,
             }));
         };
+        /*getClientX = (e: MouseEvent | TouchEvent) => {
+            (e as TouchEvent)
+            const clientx =  e.clientX || e.targetTouches?.[0].clientX || 0;
+            return clientx;
+        };*/
         // ==== Events ==== 
-        this._handlePointerDown = (e) => {
+        this._touchStart = (e) => {
+            document.addEventListener('touchmove', this._touchMove);
+            document.addEventListener('touchend', this._touchEnd);
+            e.preventDefault();
+            this._handlePointerDown();
+            this._handlePointerMove(e.touches[0].clientX);
+        };
+        this._touchMove = (e) => {
+            e.preventDefault();
+            this._handlePointerMove(e.touches[0].clientX);
+        };
+        this._touchEnd = (e) => {
+            document.removeEventListener('touchmove', this._touchMove);
+            document.removeEventListener('touchend', this._touchEnd);
+            e.preventDefault();
+        };
+        this._mouserDown = (e) => {
+            document.addEventListener('mousemove', this._mouseMove);
+            document.addEventListener('mouseup', this._mouseUp);
+            e.preventDefault();
+            this._handlePointerDown();
+        };
+        this._mouseMove = (e) => {
+            this._handlePointerMove(e.clientX);
+            e.preventDefault();
+        };
+        this._mouseUp = (e) => {
+            document.removeEventListener('mousemove', this._mouseMove);
+            document.removeEventListener('mouseup', this._mouseUp);
+            e.preventDefault();
+            this._handlePointerUp(e.clientX);
+        };
+        this._handlePointerDown = () => {
             if (this.isDisabled())
                 return;
-            this._isMoving = true;
             this.isPercentHidden = false;
         };
-        this._handlePointerMove = (e) => {
-            if (this._isMoving === true) {
-                this._movePosition(e);
-                this.isPercentHidden = false;
-                e.preventDefault();
-            }
+        this._handlePointerMove = (x) => {
+            this._movePosition(x);
+            this.isPercentHidden = false;
         };
-        this._handlePointerUp = (e) => {
-            if (this._isMoving === true) {
-                this._isMoving = false;
-                this._hidePercent();
-                this._movePosition(e);
-                e.preventDefault();
-            }
+        this._handlePointerUp = (x) => {
+            this._hidePercent();
+            this._movePosition(x);
         };
         this._handlePointOver = (e) => {
             if (this.isDisabled())
@@ -261,9 +289,8 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     _calcTackWidth(rect) {
         return rect.width;
     }
-    _calcOffset(e) {
-        const xPosition = getClientX(e);
-        return xPosition - this._trackStartX - this._rect.left + this._padding; //  - this._trackStartX - this._thumbSize / 2;
+    _calcOffset(x) {
+        return x - this._trackStartX - this._rect.left + this._padding;
     }
     _calcPercentByOffset(offset) {
         let percent = Math.round(offset / (this._trackSize) * 100 * 10) / 10;
@@ -311,7 +338,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     _calcValueByPercent(percent) {
         let value = 0;
         if (this.startFromMin) {
-            value = this.min + (this.max - this.min) * (percent / 100);
+            value = (this.max - this.min) * (percent / 100);
         }
         else {
             value = this.max * (percent / 100);
@@ -336,15 +363,14 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             this.isPercentHidden = true;
         }, 800);
     }
-    _movePosition(e) {
+    _movePosition(x) {
         requestAnimationFrame(() => {
-            const offset = this._calcOffset(e);
+            const offset = this._calcOffset(x);
             this._percent = this._calcPercentByOffset(offset);
             this._value = this._calcValueByPercent(this._percent).toString();
             this._updateOffset();
             this.dispatch();
         });
-        e.preventDefault();
     }
     setPercent(value) {
         this._percent = value;
@@ -383,10 +409,10 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         return html `
         <div class = "track ${this.isDisabled() ? 'disabled' : ''}"
             ${this.RO.observe(this._onChangeSize)}
-            @mousedown = "${this._handlePointerDown}"
+            @mousedown = "${this._mouserDown}"
             @mouserover = "${this._handlePointOver}"
             @mouseleave = "${this._handlePointLeave}"
-            @touchstart = "${this._handlePointerDown}">
+            @touchstart = "${this._touchStart}">
             ${this._thumbTemplate()}
             <div class = "track-line"></div>
             ${this._pointersTemplate()}
@@ -397,18 +423,18 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     }
     connectedCallback() {
         super.connectedCallback();
-        document.addEventListener("touchmove", this._handlePointerMove, { passive: false });
-        document.addEventListener("touchend", this._handlePointerUp);
-        document.addEventListener("mousemove", this._handlePointerMove, { passive: false });
-        document.addEventListener("mouseup", this._handlePointerUp);
+        //document.addEventListener("touchmove", this._handlePointerMove, {passive: false});
+        //document.addEventListener("touchend", this._handlePointerUp as EventListener);
+        //document.addEventListener("mousemove", this._handlePointerMove, {passive: false});
+        //document.addEventListener("mouseup", this._handlePointerUp as EventListener);
         this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
     }
     disconnectedCallback() {
-        document.removeEventListener("touchmove", this._handlePointerMove);
-        document.removeEventListener("touchend", this._handlePointerUp);
-        document.removeEventListener("mousemove", this._handlePointerMove);
-        document.removeEventListener("mouseup", this._handlePointerUp);
+        //document.removeEventListener("touchmove", this._handlePointerMove);
+        //document.removeEventListener("touchend", this._handlePointerUp as EventListener);
+        //document.removeEventListener("mousemove", this._handlePointerMove);
+        //document.removeEventListener("mouseup", this._handlePointerUp as EventListener);
         super.disconnectedCallback();
     }
 };

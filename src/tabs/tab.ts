@@ -13,12 +13,13 @@ export class LitTab extends LitElement{
         color: var(--lit-tab-color);
         --lit-icon-color: var(--lit-tab-color);
         background-color: var(--lit-tab-background);
-        text-align: center;
         font-weight: var(--lit-tab-font-weight, bold);
         white-space: nowrap;
         display: flex;
         align-items: center;
         text-transform: uppercase;
+        text-align: center;
+        justify-content: center;
     }
     :host([type="button"]){
         border: 1px solid  var(--lit-tab-border,  tomato);

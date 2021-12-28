@@ -48,7 +48,6 @@ const columns = [
         placeholder: 'from',       
         type: 'date',
         onFilter: (value: unknown, row: ISourceItem) => {
-            console.log(value)
             return row.age > value
         }
       },
@@ -72,7 +71,7 @@ const columns = [
         type: 'checkbox',
         text: '> 10 && < 15',
         onFilter: (value: unknown, row: ISourceItem) => {
-            return row.age > 3 && row.age < 8
+            return row.age > 10 && row.age < 15
         }
       },
     ],

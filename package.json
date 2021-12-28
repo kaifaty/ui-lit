@@ -63,9 +63,8 @@
   },
   "dependencies": {
     "@swc/helpers": "^0.2.13",
-    "kailib": "^1.0.37",
+    "kailib": "^1.0.38",
     "lit": "^2.0.2",
-    "qrcode": "^1.4.4",
-    "ui-lit": "^0.0.68"
+    "qrcode": "^1.4.4"
   }
 }

@@ -248,30 +248,29 @@ export class LitTableHeader extends LitElement{
     private _filterTemplate(){
         if(!this.filterVisible) return nothing;
         return html`<lit-form 
-                    @submit = "${this._onSubmitFilter}"
-                    class = "filter-template">
-                <div class = "rows">
-                    ${this.filtersData!.map((it, i) => 
-                        html`<div class = "row">
-                            
-                                ${it.title && html`<div style = "grid-column: 1/3;">${it.title}</div>`}
-                                ${this._filterItemTemplate(it, i)}
-                                ${it.divider && html`<lit-divider style = "grid-column: 1/3;"></lit-divider>`}
-                            </div>`
-                    )}
-                </div>
-                <footer>
-                    <lit-button 
-                        @click = "${this._onReset}"
-                        borderless
-                        type = "button"
-                        size = "small">Reset</lit-button>
-                    <lit-button 
-                        type = "submit"
-                        primary 
-                        size = "small">OK</lit-button>
-                </footer>
-            </lit-form>`;
+                        @submit = "${this._onSubmitFilter}"
+                        class = "filter-template">
+                    <div class = "rows">
+                        ${this.filtersData!.map((it, i) => 
+                            html`<div class = "row">
+                                    ${it.title && html`<div style = "grid-column: 1/3;">${it.title}</div>`}
+                                    ${this._filterItemTemplate(it, i)}
+                                    ${it.divider && html`<lit-divider style = "grid-column: 1/3;"></lit-divider>`}
+                                </div>`
+                        )}
+                    </div>
+                    <footer>
+                        <lit-button 
+                            @click = "${this._onReset}"
+                            borderless
+                            type = "button"
+                            size = "small">Reset</lit-button>
+                        <lit-button 
+                            type = "submit"
+                            primary 
+                            size = "small">OK</lit-button>
+                    </footer>
+                </lit-form>`;
     }
 
 
@@ -290,17 +289,22 @@ export class LitTableHeader extends LitElement{
         ${this._filterTemplate()}`;
     }
 
-
     private _onFilterToggle(e: Event){
         e.stopPropagation();
-        this.filterVisible = !this.filterVisible;
-        if( this.filterVisible){
-            document.addEventListener('click', this._documentClick);
+        if(!this.filterVisible){
+           this._showFilter()
         }
         else{
-            document.removeEventListener('click', this._documentClick);
+            this._hideFilter();
         }
-        
+    }
+    private _showFilter = () => {
+        this.filterVisible = true;
+        document.addEventListener('click', this._documentClick);
+    }
+    private _hideFilter = () => {
+        this.filterVisible = false;
+        document.removeEventListener('click', this._documentClick);
     }
     private _documentClick = (e: Event) => {
         if(!isClickInElement(e, this)){
@@ -321,9 +325,9 @@ export class LitTableHeader extends LitElement{
     }
 
     private _onSubmitFilter(e: CustomEvent){
-        this.filterVisible = false;
+        this._hideFilter()
         const data = e.detail.data;
-        const filters = this.item!.filters!.map((it, i) => {
+        const filters = this.filtersData!.map((it, i) => {
             if(!it.type || it.type === 'checkbox'){
                 return {
                     ...it, 
@@ -343,8 +347,7 @@ export class LitTableHeader extends LitElement{
     }
 
     private _onReset(){
-        this.filterVisible = false;
-        
+        this._hideFilter()
         this.dispatchEvent(new CustomEvent("resetFilter", {
             detail: this.item?.key,
             bubbles: true

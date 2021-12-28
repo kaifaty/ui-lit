@@ -121,7 +121,6 @@ export class LitPagination extends LitElement{
             this.page = page;
         }
         // this.page = page;
-        console.log(page)
         this.dispatchEvent(new CustomEvent('changed', {
             detail: page
         }));
@@ -137,7 +136,6 @@ export class LitPagination extends LitElement{
                     class = "${n.value === this.page ? 'selected' : ''}">${n.label}</button>`);
     }
     render(){
-        console.log(this.page)
         return html`
         <button @click = "${this._decrementPage}" 
                 type = "button">

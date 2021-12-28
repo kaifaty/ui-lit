@@ -230,7 +230,7 @@ export class TableElement extends LitElement{
             for(const key of keys){
                 const rowFilters: boolean[] = [];
                 cols[key].forEach(f => {
-                    if (f.value) {
+                    if (f.value || f.checked) {
                         const result = f.onFilter 
                                         ? f.onFilter(f.value, it)
                                         : it[key] == f.value

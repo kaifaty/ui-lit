@@ -12,7 +12,7 @@ const data = {
 };
   
 const columns = [
-{
+/*{
     title: 'Name',
     dataIndex: 'name',
     key: 'name',    
@@ -22,13 +22,14 @@ const columns = [
         return 0;
     },
     //defaultSort: true
-},
+},*/
 { 
     title: 'Age',
     dataIndex: 'age',
     key: 'age',
     valueFn: (item) => item.age + "y.", 
     sorter: true,
+    width: 50,
     filters: [
       {
         text: 'Age = 22',
@@ -37,8 +38,17 @@ const columns = [
       {
         text: 'More then', 
         placeholder: '> then',       
-        type: 'input',
+        type: 'text',
         onFilter: (value: unknown, row: ISourceItem) => {
+            return row.age > value
+        }
+      },
+      {
+        text: 'More then', 
+        placeholder: 'from',       
+        type: 'date',
+        onFilter: (value: unknown, row: ISourceItem) => {
+            console.log(value)
             return row.age > value
         }
       },
@@ -56,6 +66,7 @@ const columns = [
     dataIndex: 'address',
     key: 'address',
     sorter: true,
+    width: 50,
     filters: [
       {     
         type: 'checkbox',
@@ -75,11 +86,12 @@ const dataSource = [...Array(35)].map((it, i) =>
         if(a.name < b.name) return direction === 'ascend' ? -1 : 1;
         return 0;
     }) as any;
+
 // dataSource
 const Table = (text: string) => 
     html`
     <lit-table
-        style = "width: 400px; height: 400px;"
+        style = "width: 280px; height: 400px;"
         pagination
         paginationToHeight        
         defaultSort = "age"
@@ -93,8 +105,7 @@ const Table = (text: string) =>
 const Template: Story<Partial<{text: string}>> = (data) => Table(data.text);
 
 export const Default = Template.bind({});
-Default.args = {
-}
+Default.args = {}
 export default {
     title: 'Text/Table',
     argTypes: {

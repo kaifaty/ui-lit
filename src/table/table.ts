@@ -10,12 +10,15 @@ export type ISourceItem = {
     key: string;
     [key: string]: string | number | Record<string, any>;
 }
-export type TFilterType = 'checkbox' | 'input';
+export type TFilterType = 'checkbox' | 'text' | 'number' | 'date';
 export interface TFilterItem {
+    divider?: boolean,
+    title?: string;
     text: string;
     value: string | number | boolean;
     checked?: boolean;
     placeholder?: string;
+    //name?: string
     type?: TFilterType
     onFilter?: (value: string | number | boolean, record: ISourceItem) => boolean;
 }
@@ -59,10 +62,18 @@ export class TableElement extends LitElement{
         --row-height: 30px;
         --header-height: 50px;
         font-size: var(--lit-table-font-size);
+        position: relative;
     }
     :host([pagination]){
         display: grid;
         grid-template-rows: auto 26px;
+    }
+    
+    :host(:not([pagination])){
+        
+    }
+    :host(:not([pagination])) footer{
+        display: none;
     }
     .content{
         display: grid;
@@ -96,8 +107,7 @@ export class TableElement extends LitElement{
         fill: var(--lit-icon-color);
     }
     
-    .ellipses
-    {
+    .ellipses{
         overflow: hidden; 
     }
     .ellipses > *{
@@ -113,8 +123,8 @@ export class TableElement extends LitElement{
         height: 100%;
     }
     `, scrollbar];
-    RO = new ResizeObserverController(this);
-    _columns: TColumnItem[] = [];
+    private  RO = new ResizeObserverController(this);
+    private  _columns: TColumnItem[] = [];
     set columns(value: TColumnItem[]){
         const oldValue = this._columns;
         this._columns = value;
@@ -127,7 +137,7 @@ export class TableElement extends LitElement{
     get columns(){
         return this._columns;
     }
-    _headerHeight: number = 50;
+    private _headerHeight: number = 50;
     set headerHeight(value: number){
         const oldValue = this._headerHeight;
         this._headerHeight = value;
@@ -138,7 +148,7 @@ export class TableElement extends LitElement{
     }
     get headerHeight(){return this._headerHeight}
 
-    _rowHeight: number = 30;
+    private  _rowHeight: number = 30;
     set rowHeight(value: number){
         const oldValue = this._rowHeight;
         this._rowHeight = value;
@@ -156,11 +166,24 @@ export class TableElement extends LitElement{
     @state() sort: string = '';
     @state() sortDirection: TSortDirections = 'ascend';
     @state() page: number = 0;
-    _data: Array<ISourceItem> = [];
-    _rect: DOMRect | null = null;
+    private _data: Array<ISourceItem> = [];
+    private _rect: DOMRect | null = null;
+    private _stopResize = false;
 
+    private _filters: Map<string, TFilterItem[]> = new Map();
+/*
+    connectedCallback(): void {
+        super.connectedCallback()
+        setTimeout(() => {
+            this.requestUpdate();
+        }, 5000);
+    }
+    */
+    get rect(){
+        return this._rect;
+    }
     private recalcPageLength(){
-        if(!this.paginationToHeight || !this.pagination || !this._rect) return;
+        if(!this.paginationToHeight || !this.pagination || !this._rect  || this._stopResize) return;
         const availableHeight = this._rect!.height - this.headerHeight; 
         this.pageLength = Math.floor(availableHeight / this.rowHeight);
     }
@@ -185,9 +208,7 @@ export class TableElement extends LitElement{
         }
     }
     hasFilters(){
-        return !!this.columns
-                    .map(it => it.filters?.filter(it => it.checked).length)
-                    .filter(it => it).length;
+        return !!this._filters.size
     }
     getFilteredData(){
         if(!this.hasFilters()){
@@ -195,35 +216,28 @@ export class TableElement extends LitElement{
         }
         const cols: Record<string, TFilterItem[]> = {};
 
-        this.columns.forEach?.(col => col.filters?.forEach(f => {
-            if(f.checked){
-                if(!cols[col.key]) cols[col.key] = [];
-                cols[col.key].push(f);
-            }
-        }));
+        for(const [key, filters] of this._filters){
+            filters?.forEach(f => {
+                if(f.checked){
+                    if(!cols[key]) cols[key] = [];
+                    cols[key].push(f);
+                }
+            })
+        }
+
         return this.dataSource.filter(it => {
             const keys = Object.keys(cols);
             for(const key of keys){
                 const rowFilters: boolean[] = [];
-                const rowValue = it[key];
                 cols[key].forEach(f => {
-                    if(!f.type || f.type === 'checkbox'){
-                        rowFilters.push(
-                            f.onFilter 
-                                ? f.onFilter(f.value, it)
-                                : rowValue === f.value
-                        );
-                    }
-                    else if(f.type === 'input' && f.value){
-                        if(f.onFilter){
-                            rowFilters.push(f.onFilter(f.value, it));
-                        }
-                        else{
-                            rowFilters.push(rowValue == f.value);
-                        }
+                    if (f.value) {
+                        const result = f.onFilter 
+                                        ? f.onFilter(f.value, it)
+                                        : it[key] == f.value
+                        rowFilters.push(result);
                     }
                 });
-                if(!rowFilters.filter(it => it)[0]){
+                if (rowFilters.length && rowFilters.filter(it => !it)[0] === false) {
                     return false;
                 }
             };
@@ -251,7 +265,9 @@ export class TableElement extends LitElement{
     private _headerTemplate(){
         return this.columns.map((col, i) => {
             return html`<lit-table-header 
+                .filters = "${this._filters.get(col.key)}"
                 @changeFilter = "${this._changeFilter}"
+                @resetFilter = "${this._resetFilter}"
                 style = "min-width: ${col.width ? col.width + "px" : "auto" }"
                 .align = "${col.align || "left"}"
                 .sort = "${this.sort}"
@@ -281,16 +297,6 @@ export class TableElement extends LitElement{
             </lit-table-row>`
         )
     }
-    private _onResize = (rect: DOMRect) => {
-        this._rect = rect;
-        this.recalcPageLength();
-        this.dispatchEvent(new CustomEvent('tableResize', {
-            detail: rect
-        }));
-        Promise.resolve().then(() => {
-            this.recalcPageLength();
-        })
-    }
     render(){
         return html`
         <div class = "content ff-scrollbar ${!this._data.length ? 'nodata' : ''}" 
@@ -310,6 +316,8 @@ export class TableElement extends LitElement{
         <footer>
             ${this.pagination
                 ? html `<lit-pagination 
+                            @focus = "${this._onFocus}"
+                            @blur = "${this._onBlur}"
                             @changed = "${this._onPageChanged}"
                             .length = "${this._data.length}"
                             .pageLength = "${this.pageLength}" 
@@ -320,9 +328,31 @@ export class TableElement extends LitElement{
             <slot></slot>
         </footer>`;
     }
+    
+    private _onResize = (rect: DOMRect) => {
+        this._rect = rect;
+        this.recalcPageLength();
+        this.dispatchEvent(new CustomEvent('tableResize', {
+            detail: rect
+        }));
+        Promise.resolve().then(() => {
+            this.recalcPageLength();
+        })
+    }
+    private _onFocus(){
+        this._stopResize = true;
+    }
+    private _onBlur(){
+        this._stopResize = false;
+    }
     private _changeFilter(e: CustomEvent){
-        const item = e.detail;
-        this.columns = this.columns.map(it => it.key === item.key ? item : it);        
+        const item = e.detail as {key: string, filters: TFilterItem[]};
+        this._filters.set(item.key, item.filters);
+        this.requestUpdate();
+    }
+    private _resetFilter(e: CustomEvent){
+        this._filters.delete(e.detail);
+        this.requestUpdate();
     }
     private _onSortChanged(e: CustomEvent){
         this.sort = e.detail.sort;

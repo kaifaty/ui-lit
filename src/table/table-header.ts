@@ -2,13 +2,15 @@ import { ifDefined } from 'lit/directives/if-defined';
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators';
-import { TColumnItem, TFilterItem, TSortDirections } from './table';
+import { TColumnItem, TFilterItem, TSortDirections,  } from './table';
+import type { TableElement  } from './table';
 import { noselect } from '../styles/noselect';
 import '../textfield';
 import '../number';
-import { ClickController } from '../controllers/ClickController';
-import { isClickInElement } from 'kailib';
+import { isClickInElement, getHost } from 'kailib';
 
+
+const filterWidth = 230;
 @customElement('lit-table-header')
 export class LitTableHeader extends LitElement{
     static styles = [css`
@@ -57,6 +59,7 @@ export class LitTableHeader extends LitElement{
     [icon = "filter"]:hover{
         background-color: var(--lit-table-icon-background-hover, rgba(0, 0, 0, 0.1));
         --lit-icon-color: var(--lit-table-icon-color-hover, rgba(0, 0, 0, 0.5));
+        
     }
     .sorter{
         cursor: pointer;
@@ -69,18 +72,22 @@ export class LitTableHeader extends LitElement{
     .filter-template{
         position: absolute;
         font-size: 12px;
-        left: 0;
+        left: 1px;
         font-weight: 400;
         padding: 10px;
-        width: 160px;
+        width: ${filterWidth}px;
         border-radius: 5px;
         background-color: var(--lit-table-filter-content-background, #fff);
-        box-shadow: 2px 2px 10px rgba(0,0,0,0.13);
+        box-shadow: 0 0 6px rgba(0,0,0,0.6);
         z-index: 1;
         display: grid;
         grid-template-rows: auto 25px;
-        gap: 15px;
+        gap: 10px;
         
+    }
+    :host([right]) .filter-template{
+        right: 1px;
+        left: initial;
     }
     .filter-template footer{
         display: flex;
@@ -89,6 +96,10 @@ export class LitTableHeader extends LitElement{
     }
     .filter-template checkbox-element{
         margin-right: 7px;
+    }
+    lit-label{
+        flex-direction: column;
+        align-items: start;
     }
     .flex-center{
         display: flex;
@@ -112,18 +123,28 @@ export class LitTableHeader extends LitElement{
     `, noselect];
     
     @property({type: String, reflect: true}) align: string = 'left';
-    @property({type: Object}) item?: TColumnItem = undefined;
+    @property({type: Object}) item?: TColumnItem;
+    @property({type: Array}) filters?: TFilterItem[];
     @property({type: String}) sort: string = '';
     @property({type: String, reflect: true}) sortDirection: string = 'ascend';
     _filterVisible = false;
-    _clickController = new ClickController(this);
-    
+    _host: TableElement | null = null
     
     connectedCallback(){
         super.connectedCallback();
         this.sortDirection = this.directions[0] || 'ascend';
+        this._host = getHost(this)! as TableElement;
     }
-    
+    willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
+        if(this.filterVisible && this._host?.rect){
+            if(this.offsetLeft + filterWidth > this._host.rect.width){
+                this.setAttribute("right", '');
+            }
+            else{
+                this.removeAttribute("right");
+            }
+        }
+    }
     get filterVisible(){
         return this._filterVisible;
     }
@@ -132,10 +153,16 @@ export class LitTableHeader extends LitElement{
         this._filterVisible = value;
         this.requestUpdate('filterVisible', oldValue);
     }
-    
+    get isSort(){
+        return this.sort === this.item?.key;
+    }
 
     get directions() {
         return this.item?.sortDirections || ['ascend', 'descend'];
+    }
+
+    get filtersData(){
+        return this.filters || this.item?.filters;
     }
 
     private _getNewDirection(){
@@ -150,9 +177,8 @@ export class LitTableHeader extends LitElement{
         }
         return directions[index + 1];
     }
-    get isSort(){
-        return this.sort === this.item?.key;
-    }
+
+    /** Templates */
     private _sortTemplate(){
         if(this.item?.sorter){        
             return html`<div class = "sort-icons">
@@ -167,10 +193,11 @@ export class LitTableHeader extends LitElement{
             </div>`;
         }
     }
+    
     private _filterIconTemplate(){
-        if(!this.item?.filters) return nothing;
+        if(!this.filtersData) return nothing;
         const map = {
-            "filters-checked": this.item.filters.filter(it => it.checked).length
+            "filters-checked": this.filtersData.filter(it => it.checked).length
         }
         return html`<lit-icon 
                         @click = "${this._onFilterToggle}" 
@@ -178,7 +205,11 @@ export class LitTableHeader extends LitElement{
                         icon = "filter"></lit-icon>`;
     }
     private _filterItemTemplate(item: TFilterItem, i: number){
-        if(item.type === 'checkbox' || !item.type){
+        let type = item.type;
+        if(item.type === 'number'){
+            type = 'text';
+        }
+        if(type === 'checkbox' || !item.type){
             return html`
                 <lit-label>
                     ${item.text}
@@ -187,23 +218,28 @@ export class LitTableHeader extends LitElement{
                     .checked = "${item.checked || false}"
                     name = "${i}"></lit-checkbox>`;
         }
-        if(item.type === 'input' && typeof item.value === 'number'){
+        if(type === 'number'){
             return html`
                 <lit-label>
                     ${item.text}
                 </lit-label>
                 <lit-numberfield 
-                    name = "${i}" 
+                    name = "${i.toString()}" 
                     value = "${item.value}"
                     placeholder = "${ifDefined(item.placeholder)}"></lit-numberfield>`;
         }
-        if(item.type === 'input'){
+        if(
+            type === 'text' || 
+            type === 'date'
+        ){
+            /// text 
             return html`
                 <lit-label>
                     ${item.text}
                 </lit-label>
                 <lit-textfield 
-                    name = "${i}" 
+                    type = "${type}"
+                    name = "${i.toString()}" 
                     value = "${item.value}"
                     placeholder = "${ifDefined(item.placeholder)}"></lit-textfield>`;
         }
@@ -215,7 +251,14 @@ export class LitTableHeader extends LitElement{
                     @submit = "${this._onSubmitFilter}"
                     class = "filter-template">
                 <div class = "rows">
-                    ${this.item!.filters!.map((it, i) => html`<div class = "row">${this._filterItemTemplate(it, i)}</div>`)}
+                    ${this.filtersData!.map((it, i) => 
+                        html`<div class = "row">
+                            
+                                ${it.title && html`<div style = "grid-column: 1/3;">${it.title}</div>`}
+                                ${this._filterItemTemplate(it, i)}
+                                ${it.divider && html`<lit-divider style = "grid-column: 1/3;"></lit-divider>`}
+                            </div>`
+                    )}
                 </div>
                 <footer>
                     <lit-button 
@@ -230,6 +273,8 @@ export class LitTableHeader extends LitElement{
                 </footer>
             </lit-form>`;
     }
+
+
     render(){
         const map = {
             "wrapper": true,
@@ -244,10 +289,25 @@ export class LitTableHeader extends LitElement{
         </div>
         ${this._filterTemplate()}`;
     }
+
+
     private _onFilterToggle(e: Event){
         e.stopPropagation();
         this.filterVisible = !this.filterVisible;
+        if( this.filterVisible){
+            document.addEventListener('click', this._documentClick);
+        }
+        else{
+            document.removeEventListener('click', this._documentClick);
+        }
+        
     }
+    private _documentClick = (e: Event) => {
+        if(!isClickInElement(e, this)){
+            this._onFilterToggle(e);
+        }
+    }
+
     private _onChangeSort(){
         if(!this.item?.sorter) return;
         const direction = this._getNewDirection();
@@ -259,6 +319,7 @@ export class LitTableHeader extends LitElement{
             bubbles: true
         }));
     }
+
     private _onSubmitFilter(e: CustomEvent){
         this.filterVisible = false;
         const data = e.detail.data;
@@ -276,28 +337,20 @@ export class LitTableHeader extends LitElement{
             }
         });
         this.dispatchEvent(new CustomEvent("changeFilter", {
-            detail: {...this.item!, filters},
+            detail: {key: this.item?.key, filters},
             bubbles: true
         }));
     }
+
     private _onReset(){
         this.filterVisible = false;
         
-        this.dispatchEvent(new CustomEvent("changeFilter", {
-            detail: {
-                ...this.item, 
-                filters: this.item?.filters?.map(it => ({...it, checked: false, value: it.type === 'input' ? '' : it.value}))
-            },
+        this.dispatchEvent(new CustomEvent("resetFilter", {
+            detail: this.item?.key,
             bubbles: true
         }))
     }
 
-    handleDocumentClick = (e: Event) => {
-        if(!isClickInElement(e, this)){
-            this.filterVisible = false;
-        }
-        
-    }
 }
 declare global {
     interface HTMLElementTagNameMap {

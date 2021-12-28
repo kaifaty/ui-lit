@@ -69,7 +69,6 @@ export class ToolTip extends LitElement{
     _onTooltipUpdated = (e: CustomEvent) => {
         this.width = e.detail.width;
         this.height = e.detail.height;
-        console.log('_onTooltipUpdated', e.detail)
     }
     _onClick = () => {
         this.opened = !this.opened;
@@ -92,7 +91,6 @@ export class ToolTip extends LitElement{
     
     getPosition = () => {
         const rect = this.shadowRoot!.querySelector("#content")!.getBoundingClientRect();
-        //console.log(rect.x + this.width, window.innerWidth);
 
         return {
             top: this.getTop(rect), 

@@ -1,6 +1,5 @@
 import { noselectText } from '../styles/noselect';
 import { styleMap } from 'lit/directives/style-map';
-import { unsafeHTML } from 'lit/directives/unsafe-html';
 import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
 import { formAssociated } from '../form-associated/index';
 import { customElement, property, state } from 'lit/decorators';
@@ -39,9 +38,9 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     }
     .selected{
         min-width: 50px;
-        display: flex;
+        display: grid;
         align-items: center;
-        justify-content: space-between;
+        grid-template-columns: auto 20px;
         background-color: var(--lit-select-background);
         border: 1px solid  var(--lit-select-border,  #ccc);
         padding: var(--lit-select-padding, 5px 10px);
@@ -50,6 +49,12 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         box-sizing: border-box;
         text-transform: uppercase;
         font-weight: bold;
+        overflow: hidden; 
+    }
+    .selected div{
+        text-overflow: ellipsis;
+        overflow: hidden; 
+        white-space: nowrap;
     }
     .items.open{
         display: block;
@@ -100,7 +105,6 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     
     tabIndex = 0;
     
-    _clickHandleFn: Function | null = null;
     _keyHandleFn: Function | null = null;
 
     setValue(value: string){
@@ -123,21 +127,17 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     }
 
     private _hide = () => {
+        if(!this.open) return;
         this.open = false;
-        document.removeEventListener('click', this._clickHandleFn as EventListener);
-        this._clickHandleFn = null;
+        document.removeEventListener('click', this._handleClick as EventListener);
+        document.removeEventListener('keydown', this._handlekeyDown as EventListener);
     }
 
     private _show = () => {
+        if(this.open) return;
         this.open = true;
-        if(!this._clickHandleFn){
-            this._clickHandleFn = (e: Event) => this.handleClick(e);
-            document.addEventListener('click', this._clickHandleFn as EventListener);
-        }
-        if(!this._keyHandleFn){
-            this._keyHandleFn = (e: KeyboardEvent) => this.handlekeyDown(e)            
-            document.addEventListener('keydown', this._keyHandleFn as EventListener);
-        }
+        document.addEventListener('click', this._handleClick as EventListener);
+        document.addEventListener('keydown', this._handlekeyDown as EventListener);
     }
 
     private _selectedTemplate(){
@@ -194,13 +194,13 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
         }
     }
 
-    private handleClick(e: Event){
+    private _handleClick = (e: Event) => {
         if(!isClickInElement(e, this)){
             this._hide()
         }
     }
 
-    private handlekeyDown(e: KeyboardEvent){
+    private _handlekeyDown = (e: KeyboardEvent) => {
         if(e.key === "ArrowDown"){
             this._select(true)
         }

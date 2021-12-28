@@ -6,10 +6,16 @@ export interface IIconProps {
 export declare class LitIcon extends LitElement {
     static iconsMap: Record<string, number>;
     static defaultIcons: Record<string, string>;
+    static get properties(): {
+        status: {
+            type: StringConstructor;
+        };
+        error: {
+            type: StringConstructor;
+        };
+    };
     icon: string;
-    material: boolean;
     static styles: import("lit").CSSResult;
-    willUpdate(): void;
     render(): string;
 }
 declare global {

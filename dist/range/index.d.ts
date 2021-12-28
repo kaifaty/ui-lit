@@ -55,10 +55,12 @@ export declare class LitRange extends LitRange_base {
     _value: string;
     get value(): string;
     set value(value: string);
-    isDisabled(): boolean;
+    connectedCallback(): void;
     willUpdate(): void;
-    dispatch: () => void;
+    render(): TemplateResult<1>;
     get minPercent(): number;
+    isDisabled(): boolean;
+    private _dispatch;
     private _calcTrackStartX;
     private _calcTackWidth;
     private _calcOffset;
@@ -69,6 +71,7 @@ export declare class LitRange extends LitRange_base {
     private _hidePercent;
     private _movePosition;
     setPercent(value: number): void;
+    private _onChangeSize;
     private _touchStart;
     private _touchMove;
     private _touchEnd;
@@ -84,10 +87,6 @@ export declare class LitRange extends LitRange_base {
     private _percentTemplate;
     private _blockedVolume;
     private _thumbTemplate;
-    render(): TemplateResult<1>;
-    _onChangeSize: (rect: DOMRect) => void;
-    connectedCallback(): void;
-    disconnectedCallback(): void;
 }
 declare global {
     interface HTMLElementTagNameMap {

@@ -28,44 +28,36 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this._percent = 0;
         this._max = 100;
         this._value = '0';
-        this.dispatch = () => {
-            this.dispatchEvent(new CustomEvent("changed", {
-                detail: {
-                    value: this.value,
-                    percent: this._percent,
-                    valueAsNumber: this.valueAsNumber,
-                    type: 'range'
-                },
-                bubbles: true,
-            }));
-        };
-        /*getClientX = (e: MouseEvent | TouchEvent) => {
-            (e as TouchEvent)
-            const clientx =  e.clientX || e.targetTouches?.[0].clientX || 0;
-            return clientx;
-        };*/
         // ==== Events ==== 
+        this._onChangeSize = (rect) => {
+            this._rect = this.getBoundingClientRect();
+            this._trackSize = this._calcTackWidth(rect);
+            this._trackStartX = this._calcTrackStartX(rect);
+            this._updateOffset();
+        };
         this._touchStart = (e) => {
             document.addEventListener('touchmove', this._touchMove);
             document.addEventListener('touchend', this._touchEnd);
-            e.preventDefault();
+            document.addEventListener('touchcancel', this._touchEnd);
             this._handlePointerDown();
             this._handlePointerMove(e.touches[0].clientX);
+            e.preventDefault();
         };
         this._touchMove = (e) => {
-            e.preventDefault();
             this._handlePointerMove(e.touches[0].clientX);
+            e.preventDefault();
         };
         this._touchEnd = (e) => {
             document.removeEventListener('touchmove', this._touchMove);
             document.removeEventListener('touchend', this._touchEnd);
+            document.removeEventListener('touchcancel', this._touchEnd);
             e.preventDefault();
         };
         this._mouserDown = (e) => {
             document.addEventListener('mousemove', this._mouseMove);
             document.addEventListener('mouseup', this._mouseUp);
-            e.preventDefault();
             this._handlePointerDown();
+            e.preventDefault();
         };
         this._mouseMove = (e) => {
             this._handlePointerMove(e.clientX);
@@ -100,12 +92,6 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this._handlePointLeave = (e) => {
             e.preventDefault();
             this._hidePercent();
-        };
-        this._onChangeSize = (rect) => {
-            this._rect = this.getBoundingClientRect();
-            this._trackSize = this._calcTackWidth(rect);
-            this._trackStartX = this._calcTrackStartX(rect);
-            this._updateOffset();
         };
     }
     static get styles() {
@@ -265,22 +251,50 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         this._percent = this._calcPercentByValue();
         this.requestUpdate('value', oldValue);
     }
-    isDisabled() {
-        return this.disabled || this.max < this.min;
+    connectedCallback() {
+        super.connectedCallback();
+        this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
+        this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
     }
     willUpdate() {
-        //const rect = this.getBoundingClientRect()
-        //this._trackSize = this._calcTackWidth(rect);
-        //this._trackStartX = this._calcTrackStartX(rect);
         this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
+    }
+    render() {
+        return html `
+        <div class = "track ${this.isDisabled() ? 'disabled' : ''}"
+            ${this.RO.observe(this._onChangeSize)}
+            @mousedown = "${this._mouserDown}"
+            @mouserover = "${this._handlePointOver}"
+            @mouseleave = "${this._handlePointLeave}"
+            @touchstart = "${this._touchStart}">
+            ${this._thumbTemplate()}
+            <div class = "track-line"></div>
+            ${this._pointersTemplate()}
+            ${this._blockedVolume()}
+        </div>
+        ${this._percentTemplate()}
+        `;
     }
     get minPercent() {
         if (!this.startFromMin) {
             return 0;
         }
-        //return this.valueAsNumber / (this.max - this.min) * 100 
         return this.min / this.max * 100;
+    }
+    isDisabled() {
+        return this.disabled || this.max < this.min;
+    }
+    _dispatch() {
+        this.dispatchEvent(new CustomEvent("changed", {
+            detail: {
+                value: this.value,
+                percent: this._percent,
+                valueAsNumber: this.valueAsNumber,
+                type: 'range'
+            },
+            bubbles: true,
+        }));
     }
     // ==== Actions ==== 
     _calcTrackStartX(rect) {
@@ -369,7 +383,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             this._percent = this._calcPercentByOffset(offset);
             this._value = this._calcValueByPercent(this._percent).toString();
             this._updateOffset();
-            this.dispatch();
+            this._dispatch();
         });
     }
     setPercent(value) {
@@ -404,38 +418,6 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
             style = "transform: translateX(${offset}px);">
             ${this.isDisabled() ? nothing : html `<slot><div class = "thumb"></div></slot>`}       
         </div>`;
-    }
-    render() {
-        return html `
-        <div class = "track ${this.isDisabled() ? 'disabled' : ''}"
-            ${this.RO.observe(this._onChangeSize)}
-            @mousedown = "${this._mouserDown}"
-            @mouserover = "${this._handlePointOver}"
-            @mouseleave = "${this._handlePointLeave}"
-            @touchstart = "${this._touchStart}">
-            ${this._thumbTemplate()}
-            <div class = "track-line"></div>
-            ${this._pointersTemplate()}
-            ${this._blockedVolume()}
-        </div>
-        ${this._percentTemplate()}
-        `;
-    }
-    connectedCallback() {
-        super.connectedCallback();
-        //document.addEventListener("touchmove", this._handlePointerMove, {passive: false});
-        //document.addEventListener("touchend", this._handlePointerUp as EventListener);
-        //document.addEventListener("mousemove", this._handlePointerMove, {passive: false});
-        //document.addEventListener("mouseup", this._handlePointerUp as EventListener);
-        this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
-        this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
-    }
-    disconnectedCallback() {
-        //document.removeEventListener("touchmove", this._handlePointerMove);
-        //document.removeEventListener("touchend", this._handlePointerUp as EventListener);
-        //document.removeEventListener("mousemove", this._handlePointerMove);
-        //document.removeEventListener("mouseup", this._handlePointerUp as EventListener);
-        super.disconnectedCallback();
     }
 };
 __decorate([

@@ -6754,15 +6754,15 @@ junk@^3.1.0:
   resolved "https://registry.npmjs.org/junk/-/junk-3.1.0.tgz"
   integrity sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==
 
-kailib@^1.0.32:
-  version "1.0.32"
-  resolved "https://registry.npmjs.org/kailib/-/kailib-1.0.32.tgz"
-  integrity sha512-4gENogAMBz8E12VN8eENNpOpZ0TbU0LlwlB/nqqH7TzbyiOASs134aX5aHW4O/U/aXD7cArMB6JjAy+92MrzUQ==
-
 kailib@^1.0.33:
   version "1.0.33"
   resolved "https://registry.yarnpkg.com/kailib/-/kailib-1.0.33.tgz#20d905f715425bd815dd6d762015ca45e77bd064"
   integrity sha512-jNwLe9q/Gc3CwXHIIn09F0TbezeEDWM89nc3IZNZ0sJ8EKrWOrVJUXWO/w0LgmbMrdrSuS0q4J/APVFKGAV7tQ==
+
+kailib@^1.0.37:
+  version "1.0.37"
+  resolved "https://registry.yarnpkg.com/kailib/-/kailib-1.0.37.tgz#9c2b11b7303ab82d40e7fd39e16d98398c60826d"
+  integrity sha512-6UTxFSPctPDcATtFc+vard6D16//WJlnD+YEEy2XIc/6+IxvlRfCo1eH21ECDszKGzeQ34WUn6YXPby8OTDdLw==
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"

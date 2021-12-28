@@ -55,8 +55,8 @@ export class LitDialog extends LitElement{
                 </header>
                 ${pool.length > 1 
                     ? html`<lit-icon 
-                        class = "arrow-back" 
                         icon = "dropdown"
+                        
                         @click = "${this.back}"
                         ></lit-icon>` 
                     : nothing}

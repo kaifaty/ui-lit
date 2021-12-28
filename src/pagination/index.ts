@@ -11,7 +11,7 @@ export interface IPaginationProps{
 
 @customElement("lit-pagination")
 export class LitPagination extends LitElement{
-    @property({type: Number}) page: number = 0;
+    @property({type: Number}) page: number | null = 0;
     @property({type: Number}) pageLength: number = 5;
     static get properties(){
         return {
@@ -73,7 +73,7 @@ export class LitPagination extends LitElement{
         const oldValues = this._length;
         this._length = value
         this.requestUpdate('length', oldValues);
-        if(this.page * this.pageLength > this.length ){
+        if((this.page || 0) * this.pageLength > this.length){
             this.setPage(Math.floor(this.length / this.pageLength))
         }
     }
@@ -82,13 +82,14 @@ export class LitPagination extends LitElement{
     }
     get pageList(){
         const pagesCount = this.pageCount;
+        const page = this.page || 0;
         const list: number[] = [...new Set([
             0, pagesCount, 
-            this.page, 
+            page, 
             //this.page - 2, 
-            this.page - 1,
+            page - 1,
             //this.page + 2, 
-            this.page + 1,
+            page + 1,
         ])]
         .filter(n => n >= 0 && n <= pagesCount)
         .sort((a, b) => {
@@ -111,16 +112,23 @@ export class LitPagination extends LitElement{
         }
         return newArr;
     }
-    setPage(page: number){
-        const pageCount = this.pageCount;
-        if(page < 0) page = 0;
-        if(page > pageCount) page = pageCount;
-        this.page = page;
+    setPage(page: number | null){
+        if(page === null){
+            this.page = null;
+        }
+        else{
+            if(page > this.pageCount) page = this.pageCount;
+            this.page = page;
+        }
+        // this.page = page;
+        console.log(page)
         this.dispatchEvent(new CustomEvent('changed', {
             detail: page
         }));
     }
-
+    getPage(){
+        return this.page === null ? 0 : this.page + 1;
+    }
     private _pagesTemplate(){        
         return this.pageList.map(n => 
         html`<button type = "button"
@@ -129,6 +137,7 @@ export class LitPagination extends LitElement{
                     class = "${n.value === this.page ? 'selected' : ''}">${n.label}</button>`);
     }
     render(){
+        console.log(this.page)
         return html`
         <button @click = "${this._decrementPage}" 
                 type = "button">
@@ -137,8 +146,9 @@ export class LitPagination extends LitElement{
         <lit-numberfield 
             type = "number"
             .min = "${1}"
+            decimals = "0"
             .max = "${this.pageCount + 1}"
-            .value = "${(this.page + 1).toFixed(0)}"
+            .valueAsNumber = "${this.getPage() as any}"
             @changed = "${this._onInputChange}"
             .decimals = "${0}"
         ></lit-numberfield>                
@@ -154,13 +164,19 @@ export class LitPagination extends LitElement{
         this.setPage(page);
     }
     private _onInputChange(e: CustomEvent){
-        this.setPage(e.detail - 1);
+        if(!e.detail){
+            this.setPage(null);
+        }
+        else{
+            this.setPage(e.detail - 1);
+        }
+        
     }
     private _incrementPage(){
-        this.setPage(this.page + 1);
+        this.setPage(this.page || 0 + 1);
     }
     private _decrementPage(){
-        this.setPage(this.page - 1);
+        this.setPage(this.page || 0 - 1);
     }
 }
 

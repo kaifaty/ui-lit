@@ -6,29 +6,28 @@ let LitIcon = LitIcon_1 = class LitIcon extends LitElement {
     constructor() {
         super(...arguments);
         this.icon = '';
-        this.material = false;
     }
-    willUpdate() {
-        if (this.material)
-            this.classList.add("material");
-        else
-            this.classList.remove("material");
+    static get properties() {
+        return {
+            status: { type: String },
+            error: { type: String },
+        };
     }
+    ;
     render() {
         const code = LitIcon_1.iconsMap[this.icon];
-        if (!this.material) {
-            if (code) {
-                return String.fromCharCode(code);
-            }
-            if (LitIcon_1.defaultIcons[this.icon]) {
-                return LitIcon_1.defaultIcons[this.icon];
-            }
+        if (code) {
+            return String.fromCharCode(code);
+        }
+        if (LitIcon_1.defaultIcons[this.icon]) {
+            return LitIcon_1.defaultIcons[this.icon];
         }
         return this.icon;
     }
 };
 LitIcon.iconsMap = {
     "help": parseInt(`006E`, 16),
+    "back": parseInt(`0069`, 16),
     "dropdown": parseInt(`0069`, 16),
     "dropup": parseInt(`0060`, 16),
     "arrow-down": parseInt(`004e`, 16),
@@ -38,6 +37,7 @@ LitIcon.iconsMap = {
     "waiting": parseInt(`0041`, 16),
     "done": parseInt(`0042`, 16),
     "canceled": parseInt(`0046`, 16),
+    "mobile": parseInt(`0043`, 16),
     "order-status-0": parseInt(`0041`, 16),
     "order-status-3": parseInt(`0042`, 16),
     "order-status-5": parseInt(`006F`, 16),
@@ -127,22 +127,11 @@ LitIcon.styles = css `
         cursor: pointer;
         display: inline-block;
         cursor: pointer;
-        font-style: normal;
-        font-weight: normal;
         text-transform: none !important;
         font-family: var(--lit-icon-font-family, 'Icons');
         color: var(--lit-icon-color, #000);
         font-size: var(--lit-icon-font-size, 12px);
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-            -khtml-user-select: none; /* Konqueror HTML */
-            -moz-user-select: none; /* Old versions of Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-                user-select: none; /* Non-prefixed version, currently
-                                        supported by Chrome, Edge, Opera and Firefox */
-    }
-    :host(.material){
-        font-family: 'Material Icons';
+        
         font-weight: normal;
         font-style: normal;
         line-height: 1;
@@ -154,32 +143,29 @@ LitIcon.styles = css `
         direction: ltr;
         -moz-font-feature-settings: 'liga';
         -moz-osx-font-smoothing: grayscale;
+
+        -webkit-touch-callout: none; /* iOS Safari */
+        -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+                user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome, Edge, Opera and Firefox */
     }
-    :host(.font-awesome){
-        font-family: var(--icon-font-family, 'Icons');
-    }
-    :host(.text-danger),
-    :host(.danger),
-    :host(.error),
-    :host([error])
-    {
+    :host([error]){
         color: var(--lit-error-color, red);
     }
-    :host(.back){
-        transform-origin: center;
-        transform: rotate(-90deg);
+    :host([success]){
+        color: var(--lit-success-color, green);
     }
-    :host(.dropup){
+    :host([icon=back]){
         transform-origin: center;
-        transform: rotate(-180deg) translateY(1px);
+        transform: rotate(90deg);
     }
     `;
 __decorate([
-    property({ type: String })
+    property({ type: String, reflect: true })
 ], LitIcon.prototype, "icon", void 0);
-__decorate([
-    property({ type: Boolean })
-], LitIcon.prototype, "material", void 0);
 LitIcon = LitIcon_1 = __decorate([
     customElement("lit-icon")
 ], LitIcon);

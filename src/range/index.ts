@@ -30,7 +30,7 @@ export class LitRange extends formAssociated(LitElement){
                 min-width: 200px;
                 position: relative;
                 box-sizing: border-box;
-                --size: 8px;
+                --size: var(--lit-range-thumb-size, 12px);
                 --pointer: 8px;
                 --pointer-border: 2px;
                 --poiner-width: calc(var(--pointer) + var(--pointer-border));
@@ -42,7 +42,10 @@ export class LitRange extends formAssociated(LitElement){
                 box-sizing: border-box;
 
             }
-            :host(.disabled){
+            .disabled .thumb-wrapper{
+                display: none;
+            }
+            .disabled{
                 opacity: 0.5;
             }
             .thumb, .point, .track-line{
@@ -233,11 +236,12 @@ export class LitRange extends formAssociated(LitElement){
         if(!this.startFromMin){
             return 0;
         }
+        if(!this.max) return 0;
         return this.min / this.max * 100;
     }
     
     isDisabled(){
-        return this.disabled || this.max < this.min;
+        return this.disabled || this.max < this.min || !this.max;
     }
     
     
@@ -298,6 +302,8 @@ export class LitRange extends formAssociated(LitElement){
 
     private _calcPercentByValue(){
         let value = 0;
+        
+        if(!this.max) return 0;
         if(this.startFromMin){
             value =  Math.round(((this.valueAsNumber - this.min) / (this.max - this.min) ) * 100 * 10) / 10;
         }
@@ -345,6 +351,7 @@ export class LitRange extends formAssociated(LitElement){
     }
     
     private _movePosition(x: number){
+        if(this.isDisabled()) return;
         requestAnimationFrame(() => {
              const offset =  this._calcOffset(x);
              this._percent = this._calcPercentByOffset(offset);

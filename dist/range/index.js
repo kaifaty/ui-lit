@@ -103,7 +103,7 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
                 min-width: 200px;
                 position: relative;
                 box-sizing: border-box;
-                --size: 8px;
+                --size: var(--lit-range-thumb-size, 12px);
                 --pointer: 8px;
                 --pointer-border: 2px;
                 --poiner-width: calc(var(--pointer) + var(--pointer-border));
@@ -115,7 +115,10 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
                 box-sizing: border-box;
 
             }
-            :host(.disabled){
+            .disabled .thumb-wrapper{
+                display: none;
+            }
+            .disabled{
                 opacity: 0.5;
             }
             .thumb, .point, .track-line{
@@ -280,10 +283,12 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         if (!this.startFromMin) {
             return 0;
         }
+        if (!this.max)
+            return 0;
         return this.min / this.max * 100;
     }
     isDisabled() {
-        return this.disabled || this.max < this.min;
+        return this.disabled || this.max < this.min || !this.max;
     }
     _dispatch() {
         this.dispatchEvent(new CustomEvent("changed", {
@@ -335,6 +340,8 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
     }
     _calcPercentByValue() {
         let value = 0;
+        if (!this.max)
+            return 0;
         if (this.startFromMin) {
             value = Math.round(((this.valueAsNumber - this.min) / (this.max - this.min)) * 100 * 10) / 10;
         }
@@ -378,6 +385,8 @@ let LitRange = class LitRange extends formAssociated(LitElement) {
         }, 800);
     }
     _movePosition(x) {
+        if (this.isDisabled())
+            return;
         requestAnimationFrame(() => {
             const offset = this._calcOffset(x);
             this._percent = this._calcPercentByOffset(offset);

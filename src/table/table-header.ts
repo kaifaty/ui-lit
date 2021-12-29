@@ -261,8 +261,7 @@ export class LitTableHeader extends LitElement{
                     </div>
                     <footer>
                         <lit-button 
-                            @click = "${this._onReset}"
-                            borderless
+                            @click = "${this._onReset}"                            
                             type = "button"
                             size = "small">Reset</lit-button>
                         <lit-button 

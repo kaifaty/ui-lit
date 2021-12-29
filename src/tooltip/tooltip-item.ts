@@ -16,7 +16,7 @@ export class TooltimItem extends LitElement{
         border-radius: 5px;
         background-color: var(--lit-tooltip-background, white);
         color: var(--lit-tooltip-color);
-        max-width: 280px;
+        max-width: 260px;
         opacity: 0;
         z-index: 1;
         font-size: var(--lit-tooltip-font-size, 12px);

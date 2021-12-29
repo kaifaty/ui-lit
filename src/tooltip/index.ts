@@ -13,20 +13,32 @@ export class ToolTip extends LitElement{
     static styles = css`
     :host{
         display: inline-block;
-        position: relative;
     }
     `;
-    @property({type: Number}) width: number = 160;
+    @property({type: Number}) width: number = 220;
     @property({type: Number}) height: number = 30;
     @property({type: String}) align: string = 'left';
     @state() opened: boolean = false;
     @state() top: number = 0;
     @state() left: number = 0;
+    
+    /*
+    get isMobile(){
+
+    }*/
+
     connectedCallback(){
         super.connectedCallback();
     }
     disconnectedCallback(){
         super.disconnectedCallback();
+    }
+    willUpdate(){
+        if(this.opened){
+            const data = this.getPosition();
+            this.left = data.left;
+            this.top = data.top;
+        }
     }
     private _tooltipTemplate(){
         if(!this.opened){
@@ -56,37 +68,45 @@ export class ToolTip extends LitElement{
                 </div>`
             ]
     }
-    willUpdate(){
-        if(this.opened){
-            const data = this.getPosition();
-            this.left = data.left;
-            this.top = data.top;
-        }
+    public open(){
+        this.opened = true;
     }
-    private close(){
+    public close(){
         this.opened = false;
     }
-    _onTooltipUpdated = (e: CustomEvent) => {
+    private _onTooltipUpdated = (e: CustomEvent) => {
         this.width = e.detail.width;
         this.height = e.detail.height;
     }
-    _onClick = () => {
-        this.opened = !this.opened;
-        //this.getPosition();
+    private _onClick = () => {
+        if(this.opened){
+            this.close();
+        }
+        else{
+            this.open();
+        }
     }
-    checkTop = (rect: DOMRect) => rect.y - this.height < 0;
-    checkRight = (rect: DOMRect) => rect.x + this.width < window.innerWidth - 10;
+    private checkTop (rect: DOMRect) {
+        return rect.y - this.height < 0
+    };
+    private checkRight (rect: DOMRect) { 
+        return rect.x + rect.width + this.width < window.innerWidth - 10
+    };
+    private checkLeft (rect: DOMRect) {
+        return rect.x - this.width > 10;
+    }
 
     getTop = (rect: DOMRect) => this.checkTop(rect) ? rect.height : -this.height;
     getLeft = (rect: DOMRect) => {
         if(this.checkRight(rect)){
-            return rect.width
+            return rect.width;
         }
-        if(this.width + rect.width > window.innerWidth){
-            return -this.width + rect.width
+        else if(this.checkLeft(rect)) {
+            return -this.width;
         }
-
-        return -this.width;
+        else {
+            return 10 - rect.x;
+        }
     };
     
     getPosition = () => {

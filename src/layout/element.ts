@@ -11,14 +11,14 @@ export class LitLayout extends LitElement{
       box-sizing: border-box;
       width: var(--width, 200px);
       height: var(--height, 200px);
-      padding: var(--lit-layout-padding, 2px);
+      padding: var(--lit-layout-padding, 3px);
       position: absolute;
       left: var(--left, 0);
       top: var(--top, 0);
       z-index: var(--z-index, 1);
     }
     .wrapper{
-      background-color: var(--lit-layout-background, #cd85fd);
+      background-color: var(--lit-layout-background, #ccc);
       padding: 3px 6px;
       box-sizing: border-box;
       height: 100%;
@@ -27,19 +27,20 @@ export class LitLayout extends LitElement{
 
     .resize, .move{
       opacity: 0.5;
-      --icon-font-size: 9px;
+      font-size: 10px;
     }
     .move{
       position: absolute;
-      right: -2px;
-      top: 2px;
+      right: -4px;
+      top: -2px;
       z-index: 10;
       padding: 5px;
+      
     }
     .resize{
       position: absolute;
       right: -3px;
-      bottom: 1px;
+      bottom: -2px;
       transform-origin: center;
       transform: scaleX(-1);
       cursor: nw-resize;

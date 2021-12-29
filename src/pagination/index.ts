@@ -113,6 +113,7 @@ export class LitPagination extends LitElement{
         return newArr;
     }
     setPage(page: number | null){
+        console.log('setPage', this.page, page)
         if(page === null){
             this.page = null;
         }
@@ -167,14 +168,14 @@ export class LitPagination extends LitElement{
         }
         else{
             this.setPage(e.detail - 1);
-        }
-        
+        }                
     }
     private _incrementPage(){
-        this.setPage(this.page || 0 + 1);
+        this.setPage((this.page || 0) + 1);
     }
     private _decrementPage(){
-        this.setPage(this.page || 0 - 1);
+        if((this.page || 0) < 0) return;
+        this.setPage((this.page || 0) - 1);
     }
 }
 

@@ -39,8 +39,15 @@ input, textarea{
     text-align: var(--lit-input-align, initial);
     background-color: var(--lit-input-background, #fff);
     color: var(--lit-input-color, inherit);
+    font-family: inherit;
 }
+input::-webkit-calendar-picker-indicator { display: none }
 
+input[type=date]::-webkit-inner-spin-button, 
+input[type=date]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
 input:focus, 
 textarea:focus{
     outline:  1px solid var(--lit-input-outline-focus, hsla(222, 20%, 60%, 0.5));

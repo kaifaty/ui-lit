@@ -1,6 +1,6 @@
 import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
-import { customElement } from 'lit/decorators';
+import { customElement } from 'lit/decorators.js';
 import { OuterClickRemoveController } from '../controllers/OuterClickRemoveController';
 let LitNote = class LitNote extends LitElement {
     constructor() {

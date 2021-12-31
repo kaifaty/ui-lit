@@ -34,6 +34,7 @@ export type TColumnItem = {
     sorter?: boolean | ((a: ISourceItem, b: ISourceItem, direction: TSortDirections) => number); 
     sortDirections?: TSortDirections[];
     width?: number
+    percent?: number
     defaultSort?: boolean
     align?: string
     ellipses?: boolean
@@ -42,7 +43,7 @@ export type TColumnItem = {
 export type TSortDirections = 'ascend' | 'descend';
 
 const nodataSVG = svg`
-<svg width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+<svg class = "nodata-svg" width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
 <path d="M46.0625 44.7083L4.97917 3.60416L2.3125 6.24999L6.25 10.2083V39.5833C6.25 40.6884 6.68899 41.7482 7.47039 42.5296C8.25179 43.311 9.3116 43.75 10.4167 43.75H39.7917L43.4167 47.3542L46.0625 44.7083ZM10.4167 39.5833V14.3542L35.6458 39.5833H10.4167ZM17.0833 10.4167L12.9167 6.24999H39.5833C40.6884 6.24999 41.7482 6.68898 42.5296 7.47038C43.311 8.25178 43.75 9.31159 43.75 10.4167V37.0833L39.5833 32.9167V10.4167H17.0833Z"/>
 </svg>`;
 
@@ -68,23 +69,55 @@ export class TableElement extends LitElement{
         display: grid;
         grid-template-rows: auto 26px;
     }
-    
-    :host(:not([pagination])){
-        
-    }
     :host(:not([pagination])) footer{
         display: none;
     }
-    .content{
-        display: grid;
-        grid-template-columns: var(--lit-table-cells, repeat(var(--lit-cells), auto));
-        align-content: start;
-        overflow-y: auto;
+    
+    table{
+        border-collapse: collapse;
+        width: 100%;
+    }
+    table.nodata {
         height: 100%;
     }
-    .content.nodata{
-        align-content: stretch;
-        grid-template-rows: var(--header-height) auto;
+    table.nodata td{
+        height: auto;
+    }
+    tbody td{
+        padding: var(--lit-cell-padding, 0 15px);
+        height: var(--row-height);
+        white-space: nowrap;
+    }
+    tbody td.ellipses{
+        max-width: 1px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    tbody td.half-hidden{
+        opacity: 0.5;
+    }
+    th{
+        position: relative;
+        height: var(--header-height, 35px);
+        padding: 0;
+    }
+    th:not(:last-child)::after{
+        content: '';
+        position: absolute;
+        width: 1px;
+        height: 50%;
+        display: inline-block;
+        background-color: var(--lit-table-header-separator, rgba(0,0,0,0.2));
+        top: 50%;
+        right: 0;
+        transform: translate(0, -50%);
+    }
+    main{
+        overflow-y: auto;
+    }
+    .nodata svg{
+        fill: var(--lit-icon-color);
+        opacity: 0.1;
     }
     lit-pagination{
         display: flex;
@@ -94,33 +127,15 @@ export class TableElement extends LitElement{
         display: flex;
         justify-content: space-between;
     }
-    .flex-content{
+    .ellipses.col-wrapper{
         display: flex;
         align-items: center;
-        justify-content: center;
-        height: 100%;
-        grid-column: 1 / calc(var(--lit-cells) + 1);
-        opacity: 0.1;
-        min-height: 100px;
+        overflow:hidden;
     }
-    .flex-content svg{
-        fill: var(--lit-icon-color);
-    }
-    
-    .ellipses{
-        overflow: hidden; 
-    }
-    .ellipses > *{
-        text-overflow: ellipsis;
-        overflow: hidden; 
-        white-space: nowrap;
-    }
-    lit-table-cell .full-content{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
+    .ellipses.col-wrapper > *{
+        text-overflow:ellipsis;
+        overflow:hidden;
+        white-space:nowrap;
     }
     `, scrollbar];
     private  RO = new ResizeObserverController(this);
@@ -171,14 +186,7 @@ export class TableElement extends LitElement{
     private _stopResize = false;
 
     private _filters: Map<string, TFilterItem[]> = new Map();
-/*
-    connectedCallback(): void {
-        super.connectedCallback()
-        setTimeout(() => {
-            this.requestUpdate();
-        }, 5000);
-    }
-    */
+
     get rect(){
         return this._rect;
     }
@@ -264,7 +272,8 @@ export class TableElement extends LitElement{
     }
     private _headerTemplate(){
         return this.columns.map((col, i) => {
-            return html`<lit-table-header 
+            return html`<th>
+                <lit-table-header 
                 .filters = "${this._filters.get(col.key)}"
                 @changeFilter = "${this._changeFilter}"
                 @resetFilter = "${this._resetFilter}"
@@ -272,7 +281,8 @@ export class TableElement extends LitElement{
                 .align = "${col.align || "left"}"
                 .sort = "${this.sort}"
                 .sortDirection = "${this.sortDirection}"
-                .item = "${col}"></lit-table-header>`
+                .item = "${col}"></lit-table-header>
+            </th>`
         });
     }
     private _rowsTemplate(){
@@ -282,37 +292,46 @@ export class TableElement extends LitElement{
                 : this._data, 
             it => it.key, 
             it => html`
-            <lit-table-row 
-            
-            >
+            <tr>
                 ${this.columns.map((col, i) => {
                     const classes = {
                         ellipses: !!col.ellipses,
                         'half-hidden': col.halfHidden ? col.halfHidden(it) : false
                     }                    
-                    return html`<lit-table-cell 
-                                    .align = "${col.align || "left"}"
-                                    class = "${classMap(classes)}">${col.valueFn ? col.valueFn(it) : it[col.key]}</lit-table-cell>`
+                    return html `<td .align = "${col.align || "left"}"
+                                     style = "width: ${col.percent ? col.percent + '%' : 'auto'}"
+                                     class = "${classMap(classes)}">
+                                    <div 
+                                        style = "min-width: ${col.width ? col.width + "px" : "auto"}"
+                                         class = "col-wrapper ${!!col.ellipses ? 'ellipses' : ''}">
+                                        ${col.valueFn ? col.valueFn(it) : it[col.key]}
+                                    </div>
+                                </td>`;
                 })}
-            </lit-table-row>`
+            </tr>`
         )
     }
     render(){
         return html`
-        <div class = "content ff-scrollbar ${!this._data.length ? 'nodata' : ''}" 
-            ${this.RO.observe(this._onResize)}
-             @changeSort = "${this._onSortChanged}">
-            <lit-table-row>
-                ${this._headerTemplate()}
-            </lit-table-row>
-            ${
-                !this._data.length 
-                    ? html`<div class = "flex-content">
-                                ${nodataSVG}
-                           </div>` 
-                    : this._rowsTemplate()
-            }
-        </div>
+        <main class = "ff-scrollbar" ${this.RO.observe(this._onResize)}>
+            <table class = " ${!this._data.length ? 'nodata' : ''}" 
+                    @changeSort = "${this._onSortChanged}">
+                <thead>
+                    <tr>
+                        ${this._headerTemplate()}
+                    </tr>
+                </thead>
+                <tbody>
+                ${
+                    !this._data.length 
+                        ? html`<tr><td colspan = "200" align = "center">
+                                    ${nodataSVG}
+                                </td></tr>` 
+                        : this._rowsTemplate()
+                }
+                </tbody>
+            </table>
+        </main>
         <footer>
             ${this.pagination
                 ? html `<lit-pagination 

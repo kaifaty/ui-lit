@@ -30,7 +30,7 @@ export class LitTabs extends formAssociated(LitElement) implements ITabs{
     }
     :host([disabled]){
         opacity: 0.5;
-    }`, scrollbar];    
+    }`, scrollbar];
     @property({type: String, reflect: true}) type: TTabType = 'button';
     @property({type: String}) value: string = '';
 

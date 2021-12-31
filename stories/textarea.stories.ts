@@ -1,4 +1,4 @@
-import { TemplateResult, html } from 'lit';
+import { TemplateResult, html } from 'lit-html';
 import '../dist/textarea';
 import type { ITextareaProps } from '../src/textarea';
 import { Story, Meta } from '@storybook/web-components';

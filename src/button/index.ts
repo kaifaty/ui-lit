@@ -1,14 +1,14 @@
 import { TemplateResult, LitElement, nothing, html, } from 'lit';
-import { customElement, property, state } from 'lit/decorators';
-import { classMap } from 'lit/directives/class-map';
+import { customElement, property, state } from 'lit/decorators.js';
+import { classMap } from 'lit/directives/class-map.js';
 import { KeyDownController } from '../controllers/KeyController';
-import { button } from '../styles/button';
+import { button } from './styles';
 import '../spinner';
 
 
 export interface ButtonProps{
-    type?: 'button' | 'submit',
-    size?: TSize,
+    type: 'button' | 'submit',
+    size: TSize,
     primary?: boolean
     disabled?: boolean
     borderless?: boolean
@@ -47,48 +47,30 @@ export class LitButton extends LitElement implements ButtonProps{
     enter = new KeyDownController(this);
     notifyTimeout = 0;
 
-    connectedCallback(){
-        super.connectedCallback();
-    }
-    disconnectedCallback(){
-        super.disconnectedCallback();
-    }
     get classes(){
         return {
             wrapper: true,
             noselect: true,
         };
     }
-    willUpdate(){
-        if (this._notifyIcon || (this.loading && this.clientWidth)) {
-            this.style.width = this.clientWidth + "px";
-            this.style.height = this.clientHeight + "px";
-            this.style.setProperty("--button-justify", 'center');
-        }
-        else if (this.notifyTimeout > 0) {
-            this.style.removeProperty("width");
-            this.style.removeProperty("height");
-            this.style.removeProperty("--button-justify");
-        }
-    }
     private _contentTemplate(){
-        return this._notifyIcon 
-        ? html`<lit-icon class = "checkmark" 
-                         icon = "checkmark"></lit-icon>` 
-        : html`
-            <slot name = "icon-before"></slot>
-            <slot></slot>
-            <slot name = "icon-after"></slot>`;
+        if(this.loading){
+            return html`<lit-spinner small></lit-spinner>`;
+        }
+        if(this._notifyIcon){
+            return html`<lit-icon class = "checkmark" 
+                                  icon = "checkmark"></lit-icon>`;
+        }
+        return html`<slot name = "icon-before"></slot>
+                    <slot></slot>
+                    <slot name = "icon-after"></slot>`;
     }
     render(){
         return html`
         <div tabIndex = "${this.tabindex}" 
             class = "${classMap(this.classes)}" 
-            @click = "${this._click}"
-            >${this.loading 
-                ? html`<lit-spinner small></lit-spinner>` 
-                : this._contentTemplate()}
-        </div>`;
+            @click = "${this.click}"
+        >${this._contentTemplate()}</div>`;
     }
 
     // ==== Events ====
@@ -97,26 +79,28 @@ export class LitButton extends LitElement implements ButtonProps{
             this.submit();
         }
     }
-    private _click(){
-        if(this.disabled) return;
-        
+    public focus(): void {
+        (this.shadowRoot!.querySelector(`.wrapper`) as HTMLElement)?.focus();
+    }
+    public click(){
+        if(this.disabled || this.loading) return;        
         if(this.switch){
             this.toggleSwitch();
         }
         else{
             this.submit();
-        }        
-        
+        }                
     }
     // ==== Actions ====
-    toggleSwitch(){
+    public toggleSwitch(){
         this.switchOn = !this.switchOn;
         this.dispatchEvent(new CustomEvent("switchChanged", {
             detail: this.switchOn,
             bubbles: true,
         }))
     }
-    submit(){
+    public submit(){
+        if(this.loading) return;
         if(this.type === 'submit'){
             this.dispatchEvent(new CustomEvent("submitForm", {
                 bubbles: true,

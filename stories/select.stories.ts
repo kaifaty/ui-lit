@@ -2,7 +2,7 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/select';
-import type { IPropsSelect } from '../src/select';
+import type { IPropsSelect } from '../select';
 
 
 const Select = (data: IPropsSelect) => 

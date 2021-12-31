@@ -2,7 +2,7 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/range';
-import type { IRangeProps } from '../src/range';
+import type { IRangeProps } from '../range';
 
 
 const Range = (data: IRangeProps) => 

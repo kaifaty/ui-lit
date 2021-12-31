@@ -18,25 +18,18 @@ export class LitTableHeader extends LitElement{
         padding: var(--lit-cell-header-padding, 0 15px);
         font-weight: 600;
         font-size: var(--lit-table-header-font-size, inherit);
-        position: relative;
-        display: flex;
         --lit-icon-font-size: 8px;
         --lit-icon-color: var(--lit-table-icon-color, rgba(0,0,0,0.2));
+        background-color: var(--lit-table-header-background, #eee);
+        position: relative;
+        display: flex;
+        height: 100%;
+        
     }
-    :host(:not(:last-child))::after{
-        content: '';
-        position: absolute;
-        width: 1px;
-        height: 50%;
-        display: inline-block;
-        background-color: var(--lit-table-header-separator, rgba(0,0,0,0.1));
-        top: 50%;
-        right: 0;
-        transform: translate(0, -50%);
-    }
+    
     .sort-icons{
         display: flex;
-        padding: var(--lit-table-sort-padding, 0 5px );
+        padding: var(--lit-table-sort-padding, 0 5px);
         flex-direction: column;
         align-items: center;
         line-height: 0.9;
@@ -48,8 +41,7 @@ export class LitTableHeader extends LitElement{
     }
     :host([sortDirection = "descend"]) .sorted lit-icon[icon = "dropdown"],
     :host([sortDirection = "ascend"]) .sorted lit-icon[icon = "dropup"],
-    .filters-checked
-    {
+    .filters-checked{
         --lit-icon-color: var(--lit-table-icon-color-selected, hsl(210, 90%, 60%));
     }
     [icon = "filter"]{
@@ -67,11 +59,11 @@ export class LitTableHeader extends LitElement{
     .wrapper{
         display: flex;
         align-items: center;
-        height: var(--header-height, 50px);
     }
     .filter-template{
         position: absolute;
         font-size: 12px;
+        top: 1px;
         left: 1px;
         font-weight: 400;
         padding: 10px;
@@ -100,6 +92,7 @@ export class LitTableHeader extends LitElement{
     lit-label{
         flex-direction: column;
         align-items: start;
+        text-align: left;
     }
     .flex-center{
         display: flex;

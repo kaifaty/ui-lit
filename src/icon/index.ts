@@ -1,5 +1,5 @@
 import { LitElement, css, PropertyDeclarations,  } from 'lit';
-import { property, customElement } from 'lit/decorators';
+import { property, customElement } from 'lit/decorators.js';
 
 export interface IIconProps{
     material: boolean
@@ -16,6 +16,7 @@ export class LitIcon extends LitElement{
         "arrow-down": parseInt(`004e`, 16),
         "arrow-up": parseInt(`004f`, 16),
         "arrow-down-2": parseInt(`0050`, 16),
+        "arrow-left": parseInt(`0050`, 16),
         "arrow-up-2": parseInt(`0051`, 16),
         "waiting": parseInt(`0041`, 16),
         "done": parseInt(`0042`, 16),
@@ -148,7 +149,8 @@ export class LitIcon extends LitElement{
     :host([success]){
         color: var(--lit-success-color, green);
     }
-    :host([icon=back]){
+    :host([icon=back]),
+    :host([icon=arrow-left]){
         transform-origin: center;
         transform: rotate(90deg);
     }

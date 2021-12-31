@@ -1,11 +1,11 @@
 import { __decorate } from "tslib";
 import { LitElement, html, nothing } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 import { formAssociated } from '../form-associated/index';
 ;
 import '../icon';
 import { input } from '../styles/input';
-import { live } from 'lit//directives/live';
+import { live } from 'lit/directives/live.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 const AvailabledKeys = ['Control', 'Backspace', 'Delete', ',', '.', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End', "Enter"];
 const Numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
@@ -136,8 +136,10 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
     }
     validate() {
         super.validate();
+        //if(!this.required && this.disabled) return;
+        const skip = !this.required && this.disabled;
         if (this.min) {
-            if (this.valueAsNumber < this.min) {
+            if (this.valueAsNumber < this.min && !skip) {
                 this.setValidity({ rangeUnderflow: true });
             }
             else if (this.validity.rangeUnderflow) {
@@ -145,7 +147,7 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
             }
         }
         if (this.max) {
-            if (this.valueAsNumber > this.max) {
+            if (this.valueAsNumber > this.max && !skip) {
                 this.setValidity({ rangeOverflow: true });
             }
             else if (this.validity.rangeOverflow) {

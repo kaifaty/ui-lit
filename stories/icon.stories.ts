@@ -2,7 +2,7 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/icon';
-import type { IIconProps } from '../src/icon';
+import type { IIconProps } from '../icon';
 
 
 const Icon = (data: IIconProps) => 

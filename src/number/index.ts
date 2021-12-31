@@ -1,10 +1,10 @@
 import { LitElement, html, css, nothing, TemplateResult } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 import { formAssociated } from '../form-associated/index'
 import type { FormAssociated } from '../form-associated/interface';;
 import '../icon';
 import { input } from '../styles/input';
-import { live } from 'lit//directives/live';
+import { live } from 'lit/directives/live.js';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
 import { TInputMode } from '../textfield/index';
 
@@ -157,8 +157,10 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
     
     public validate(){
         super.validate();
+        //if(!this.required && this.disabled) return;
+        const skip = !this.required && this.disabled;
         if(this.min){
-            if(this.valueAsNumber < this.min){
+            if(this.valueAsNumber < this.min && !skip){
                 this.setValidity({rangeUnderflow: true})
             }
             else if(this.validity.rangeUnderflow){
@@ -166,10 +168,10 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
             }
         }
         if(this.max){
-            if(this.valueAsNumber > this.max){
+            if(this.valueAsNumber > this.max && !skip){
                 this.setValidity({rangeOverflow: true})
             }
-            else if(this.validity.rangeOverflow){
+            else if(this.validity.rangeOverflow ){
                 this.setValidity({rangeOverflow: false})
             }
         }

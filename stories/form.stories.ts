@@ -1,6 +1,6 @@
 import { TemplateResult, html } from 'lit';
 import '../dist/form';
-import type { IFormProps } from '../src/form';
+import type { IFormProps } from '../form';
 import { Story, Meta } from '@storybook/web-components';
 
 const Button = (data: IFormProps) => 

@@ -12,8 +12,7 @@ const Circle = (data: ICircleProps) =>
             percent = "${data.percent}"></lit-circle>`;
 
 
-const Template: Story<Partial<ICircleProps>> = (data) => 
-    Circle(data as ICircleProps);
+const Template: any = (data: ICircleProps) => Circle(data);
 
 export const Default = Template.bind({});
 Default.args = {

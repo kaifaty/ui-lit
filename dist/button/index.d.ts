@@ -2,8 +2,8 @@ import { TemplateResult, LitElement } from 'lit';
 import { KeyDownController } from '../controllers/KeyController';
 import '../spinner';
 export interface ButtonProps {
-    type?: 'button' | 'submit';
-    size?: TSize;
+    type: 'button' | 'submit';
+    size: TSize;
     primary?: boolean;
     disabled?: boolean;
     borderless?: boolean;
@@ -37,17 +37,15 @@ export declare class LitButton extends LitElement implements ButtonProps {
     tabindex: number;
     enter: KeyDownController;
     notifyTimeout: number;
-    connectedCallback(): void;
-    disconnectedCallback(): void;
     get classes(): {
         wrapper: boolean;
         noselect: boolean;
     };
-    willUpdate(): void;
     private _contentTemplate;
     render(): TemplateResult<1>;
     handlekeyDown(e: KeyboardEvent): void;
-    private _click;
+    focus(): void;
+    click(): void;
     toggleSwitch(): void;
     submit(): void;
 }

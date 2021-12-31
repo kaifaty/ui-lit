@@ -2,7 +2,7 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/tabs';
-import { ITabs } from '../src/tabs';
+import { ITabs } from '../tabs';
 
 
 const Tabs = (data: ITabs) => 

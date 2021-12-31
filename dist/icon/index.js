@@ -1,7 +1,7 @@
 var LitIcon_1;
 import { __decorate } from "tslib";
 import { LitElement, css, } from 'lit';
-import { property, customElement } from 'lit/decorators';
+import { property, customElement } from 'lit/decorators.js';
 let LitIcon = LitIcon_1 = class LitIcon extends LitElement {
     constructor() {
         super(...arguments);
@@ -33,6 +33,7 @@ LitIcon.iconsMap = {
     "arrow-down": parseInt(`004e`, 16),
     "arrow-up": parseInt(`004f`, 16),
     "arrow-down-2": parseInt(`0050`, 16),
+    "arrow-left": parseInt(`0050`, 16),
     "arrow-up-2": parseInt(`0051`, 16),
     "waiting": parseInt(`0041`, 16),
     "done": parseInt(`0042`, 16),
@@ -158,7 +159,8 @@ LitIcon.styles = css `
     :host([success]){
         color: var(--lit-success-color, green);
     }
-    :host([icon=back]){
+    :host([icon=back]),
+    :host([icon=arrow-left]){
         transform-origin: center;
         transform: rotate(90deg);
     }

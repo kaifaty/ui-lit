@@ -2,7 +2,7 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/table';
-import { ISourceItem } from '../src/table/table';
+import { ISourceItem } from '../table/table';
 
 const data = {
     key: '1',
@@ -96,7 +96,7 @@ const Table = (text: string) =>
         defaultSort = "age"
         .dataSource = "${dataSource}"
         .columns = "${columns}"
-        rowHeight = "20"
+        rowHeight = "25"
         headerHeight = "20"
     ></lit-table>`;
 

@@ -32,7 +32,7 @@ export declare class LitCheckbox extends LitCheckbox_base implements ICheckboxPr
     disconnectedCallback(): void;
     private _switcherTemplate;
     private _checkboxTemplate;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     private _handleClick;
     toggle(): void;
 }

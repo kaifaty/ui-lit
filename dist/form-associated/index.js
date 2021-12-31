@@ -1,6 +1,6 @@
 import { __decorate } from "tslib";
 import { html, nothing } from 'lit';
-import { property } from 'lit/decorators';
+import { property } from 'lit/decorators.js';
 import '../note';
 import { ref, createRef } from 'lit/directives/ref.js';
 const defaultValidationMessages = {
@@ -104,18 +104,6 @@ export const formAssociated = (superClass) => {
             }
             return nothing;
         }
-        updated(_changedProperties) {
-            if (_changedProperties.has("disabled")) {
-                this.disabled
-                    ? this.classList.add("disabled")
-                    : this.classList.remove("disabled");
-            }
-            if (_changedProperties.has("readonly")) {
-                this.readonly
-                    ? this.classList.add("readonly")
-                    : this.classList.remove("readonly");
-            }
-        }
         async firstUpdated() {
             await this.updateComplete;
             this.isFirstUpdated = true;
@@ -178,10 +166,10 @@ export const formAssociated = (superClass) => {
             return validity;
         }
         validate() {
-            if (this.required && !this.value) {
+            if (this.required && !this.value && !this.disabled) {
                 this.setValidity({ valueMissing: true });
             }
-            else if (!this.required || this.value) {
+            else if (this.validity.valueMissing) {
                 this.setValidity({ valueMissing: false });
             }
         }

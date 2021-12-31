@@ -1,4 +1,4 @@
-import { TemplateResult, html } from 'lit';
+import { html } from 'lit-html';
 import '../dist/textfield';
 import type { TextProps } from '../src/textfield';
 import { Story, Meta } from '@storybook/web-components';

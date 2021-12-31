@@ -10,7 +10,7 @@ export declare class LitLabel extends LitElement {
     connectedCallback(): void;
     disconnectedCallback(): void;
     firstUpdated(): void;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     appendConnectedField(el: TLabled | HTMLInputElement | null): void;
     removeConnectedField(el?: TLabled | HTMLInputElement | null): void;
     private _findConnectedField;

@@ -10,9 +10,8 @@ export class TooltimItem extends LitElement{
         position: absolute;
         top: 0;
         left: 0;
-        padding: 4px 10px;
+        padding: 8px 10px;
         box-sizing: border-box;
-        border: 1px solid var(--lit-tooltip-border, #333);
         border-radius: 5px;
         background-color: var(--lit-tooltip-background, white);
         color: var(--lit-tooltip-color);
@@ -22,6 +21,7 @@ export class TooltimItem extends LitElement{
         font-size: var(--lit-tooltip-font-size, 12px);
         font-weight: var(--lit-tooltip-weight, normal);
         transition: opacity 0.3s ease-out;
+        box-shadow: 0 0 8px var(--lit-tooltip-shadow, rgba(0,0,0,0.5));
     }
     :host(.visible){
         opacity: 1;
@@ -32,6 +32,9 @@ export class TooltimItem extends LitElement{
         top: -8px;
         border-radius: 12px;
         padding: 2px;
+        color: #fff;
+        background: rgba(0,0,0,0.7);
+        box-shadow: 0 0 6px rgba(0,0,0,0.5);
     }
     `;
     firstUpdated(){

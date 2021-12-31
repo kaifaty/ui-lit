@@ -13,6 +13,8 @@ export class ToolTip extends LitElement{
     static styles = css`
     :host{
         display: inline-block;
+        position: relative;
+        cursor: pointer;
     }
     `;
     @property({type: Number}) width: number = 220;

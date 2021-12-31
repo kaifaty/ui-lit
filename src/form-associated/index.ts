@@ -1,7 +1,6 @@
 import { LitElement, html, nothing, css } from 'lit';
-import { state, property } from 'lit/decorators';
+import { property } from 'lit/decorators.js';
 import type { FormAssociatedElement, ProxyElement, ValidityStateFlags } from './interface';
-import { calcPositionForPopup } from '../helpers/position';
 import type { LitNote } from '../note';
 import '../note';
 import { ref, createRef } from 'lit/directives/ref.js';
@@ -118,18 +117,6 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             }
             return nothing;
         }
-        updated(_changedProperties: Map<string | number | symbol, unknown>){
-            if(_changedProperties.has("disabled")){
-                this.disabled 
-                    ? this.classList.add("disabled") 
-                    : this.classList.remove("disabled");
-            }
-            if(_changedProperties.has("readonly")){
-                this.readonly 
-                    ? this.classList.add("readonly") 
-                    : this.classList.remove("readonly");
-            }
-        }
         async firstUpdated(){
             await this.updateComplete;
             this.isFirstUpdated = true
@@ -193,10 +180,11 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             return validity;
         }
         validate(){
-            if(this.required && !this.value){
+            
+            if(this.required && !this.value && !this.disabled){
                 this.setValidity({valueMissing: true});
             }
-            else if(!this.required || this.value){
+            else if(this.validity.valueMissing){
                 this.setValidity({valueMissing: false});
             }
         }

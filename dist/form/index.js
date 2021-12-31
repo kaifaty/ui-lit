@@ -7,7 +7,7 @@ let LitFrom = class LitFrom extends LitElement {
         super(...arguments);
         this._elements = [];
         this.noValidate = false;
-        this.disabled = false;
+        this._disabled = false;
         // ==== Events ==== 
         this._handleSubmit = (e) => {
             e.preventDefault();
@@ -24,6 +24,15 @@ let LitFrom = class LitFrom extends LitElement {
     }
     get elements() {
         return this._elements;
+    }
+    get disabled() {
+        return this.disabled;
+    }
+    set disabled(value) {
+        if (value !== this._disabled) {
+            this._disabled = value;
+            this._elements.forEach(el => el.disabled = this.disabled);
+        }
     }
     render() {
         return html `<slot></slot>`;
@@ -77,11 +86,6 @@ let LitFrom = class LitFrom extends LitElement {
         }
         return true;
     }
-    updated(props) {
-        if (props.has('disabled')) {
-            this._elements.forEach(el => el.disabled = this.disabled);
-        }
-    }
     submit() {
         if (!this.noValidate && !this.reportValidity()) {
             return false;
@@ -104,9 +108,6 @@ LitFrom.styles = css `
 __decorate([
     property({ type: Boolean })
 ], LitFrom.prototype, "noValidate", void 0);
-__decorate([
-    property({ type: Boolean })
-], LitFrom.prototype, "disabled", void 0);
 LitFrom = __decorate([
     customElement("lit-form")
 ], LitFrom);

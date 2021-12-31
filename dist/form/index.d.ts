@@ -17,8 +17,10 @@ export declare class LitFrom extends LitElement implements IFormElement, IFormPr
     get length(): number;
     get elements(): FormAssociatedElement[];
     noValidate: boolean;
-    disabled: boolean;
-    render(): import("lit-html").TemplateResult<1>;
+    _disabled: boolean;
+    get disabled(): boolean;
+    set disabled(value: boolean);
+    render(): import("lit").TemplateResult<1>;
     connectedCallback(): void;
     disconnectedCallback(): void;
     private _handleSubmit;
@@ -27,7 +29,6 @@ export declare class LitFrom extends LitElement implements IFormElement, IFormPr
     getData(): TReturnData;
     checkValidity(): boolean;
     reportValidity(): boolean;
-    updated(props: Map<string, string | boolean>): void;
     submit(): false | TReturnData;
     reset(): void;
 }

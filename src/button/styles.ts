@@ -1,5 +1,6 @@
 import { css } from 'lit';
-import { noselect } from './noselect';
+import { noselect } from '../styles/noselect';
+
 export const button = [
     noselect,
     css`
@@ -12,7 +13,6 @@ export const button = [
         display: grid;
         
         gap: var(--lit-button-icon-gap, 4px);
-        justify-content: var(--button-justify);
         box-sizing: border-box;
         align-items: center;
         grid-auto-flow: column;
@@ -26,6 +26,14 @@ export const button = [
         font-weight: var(--lit-button-weight, 600);
         padding: var(--lit-button-padding, 6px 14px);
         text-transform: var(--lit-button-text-transform, uppercase);
+    }
+    .checkmark{
+        justify-self: center;
+    }
+    lit-spinner{
+        height: 15px;
+        width: 15px;
+        justify-self: center;
     }
 
     :host([center]) .wrapper{
@@ -48,7 +56,7 @@ export const button = [
         color: var(--lit-button-primary, hsl(222, 95%, 98%));
         background-color: var(--lit-button-primary-background, hsl(222, 95%, 65%));
         border: 1px solid var(--lit-button-primary-border,  hsl(222, 95%, 45%));
-        --lit-icon-color: var(--lit-button-primary);
+        --lit-icon-color: var(--lit-button-primary, hsl(222, 95%, 98%));
     }
     :host(:not([disabled])[primary]) .wrapper:hover{
         background-color: var(--lit-button-primary-background-hover,  hsl(222, 95%, 60%));

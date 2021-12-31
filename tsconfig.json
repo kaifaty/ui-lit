@@ -1,9 +1,11 @@
 {
   "include": [
-    "./src/**/*",
+    "./src/**/*", 
   ],
   "exclude": [
     "dist",
+    "stories",
+    "storybook-static",
     "node_modules",
   ],
   "compilerOptions": {   

@@ -12,7 +12,7 @@ export declare class LitLink extends LitElement {
     rel?: string;
     target: TLinkTartget;
     underlined: boolean;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
 }
 declare global {
     interface HTMLElementTagNameMap {

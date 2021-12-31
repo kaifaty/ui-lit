@@ -32,7 +32,17 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         return this._elements;
     }
     @property({type: Boolean}) noValidate: boolean = false;
-    @property({type: Boolean}) disabled: boolean = false;
+    _disabled: boolean = false;
+    get disabled(){ 
+        return this.disabled
+    }
+    set disabled(value: boolean){
+        if(value !== this._disabled){
+            this._disabled = value;
+            this._elements.forEach(el => el.disabled = this.disabled);
+        }
+    }
+
 
     render(){
         return html`<slot></slot>`;
@@ -98,12 +108,6 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         return true;
     }
 
-    updated(props: Map<string, string | boolean>){
-        if(props.has('disabled')){
-            this._elements.forEach(el => el.disabled = this.disabled);
-        }
-
-    }
     submit(): false | TReturnData{
         if(!this.noValidate && !this.reportValidity()){
             return false;

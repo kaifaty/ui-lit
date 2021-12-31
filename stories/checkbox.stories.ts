@@ -1,4 +1,4 @@
-import { TemplateResult, html } from 'lit';
+import { TemplateResult, html } from 'lit-html';
 import '../dist/checkbox';
 import type { ICheckboxProps } from '../src/checkbox';
 import { Story, Meta } from '@storybook/web-components';
@@ -10,7 +10,7 @@ const Number = (data: ICheckboxProps) =>
         <lit-checkbox 
             ?checked = "${data.checked}"
             ?readonly = "${data.readonly}"
-            .value = "${data.value || ''}"
+            .value = "${data.value}"
             .type = "${data.type}"
         ></lit-checkbox>
     </lit-label>

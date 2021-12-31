@@ -2,7 +2,7 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/qrcode';
-import type { IQRCodeProps } from '../src/qrcode';
+import type { IQRCodeProps } from '../qrcode';
 
 
 const QRCode = (data: IQRCodeProps) => 

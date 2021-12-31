@@ -3,7 +3,7 @@
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/header';
-import { IHeaderProps } from '../src/header';
+import { IHeaderProps } from '../header';
 
  
 const Header = (data: IHeaderProps) => 

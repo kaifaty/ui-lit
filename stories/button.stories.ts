@@ -5,8 +5,7 @@ import {ButtonProps } from  '../src/button'
 
 const _Button = (data: ButtonProps) => {
   return html`<lit-button 
-    style = "width: 200px"
-    type = "${data.type}"
+    type = "${data.type || 'button'}"
     ?primary = "${!!data.primary}"
     ?disabled = "${!!data.disabled}"
     ?borderless = "${!!data.borderless}"
@@ -16,8 +15,7 @@ const _Button = (data: ButtonProps) => {
     ?switchOn = "${!!data.switchOn}"
     ?notifyOnClick = "${!!data.notifyOnClick}"
     ?loading = "${!!data.loading}"
-    ?center = "${!!data.center}"
-    size = "${data.size}">
+    size = "${data.size || 'medium'}">
   <lit-icon icon = "account" slot = "icon-before"></lit-icon>
   Button
   </lit-button>
@@ -26,9 +24,16 @@ const _Button = (data: ButtonProps) => {
 
 const Template: any = (args: ButtonProps) => _Button(args);
 
+export const Default = Template.bind({});
+Default.args = {
+}
 export const Primary = Template.bind({});
 Primary.args = {
   primary: true
+}
+export const Disabled = Template.bind({});
+Disabled.args = {
+  disabled: true
 }
 
 export const Success = Template.bind({});

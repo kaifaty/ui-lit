@@ -33,4 +33,19 @@ describe('Base', async () => {
         button.focus();
         expect(button.shadowRoot!.querySelector(".wrapper:focus")).exist;
     });
+    it('should width be same after ckecked', async() => {
+        const button = getButton();  
+        button.notifyOnClick = true;
+        const widthBefore = button.clientWidth    
+        button.click();
+        await (() => setTimeout(() => 0))();
+        expect(button.clientWidth).equal(widthBefore);
+    });
+    it('should width be same after loading', async() => {
+        const button = getButton();  
+        const widthBefore = button.clientWidth    
+        button.loading = true;
+        await (() => setTimeout(() => 0))();
+        expect(button.clientWidth).equal(widthBefore);
+    });
 });

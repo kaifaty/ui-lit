@@ -9,26 +9,26 @@ export const button = [
     }
     
     .wrapper{
+        -webkit-tap-highlight-color: transparent;
         cursor: pointer;
-        display: grid;
-        
-        gap: var(--lit-button-icon-gap, 4px);
+        display: inline-grid;
+        gap: var(--lit-button-icon-gap, 8px);
         box-sizing: border-box;
         align-items: center;
+        justify-content: center;
         grid-auto-flow: column;
-        height: 100%;
-        border: 1px solid  var(--lit-button-border,  hsl(222, 20%, 65%));
+        width: 100%;
+        height: 30px;
+        border: 1px solid  var(--lit-button-border);
         outline: var(--lit-button-outline, none);
         border-radius: var(--lit-button-radius, 1px);
-        color: var(--lit-button-color, hsl(222, 20%, 35%));
-        background-color: var(--lit-button-background, hsl(222, 20%, 99%));
-        --icon-color: var(--lit-button-color);
+        color: var(--lit-button-color, hsl(264, 100%, 46%));
+        background-color: var(--lit-button-background, hsl(264, 20%, 100%));
+        --lit-icon-color: var(--lit-button-color, hsl(264, 100%, 46%));
         font-weight: var(--lit-button-weight, 600);
-        padding: var(--lit-button-padding, 6px 14px);
+        padding: var(--lit-button-padding, 0 14px);
         text-transform: var(--lit-button-text-transform, uppercase);
-    }
-    .checkmark{
-        justify-self: center;
+        letter-spacing: var(--mdc-typography-button-letter-spacing, 0.089em);
     }
     lit-spinner{
         height: 15px;
@@ -36,39 +36,52 @@ export const button = [
         justify-self: center;
     }
 
-    :host([center]) .wrapper{
-        text-align: center;
-        justify-content: center;
+    :host([disabled]) .wrapper{
+        color: var(--lit-button-color-disabled,  hsl(264, 1%, 70%)) !important;
+        --lit-icon-color: var(--lit-button-color-disabled,  hsl(264, 1%, 60%)) !important;
+        background-color: var(--lit-button-background-disabled,  hsl(264, 1%, 99%)) !important;
+        border: 1px solid var(--lit-button-border-disabled,  hsl(264, 1%, 75%)) !important;
+        outline: none;
+        cursor: initial;
     }
-    :host([disabled]){
-        opacity: 0.5;
+    :host(:not([disabled]):not([loading])) .wrapper.hover{
+        background-color: var(--lit-button-background-hover,  hsl(264, 100%, 98%));
     }
-    :host(:not([disabled])) .wrapper:hover{
-        background-color: var(--lit-button-background-hover,  hsl(222, 20%, 96%));
+    :host(:not([disabled]):not([loading])) .wrapper.focused{
+        background-color: var(--lit-button-background-focus, hsl(264, 100%, 95%));
+        /* outline: 1px solid var(--lit-button-outline-focus, hsla(264, 20%, 60%, 0.5));
+        */
     }
-    :host(:not([disabled])) .wrapper:focus{
-        background-color: var(--lit-button-background-focus, hsl(222,20%, 99%));
-        outline: 1px solid var(--lit-button-outline-focus, hsla(222, 20%, 60%, 0.5));
-        
+    :host(:not([disabled]):not([loading])) .wrapper.pressed{
+        background-color: var(--lit-button-background-pressed,  hsl(264, 100%, 92%));
+    }
+    /*
+    */
+    :host([loading]) .wrapper{
+        cursor: initial;
     }
 
     :host([primary]) .wrapper{
-        color: var(--lit-button-primary, hsl(222, 95%, 98%));
-        background-color: var(--lit-button-primary-background, hsl(222, 95%, 65%));
-        border: 1px solid var(--lit-button-primary-border,  hsl(222, 95%, 45%));
-        --lit-icon-color: var(--lit-button-primary, hsl(222, 95%, 98%));
+        color: var(--lit-button-primary, hsl(264, 95%, 98%));
+        background-color: var(--lit-button-primary-background, hsl(264, 95%, 65%));
+        border: 1px solid var(--lit-button-primary-border);
+        --lit-icon-color: var(--lit-button-primary, hsl(264, 95%, 98%));
     }
-    :host(:not([disabled])[primary]) .wrapper:hover{
-        background-color: var(--lit-button-primary-background-hover,  hsl(222, 95%, 60%));
+    :host([primary]) .wrapper.hover{
+        background-color: var(--lit-button-primary-background-hover,  hsl(264, 95%, 68%));
     }
-    :host(:not([disabled])[primary]) .wrapper:focus{
-        background-color: var(--lit-button-primary-background-focus,  hsl(222, 95%, 65%));
-        outline: 1px solid  var(--lit-button-primary-outline-focus,  hsl(222, 95%, 45%));
+    :host([primary]) .wrapper.focused{
+        background-color: var(--lit-button-primary-background-focus,  hsl(264, 95%, 55%));
+        outline: 1px solid  var(--lit-button-primary-outline-focus, #000);
+    }
+    :host([primary]) .wrapper.pressed{
+        background-color: var(--lit-button-primary-background-pressed,  hsl(264, 95%, 60%));
     }
 
 
     .checkmark{
-        --lit-icon-color: var(--lit-button-success-background, hsl(110, 85%, 70%));
+        background-color: var(--lit-button-success-background,  hsl(110, 100%, 70%)) !important;
+        --lit-icon-color: var(--lit-button-success, hsl(110, 100%, 15%)) !important;
     }
     :host([success]) .wrapper{
         color: var(--lit-button-success, hsl(120, 95%, 15%));
@@ -76,10 +89,10 @@ export const button = [
         border:  1px solid var(--lit-button-success-border, hsl(120, 95%, 45%));
         --lit-icon-color: var(--lit-button-success);
     }
-    :host(:not([disabled])[success]) .wrapper:hover{
+    :host([success]) .wrapper.hover{
         background-color: var(--lit-button-success-background-hover, hsl(120, 95%, 80%));
     }
-    :host(:not([disabled])[success]) .wrapper:focus{
+    :host([success]) .wrapper.focused{
         background-color: var(--lit-button-success-background-focus, hsl(120, 95%, 70%));
         outline: 1px solid var(--lit-button-success-outline-focus,  hsl(120, 95%, 50%));
     }
@@ -90,24 +103,24 @@ export const button = [
         border: 1px solid var(--lit-button-danger-border, hsl(1, 95%, 55%));
         --lit-icon-color: var(--lit-button-danger);
     }
-    :host(:not([disabled])[danger]) .wrapper:hover{
+    :host([danger]) .wrapper.hover{
         background-color: var(--lit-button-danger-background-hover,  hsl(1, 95%, 75%));
     }
-    :host(:not([disabled])[danger]) .wrapper:focus{
+    :host([danger]) .wrapper.focus{
         background-color: var(--lit-button-danger-background-hover,  hsl(1, 95%, 80%));
         outline: 1px solid var(--lit-button-danger-outline-focus,  hsl(1, 95%, 55%));
     }
 
     :host([switch][switchOn]) .wrapper{
-        background-color: var(--lit-button-switch-background, hsl(222, 80%, 60%));
-        color: var(--lit-button-switch-color, hsl(222, 80%, 98%));
-        --lit-icon-color: var(--lit-button-switch-color, hsl(222, 80%, 98%));
+        background-color: var(--lit-button-switch-background, hsl(264, 80%, 60%));
+        color: var(--lit-button-switch-color, hsl(264, 80%, 98%));
+        --lit-icon-color: var(--lit-button-switch-color, hsl(264, 80%, 98%));
     }
-    :host([switch]) .wrapper:focus{
+    :host([switch]) .wrapper.focused{
         outline: none;
     }
-    :host(:not([switchOn])[switch]) .wrapper:not(:hover),
-    :host(:not([switchOn])[switch]) .wrapper:focus{
+    :host(:not([switchOn])[switch]) .wrapper:not(.hover),
+    :host(:not([switchOn])[switch]) .wrapper.focused{
         background-color: transparent;
     }
 
@@ -124,16 +137,10 @@ export const button = [
         font-size: var(--lit-button-large-font-size, 1.1rem);
     }
     :host([borderless]) .wrapper,
-    :host([borderless]) .wrapper:hover,
-    :host([borderless]) .wrapper:focus{
+    :host([borderless]) .wrapper.hover,
+    :host([borderless]) .wrapper.focused{
         border: 1px solid transparent;
         background-color: transparent;
         
-    }
-    
-    .icon{
-        align-self: center;
-        justify-self: center;
-    }
-    `
+    }`
 ];

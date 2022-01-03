@@ -1,19 +1,21 @@
 import { __decorate } from "tslib";
 import { LitElement, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { formAssociated } from '../form-associated/index';
+import { formAssociated } from '../mixins/form-associated/index';
 ;
 import '../icon';
 import { input } from '../styles/input';
 import { live } from 'lit/directives/live.js';
 import { createRef, ref } from 'lit/directives/ref.js';
+import { labled } from '../mixins/labled';
+import { focusable } from '../mixins/focusable/index';
 const AvailabledKeys = ['Control', 'Backspace', 'Delete', ',', '.', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End', "Enter"];
 const Numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 const CtrAvailable = [
     'a', 'v', 'c', 'x', 'z',
     86, 67, 88, 90, 65
 ];
-let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
+let LitNumberField = class LitNumberField extends focusable(labled(formAssociated(LitElement))) {
     constructor() {
         super(...arguments);
         this.min = NaN;
@@ -62,15 +64,9 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
         this._valueAsNumber = Number(this._value);
         this.requestUpdate('value', oldValue);
     }
-    connectedCallback() {
+    get isFocused() {
         var _a;
-        super.connectedCallback();
-        (_a = this.findLabel()) === null || _a === void 0 ? void 0 : _a.appendConnectedField(this);
-    }
-    disconnectedCallback() {
-        var _a;
-        super.disconnectedCallback();
-        (_a = this.findLabel()) === null || _a === void 0 ? void 0 : _a.removeConnectedField(this);
+        return !!((_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('input:focus'));
     }
     _valueResolve(rawValue) {
         let value = rawValue.replace(",", ".");
@@ -128,12 +124,6 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
         }
         this.validate();
     }
-    async firstUpdated(props) {
-        super.firstUpdated(props);
-        if (this.autofocus) {
-            setTimeout(() => this.focus());
-        }
-    }
     validate() {
         super.validate();
         //if(!this.required && this.disabled) return;
@@ -157,11 +147,6 @@ let LitNumberField = class LitNumberField extends formAssociated(LitElement) {
     }
     _clearValue() {
         this.value = '';
-    }
-    focus() {
-        var _a, _b;
-        (_a = this.inputRef.value) === null || _a === void 0 ? void 0 : _a.focus();
-        (_b = this.inputRef.value) === null || _b === void 0 ? void 0 : _b.setSelectionRange(this.value.length, this.value.length);
     }
     // ==== Events ====
     _handleChange(e) {

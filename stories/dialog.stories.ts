@@ -1,5 +1,4 @@
 import '../dist/dialog';
-import '../dist/dialog/test-dialog';
 import type { IDialogProps } from '../src/dialog';
 import { html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
@@ -17,7 +16,6 @@ const Link = (data: IDialogProps) =>
         >
         <h2 slot = "header">Header</h2>
         <lit-header level = "5">Confirm otp please</lit-header>
-        <test-dialog></test-dialog>
         <lit-button slot = "footer" primary confirm>Confirm</lit-button>
     </lit-dialog>`;
 

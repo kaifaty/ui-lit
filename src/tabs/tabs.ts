@@ -1,9 +1,9 @@
 import { noselectText } from '../styles/noselect';
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, css, unsafeCSS, html, TemplateResult } from 'lit';
-import { formAssociated } from '../form-associated/index';
+import { formAssociated } from '../mixins/form-associated/index';
 import { property, customElement } from 'lit/decorators';
-import { FormAssociatedProps } from '../form-associated/interface';
+import { FormAssociatedProps } from '../mixins/form-associated/interface';
 import { scrollbar } from '../styles/scrollbar';
 
 export type TTabType = 'button' | 'tab';

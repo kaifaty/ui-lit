@@ -97,11 +97,10 @@ export class TableElement extends LitElement{
         opacity: 0.5;
     }
     th{
-        position: relative;
         height: var(--header-height, 35px);
         padding: 0;
     }
-    th:not(:last-child)::after{
+    th:not(:last-child) lit-table-header::after{
         content: '';
         position: absolute;
         width: 1px;
@@ -209,6 +208,7 @@ export class TableElement extends LitElement{
         return 0;
     }
     private _updateSort(){
+        if(this.sort) return;
         const data = this.columns.filter(it => it.defaultSort)[0];
         if(data && data?.key !== this.sort){
             this.sort = data.key;
@@ -270,11 +270,17 @@ export class TableElement extends LitElement{
         this._data = dataSource;
 
     }
+    getColumnFilters(key: string){
+        const filters = this._filters.get(key);
+        const CFilters = this.columns.filter(c => c.key === key)[0].filters!;
+        
+        return filters?.map((f, i) => ({...f, text: CFilters[i].text}))
+    }
     private _headerTemplate(){
         return this.columns.map((col, i) => {
             return html`<th>
                 <lit-table-header 
-                .filters = "${this._filters.get(col.key)}"
+                .filters = "${this.getColumnFilters(col.key)}"
                 @changeFilter = "${this._changeFilter}"
                 @resetFilter = "${this._resetFilter}"
                 style = "min-width: ${col.width ? col.width + "px" : "auto" }"

@@ -1,6 +1,7 @@
 import { LitElement } from 'lit';
-import type { LitLabel } from '../label/index';
-export interface ValidityStateFlags {
+import type { LitLabel } from '../../label/index';
+
+ export interface ValidityStateFlags {
     badInput?: boolean;
     customError?: boolean;
     patternMismatch?: boolean;
@@ -12,15 +13,16 @@ export interface ValidityStateFlags {
     typeMismatch?: boolean;
     valueMissing?: boolean;
 }
+
 export interface FormAssociatedProps {
-    readonly: boolean;
+    readonly: boolean,
     disabled: boolean;
     name: string;
     required: boolean;
     value: string;
 }
-export interface FormAssociated extends FormAssociatedProps {
-    findLabel(): LitLabel | null;
+ export interface FormAssociated extends FormAssociatedProps{
+    //findLabel(): LitLabel | null
     readonly validationMessage: string;
     validity: ValidityStateFlags;
     validate(): void;
@@ -28,5 +30,8 @@ export interface FormAssociated extends FormAssociatedProps {
     reportValidity(): boolean;
     setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement): void;
 }
-export declare type ProxyElement = HTMLSelectElement | HTMLTextAreaElement | HTMLInputElement;
-export declare type FormAssociatedElement = FormAssociated & LitElement;
+
+ export type ProxyElement = HTMLSelectElement | HTMLTextAreaElement | HTMLInputElement;
+
+ export type FormAssociatedElement = FormAssociated & LitElement 
+ 

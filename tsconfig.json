@@ -30,6 +30,18 @@
     "experimentalDecorators": true,              /* Enables experimental support for ES7 decorators. */
     "skipLibCheck": true,                           /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true,        /* Disallow inconsistently-cased references to the same file. */
-    "allowJs": false
-  }
+    "allowJs": false,
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "strict": true,
+        "rules": {
+          "no-unknown-tag-name": "off",
+          "no-unknown-event": "warning"
+        }
+      }
+    ]
+  },
+  
+
 }

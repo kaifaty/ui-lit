@@ -1,12 +1,12 @@
 import { LitElement, TemplateResult } from 'lit';
-import type { FormAssociated } from '../form-associated/interface';
+import type { FormAssociated } from '../mixins/form-associated/interface';
 import '../icon';
 import { Ref } from 'lit/directives/ref.js';
 import { TInputMode } from '../textfield/index';
-export interface NumberProps extends FormAssociated {
+import { Focusable } from '../mixins/focusable/inderface';
+export interface NumberProps extends FormAssociated, Focusable {
     replaceToRange: boolean;
     useCancelButton: boolean;
-    autofocus: boolean;
     placeholder: string;
     inputmode: string;
     value: string;
@@ -16,7 +16,7 @@ export interface NumberProps extends FormAssociated {
     max: number;
     icon: string | TemplateResult;
 }
-declare const LitNumberField_base: (new (...args: any[]) => import("../form-associated/interface").FormAssociatedElement) & typeof LitElement;
+declare const LitNumberField_base: (new (...args: any[]) => Focusable) & (new (...args: any[]) => import("../mixins/labled/inderface").ILabled) & (new (...args: any[]) => import("../mixins/form-associated/interface").FormAssociatedElement) & typeof LitElement;
 export declare class LitNumberField extends LitNumberField_base implements NumberProps {
     static get styles(): import("lit").CSSResult;
     static get properties(): {
@@ -46,17 +46,14 @@ export declare class LitNumberField extends LitNumberField_base implements Numbe
     _value: string;
     get value(): string;
     set value(value: string);
-    connectedCallback(): void;
-    disconnectedCallback(): void;
+    get isFocused(): boolean;
     private _valueResolve;
     private _cancelIconTemplate;
     willUpdate(): void;
     render(): TemplateResult<1>;
     updated(props: Map<string | number | symbol, unknown>): void;
-    firstUpdated(props: Map<string | number | symbol, unknown>): Promise<void>;
     validate(): void;
     private _clearValue;
-    focus(): void;
     private _handleChange;
     private _handleInput;
     private _handleKeyDown;

@@ -1,11 +1,11 @@
 import { noselectText } from '../styles/noselect';
 import { styleMap } from 'lit/directives/style-map';
 import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
-import { formAssociated } from '../form-associated/index';
+import { formAssociated } from '../mixins/form-associated/index';
 import { customElement, property, state } from 'lit/decorators';
 import { isClickInElement } from 'kailib';
 import { scrollbar } from '../styles/scrollbar';
-import { FormAssociatedProps } from '../form-associated/interface';
+import { FormAssociatedProps } from '../mixins/form-associated/interface';
 import { FocusController } from '../controllers/FocusContriller';
 
 

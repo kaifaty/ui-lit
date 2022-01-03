@@ -1,24 +1,22 @@
 import { LitElement } from 'lit';
-import type { LitTextField } from '../textfield/index';
-import type { LitNumberField } from '../number/index';
-import type { LitCheckbox } from '../checkbox/index';
-declare type TLabled = LitNumberField | LitTextField | LitCheckbox;
+import { ILabled } from '../mixins/labled/inderface';
 export declare class LitLabel extends LitElement {
     static styles: import("lit").CSSResult;
     for: string;
-    _connectedNode: TLabled | HTMLInputElement | null;
+    private _labled;
     connectedCallback(): void;
     disconnectedCallback(): void;
     firstUpdated(): void;
     render(): import("lit").TemplateResult<1>;
-    appendConnectedField(el: TLabled | HTMLInputElement | null): void;
-    removeConnectedField(el?: TLabled | HTMLInputElement | null): void;
-    private _findConnectedField;
-    _handleClick: (e: Event) => void;
+    get labled(): ILabled | null;
+    protected setLabled(labeled: ILabled): void;
+    private _disconnectLabels;
+    private _connectByFor;
+    private _onLabledConnected;
+    private _handleClick;
 }
 declare global {
     interface HTMLElementTagNameMap {
         'lit-label': LitLabel;
     }
 }
-export {};

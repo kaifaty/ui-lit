@@ -7,7 +7,7 @@ export * from './code';
 export * from './description';
 export * from './dialog';
 export * from  './form';
-export * from  './form-associated';
+export * from  './mixins/form-associated';
 export * from  './header';
 export * from  './icon';
 export * from  './label';

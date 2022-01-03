@@ -1,8 +1,8 @@
 import { ResizeObserverController } from './../controllers/ResizeObserverController';
 import { LitElement, html, TemplateResult, nothing, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators';
-import type { FormAssociated } from '../form-associated/interface';
-import { formAssociated } from '../form-associated/index';
+import type { FormAssociated } from '../mixins/form-associated/interface';
+import { formAssociated } from '../mixins/form-associated/index';
 import { noselect } from '../styles/noselect';
 import { getClientX, IUIEvent } from 'kailib';
 

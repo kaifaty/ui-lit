@@ -9,7 +9,8 @@ export const DIALOG_STYLES = css`
 }
 .overlap{
     display: flex;
-    --dialog-z-index: 125;
+    /*--dialog-z-index: 125;*/
+    isolation: isolate;
     margin: 0;
     left: 0;
     top: 0;
@@ -74,8 +75,8 @@ footer{
 .close-icon, .arrow-back{
     position: absolute;
     padding: 10px;
-    right: 2px;
-    top: -2px;
+    right: 0;
+    top: 0;
     cursor: pointer;
     color: var(--lit-dialog-control-icons, #aaa);
     --icon-font-size: 18px;

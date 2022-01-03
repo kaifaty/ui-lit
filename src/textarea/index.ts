@@ -1,8 +1,10 @@
+import { labled } from '../mixins/labled';
 import { styleMap } from 'lit/directives/style-map';
 import { html, LitElement, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
 import { input } from '../styles/input';
-import { formAssociated } from '../form-associated/index';
+import { formAssociated } from '../mixins/form-associated/index';
+import { focusable } from '../mixins/focusable/index';
 
 export interface ITextareaProps {
     name?: string
@@ -12,7 +14,7 @@ export interface ITextareaProps {
 }
 type TResize = "none" | "both" | "horizontal" | "vertical" | "block" | "inline";
 @customElement('lit-textarea')
-export class LitTextarea extends formAssociated(LitElement){
+export class LitTextarea extends focusable(labled(formAssociated(LitElement))){
     static styles = [input, css`
     :host{  
         display: inline-block;

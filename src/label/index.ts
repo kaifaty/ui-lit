@@ -1,11 +1,9 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators';
-import { getRootElement } from 'kailib';
-import type { LitTextField } from '../textfield/index';
-import type { LitNumberField } from '../number/index';
+import { customElement, property } from 'lit/decorators.js';
 import type { LitCheckbox } from '../checkbox/index';
+import { ILabled } from '../mixins/labled/inderface';
 
-type TLabled = LitNumberField | LitTextField | LitCheckbox;
+
 
 @customElement("lit-label")
 export class LitLabel extends LitElement{
@@ -13,61 +11,72 @@ export class LitLabel extends LitElement{
     :host{
         display: inline-flex;
         align-items: center;
-    }`;
+    }
+    :host([disabled]){
+        opacity: 0.5;
+    }
+    `;
     @property({type: String}) for: string = '';
-    _connectedNode: TLabled | HTMLInputElement | null = null;
+    private _labled: ILabled | null = null;
     connectedCallback(){
         super.connectedCallback();
         this.addEventListener('click', this._handleClick);
+        this.addEventListener('labledConnected', this._onLabledConnected as EventListener);
     }
     disconnectedCallback(){
-        super.disconnectedCallback();
-        this._connectedNode = null;
+        super.disconnectedCallback();        
+        this._disconnectLabels();
         this.removeEventListener('click', this._handleClick);
+        this.removeEventListener('labledConnected', this._onLabledConnected as EventListener);
     }
     firstUpdated(){
-        this.appendConnectedField(this._findConnectedField());
+        this._connectByFor();
     }
     render(){
         return html`<slot></slot>`
     }
-    public appendConnectedField(el: TLabled | HTMLInputElement | null){
-        if(!this._connectedNode && el){
-            this._connectedNode = el;
-        }
+    get labled(){
+        return this._labled;
     }
-    public removeConnectedField(el?:  TLabled | HTMLInputElement | null){
-        if(el === this._connectedNode){
-            this._connectedNode = null;
+    protected setLabled(labeled: ILabled){
+        
+        if(this._labled === labeled) return;
+        if(this._labled){
+            console.warn(this, 'already has labled', this._labled);
+            this._disconnectLabels();
         }
+        this._labled = labeled;
+        console.log(`--->`, labeled.addLabel(this))
+        this._labled.addLabel(this);
     }
-    private _findConnectedField(){
+    
+    private _disconnectLabels(){
+        this._labled?.removeLabel(this);
+        this._labled = null;
+    }
+    private _connectByFor(){
         if(this.for){
-            const root = getRootElement(this);
-            const node = root.querySelector(`#${this.for}`) as (HTMLElement & {_formAssiciated?: boolean});
-            if(node && node._formAssiciated || node instanceof HTMLInputElement){
-                return node as TLabled | HTMLInputElement;
+            const node = this.parentElement?.querySelector(`#${this.for}`) as ILabled | null;
+            if(node && node.addLabel){
+                this.setLabled(node);
             }
         }
-        else{
-            for(const node of this.childNodes){
-                if ((node as any)._formAssiciated){
-                    return node as TLabled;
-                }
-            }
-        }
-        return null;
     }
 
-    _handleClick = (e: Event) => {
-        this._connectedNode?.focus();
-        if(
-            this._connectedNode?.tagName.toLowerCase() === 'lit-checkbox' 
-            && (e.target as LitCheckbox)?.tagName.toLowerCase() !== 'lit-checkbox'
-        ){
-            (this._connectedNode as LitCheckbox).toggle();
-        }
+    //  === Events === 
+    private _onLabledConnected = (e: CustomEvent) => {
+        this.setLabled(e.detail);
     }
+
+    private _handleClick = (e: Event) => {
+        if(!this._labled) return;
+        this._labled?.focus();
+        if((this._labled as LitCheckbox).checked !== undefined){
+            (this._labled as LitCheckbox).toggle();
+        }
+        
+    }
+
 }
 
 declare global {

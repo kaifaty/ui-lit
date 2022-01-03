@@ -31,7 +31,8 @@
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook",
     "parcel": "parcel build ./src/index.ts -d ./pages/ --out-file index.js",
-    "parcel-watch": "parcel  ./src/index.ts -d ./pages/ --out-file index.js"
+    "parcel-watch": "parcel  ./src/index.ts -d ./pages/ --out-file index.js",
+    "cem": "cem analyze --litelement --globs ./src/button/index.ts --outdir /manifest"
   },
   "files": [
     "/dist/"
@@ -78,9 +79,12 @@
     "typescript": "latest"
   },
   "dependencies": {
+    "@custom-elements-manifest/analyzer": "^0.5.7",
     "@swc/helpers": "^0.2.13",
     "kailib": "^1.0.38",
     "lit": "^2.0.2",
-    "qrcode": "^1.4.4"
-  }
+    "qrcode": "^1.4.4",
+    "ts-lit-plugin": "^1.2.1"
+  },
+  "customElements": "/manifest/custom-elements.json"
 }

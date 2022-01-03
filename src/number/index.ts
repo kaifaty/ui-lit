@@ -1,18 +1,20 @@
 import { LitElement, html, css, nothing, TemplateResult } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { formAssociated } from '../form-associated/index'
-import type { FormAssociated } from '../form-associated/interface';;
+import { formAssociated } from '../mixins/form-associated/index'
+import type { FormAssociated } from '../mixins/form-associated/interface';;
 import '../icon';
 import { input } from '../styles/input';
 import { live } from 'lit/directives/live.js';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
 import { TInputMode } from '../textfield/index';
+import { labled } from '../mixins/labled';
+import { focusable } from '../mixins/focusable/index';
+import { Focusable } from '../mixins/focusable/inderface';
 
 
-export interface NumberProps  extends FormAssociated{
+export interface NumberProps extends FormAssociated, Focusable{
     replaceToRange: boolean,
     useCancelButton: boolean,
-    autofocus: boolean,
     placeholder: string,
     inputmode: string,
     value: string,
@@ -31,7 +33,7 @@ const CtrAvailable: (number | string)[] = [
 ];
 
 @customElement("lit-numberfield")
-export class LitNumberField extends formAssociated(LitElement) implements NumberProps{
+export class LitNumberField extends focusable(labled(formAssociated(LitElement))) implements NumberProps{
     static get styles (){
         return input
     };
@@ -85,15 +87,10 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
         this.requestUpdate('value', oldValue);
     }
 
-    public connectedCallback(): void {
-        super.connectedCallback();
-        this.findLabel()?.appendConnectedField(this);
+    public get isFocused(){
+        return !!this.shadowRoot?.querySelector('input:focus');
     }
-    public disconnectedCallback(){
-        super.disconnectedCallback();
-        this.findLabel()?.removeConnectedField(this);
-    }
-
+    
     private _valueResolve(rawValue: string){
         let value = rawValue.replace(",", ".");
         const arr = value.split(".");
@@ -148,12 +145,6 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
         this.validate();
         
     }
-    async firstUpdated(props: Map<string | number | symbol, unknown>){
-        super.firstUpdated(props);
-        if(this.autofocus){
-            setTimeout(() => this.focus());
-        }
-    }
     
     public validate(){
         super.validate();
@@ -179,11 +170,6 @@ export class LitNumberField extends formAssociated(LitElement) implements Number
 
     private _clearValue(){
         this.value = '';
-    }
-
-    focus(){
-        this.inputRef.value?.focus();
-        this.inputRef.value?.setSelectionRange(this.value.length, this.value.length);
     }
     
     // ==== Events ====

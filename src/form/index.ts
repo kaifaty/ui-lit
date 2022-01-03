@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators';
-import { FormAssociatedElement } from '../form-associated/interface';
+import { FormAssociatedElement } from '../mixins/form-associated/interface';
 import '../label';
 import type { LitCheckbox } from '../checkbox/index';
 import { LitNumberField } from '../number/index';

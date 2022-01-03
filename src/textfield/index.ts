@@ -1,23 +1,25 @@
 import { LitElement, html, css, nothing, TemplateResult } from 'lit';
-import { customElement, property, state } from 'lit/decorators';
-import { formAssociated } from '../form-associated/index';
-import type { FormAssociated } from '../form-associated/interface';
+import { customElement, property, state } from 'lit/decorators.js';
+import { formAssociated } from '../mixins/form-associated/index';
+import type { FormAssociated } from '../mixins/form-associated/interface';
 import '../icon';
 import { input } from '../styles/input';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
+import { labled } from '../mixins/labled';
+import { focusable } from '../mixins/focusable/index';
+import { Focusable } from '../mixins/focusable/inderface';
 
 export type TInputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'
 
 export type TFileldTypes = 'text' | 'password' | 'date'
 
-export interface TextProps extends FormAssociated{
+export interface TextProps extends FormAssociated, Focusable{
     size: number,
     minlength: number,
     maxlength: number,
     readonly: boolean,
     useCancelButton: boolean,
     spellcheck: boolean,
-    autofocus: boolean,
     placeholder: string,
     inputmode: TInputMode,
     pattern: string,
@@ -27,7 +29,7 @@ export interface TextProps extends FormAssociated{
 }
 
 @customElement("lit-textfield")
-export class LitTextField extends formAssociated(LitElement) implements TextProps{
+export class LitTextField extends focusable(labled(formAssociated(LitElement))) implements TextProps{
     static get styles (){
         return input
     };
@@ -43,7 +45,6 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
     @property({type: Number}) minlength: number = NaN;
     @property({type: Number}) maxlength: number = NaN;
     @property({type: Boolean}) spellcheck: boolean = false;
-    @property({type: Boolean}) autofocus: boolean = false;
     
     @property({type: String}) pattern: string = '';
     @property({type: String}) placeholder: string = '';
@@ -52,10 +53,13 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
 
     @property({type: Boolean}) useCancelButton: boolean = false;
     @property() icon: string | TemplateResult = '';
-    inputRef: Ref<HTMLInputElement> = createRef();
+    #inputRef: Ref<HTMLInputElement> = createRef();
 
     @state() hiddenPassword = true
 
+    get valueAsDate(){
+        return new Date(this.value);
+    }
     set valueAsDate(value: Date){
         if(this.type === 'date'){
             this.value = (value).toISOString().substring(0, 10);
@@ -77,7 +81,7 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
         }
     }
 
-    _value: string = '';
+    private _value: string = '';
     get value(){
         return this._value;
     }
@@ -87,6 +91,7 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
         this.requestUpdate('value', oldValue);
     }
     
+    
     private _getType(){
         if(this.type === 'password'){
             return this.hiddenPassword ? 'password' : 'text'
@@ -94,14 +99,6 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
         return this.type
     }
 
-    public connectedCallback(): void {
-        super.connectedCallback();
-        this.findLabel()?.appendConnectedField(this);
-    }
-    public disconnectedCallback(){
-        super.disconnectedCallback();
-        this.findLabel()?.removeConnectedField(this);
-    }
 
     public validate(){
         if(this.type === 'date'){
@@ -137,7 +134,8 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
     private _iconslotTemplate(){
         if(!this.useCancelButton) {
             if(this.type === 'password'){
-                return html`<div class = "icon" @click = "${this.toggleHiddenPassword}">
+                return html`<div class = "icon toggle-password" 
+                            @click = "${this.toggleHiddenPassword}">
                     <lit-icon icon = "${this.hiddenPassword ? 'show' : 'hide'}"></lit-icon>
                 </div>`;
             }
@@ -149,26 +147,25 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
         };
         if(!this.value) return nothing;
         return html`<lit-icon 
-                        @click = "${this.clearValue}"
+                        @click = "${this._clearValue}"
                         icon = "cancel" 
-                        class = "danger icon"></lit-icon>`;
+                        class = "danger icon cancel"></lit-icon>`;
     }
     render(){
         return html`
         ${super.render()}
         <div class = "wrapper" >
             <input type = "${this._getType()}" 
-                   placeholder = "${this.placeholder}"
-                   spellcheck = "${this.spellcheck}"
-                   inputmode = "${this.inputmode}"
-                   ?autofocus = "${this.autofocus}"
-                   ?readonly = "${this.readonly}"
-                   ?disabled = "${this.disabled}"
-                   size = "${this.size}"
-                   @input = "${this._onInput}" 
-                   @change = "${this._onChange}"
-                   ${ref(this.inputRef)}
-                   .value = "${this.value}">
+                ${ref(this.#inputRef)}
+                placeholder = "${this.placeholder}"
+                spellcheck = "${this.spellcheck}"
+                inputmode = "${this.inputmode}"
+                ?readonly = "${this.readonly}"
+                ?disabled = "${this.disabled}"
+                size = "${this.size}"
+                @input = "${this._onInput}" 
+                @change = "${this._onChange}"
+                .value = "${this.value}">
             ${this._iconslotTemplate()}
         </div>`;
     }
@@ -176,19 +173,7 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
         super.updated(_changedProperties);
         this.validate();
     }
-    firstUpdated(props: Map<string | number | symbol, unknown>){
-        super.firstUpdated(props);
-        if(this.autofocus){
-            setTimeout(() => this.focus());
-        }
-    }
-    
-    focus(){
-        this.inputRef.value?.focus();
-        this.inputRef.value?.setSelectionRange(this.value.length, this.value.length);
-
-    }
-    private clearValue(){
+    private _clearValue(){
         this.value = '';
         this.dispatchEvent(new CustomEvent("changed", {
             detail: this.value,
@@ -206,7 +191,7 @@ export class LitTextField extends formAssociated(LitElement) implements TextProp
             bubbles: true,
         }));
     }
-    private _onInput(e: Event){        
+    private _onInput(e: Event){      
         this.value = (e.target as HTMLInputElement).value as string;
         this.dispatchEvent(new CustomEvent("changed", {
             detail: this.value,

@@ -1,8 +1,8 @@
 
-import { html } from 'lit';
+import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/table';
-import { ISourceItem } from '../table/table';
+import { ISourceItem } from '../src/table/table';
 
 const data = {
     key: '1',
@@ -104,7 +104,8 @@ const Table = (text: string) =>
 const Template: Story<Partial<{text: string}>> = (data) => Table(data.text);
 
 export const Default = Template.bind({});
-Default.args = {}
+Default.args = {
+}
 export default {
     title: 'Text/Table',
     argTypes: {

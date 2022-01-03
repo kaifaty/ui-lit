@@ -7,6 +7,8 @@ import { DIALOG_STYLES } from './styles';
 import { scrollbar } from '../styles/scrollbar';
 import { KeyDownController } from '../controllers/KeyController';
 
+import '../icon';
+import '../button';
 export interface IDialogProps {
     opened: boolean
     closeBtnText: string
@@ -55,8 +57,7 @@ export class LitDialog extends LitElement{
                 </header>
                 ${pool.length > 1 
                     ? html`<lit-icon 
-                        icon = "dropdown"
-                        
+                        icon = "dropdown"                        
                         @click = "${this.back}"
                         ></lit-icon>` 
                     : nothing}

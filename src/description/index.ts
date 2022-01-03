@@ -2,6 +2,15 @@ import { customElement } from 'lit/decorators';
 import { LitElement, html, css } from 'lit';
 
 
+/**
+ * @cssprop --lit-description-display
+ * @cssprop --lit-description-padding
+ * @cssprop --lit-description-font-style
+ * @cssprop --lit-description-font-size
+ * @cssprop --lit-description-line-height
+ * 
+ */
+
 @customElement('lit-description')
 export class LitDescription extends LitElement{
     static styles = css`

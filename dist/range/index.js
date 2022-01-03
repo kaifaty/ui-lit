@@ -2,7 +2,7 @@ import { __decorate } from "tslib";
 import { ResizeObserverController } from './../controllers/ResizeObserverController';
 import { LitElement, html, nothing, css } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators';
-import { formAssociated } from '../form-associated/index';
+import { formAssociated } from '../mixins/form-associated/index';
 import { noselect } from '../styles/noselect';
 /** <lit-range></lit-range> */
 let LitRange = class LitRange extends formAssociated(LitElement) {

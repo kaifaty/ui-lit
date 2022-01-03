@@ -8,6 +8,7 @@ const Number = (data: ICheckboxProps) =>
     html`<lit-label>
         Label for: 
         <lit-checkbox 
+            ?disabled = "${data.disabled}"
             ?checked = "${data.checked}"
             ?readonly = "${data.readonly}"
             .value = "${data.value}"
@@ -19,27 +20,16 @@ const Number = (data: ICheckboxProps) =>
 
 const Template: Story<Partial<ICheckboxProps>> = (args) => Number(args as ICheckboxProps);
 
-export const Switcher = Template.bind({});
-Switcher.args = {
+export const Default = Template.bind({});
+Default.args = {
     type: 'switcher',
-}
-export const Checkbox = Template.bind({});
-Checkbox.args = {
-    type: 'checkbox',
+    disabled: false,
 }
 
 export default {
-    title: 'Form assosiated/Checkbox',
+    title: 'Text/Label',
     
     argTypes: {
-        value: {
-            options: ['on', 'off'],
-            control: { type: 'select' }
-        },
-        type: {
-            options: ['switcher', 'checkbox'],
-            control: { type: 'select' }
-        },
     },
     parameters: {
         actions: {

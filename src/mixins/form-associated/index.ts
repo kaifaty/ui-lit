@@ -1,11 +1,10 @@
-import { LitElement, html, nothing, css } from 'lit';
+import { LitElement, html, nothing } from 'lit';
 import { property } from 'lit/decorators.js';
-import type { FormAssociatedElement, ProxyElement, ValidityStateFlags } from './interface';
-import type { LitNote } from '../note';
-import '../note';
+import type { FormAssociatedElement, ValidityStateFlags } from './interface';
+import type { LitNote } from '../../note';
+import '../../note';
 import { ref, createRef } from 'lit/directives/ref.js';
-import type { LitLabel } from '../label';
-import { LitFrom } from '../form/index';
+import { LitFrom } from '../../form/index';
 
 type TValidationMessageKey = keyof ValidityStateFlags;
 type TValidationMessages = Record<TValidationMessageKey, {[k: string] : string}>
@@ -80,7 +79,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         public max?: number = NaN;
         public step?: number = NaN;
         public pattern?: string = '';
-        _submitForm: LitFrom | null = null;
+        private _submitForm: LitFrom | null = null;
 
         
         constructor(...args: any[]) {
@@ -120,20 +119,6 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         async firstUpdated(){
             await this.updateComplete;
             this.isFirstUpdated = true
-        }
-
-        public findLabel(): LitLabel | null{
-            let parent = this.parentElement;
-            if(parent?.tagName === "lit-label"){
-                return parent as LitLabel;
-            }
-            while(parent){
-                if(parent?.tagName === "lit-label"){
-                    return parent as LitLabel;
-                }
-                parent = parent.parentElement
-            }
-            return null;
         }
 
         /** Validation */

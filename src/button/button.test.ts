@@ -3,13 +3,19 @@ import { expect, assert } from '@esm-bundle/chai';
 import './index'
 
 const getButton = () => document.querySelector("lit-button")!;
-describe('Base', async () => {
+describe('Test Button', async () => {
     
     
     beforeEach(async () => {
         document.body.innerHTML = `<lit-button>Button</lit-button>`;
     });
     
+    it('is shouldbe icon-before', () => {
+        expect(getButton().shadowRoot?.querySelector(`slot[name=icon-before]`)).exist;
+    });
+    it('is should be icon-after', () => {
+        expect(getButton().shadowRoot?.querySelector(`slot[name=icon-after]`)).exist;
+    });
     it('is text Transformed', () => {
         const button = getButton();
         button.innerText = "button";
@@ -18,34 +24,65 @@ describe('Base', async () => {
     it('should spin', async() => {
         const button = getButton();
         button.loading = true;
-        await (() => setTimeout(() => 0))();
+        await true;
         expect(button.shadowRoot!.querySelector("lit-spinner")).exist;
     });
     it('should notify on click', async() => {
         const button = getButton();
         button.notifyOnClick = true;
         button.click();
-        await (() => setTimeout(() => 0))();
+        await true;
         expect(button.shadowRoot!.querySelector("lit-icon[icon=checkmark]")).exist;
+    });
+    it('should hide notify on click after 1000 ms', async() => {
+        const button = getButton();
+        button.notifyOnClick = true;
+        button.click();
+        await new Promise(r => setTimeout(() => r(true), 1000));
+        expect(button.shadowRoot!.querySelector("lit-icon[icon=checkmark]")).equal(null);
     });
     it('should be focusable', async() => {
         const button = getButton();      
         button.focus();
         expect(button.shadowRoot!.querySelector(".wrapper:focus")).exist;
     });
-    it('should width be same after ckecked', async() => {
+    it('should width be same after checked', async() => {
         const button = getButton();  
         button.notifyOnClick = true;
         const widthBefore = button.clientWidth    
         button.click();
-        await (() => setTimeout(() => 0))();
         expect(button.clientWidth).equal(widthBefore);
     });
-    it('should width be same after loading', async() => {
+    it('should trigger submitForm after submit', async() => {
         const button = getButton();  
-        const widthBefore = button.clientWidth    
-        button.loading = true;
-        await (() => setTimeout(() => 0))();
-        expect(button.clientWidth).equal(widthBefore);
+        button.type = 'submit';
+        let submited = false;
+        button.addEventListener('submitForm', () => {
+            submited = true;
+        })
+        button.submit();
+        expect(submited).equal(true);
     });
+    it('should not trigger submitForm after submit type = button', async() => {
+        const button = getButton();  
+        button.type = 'button';
+        let submited = false;
+        button.addEventListener('submitForm', () => {
+            submited = true;
+        })
+        button.submit();
+        expect(submited).equal(false);
+    });
+    it('should switch ', async() => {
+        const button = getButton();  
+        button.type = 'switch';
+        let switched = false;
+        button.addEventListener('switchChanged', ((e: CustomEvent) => {
+            switched = e.detail;
+        }) as EventListener);
+        
+        button.submit();
+        expect(switched).equal(true);
+    });
+    
 });

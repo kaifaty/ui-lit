@@ -1,5 +1,5 @@
 import { LitElement } from 'lit';
-import { FormAssociatedElement } from '../form-associated/interface';
+import { FormAssociatedElement } from '../mixins/form-associated/interface';
 import '../label';
 export interface IFormProps {
     disabled: boolean;

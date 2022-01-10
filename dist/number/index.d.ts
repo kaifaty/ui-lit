@@ -1,14 +1,11 @@
 import { LitElement, TemplateResult } from 'lit';
 import type { FormAssociated } from '../mixins/form-associated/interface';
 import '../icon';
-import { Ref } from 'lit/directives/ref.js';
-import { TInputMode } from '../textfield/index';
 import { Focusable } from '../mixins/focusable/inderface';
 export interface NumberProps extends FormAssociated, Focusable {
     replaceToRange: boolean;
     useCancelButton: boolean;
     placeholder: string;
-    inputmode: string;
     value: string;
     decimals: number;
     valueAsNumber: number;
@@ -16,9 +13,9 @@ export interface NumberProps extends FormAssociated, Focusable {
     max: number;
     icon: string | TemplateResult;
 }
-declare const LitNumberField_base: (new (...args: any[]) => Focusable) & (new (...args: any[]) => import("../mixins/labled/inderface").ILabled) & (new (...args: any[]) => import("../mixins/form-associated/interface").FormAssociatedElement) & typeof LitElement;
+declare const LitNumberField_base: (new (...args: any[]) => Focusable & LitElement) & (new (...args: any[]) => import("../mixins/labled/inderface").ILabled) & (new (...args: any[]) => import("../mixins/form-associated/interface").FormAssociatedElement) & (new (...args: any[]) => import("../mixins/form-associated/interface").FormAssociatedElement) & typeof LitElement;
 export declare class LitNumberField extends LitNumberField_base implements NumberProps {
-    static get styles(): import("lit").CSSResult;
+    static get styles(): import("lit").CSSResultOrNative[];
     static get properties(): {
         value: {
             type: StringConstructor;
@@ -31,22 +28,18 @@ export declare class LitNumberField extends LitNumberField_base implements Numbe
     min: number;
     max: number;
     decimals: number;
-    readonly: boolean;
-    autofocus: boolean;
     replaceToRange: boolean;
     placeholder: string;
-    inputmode: TInputMode;
+    inputmode: 'decimal' | 'numeric';
     useCancelButton: boolean;
     icon: string | TemplateResult;
-    _selectionBeforeRender: number;
-    inputRef: Ref<HTMLInputElement>;
-    _valueAsNumber: number;
+    private _selectionBeforeRender;
+    private _inputRef;
     get valueAsNumber(): number;
     set valueAsNumber(value: number);
-    _value: string;
+    private _value;
     get value(): string;
     set value(value: string);
-    get isFocused(): boolean;
     private _valueResolve;
     private _cancelIconTemplate;
     willUpdate(): void;

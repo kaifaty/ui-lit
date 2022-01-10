@@ -1,112 +1,130 @@
-import { noselectText } from '../styles/noselect';
 import { LitElement, html, css, unsafeCSS } from 'lit';
-import { customElement, property, state } from 'lit/decorators';
-import { TTabType } from './tabs';
-import { KeyDownController } from '../controllers/KeyController';
+import { customElement, property, state } from 'lit/decorators.js';
+import type { TTabType, LitTabs } from './tabs';
+import '../button'
+import { focusable } from '../mixins/focusable/index';
+
+/**
+ * --lit-tab-color Tab color
+ * --lit-tab-color-default Inactive tab color 
+ * --lit-tab-background Tab background color
+ * --lit-tab-font-weight Tab font weight
+ * --lit-tab-border Tab border color
+ * --lit-tab-padding Tab padding
+ * 
+ */
 
 @customElement('lit-tab')
-export class LitTab extends LitElement{
+export class LitTab extends focusable(LitElement){
     static styles = css`
     :host{
-        ${unsafeCSS(noselectText)};
-        cursor: pointer;
-        color: var(--lit-tab-color);
-        --lit-icon-color: var(--lit-tab-color);
-        background-color: var(--lit-tab-background);
-        font-weight: var(--lit-tab-font-weight, bold);
-        white-space: nowrap;
-        display: flex;
-        align-items: center;
-        text-transform: uppercase;
-        text-align: center;
-        justify-content: center;
+        display: block;
+        flex: 1 0 auto;
+        position: relative;
     }
-    :host([type="button"]){
-        border: 1px solid  var(--lit-tab-border,  tomato);
-        padding: var(--lit-tab-button-padding, 5px 14px);
+    :host(:not([selected])){
+        --lit-button-color: var(--lit-tab-color-default, #666);
     }
-    :host([type="tab"]){
-        padding: var(--lit-tab-padding, 5px 14px);
-        border: 1px solid transparent;
-        border-left: none;
-        border-right: none;
-        border-bottom: 1px solid var(--lit-tab-border, tomato);
-        
+    :host([selected]) .border{
+        display: block;
     }
-    :host(:not([selected]):hover){
-        outline: 1px solid var(--lit-tab-outline-hover, inherit);
-        z-index: 1;
+    lit-button{
+        width: 100%;
+        contain: content;
+        display: block;
     }
-    :host([selected]){
-        background-color: var(--lit-tab-background-selected, tomato);
-        color: var(--lit-tab-color-selected, black);
-        --lit-icon-color: var(--lit-tab-color-selected, black);
+    .active.border{
+        transform: none !important; 
+        transition: 250ms transform cubic-bezier(0.4, 0, 0.2, 1);
     }
-    :host(:not([disabled]):focus){
-        outline: 1px solid var(--lit-tab-border, tomato);
-        z-index: 1;
+    .border{
+        display: none;
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        background-color: var(--lit-theme-primary, hsl(264, 100%, 66%));
+        bottom: -2px;
     }
-    
     `;
     @property({type: String}) value = "";
-    tabIndex = 0;
-    private _keyPressController = new KeyDownController(this);
-    private _focused = false;
-    private _type: string = '';
-    set type(value: TTabType){
-        if(value !== this._type){
-            this.setAttribute('type', value);
-            this._type = value;
-        }
-    }
-    select(){
-        this.setAttribute('selected', '');
-        setTimeout(() => {
-            this.focus();
-        })
-    }
-    unselect(){
-        this.removeAttribute('selected');
+    @property({type: Boolean, reflect: true}) selected = false;
+    @property({type: String, reflect: true}) type: TTabType = 'button';
+    
+    private _tabsHost: LitTabs | null = null;
+    //private _keyPressController = new KeyDownController(this);
+    private _currentX = 0;
+    private _prevRect?: DOMRect | null = null;
+
+    @state() active: boolean = false;
+
+    setTabsHost(value: LitTabs){
+        this._tabsHost = value;
     }
     connectedCallback(){
         super.connectedCallback();
-        this.addEventListener('click', this.selectNotify);
-        this.addEventListener('focus', this._handleFocus);
-        this.addEventListener('blur', this._handleBlur);
+        this.dispatchEvent(new CustomEvent('tabConnected', {
+            detail: this,
+            bubbles: true
+        }))
     }
+    willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {        
+        if(_changedProperties.has("selected") && this.selected && this._prevRect){
+            this._currentX = (this._prevRect?.x || 0) - this.getBoundingClientRect().x;            
+        }
+    }
+
     disconnectedCallback(){
         super.disconnectedCallback();
-        this.removeEventListener('click', this.selectNotify);
-        this.removeEventListener('focus', this._handleFocus);
-        this.addEventListener('blur', this._handleBlur);
+        this._tabsHost?.disconncetTab(this);
     }
-    private selectNotify(){
+    setSelect(value: boolean, prevRect?: DOMRect | null){
+        this._prevRect = prevRect;
+        this.selected = value;
+    }
+    private _selectNotify(){
         this.dispatchEvent(new CustomEvent('changed', {
             detail: this.value,
             bubbles: true
         }));
     }
-    private _handleFocus(){
-        this._focused = true;
-    }
-    private _handleBlur(){
-        this._focused = false;
-    }
     render(){
-        return html`<slot></slot>`;
+        return html`
+        <lit-button 
+            .tabindex = "${this.selected ? 0 : -1}"
+            @click = "${this._selectNotify}" 
+            @focus = "${this._onFocus}"
+            @blur = "${this._onBlur}"
+            ?borderless = "${this.type === 'tab'}">
+            <slot></slot>
+        </lit-button>
+        <div class = "border ${this.active ? 'active' : ''}" 
+             style = "transform: translateX(${this._currentX}px);"></div>`;
     }
-    
-    handlekeyDown = (e: KeyboardEvent) => {
-        if(e.key === "Enter" && this._focused){
-            this.selectNotify();
+    private _onFocus(){
+        document.addEventListener('keydown', this.handlekeyDown);
+    }
+    private _onBlur(){
+        document.removeEventListener('keydown', this.handlekeyDown);
+    }
+    protected updated(_changedProperties: Map<string | number | symbol, unknown>): void {
+        if(this.selected){
+            if(!this.active){
+                setTimeout(() => this.active = true);
+            }
         }
-        if(this.hasAttribute('selected') && this._focused){
-            if(e.key === "ArrowRight"){
-                (this.nextElementSibling as LitTab | null)?.selectNotify?.();
-            }
-            if(e.key === "ArrowLeft"){
-                (this.previousElementSibling as LitTab | null)?.selectNotify?.();
-            }
+        else{
+            this.active = false;
+        }
+    }
+    handlekeyDown = (e: KeyboardEvent) => {
+        if(e.key === "ArrowRight"){
+            (this.nextElementSibling as LitTab | null)?.focus?.()
+        }
+        if(e.key === "ArrowLeft"){
+            (this.previousElementSibling as LitTab | null)?.focus?.()
+        }
+        if(e.key === "Enter" || e.key === " "){
+            this._selectNotify();
         }
     }
 }

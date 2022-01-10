@@ -37,10 +37,19 @@ let LitCheckbox = class LitCheckbox extends labled(formAssociated(LitElement)) {
         this.setAttribute('value', value);
         this.requestUpdate('value', oldValue);
     }
+    reportValidity() {
+        return true;
+    }
     render() {
-        return html `<div class = "noselect"
-                        id = "content" 
-                        @click = "${this._click}"><span class = "control"></span></div>`;
+        var _a;
+        return html `
+        <div 
+            role = "checkbox" 
+            aria-checked = "${this.checked}"
+            aria-label = "${(((_a = this.labels[0]) === null || _a === void 0 ? void 0 : _a.textContent) || '').trim()}"
+            class = "noselect"
+            id = "content" 
+            @click = "${this._click}"><span class = "control"></span></div>`;
     }
     _click(e) {
         e.stopPropagation();

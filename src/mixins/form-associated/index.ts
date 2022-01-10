@@ -1,9 +1,7 @@
-import { LitElement, html, nothing } from 'lit';
+import { LitElement, css } from 'lit';
 import { property } from 'lit/decorators.js';
 import type { FormAssociatedElement, ValidityStateFlags } from './interface';
-import type { LitNote } from '../../note';
 import '../../note';
-import { ref, createRef } from 'lit/directives/ref.js';
 import { LitFrom } from '../../form/index';
 
 type TValidationMessageKey = keyof ValidityStateFlags;
@@ -42,23 +40,38 @@ const defaultValidationMessages: TValidationMessages = {
     },
 };
 
+const getLang = () => window.ValidationsMessagesLang || window.navigator.language.split('-')[0];
 
 type Constructor<T> = new (...args: any[]) => T;
 
 export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T) => {
     class FormAssociated extends superClass implements FormAssociated{
-        _formAssiciated =  true;
+        private _formAssiciated =  true;
         static get properties(){
             return {
                 value: {type: String},
             }
         }
-        @property({type: Boolean, reflect: true}) showNote: boolean = false;
+        static styles = [
+            ...(superClass as any).elementStyles, 
+            css`            
+            :host([disabled]){
+                opacity: 0.5;
+                pointer-events: none;
+            }
+            :host([readonly]){
+                opacity: 0.7;
+                pointer-events: none;
+        }`];
+        
         @property({type: Boolean, reflect: true}) disabled: boolean = false;
         @property({type: Boolean}) required: boolean = false;
-        @property({type: Boolean}) readonly: boolean = false;
+        @property({type: Boolean, reflect: true}) readonly: boolean = false;
+        @property({type: Boolean}) willValidate: boolean = true;
         @property({type: String}) name: string = '';
-        @property({type: Boolean, reflect: true}) valid: boolean = true;
+
+        //@property({type: Boolean}) valid: boolean = true;
+
         public validity: ValidityStateFlags = {
             badInput: false,
             customError: false,
@@ -71,8 +84,13 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             typeMismatch: false,
             valueMissing: false,
         };
-        public noteRef = createRef<LitNote>();
-        public value: string = '';
+        public _value: string = '';
+        get value(){
+            return this._value
+        }
+        set value(value: string){
+            this._value = value;
+        }
         protected customValidationMessage = '';
         public isFirstUpdated = false;
         public min?: number = NaN;
@@ -81,11 +99,6 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         public pattern?: string = '';
         private _submitForm: LitFrom | null = null;
 
-        
-        constructor(...args: any[]) {
-            super(...args);
-            this.required = false;
-        }
         
         public connectedCallback(): void {
             super.connectedCallback();
@@ -105,30 +118,21 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             super.disconnectedCallback();
             this._submitForm?.detatchElement(this);
         }
-        render(){
-            if(this.showNote){
-                //const {x, y} = calcPositionForPopup(this, {width: 400, height: 40});
-                // style = "left: ${x}px; top: ${y + 5}px"
-                return html`<lit-note 
-                    @close = "${this._handleCloseNote}" 
-                    style = "transform: translate(0, -100%);"
-                    class = "error" ${ref(this.noteRef)}>${this.validationMessage}</lit-note>`;
-            }
-            return nothing;
-        }
         async firstUpdated(){
             await this.updateComplete;
             this.isFirstUpdated = true
         }
-
-        /** Validation */
-        private _getLang(): string{
-            return window.ValidationsMessagesLang || window.navigator.language.split('-')[0];
+        get form(){
+            return this._submitForm;
         }
+        get valid(){
+            return this.checkValidity();
+        }
+        /** Validation */
         private _getErrorText(key: TValidationMessageKey){
-            const text = window.ValidationsMessages?.[key][this._getLang()] 
+            const text = window.ValidationsMessages?.[key][getLang()] 
                 || window.ValidationsMessages?.[key]['en'] 
-                || defaultValidationMessages[key][this._getLang()]
+                || defaultValidationMessages[key][getLang()]
                 || defaultValidationMessages[key]['en'];
             const data: Record<string, number | string | undefined> = {
                 min: this.min,
@@ -153,19 +157,22 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             }
             return "";
         }
-        checkValidity(){
-            if(!this.isFirstUpdated) return false;
-            this.valid = !Object.values(this.validity).filter(it => it).length;
-            
-            return this.valid;
+        checkValidity(): boolean{
+            if(!this.isFirstUpdated){
+                return true;
+            }
+            return !Object.values(this.validity).filter(it => it).length;
         }
-        reportValidity(){            
-            const validity = this.checkValidity();
-            this.showNote = !validity;
-            return validity;
+        reportValidity(): boolean{
+            const valid = this.checkValidity();
+            this.dispatchEvent(new CustomEvent(valid ? 'valid' : 'invalid', {
+                detail: this,
+                composed: true,
+                bubbles: true
+            }))
+            return valid;
         }
-        validate(){
-            
+        validate(){           
             if(this.required && !this.value && !this.disabled){
                 this.setValidity({valueMissing: true});
             }
@@ -174,18 +181,17 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             }
         }
         setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement){
+                
+            if(!this.willValidate) return;
             this.validity = {...this.validity, ...flags};
             if(message){
                 this.customValidationMessage = message;
             }
-           this.checkValidity();
+            this.reportValidity();
         }
         
         /** ========= */
 
-        private _handleCloseNote(){
-            this.showNote = false;
-        }
         private _handleKeypress(e: KeyboardEvent): void {
             if(e.key === 'Enter'){
                 this.dispatchEvent(new CustomEvent('submitForm', {

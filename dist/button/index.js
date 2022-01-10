@@ -1,5 +1,4 @@
-var _LitButton_notifyTimeout, _LitButton_width;
-import { __classPrivateFieldGet, __classPrivateFieldSet, __decorate } from "tslib";
+import { __decorate } from "tslib";
 import { styleMap } from 'lit/directives/style-map.js';
 import { LitElement, html, } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -7,6 +6,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { button } from './styles';
 import '../spinner';
 import '../icon';
+import '../ripple';
 import { focusable } from '../mixins/focusable/index';
 /** @tag lit-button */
 let LitButton = class LitButton extends focusable(LitElement) {
@@ -29,34 +29,22 @@ let LitButton = class LitButton extends focusable(LitElement) {
         this.success = false;
         /** @prop {boolean} danger - Danger  */
         this.danger = false;
+        this.between = false;
         /** @prop {boolean} switchOn - switch State. true - enabled, false disabled */
         this.switchOn = false;
         this.notifyOnClick = false;
         /** @ignore  */
         this._notifyIcon = false;
-        /** @ignore  */
-        this.hover = false;
-        /** @ignore  */
-        this.pressed = false;
-        /** @ignore  */
-        this.focused = false;
         this.tabindex = 0;
         /** @ignore  */
-        _LitButton_notifyTimeout.set(this, 0);
+        this._notifyTimeout = 0;
         /** @ignore  */
-        _LitButton_width.set(this, 0);
+        this._width = 0;
         /** @ignore  */
-        this._onMouseUp = (e) => {
-            this.pressed = false;
-            // e.preventDefault();
-            document.removeEventListener('mouseup', this._onMouseUp);
-        };
-        /** @ignore  */
-        this._onEndTouch = (e) => {
-            this.pressed = false;
-            document.removeEventListener('touchcancel', this._onEndTouch);
-            document.removeEventListener('touchend', this._onEndTouch);
-            // e.preventDefault();
+        this._onKeyDown = (e) => {
+            if (e.key === "Enter" || e.key === "Space") {
+                this.submit();
+            }
         };
     }
     static get properties() {
@@ -85,10 +73,8 @@ let LitButton = class LitButton extends focusable(LitElement) {
         return {
             wrapper: true,
             noselect: true,
-            hover: this.hover,
-            pressed: this.pressed,
-            focus: this.focused,
-            checkmark: this._notifyIcon
+            checkmark: this._notifyIcon,
+            accent: this.primary || this.success || this.danger
         };
     }
     /** @ignore  */
@@ -107,59 +93,27 @@ let LitButton = class LitButton extends focusable(LitElement) {
      * @slot icon-after - You can put some elements after content
      */
     render() {
-        const styles = __classPrivateFieldGet(this, _LitButton_width, "f") ? { width: __classPrivateFieldGet(this, _LitButton_width, "f") + 'px' } : {};
+        const styles = this._width ? { width: this._width + 'px' } : {};
         return html `
-        <button tabindex = "${this.tabindex}" 
-            style = "${styleMap(styles)}"
-            class = "${classMap(this.classes)}" 
-            @click = "${this.click}"
-            @focus = "${this._onFocus}"
-            @blur = "${this._onBlur}"
-            @mouseover = "${this._onMouseOver}"
-            @mouseout = "${this._onMouseOut}"
-            @mousedown = "${this._onMouseDown}"
-            @touchstart = "${this._onTouchStart}"
-        >${this._contentTemplate()}</button>`;
+            <lit-ripple 
+                role = "button"
+                aria-pressed = "${this.type === 'switch' ? this.switchOn : 'undefined'}"
+                tabindex = "${this.tabindex}" 
+                style = "${styleMap(styles)}"
+                class = "${classMap(this.classes)}" 
+                @click = "${this.click}"
+                @focus = "${this._onFocus}"
+                @blur = "${this._onBlur}"
+            >${this._contentTemplate()}</lit-ripple>`;
     }
     // ==== Events ====
     /** @ignore  */
-    _onMouseDown(e) {
-        this.pressed = true;
-        // e.preventDefault();
-        document.addEventListener('mouseup', this._onMouseUp);
-    }
-    /** @ignore  */
-    _onTouchStart(e) {
-        this.pressed = true;
-        document.addEventListener('touchcancel', this._onEndTouch);
-        document.addEventListener('touchend', this._onEndTouch);
-        // e.preventDefault();
-    }
-    /** @ignore  */
-    _onMouseOver(e) {
-        this.hover = true;
-        e.preventDefault();
-    }
-    /** @ignore  */
-    _onMouseOut(e) {
-        this.hover = false;
-        e.preventDefault();
-    }
-    /** @ignore  */
     _onBlur() {
-        this.focused = false;
         document.removeEventListener('keydown', this._onKeyDown);
     }
     /** @ignore  */
     _onFocus() {
-        this.focused = true;
         document.addEventListener('keydown', this._onKeyDown);
-    }
-    /** @ignore  */
-    _onKeyDown(e) {
-        if (e.key === "Enter") {
-            this.submit();
-        }
     }
     // ==== Actions ====
     click() {
@@ -188,16 +142,15 @@ let LitButton = class LitButton extends focusable(LitElement) {
         }
         if (this.notifyOnClick) {
             this._notifyIcon = true;
-            __classPrivateFieldSet(this, _LitButton_width, this.clientWidth, "f");
-            clearTimeout(__classPrivateFieldGet(this, _LitButton_notifyTimeout, "f"));
-            __classPrivateFieldSet(this, _LitButton_notifyTimeout, window.setTimeout(() => {
+            this._width = this.clientWidth;
+            clearTimeout(this._notifyTimeout);
+            this._notifyTimeout = window.setTimeout(() => {
                 this._notifyIcon = false;
-                __classPrivateFieldSet(this, _LitButton_width, 0, "f");
-            }, 1000), "f");
+                this._width = 0;
+            }, 1000);
         }
     }
 };
-_LitButton_notifyTimeout = new WeakMap(), _LitButton_width = new WeakMap();
 LitButton.styles = button;
 __decorate([
     property({ type: String, attribute: true })
@@ -222,6 +175,9 @@ __decorate([
 ], LitButton.prototype, "danger", void 0);
 __decorate([
     property({ type: Boolean, reflect: true })
+], LitButton.prototype, "between", void 0);
+__decorate([
+    property({ type: Boolean, reflect: true })
 ], LitButton.prototype, "switchOn", void 0);
 __decorate([
     property({ type: Boolean })
@@ -229,15 +185,6 @@ __decorate([
 __decorate([
     state()
 ], LitButton.prototype, "_notifyIcon", void 0);
-__decorate([
-    state()
-], LitButton.prototype, "hover", void 0);
-__decorate([
-    state()
-], LitButton.prototype, "pressed", void 0);
-__decorate([
-    state()
-], LitButton.prototype, "focused", void 0);
 __decorate([
     property({ type: Number })
 ], LitButton.prototype, "tabindex", void 0);

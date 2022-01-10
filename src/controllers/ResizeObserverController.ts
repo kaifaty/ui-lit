@@ -1,5 +1,5 @@
 import {ReactiveController, ReactiveControllerHost, noChange} from 'lit';
-import { directive, Directive, PartInfo, PartType, ElementPart} from 'lit/directive';
+import { directive, Directive, PartInfo, PartType, ElementPart} from 'lit/directive.js';
 
 interface IResizeObserverController extends ReactiveController {
     startOberve (el: HTMLElement): void

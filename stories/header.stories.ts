@@ -1,9 +1,9 @@
 
 
-import { html } from 'lit';
+import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/header';
-import { IHeaderProps } from '../header';
+import { IHeaderProps } from '../src/header';
 
  
 const Header = (data: IHeaderProps) => 

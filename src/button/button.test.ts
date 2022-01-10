@@ -16,9 +16,10 @@ describe('Test Button', async () => {
     it('is should be icon-after', () => {
         expect(getButton().shadowRoot?.querySelector(`slot[name=icon-after]`)).exist;
     });
-    it('is text Transformed', () => {
+    it('is text Transformed', async () => {
         const button = getButton();
         button.innerText = "button";
+        await true
         expect(button.innerText).equal('button'.toUpperCase());
     });
     it('should spin', async() => {
@@ -44,7 +45,7 @@ describe('Test Button', async () => {
     it('should be focusable', async() => {
         const button = getButton();      
         button.focus();
-        expect(button.shadowRoot!.querySelector(".wrapper:focus")).exist;
+        expect(button.isFocused).equal(true);
     });
     it('should width be same after checked', async() => {
         const button = getButton();  

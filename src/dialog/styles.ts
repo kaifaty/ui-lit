@@ -41,8 +41,8 @@ export const DIALOG_STYLES = css`
     word-wrap: break-word;
     display: flex;
     flex-direction: column;
-    position: relative;
     box-shadow: 1px 1px 8px var(--lit-dialog-boxshadow, rgba(0,0,0,0.7));
+    position: relative;
 }
 
 slot[name = header]::slotted(*){
@@ -72,17 +72,15 @@ footer{
     flex-direction: column;
     justify-content: end;
 }
-.close-icon, .arrow-back{
+.icons{
     position: absolute;
-    padding: 10px;
     right: 0;
     top: 0;
+}
+.close-icon, 
+.arrow-back{
+    padding: 10px;
     cursor: pointer;
     color: var(--lit-dialog-control-icons, #aaa);
     --icon-font-size: 18px;
-}
-.arrow-back{
-    right: 30px;
-    transform-origin: center;
-    transform: rotate(90deg);
 }`

@@ -8475,10 +8475,10 @@ junk@^3.1.0:
   resolved "https://registry.npmjs.org/junk/-/junk-3.1.0.tgz"
   integrity sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==
 
-kailib@^1.0.38:
-  version "1.0.38"
-  resolved "https://registry.yarnpkg.com/kailib/-/kailib-1.0.38.tgz#2d6ac1e15a0348e2c384f61744fec87840cd906c"
-  integrity sha512-1dHIMzOG2LbHh+H/wG2Pmo0D2PhFWnPG8ffKOJkTb1RnEfIs5E0csCGrA1TxL24H9P4A2tVGGB6CaCZdN4gKSA==
+kailib@^1.0.41:
+  version "1.0.41"
+  resolved "https://registry.yarnpkg.com/kailib/-/kailib-1.0.41.tgz#d9ac09047bb5270e687bc398279e6f22a3e22601"
+  integrity sha512-tPlHRJ7y0yP56/6HTBnRgCyEzZpfd97KqnoXR3X88Y7XTm+yIxCv4H5PfYmhudFi9/7nPXgEyNcMxv2O+EAOBA==
 
 keygrip@~1.1.0:
   version "1.1.0"

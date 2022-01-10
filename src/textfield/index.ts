@@ -8,6 +8,7 @@ import { createRef, ref, Ref } from 'lit/directives/ref.js';
 import { labled } from '../mixins/labled';
 import { focusable } from '../mixins/focusable/index';
 import { Focusable } from '../mixins/focusable/inderface';
+import { notificatable } from '../mixins/notificatable/index';
 
 export type TInputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'
 
@@ -29,9 +30,12 @@ export interface TextProps extends FormAssociated, Focusable{
 }
 
 @customElement("lit-textfield")
-export class LitTextField extends focusable(labled(formAssociated(LitElement))) implements TextProps{
+export class LitTextField extends focusable(labled(notificatable(formAssociated(LitElement)))) implements TextProps{
     static get styles (){
-        return input
+        return [
+            super.elementStyles,
+            input
+        ]
     };
 
     static get properties(){        

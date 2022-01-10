@@ -46,7 +46,6 @@ export class LitLabel extends LitElement{
             this._disconnectLabels();
         }
         this._labled = labeled;
-        console.log(`--->`, labeled.addLabel(this))
         this._labled.addLabel(this);
     }
     

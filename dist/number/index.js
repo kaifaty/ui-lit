@@ -9,32 +9,56 @@ import { live } from 'lit/directives/live.js';
 import { createRef, ref } from 'lit/directives/ref.js';
 import { labled } from '../mixins/labled';
 import { focusable } from '../mixins/focusable/index';
+import { notificatable } from '../mixins/notificatable/index';
 const AvailabledKeys = ['Control', 'Backspace', 'Delete', ',', '.', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End', "Enter"];
 const Numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
 const CtrAvailable = [
     'a', 'v', 'c', 'x', 'z',
     86, 67, 88, 90, 65
 ];
-let LitNumberField = class LitNumberField extends focusable(labled(formAssociated(LitElement))) {
+const filterZeroues = (decimals) => {
+    let res = '';
+    let nonZeroExist = false;
+    for (let i = decimals.length - 1; i >= 0; i--) {
+        if (decimals[i] !== '0') {
+            nonZeroExist = true;
+        }
+        if (nonZeroExist) {
+            res = decimals[i] + res;
+        }
+    }
+    return res;
+};
+const filterNotNumbers = (str) => {
+    let res = '';
+    for (let i = 0; i < str.length; i++) {
+        const code = str.charCodeAt(i);
+        if (code === 46 || code >= 48 && code <= 57) {
+            res += str[i];
+        }
+    }
+    return res;
+};
+let LitNumberField = class LitNumberField extends focusable(labled(notificatable(formAssociated(LitElement)))) {
     constructor() {
         super(...arguments);
         this.min = NaN;
         this.max = NaN;
         this.decimals = 8;
-        this.readonly = false;
-        this.autofocus = false;
         this.replaceToRange = false;
         this.placeholder = '';
-        this.inputmode = 'text';
+        this.inputmode = 'decimal';
         this.useCancelButton = false;
         this.icon = '';
         this._selectionBeforeRender = 0;
-        this.inputRef = createRef();
-        this._valueAsNumber = NaN;
+        this._inputRef = createRef();
         this._value = '';
     }
     static get styles() {
-        return input;
+        return [
+            ...super.elementStyles,
+            input
+        ];
     }
     ;
     static get properties() {
@@ -45,7 +69,7 @@ let LitNumberField = class LitNumberField extends focusable(labled(formAssociate
         };
     }
     get valueAsNumber() {
-        return this._valueAsNumber;
+        return Number(this._value);
     }
     set valueAsNumber(value) {
         if (typeof value === 'number') {
@@ -61,18 +85,23 @@ let LitNumberField = class LitNumberField extends focusable(labled(formAssociate
     set value(value) {
         const oldValue = this._value;
         this._value = this._valueResolve(value);
-        this._valueAsNumber = Number(this._value);
         this.requestUpdate('value', oldValue);
     }
-    get isFocused() {
-        var _a;
-        return !!((_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('input:focus'));
-    }
     _valueResolve(rawValue) {
-        let value = rawValue.replace(",", ".");
-        const arr = value.split(".");
-        if (arr.length > 1) {
-            value = arr[0] + "." + arr.slice(1).join("").slice(0, this.decimals);
+        let value = filterNotNumbers(rawValue.replace(",", "."));
+        let [ceil, ...decs] = value.split(".");
+        if (decs.length) {
+            const decimals = decs.join("");
+            const filtered = filterZeroues(decimals);
+            if (filtered) {
+                value = ceil + "." + filtered.slice(0, this.decimals);
+            }
+            else if (decimals) {
+                value = ceil;
+            }
+            else {
+                value = ceil + ".";
+            }
         }
         if (this.replaceToRange) {
             const asNumber = Number(value);
@@ -91,11 +120,12 @@ let LitNumberField = class LitNumberField extends focusable(labled(formAssociate
         return html `<lit-icon 
                         @click = "${this._clearValue}"
                         icon = "remove" 
+                        danger
                         class = "danger icon"></lit-icon>`;
     }
     willUpdate() {
         var _a;
-        this._selectionBeforeRender = ((_a = this.inputRef.value) === null || _a === void 0 ? void 0 : _a.selectionStart) || 0;
+        this._selectionBeforeRender = ((_a = this._inputRef.value) === null || _a === void 0 ? void 0 : _a.selectionStart) || 0;
     }
     render() {
         return html `
@@ -106,11 +136,10 @@ let LitNumberField = class LitNumberField extends focusable(labled(formAssociate
                    ?readonly = "${this.readonly}"
                    placeholder = "${this.placeholder}"
                    spellcheck = "${this.spellcheck}"
-                   inputmode = "${this.inputmode}"
+                   inputmode = "decimal"
                    @input = "${this._handleInput}" 
-                   @keydown = "${this._handleKeyDown}"
                    @change = "${this._handleChange}"
-                   ${ref(this.inputRef)}
+                   ${ref(this._inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
             <div class = "icon"><slot name = "icon"></slot></div>
@@ -120,7 +149,7 @@ let LitNumberField = class LitNumberField extends focusable(labled(formAssociate
         var _a;
         super.updated(props);
         if (this._selectionBeforeRender !== undefined) {
-            (_a = this.inputRef.value) === null || _a === void 0 ? void 0 : _a.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
+            (_a = this._inputRef.value) === null || _a === void 0 ? void 0 : _a.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
         }
         this.validate();
     }
@@ -177,12 +206,6 @@ __decorate([
 __decorate([
     property({ type: Number })
 ], LitNumberField.prototype, "decimals", void 0);
-__decorate([
-    property({ type: Boolean })
-], LitNumberField.prototype, "readonly", void 0);
-__decorate([
-    property({ type: Boolean })
-], LitNumberField.prototype, "autofocus", void 0);
 __decorate([
     property({ type: Boolean })
 ], LitNumberField.prototype, "replaceToRange", void 0);

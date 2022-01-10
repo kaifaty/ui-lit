@@ -1,5 +1,5 @@
 
-import { customElement, state } from 'lit/decorators';
+import { customElement, state } from 'lit/decorators.js';
 import { LitElement, html, css } from 'lit';
 import { getParentTagName } from 'kailib';
 import type { LitCode } from './index';

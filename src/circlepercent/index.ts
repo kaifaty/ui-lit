@@ -1,6 +1,6 @@
 import { LitElement, css, html, noChange } from 'lit';
-import {property, customElement, query} from 'lit/decorators'
-import { Directive, PartInfo, PartType, ElementPart, directive } from 'lit/directive';
+import {property, customElement, query} from 'lit/decorators.js'
+import { Directive, PartInfo, PartType, ElementPart, directive } from 'lit/directive.js';
 
 export interface ICircleProps{
     percent: number

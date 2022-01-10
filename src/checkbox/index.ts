@@ -3,6 +3,7 @@ import { formAssociated } from '../mixins/form-associated/index';
 import { LitElement, html, css } from 'lit';
 import { noselect } from '../styles/noselect';
 import { labled } from '../mixins/labled';
+import { ValidityStateFlags } from '../mixins/form-associated/interface';
 
 
 /**
@@ -124,7 +125,7 @@ export class LitCheckbox extends labled(formAssociated(LitElement)) implements I
             checked: {type: Boolean},
         }
     }
-    _checked: boolean = false;
+    private _checked: boolean = false;
     get checked(){
         return this._checked;
     }
@@ -132,7 +133,7 @@ export class LitCheckbox extends labled(formAssociated(LitElement)) implements I
         this.value = value ? 'on' : 'off';
     }
 
-    _value: TCkeckboxValue = 'off';
+    private _value: TCkeckboxValue = 'off';
     get value(){
         return this._value;
     }
@@ -145,11 +146,18 @@ export class LitCheckbox extends labled(formAssociated(LitElement)) implements I
         this.requestUpdate('value', oldValue);
     }
     
-
+    reportValidity(){
+        return true;
+    }
     render(){
-        return html`<div class = "noselect"
-                        id = "content" 
-                        @click = "${this._click}"><span class = "control"></span></div>`;
+        return html`
+        <div 
+            role = "checkbox" 
+            aria-checked = "${this.checked}"
+            aria-label = "${(this.labels[0]?.textContent || '').trim()}"
+            class = "noselect"
+            id = "content" 
+            @click = "${this._click}"><span class = "control"></span></div>`;
     }
     private _click(e: Event){
         e.stopPropagation();

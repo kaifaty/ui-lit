@@ -1,5 +1,5 @@
 
-import { customElement, property, query } from 'lit/decorators';
+import { customElement, property, query } from 'lit/decorators.js';
 import { LitElement, html, css } from 'lit';
 import QRCode from 'qrcode'
 

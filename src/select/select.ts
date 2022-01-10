@@ -1,119 +1,166 @@
-import { noselectText } from '../styles/noselect';
-import { styleMap } from 'lit/directives/style-map';
 import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
 import { formAssociated } from '../mixins/form-associated/index';
-import { customElement, property, state } from 'lit/decorators';
-import { isClickInElement } from 'kailib';
-import { scrollbar } from '../styles/scrollbar';
-import { FormAssociatedProps } from '../mixins/form-associated/interface';
-import { FocusController } from '../controllers/FocusContriller';
+import { customElement, property, state } from 'lit/decorators.js';
+import { unsafeHTML } from 'lit/directives/unsafe-html.js'
+import '../button';
+import './listbox';
+import './group';
+import './option';
+import { IPropsSelect } from './interface';
+import type { LitOption } from './option';
+import { focusable } from '../mixins/focusable/index';
+import { labled } from '../mixins/labled/index';
+import { notificatable } from '../mixins/notificatable/index';
 
 
-export type TSelectItem = {
-    content: string | TemplateResult
-    value: string
-}
-
-
-export interface IPropsSelect extends FormAssociatedProps{
-    items: TSelectItem[],
-    disabled: boolean
-    optionsWidth: number
-    optionsHeight: number
-}
 
 @customElement("lit-select")
-export class LitSelect extends formAssociated(LitElement) implements IPropsSelect{
-    static styles = [css`
-    :host{
-        display: inline-block;
-        position: relative;
-        color: var(--lit-select-color, black);
-    }
-    :host(:not([disabled]):focus){
-        outline: 1px solid var(--lit-select-outline-focus, #ccc);
-    }
-    .icon-dropdown{
-        margin-left: 10px;
-    }
-    .selected{
-        min-width: 50px;
-        display: grid;
-        align-items: center;
-        grid-template-columns: auto 20px;
-        background-color: var(--lit-select-background);
-        border: 1px solid  var(--lit-select-border,  #ccc);
-        padding: var(--lit-select-padding, 5px 10px);
-        cursor: pointer;
-        height: 100%;
-        box-sizing: border-box;
-        text-transform: uppercase;
-        font-weight: bold;
-        overflow: hidden; 
-    }
-    .selected div{
-        text-overflow: ellipsis;
-        overflow: hidden; 
-        white-space: nowrap;
-    }
-    .items.open{
-        display: block;
-    }
-    .items{
-        display: none;
-        position: absolute;
-        border: 1px solid var(--lit-select-border, #ccc);
-        background-color: var(--lit-select-item-background);
-        z-index: var(--lit-select-items-zindex, 20);
-        overflow-y: auto;
-        overflow-x: hidden;
-        box-sizing: border-box;
-    }
-    .items.above{
-        top: 0;
-        transform: translateY(-100%);
-    }
-    .items.below{
-        bottom: 0;
-        transform: translateY(100%);
-    }
-    :host([disabled]){
-        opacity: 0.5;
-        ${unsafeCSS(noselectText)};
-    }
-    .item{
-        display: block;
-        padding: var(--lit-select-padding, 5px 10px);
-        cursor: pointer;
-        background-color: var(--lit-select-item-background, #fff);
-    }
-    .item:focus{
-        outline: 2px solid var(--lit-select-outline-focus, #ccc);
-    }
-    .item:hover{
-        background-color: var(--lit-select-item-background-hover, #eee);
-    }
-    `, scrollbar];
-    
-    private _focusController = new FocusController(this);
-    @property({type: Array}) items: TSelectItem[] = [];
-    @property({type: Number}) optionsWidth: number = 0;
-    @property({type: Number}) optionsHeight: number = 0;
-    @property({type: String}) value: string = '';
-    @property({type: String}) staticLabel: string | TemplateResult = '';
-    @state() open: boolean = false;
-    
-    tabIndex = 0;
-    
-    _keyHandleFn: Function | null = null;
+export class LitSelect extends focusable(labled(notificatable(formAssociated(LitElement)))) implements IPropsSelect{
+    static get styles (){
+        return [
+            ...super.elementStyles, 
+            css`
+        :host{
+            display: inline-block;
+            position: relative;
+            color: var(--lit-select-color, black);
+        }
+        .wrapper{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        lit-button{
+            width: 100%;
+            min-width: 70px;
+        }
 
-    setValue(value: string){
-        this.value = value;
-        this.dispatchEvent(new CustomEvent("changed", {
-            detail: this.value,
-            bubbles: true
-        }));
-        this._hide();
+        `, ]
+    };
+    static get properties(){
+        return {
+            open: {type: Boolean}
+        }
+    }
+    
+    @property({type: Number}) tabindex: number = 0;
+    @property({type: Boolean}) multiple: boolean = false;
+    //@property({type: String}) type: 'select-one' | 'select-multiple' = 'select-one';
+    private _keyboardEventSet = false;
+
+    private _open: boolean = false;
+    set open(value: boolean){
+        if(value === this._open){
+            return;
+        }
+        if(!this._keyboardEventSet && value){
+            document.addEventListener('keydown', this._handlekeyDown as EventListener);
+            this._keyboardEventSet = false;
+        }
+        const oldValue = this._open;
+        this._open = value;
+        this.requestUpdate('open', oldValue);
+    }
+    get open(){
+        return this._open;
+    }
+
+    private _value: string = '';
+    get value(){
+        return this._value
+    }
+    set value(value: string){
+        this._setValue?.(value, false);
+    }
+
+    @state() options: LitOption[] = [];
+
+    get selectedContent(){
+        const selected = this.options.find(it => it.selected);
+        if(selected){
+            return selected.innerHTML
+        }
+        return '-'
+    }
+
+    private _setValue = (value: string, notify = true) => {
+        
+        if(value === this.value){
+            return;
+        }
+        const exist = this.options.find(it => it.value === value);
+        if(!exist) return;
+        this._value = value;
+        this.options.forEach(it => {
+            if(it.value === value){
+                it.selected = true;
+            }
+            else{
+                it.selected = false;
+            }
+        })
+        this.requestUpdate()
+        if(notify){
+            this.dispatchEvent(new CustomEvent('changed', {
+                detail: value,
+                bubbles: true,
+                composed: true
+            }));
+        }
+    }
+
+    private _optionSelect = (e: CustomEvent) => {
+        this.open = false;
+        this._setValue(e.detail);
+    }
+
+    private _optionConnect = (e: CustomEvent) => {
+        const option = e.detail;
+        option.setSelectHost(this);
+        this.options.push(option);
+        if(this.value){
+            if(option.value === this.value){
+                option.selected = true
+            }
+            else{
+                option.selected = false
+            }
+        }
+        else if(option.selected){
+            this.value = option.value;
+        }
+        this.requestUpdate()
+        
+    }
+    connectedCallback(): void {
+        super.connectedCallback();
+        this.addEventListener('optionConnected', this._optionConnect as EventListener);
+        this.addEventListener('optionSelect', this._optionSelect as EventListener);
+    }
+    disconnectedCallback(): void {
+        super.disconnectedCallback();
+        this.removeEventListener('optionConnected', this._optionConnect as EventListener);
+        this.removeEventListener('optionSelect', this._optionSelect as EventListener);
+    }
+
+    optionDisconnect = (option: LitOption) => {
+        const index = this.options.indexOf(option);
+        if(~index){
+            this.options.splice(index, 1);
+        }
+    }
+
+    get length(){
+        return this.options.length;
+    }    
+
+    move(forward = true){
+        let index = this.options.findIndex(it => it.selected);
+        index += forward ? 1 : -1;
+        if(index < 0) index = 0;
+        if(index > this.options.length - 1) index = this.options.length - 1;
+
+        this._setValue(this.options[index].value);
     }
 
     private _toggle(){
@@ -129,94 +176,72 @@ export class LitSelect extends formAssociated(LitElement) implements IPropsSelec
     private _hide = () => {
         if(!this.open) return;
         this.open = false;
-        document.removeEventListener('click', this._handleClick as EventListener);
-        document.removeEventListener('keydown', this._handlekeyDown as EventListener);
     }
 
     private _show = () => {
         if(this.open) return;
         this.open = true;
-        document.addEventListener('click', this._handleClick as EventListener);
+    }
+
+    render(){        
+        return html`
+        ${super.render()}
+        <lit-button 
+            between
+            .tabindex = "${this.tabindex}"
+            aria-expanded = "${this.open}"
+            class = "selected" 
+            @focus = "${this._onFocus}"
+            @blur = "${this._onBlur}"
+            @click = "${this._toggle}">
+            <slot name = "selected">
+                ${unsafeHTML(this.selectedContent)}
+            </slot>
+            <lit-icon 
+                slot = "icon-after"
+                icon = "${this.open ? 'dropup' : 'dropdown'}" 
+            ></lit-icon>
+        </lit-button>
+        <lit-listbox 
+            @listboxClose = "${this._onCloseByListbox}"
+            .open = "${this.open}">
+            <slot></slot>
+        </lit-listbox>
+        `;
+    }
+
+    private _onFocus(){
+        if(this._keyboardEventSet) return;
         document.addEventListener('keydown', this._handlekeyDown as EventListener);
+        this._keyboardEventSet = true;
     }
 
-    private _selectedTemplate(){
-        const selected = this.items.filter(it => it.value == this.value)[0];
-        return html`
-        <slot name = "selected">
-            ${selected ? selected.content : '-' }
-        </slot>
-        <slot name = "icon">
-            <div class = "icon-dropdown"><lit-icon 
-                class = "${this.open ? 'dropup' : ''}" 
-                icon = "dropdown"></lit-icon></div>
-        </slot>`;
+    private _onBlur(){
+        document.removeEventListener('keydown', this._handlekeyDown as EventListener);
+        this._keyboardEventSet = false;
     }
 
-    render(){
-        const stylesData = {
-            height: this.optionsHeight ? this.optionsHeight + "px" : 'initial',
-            width: this.optionsWidth ? this.optionsWidth + "px" : '100%'
-        };
-        
-        return html`
-        <div class = "selected" 
-             @click = "${this._toggle}">
-            ${this._selectedTemplate()}
-        </div>
-        <div style = "${styleMap(stylesData)}" 
-             class = "items ff-scrollbar below ${this.open ? 'open' : ''}" >
-            ${this.items.map(it => 
-                html`<div class = "item "
-                          tabIndex = "0"
-                          data-value = "${it.value}"
-                          @click = "${() => this.setValue(it.value)}" >${it.content}</div>`
-            )}
-        </div>`;
-    }
-
-    private _select(isNext: boolean){            
-        if(this.disabled) return;
-        if(!this._focusController.focused && !this.open){
-            return;
-        }        
-        const item = this.shadowRoot!.querySelector(`.item[data-value="${this.value}"]`) as HTMLElement;
-        const select = isNext 
-            ? item?.nextElementSibling as (HTMLElement | null) 
-            : item?.previousElementSibling as (HTMLElement | null);
-
-        if(!select) return;
-
-        this.value = select.dataset!.value!;
-
-        if(this.open){
-            select.focus();
-        }
-    }
-
-    private _handleClick = (e: Event) => {
-        if(!isClickInElement(e, this)){
-            this._hide()
-        }
+    private _onCloseByListbox(e: CustomEvent){
+        this.open = false;
     }
 
     private _handlekeyDown = (e: KeyboardEvent) => {
+        if(e.key === "Enter" || e.key === " "){
+            this.open = !this.open;
+        }
         if(e.key === "ArrowDown"){
-            this._select(true)
+            this.move()
         }
         if(e.key === "ArrowUp"){
-            this._select(false)
+            this.move(false)
         }
-        if(e.key === "Enter"){
-            if(this._focusController.focused && this.open === false){
-                this.open = true;
-            }
-            else if(this.open){
-                const focused = this.shadowRoot!.querySelector(".item:focus");
-                const value = (focused as HTMLElement)?.dataset.value;
-                if(value){
-                    this.setValue(value);
-                }
+        if(e.key === "Escape"){
+            this.open = false;
+        }
+        if(e.key === "Tab"){
+            if(this.open){
+                this._hide();
+                e.preventDefault();
             }
         }
     }

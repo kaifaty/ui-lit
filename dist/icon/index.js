@@ -153,6 +153,7 @@ LitIcon.styles = css `
                 user-select: none; /* Non-prefixed version, currently
                                         supported by Chrome, Edge, Opera and Firefox */
     }
+    :host([danger]),
     :host([error]){
         color: var(--lit-error-color, red);
     }

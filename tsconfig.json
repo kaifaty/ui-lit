@@ -3,9 +3,9 @@
     "./src/**/*", 
   ],
   "exclude": [
-    "dist",
-    "stories",
-    "storybook-static",
+    "./dist",
+    "./stories",
+    "./storybook-static",
     "node_modules",
   ],
   "compilerOptions": {   
@@ -22,7 +22,7 @@
     "module": "es2015",                           /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
     "declaration": true,                         /* Generates corresponding '.d.ts' file. */
     "outDir": "./dist",                              /* Redirect output structure to the directory. */
-    //"rootDir": "./src",                             /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    
     "importHelpers": true,                       /* Import emit helpers from 'tslib'. */
     "strict": true,                                 /* Enable all strict type-checking options. */
     "moduleResolution": "node",                  /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */

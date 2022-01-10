@@ -1,6 +1,9 @@
 import '../dist/dialog';
+import '../dist/tooltip';
+import '../dist/range';
+import '../dist/header';
 import type { IDialogProps } from '../src/dialog';
-import { html } from 'lit';
+import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 
 
@@ -11,11 +14,17 @@ const Link = (data: IDialogProps) =>
     html`
     <lit-button @click = "${open}">Open</lit-button>
     <lit-dialog 
-        style = "margin-left: -15px;"
-        ?useCancelBtn = "${data.useCancelBtn}"
-        >
-        <h2 slot = "header">Header</h2>
-        <lit-header level = "5">Confirm otp please</lit-header>
+        ?useCancelBtn = "${data.useCancelBtn}">
+            <lit-range></lit-range>
+            <br/>
+            <lit-tooltip>
+                <lit-icon icon = "help">></lit-icon>
+                <div slot = "tooltip">
+                    Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip Tooltip 
+                </div>
+            </lit-tooltip>
+            <lit-header level = "5">Confirm otp please</lit-header>
+        <lit-header level = "2" slot = "header">Header</lit-header>
         <lit-button slot = "footer" primary confirm>Confirm</lit-button>
     </lit-dialog>`;
 

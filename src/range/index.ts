@@ -1,10 +1,13 @@
 import { ResizeObserverController } from './../controllers/ResizeObserverController';
 import { LitElement, html, TemplateResult, nothing, css } from 'lit';
-import { customElement, property, state, query } from 'lit/decorators';
+import { customElement, property, state, query } from 'lit/decorators.js';
 import type { FormAssociated } from '../mixins/form-associated/interface';
 import { formAssociated } from '../mixins/form-associated/index';
 import { noselect } from '../styles/noselect';
 import { getClientX, IUIEvent } from 'kailib';
+import { labled } from '../mixins/labled/index';
+import { focusable } from '../mixins/focusable/index';
+import { notificatable } from '../mixins/notificatable/index';
 
 export interface IRangeProps extends FormAssociated {
     value: string
@@ -17,60 +20,79 @@ export interface IRangeProps extends FormAssociated {
     showPercent: boolean
 }
 
-/** <lit-range></lit-range> */
+
+
+/** 
+ * <lit-range></lit-range> 
+ * 
+ * @cssprop --lit-range-thumb-size Thumb size
+ * 
+ * @cssprop --lit-range-track Track color
+ * @cssprop --lit-range-track-hover Track color when hovered
+ * 
+ * @cssprop --lit-range-thumb Thumb color
+ * @cssprop --lit-range-thumb-shadow Thumb shadow
+ * 
+ * @cssprop --lit-range-points-background Points background
+ * 
+ * @cssprop --lit-range-filled Fillted color
+ * @cssprop --lit-range-filled-hover Fillted color
+ * 
+ * 
+ * @cssprop --lit-range-outline-focus Outline when focused
+ * 
+ * */ 
 @customElement("lit-range")
-export class LitRange extends formAssociated(LitElement){
+export class LitRange extends focusable(labled(notificatable(formAssociated(LitElement)))){
     
     static get styles () {
         return [
+            ...super.elementStyles,
             noselect, 
             css`
             :host{
                 display: inline-block;
-                min-width: 200px;
-                position: relative;
-                box-sizing: border-box;
-                --size: var(--lit-range-thumb-size, 12px);
+                --size: var(--lit-range-thumb-size, 16px);
                 --pointer: 8px;
                 --pointer-border: 2px;
                 --poiner-width: calc(var(--pointer) + var(--pointer-border));
                 --line-height: 4px;
                 --to-middle: calc((var(--size) - var(--pointer)) / 2);
                 --top-margin: 8px;
-                --padding: 10px;
-                padding: 5px var(--padding);
+                --padding: 12px;
+                --default-filled: hsl(264, 100%, 60%);
+                padding: 1px;
                 box-sizing: border-box;
+                contain: content;
 
             }
-            .disabled .thumb-wrapper{
-                display: none;
+            :host([showPercent]) .wrapper{
+                padding-bottom: 15px;
             }
-            .disabled{
-                opacity: 0.5;
+            .wrapper:focus{
+                outline: var(--lit-range-outline-focus, 1px dashed rgba(0,0,0,0.5));
+            }
+            :host([hover]),
+            :host([pressed]){                
+                --default-filled: hsl(264, 100%, 50%);
+                --lit-range-track: var(--lit-range-track-hover, #ddd);
+                --lit-range-filled: var(--lit-range-filled-hover, hsl(264, 100%, 50%));
+            }
+            :host([hover]){
+                --lit-range-thumb: var(--lit-range-thumb-hover,  hsl(264, 10%, 20%));
+            }
+            :host([pressed]){
+                
+                --lit-range-thumb: var(--lit-range-thumb-pressed,  hsl(264, 90%, 60%));
+            }
+            .wrapper{
+                min-width: 200px;
+                position: relative;
+                box-sizing: border-box;
+                padding: 5px var(--padding);
             }
             .thumb, .point, .track-line{
                 cursor: pointer;
-            }
-            .thumb-wrapper{
-                position: absolute;
-                z-index: 3;
-                left: calc(var(--size) / 2 * -1);
-                top: calc(var(--top-margin) - var(--size) / 2 + var(--line-height) / 2);
-                width: var(--size, 14px);
-                height: var(--size, 14px);
-                /*transform-origin: center;
-                transform: translateX(-50%);*/
-                will-change: transform;
-
-                
-            }
-            .thumb{
-                border-radius: 100%;
-                width: 100%;
-                height: 100%;
-                background-color: var(--lit-range-thumb, #111);
-                box-shadow: 0 0 0 var(--lit-pointer-border) var(--lit-range-points-border-color, #111);
-                
             }
             .percent{
                 opacity: 1;
@@ -82,8 +104,6 @@ export class LitRange extends formAssociated(LitElement){
                 font-size: 12px;
                 will-change: transform;
                 left: calc(var(--size) / 2 * -1);
-                /*transform-origin: center;
-                transform: translate(calc(-50% + 4px));*/
             }
             .percent.hidden{
                 opacity: 0;
@@ -92,24 +112,37 @@ export class LitRange extends formAssociated(LitElement){
                 display: flex;
                 position: relative;
                 width: 100%;
-                border-radius: 3px;
+                border-radius: 5px;
                 box-sizing: border-box;
                 position: relative;
             }
             .track-line{
-                width: calc(100% );
-                background-color: var(--lit-range-track, #999);
+                width: 100%;
                 height: var(--line-height);
                 margin: var(--top-margin) auto;
-                border-radius: 2px
+                border-radius: 5px;
+                outline: 1px solid #999;
             }
-            .blocked-track{
+            .thumb-wrapper{
                 position: absolute;
-                left: 5px;
-                background-color: var(--lit-range-track-blocked, #999);
-                height: var(--lineHeigh);
-                top: var(--top-margin);
-                border-radius: 2px
+                z-index: 3;
+                left: calc(var(--size) / 2 * -1);
+                top: calc(var(--top-margin) - var(--size) / 2 + var(--line-height) / 2);
+                width: var(--size, 14px);
+                height: var(--size, 14px);
+                will-change: transform;
+            }
+            .thumb.fullfiled{
+                background-color: var(--lit-range-filled, var(--default-filled));
+            }
+            .thumb{
+                border-radius: 100%;
+                width: 100%;
+                height: 100%;
+                background-color: var(--lit-range-thumb,  hsl(264, 10%, 40%));
+                outline: 2px solid  hsl(264, 100%, 99%);
+                box-shadow: var(--lit-range-thumb-shadow, 0 1px 3px hsl(264, 100%, 20%));
+                
             }
             .point{
                 position: absolute;
@@ -117,12 +150,17 @@ export class LitRange extends formAssociated(LitElement){
                 width: var(--pointer);
                 height: var(--pointer);
                 border-radius: var(--pointer);
-                background-color: var(--lit-range-points-background, #fff);
-                box-shadow: 0 0 0 var(--pointer-border) var(--lit-range-points-border-color, #444);
+                background-color: var(--lit-range-points-background, #eee);
+                box-shadow: 0 0 0 var(--pointer-border) var(--lit-range-filled, var(--default-filled));
                 transform: translate(-50%, 0);
                 z-index: 1;
             }
-            `
+            .point.filled{
+                background-color: var(--lit-range-filled, var(--default-filled));
+            }
+            `,
+            
+
         ]
     } 
     
@@ -134,26 +172,25 @@ export class LitRange extends formAssociated(LitElement){
             max: {type: Number},
         }
     }
-    // private _isMoving: boolean = false;
     @state() offsetX: number = 0;
     @state() isPercentHidden: boolean = true;
     @state() disabledByVol: boolean = true;
     @property({type: Number}) decimals: number = 8;
-    @property({type: Boolean}) showPercent: boolean = false;
+    @property({type: Boolean, reflect: true}) showPercent: boolean = false;
     @property({type: Boolean}) usePoints: boolean = true;
-    @property({type: Boolean}) startFromMin: boolean = false;
+    @property({type: Boolean, reflect: true}) startFromMin: boolean = false;
     @query('.track') _wrapper!: HTMLElement;
-    RO = new ResizeObserverController(this);
-    _points: number[] = [0, 25, 50, 75, 100];
-    _timeout: number = 0;
-    _trackSize: number = 0;
-    _trackStartX: number = 0;
-    _thumbSize: number = 0;
-    _padding: number = 0;
-    _rect: DOMRect | null = null;
-    _min: number = 0;
-    _percent: number = 0;
-    
+    private _RO = new ResizeObserverController(this);
+    private _points: number[] = [0, 25, 50, 75, 100];
+    private _timeout: number = 0;
+    private _trackSize: number = 0;
+    private _trackStartX: number = 0;
+    private _thumbSize: number = 0;
+    private _padding: number = 0;
+    private _rect: DOMRect | null = null;
+    private _min: number = 0;
+    private _percent: number = 0;
+    tabindex: number = 0;
     get min() {
         return this._min;
     }
@@ -166,11 +203,12 @@ export class LitRange extends formAssociated(LitElement){
             value = 0;
         }
         this._min = value;
+        this._recalcValue();
         this._percent = this._calcPercentByValue();
         this.requestUpdate('max', oldValue);        
     }
 
-    _max: number = 100;
+    private _max: number = 100;
     get max() {
         return this._max;
     }
@@ -178,10 +216,14 @@ export class LitRange extends formAssociated(LitElement){
         const oldValue = this._max;
         if(oldValue === value) return;
         this._max = value;
+        this._recalcValue();
         this._percent = this._calcPercentByValue();
         this.requestUpdate('max', oldValue);        
     }
 
+    get percent(){
+        return this._percent;
+    }
     get valueAsNumber(){
         return Number(this._value);
     }
@@ -193,7 +235,7 @@ export class LitRange extends formAssociated(LitElement){
             this.value = value
         }
     }
-    _value: string = '0';
+    private _value: string = '0';
     get value() {
         return this._value;
     }
@@ -201,39 +243,12 @@ export class LitRange extends formAssociated(LitElement){
         const oldValue = this._value;
         if(oldValue === value) return;
         this._value = value;
+        this._recalcValue();
         this._percent = this._calcPercentByValue();
         this.requestUpdate('value', oldValue);        
     }
-    
-    
-    connectedCallback(){
-        super.connectedCallback();
-        this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
-        this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
-    }
-    willUpdate(){         
-        this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
-        this._updateOffset();
-    }
-    render(){
-        return html`
-        <div class = "track ${this.isDisabled() ? 'disabled' : ''}"
-            ${this.RO.observe(this._onChangeSize)}
-            @mousedown = "${this._mouserDown}"
-            @mouserover = "${this._handlePointOver}"
-            @mouseleave = "${this._handlePointLeave}"
-            @touchstart = "${this._touchStart}">
-            ${this._thumbTemplate()}
-            <div class = "track-line"></div>
-            ${this._pointersTemplate()}
-            ${this._blockedVolume()}
-        </div>
-        ${this._percentTemplate()}
-        `;
-    }
-
     get minPercent(){
-        if(!this.startFromMin){
+        if(this.startFromMin){
             return 0;
         }
         if(!this.max) return 0;
@@ -244,7 +259,85 @@ export class LitRange extends formAssociated(LitElement){
         return this.disabled || this.max < this.min || !this.max;
     }
     
+    connectedCallback(){
+        super.connectedCallback();
+        this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
+        this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
+    }
+
+    willUpdate(){         
+        this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
+        this._updateOffset();
+    }
+
+    // ==== templates ==== 
+    private _pointersTemplate(){
+        if(this.usePoints){
+            return this._points.map(it => 
+                    html`<div                         
+                        data-value = "${it}"
+                        style = "left: ${it}%;"
+                        class = "point point-${it} ${this._percent >= it ? 'filled' : ''}"></div>`);
+        }
+        return nothing;
+    }
+    private _percentTemplate(){
+        if(!this.showPercent) return nothing;
+        const left = this.offsetX + this._padding - (this._thumbSize + 7) * this._percent / 100;
+        return  html`<div style = "transform: translateX(${left}px);"
+                        class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `
+    }
+    private _thumbTemplate(){
+        const offset = (this.offsetX ).toFixed(1);
+        return html`<div class = "thumb-wrapper }" 
+            style = "transform: translateX(${offset}px);">
+            ${this.isDisabled() 
+                ? nothing 
+                : html`<div part = "thumb" 
+                            class = "thumb ${this._percent === 100 ? 'fullfiled' : ''}"></div>`}       
+        </div>`;
+    }
+
+    render(){
+        return html`
+        <div tabindex = "${this.tabindex}"
+            role = "slider" 
+            class = "wrapper"
+            @focus = "${this._onFocus}"
+            @blur = "${this._onBlur}"
+            aria-valuemin="${this.min}"
+            aria-valuemax="${this.max}"
+            aria-valuenow="${this.value}">
+            <div class = "track"
+                ${this._RO.observe(this._onChangeSize)}
+                @mousedown = "${this._mouserDown}"
+                @mouseover = "${this._handlePointOver}"
+                @mouseout = "${this._handlePointLeave}"
+                @touchstart = "${this._touchStart}">
+                ${this._thumbTemplate()}
+                <div style = "background: linear-gradient(to right,  var(--lit-range-filled, var(--default-filled)) ${this._percent}%, var(--lit-range-track, #eee) ${this._percent}%);"
+                    class = "track-line"></div>
+                ${this._pointersTemplate()}
+            </div>
+            ${this._percentTemplate()}
+        </div>`;
+    }
+
     
+    
+
+
+    // ==== Actions ==== 
+    private _recalcValue(){
+        let val = this.valueAsNumber;
+        if(this.valueAsNumber > this.max){
+            val = this.max;
+        }
+        if(this.valueAsNumber < this.min){
+            val = this.min;
+        }
+        this._value = val.toFixed(this.decimals);
+    }
     private _dispatch() {
         this.dispatchEvent(new CustomEvent("changed", {
             detail: {
@@ -256,9 +349,6 @@ export class LitRange extends formAssociated(LitElement){
             bubbles: true,
         }));
     }
-
-
-    // ==== Actions ==== 
 
     private _calcTrackStartX(rect: DOMRect){
         return rect.x  + 2 * this._padding;
@@ -321,19 +411,14 @@ export class LitRange extends formAssociated(LitElement){
 
     private _calcValueByPercent(percent: number){
         let value = 0;
-        if(this.startFromMin){
-            value = (this.max - this.min)  * (percent / 100);
-         }
-         else{
-            value = this.max * (percent / 100);
-         }
-         if(value < this.min){
-             return this.min;
-         }
-         if(value > this.max){
-             return this.max;
-         }
-         return value;
+        value = this.max * (percent / 100);
+        if (this.startFromMin && value < this.min) {
+            return this.min;
+        }
+        if (value > this.max) {
+            return this.max;
+        }
+        return value;
     }
     
     private _updateOffset(){
@@ -353,28 +438,35 @@ export class LitRange extends formAssociated(LitElement){
     private _movePosition(x: number){
         if(this.isDisabled()) return;
         requestAnimationFrame(() => {
-             const offset =  this._calcOffset(x);
-             this._percent = this._calcPercentByOffset(offset);
-             this._value = this._calcValueByPercent(this._percent).toString();
-             this._updateOffset();
-             this._dispatch();
+            const offset =  this._calcOffset(x);
+            this._percent = this._calcPercentByOffset(offset);
+            this._value = this._calcValueByPercent(this._percent).toString();
+            this._updateOffset();
+            this._dispatch();
          })
     }
 
     public setPercent(value: number){
-        this._percent = value;
+        this._percent = Math.max(Math.min(value, 100), 0);
+        this.requestUpdate();
+        setTimeout(()=> this._dispatch())
     }
     
     
     // ==== Events ==== 
 
+    private _onFocus(){
+        document.addEventListener("keydown", this._handleKeyboard)
+    }
+    private _onBlur(){
+        document.removeEventListener("keydown", this._handleKeyboard)
+    }
     private _onChangeSize = (rect: DOMRect) => {
         this._rect = this.getBoundingClientRect();
         this._trackSize = this._calcTackWidth(rect);
         this._trackStartX = this._calcTrackStartX(rect);
         this._updateOffset();
     }
-
     private _touchStart = (e: TouchEvent) => {
         document.addEventListener('touchmove', this._touchMove);
         document.addEventListener('touchend', this._touchEnd);
@@ -392,6 +484,7 @@ export class LitRange extends formAssociated(LitElement){
         document.removeEventListener('touchmove', this._touchMove);
         document.removeEventListener('touchend', this._touchEnd);
         document.removeEventListener('touchcancel', this._touchEnd);
+        this._handlePointerUp(e.touches[0].clientX);
         e.preventDefault();
     }
 
@@ -399,6 +492,7 @@ export class LitRange extends formAssociated(LitElement){
         document.addEventListener('mousemove', this._mouseMove);
         document.addEventListener('mouseup', this._mouseUp);        
         this._handlePointerDown();
+        this._handlePointerMove(e.clientX);
         e.preventDefault();
     }
     private _mouseMove = (e: MouseEvent) => {
@@ -416,56 +510,42 @@ export class LitRange extends formAssociated(LitElement){
     private _handlePointerDown = () => {
         if(this.isDisabled()) return;
         this.isPercentHidden = false;
-    }
+        this.setAttribute('pressed', '');
 
-    private _handlePointerMove = (x: number) => {
-        this._movePosition(x);
-        this.isPercentHidden = false;
     }
     private _handlePointerUp = (x: number) => {
         this._hidePercent();
         this._movePosition(x);
+        this.removeAttribute('pressed');
+    }
+    private _handlePointerMove = (x: number) => {
+        this._movePosition(x);
+        this.isPercentHidden = false;
     }
     private _handlePointOver = (e: Event) => {
         if(this.isDisabled()) return;
         clearTimeout(this._timeout);
         this.isPercentHidden = false;
+        this.setAttribute('hover', '');
         e.preventDefault();
     }
     private _handlePointLeave = (e: Event) => {
         e.preventDefault();
         this._hidePercent();
+        this.removeAttribute('hover');
+    }
+    private _handleKeyboard = (e: KeyboardEvent) => {
+        if(e.key === "ArrowRight" || e.key === "ArrowTop"){
+            this.setPercent(this._percent + 1)
+            
+        }
+        if(e.key === "ArrowLeft" || e.key === "ArrowBottom"){
+            this.setPercent(this._percent - 1)
+            
+        }
     }
 
-    // ==== templates ==== 
-    private _pointersTemplate(){
-        if(this.usePoints){
-            return this._points.map(it => 
-                    html`<div                         
-                        data-value = "${it}"
-                        style = "left: ${it}%;"
-                        class = "point point-${it}"></div>`);
-        }
-        return nothing;
-    }
-    private _percentTemplate(){
-        if(!this.showPercent) return nothing;
-        const left = this.offsetX + this._padding - this._thumbSize * this._percent / 100;
-        return  html`<div style = "transform: translateX(${left}px);"
-                        class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `
-    }
-    private _blockedVolume(){
-        if(!this.startFromMin) return nothing;
-        const width = this.minPercent * (this._trackSize - this._padding) / 100;
-        return html`<div class = "blocked-track" style = "width: ${width}px;"></div>`;
-    }
-    private _thumbTemplate(){
-        const offset = (this.offsetX ).toFixed(1);
-        return html`<div class = "thumb-wrapper" 
-            style = "transform: translateX(${offset}px);">
-            ${this.isDisabled() ? nothing : html`<slot><div class = "thumb"></div></slot>`}       
-        </div>`;
-    }
+    
 }
 
 declare global {

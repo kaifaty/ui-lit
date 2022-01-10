@@ -1,5 +1,5 @@
 
-import { html } from 'lit';
+import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/layout';
 import { ILayoutElementProps } from '../src/layout/grid';

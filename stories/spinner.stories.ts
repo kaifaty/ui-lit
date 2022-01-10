@@ -1,6 +1,6 @@
 
 
-import { html } from 'lit';
+import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/spinner';
 import { ISipnnerProps } from '../dist/spinner/index';

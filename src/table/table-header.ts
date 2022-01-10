@@ -1,16 +1,19 @@
 import { ifDefined } from 'lit/directives/if-defined';
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing } from 'lit';
-import { customElement, property, state } from 'lit/decorators';
+import { customElement, property, state } from 'lit/decorators.js';
 import { TColumnItem, TFilterItem, TSortDirections,  } from './table';
 import type { TableElement  } from './table';
 import { noselect } from '../styles/noselect';
 import '../textfield';
 import '../number';
+import '../divider';
+import '../button';
 import { isClickInElement, getHost } from 'kailib';
 
 
 const filterWidth = 230;
+let dialogOpened = false;
 @customElement('lit-table-header')
 export class LitTableHeader extends LitElement{
     static styles = [css`
@@ -186,7 +189,6 @@ export class LitTableHeader extends LitElement{
             </div>`;
         }
     }
-    
     private _filterIconTemplate(){
         if(!this.filtersData) return nothing;
         const map = {
@@ -282,7 +284,9 @@ export class LitTableHeader extends LitElement{
     }
 
     private _onFilterToggle(e: Event){
-        e.stopPropagation();
+        //e.stopPropagation();
+        // Скрывать если открыт фильтр, предотвращать клик на смену сортировки
+        // 
         if(!this.filterVisible){
            this._showFilter()
         }
@@ -292,10 +296,12 @@ export class LitTableHeader extends LitElement{
     }
     private _showFilter = () => {
         this.filterVisible = true;
+        dialogOpened = true;
         document.addEventListener('click', this._documentClick);
     }
     private _hideFilter = () => {
         this.filterVisible = false;
+        dialogOpened = false;
         document.removeEventListener('click', this._documentClick);
     }
     private _documentClick = (e: Event) => {
@@ -305,6 +311,7 @@ export class LitTableHeader extends LitElement{
     }
 
     private _onChangeSort(){
+        if(dialogOpened) return;
         if(!this.item?.sorter) return;
         const direction = this._getNewDirection();
         this.dispatchEvent(new CustomEvent("changeSort", {

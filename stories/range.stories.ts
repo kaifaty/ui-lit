@@ -1,12 +1,13 @@
 
-import { html } from 'lit';
+import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/range';
-import type { IRangeProps } from '../range';
+import type { IRangeProps } from '../src/range';
 
 
 const Range = (data: IRangeProps) => 
-    html`<lit-range 
+    html`
+    <lit-range 
         .value = "${data.value}"
         .valueAsNumber = "${data.valueAsNumber}"
         .min = "${data.min}"

@@ -1,6 +1,7 @@
 import { LitElement } from 'lit';
 import '../spinner';
 import '../icon';
+import '../ripple';
 /**
  *
  * @cssprop --lit-button-display - Controls the display of button
@@ -116,10 +117,9 @@ export interface ButtonProps {
 }
 declare type Type = 'submit' | 'button' | 'switch';
 declare type TSize = "small" | "medium" | "large";
-declare const LitButton_base: (new (...args: any[]) => import("../mixins/focusable/inderface").Focusable) & typeof LitElement;
+declare const LitButton_base: (new (...args: any[]) => import("../mixins/focusable/inderface").Focusable & LitElement) & typeof LitElement;
 /** @tag lit-button */
 export declare class LitButton extends LitButton_base implements ButtonProps {
-    #private;
     static styles: import("lit").CSSResult[];
     static get properties(): {
         loading: {
@@ -127,7 +127,7 @@ export declare class LitButton extends LitButton_base implements ButtonProps {
         };
     };
     /** @ignore  */
-    _loading: boolean;
+    private _loading;
     get loading(): boolean;
     set loading(value: boolean);
     /** @prop {"button" | "submit"} type */
@@ -143,18 +143,17 @@ export declare class LitButton extends LitButton_base implements ButtonProps {
     success: boolean;
     /** @prop {boolean} danger - Danger  */
     danger: boolean;
+    between: boolean;
     /** @prop {boolean} switchOn - switch State. true - enabled, false disabled */
     switchOn: boolean;
     notifyOnClick: boolean;
     /** @ignore  */
     _notifyIcon: boolean;
-    /** @ignore  */
-    hover: boolean;
-    /** @ignore  */
-    pressed: boolean;
-    /** @ignore  */
-    focused: boolean;
     tabindex: number;
+    /** @ignore  */
+    private _notifyTimeout;
+    /** @ignore  */
+    private _width;
     /** @ignore  */
     private get classes();
     /** @ignore  */
@@ -164,18 +163,6 @@ export declare class LitButton extends LitButton_base implements ButtonProps {
      * @slot icon-after - You can put some elements after content
      */
     render(): import("lit").TemplateResult<1>;
-    /** @ignore  */
-    private _onMouseDown;
-    /** @ignore  */
-    private _onMouseUp;
-    /** @ignore  */
-    private _onTouchStart;
-    /** @ignore  */
-    private _onEndTouch;
-    /** @ignore  */
-    private _onMouseOver;
-    /** @ignore  */
-    private _onMouseOut;
     /** @ignore  */
     private _onBlur;
     /** @ignore  */

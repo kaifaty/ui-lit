@@ -1,4 +1,4 @@
-import { Directive, directive } from 'lit/directive';
+import { Directive, directive } from 'lit/directive.js';
 class InputValueDirective extends Directive {
     render(value) {
         return value;

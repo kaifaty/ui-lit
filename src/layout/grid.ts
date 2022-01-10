@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { property, customElement, query, state, queryAll} from 'lit/decorators';
+import { property, customElement, query, state, queryAll} from 'lit/decorators.js';
 import type { LitLayout } from './element';
 import { scrollbar } from '../styles/scrollbar';
 

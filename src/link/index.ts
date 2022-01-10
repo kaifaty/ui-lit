@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { property, customElement } from 'lit/decorators';
+import { property, customElement } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined';
 
 export type TLinkTartget = "_blank" | "_parent" | "_self" | "_top"

@@ -37,12 +37,13 @@ export declare class LitCheckbox extends LitCheckbox_base implements ICheckboxPr
             type: BooleanConstructor;
         };
     };
-    _checked: boolean;
+    private _checked;
     get checked(): boolean;
     set checked(value: boolean);
-    _value: TCkeckboxValue;
+    private _value;
     get value(): TCkeckboxValue;
     set value(value: TCkeckboxValue);
+    reportValidity(): boolean;
     render(): import("lit").TemplateResult<1>;
     private _click;
     toggle(): void;

@@ -90,7 +90,7 @@ const dataSource = [...Array(35)].map((it, i) =>
 const Table = (text: string) => 
     html`
     <lit-table
-        style = "width: 280px; height: 400px;"
+        style = "width: 380px; height: 400px;"
         pagination
         paginationToHeight        
         defaultSort = "age"

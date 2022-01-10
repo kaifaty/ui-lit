@@ -1,7 +1,7 @@
 
 import { LitElement, html, nothing} from 'lit';
 import type {TemplateResult} from 'lit';
-import { state, customElement, property } from 'lit/decorators';
+import { state, customElement, property } from 'lit/decorators.js';
 import { getScrollbarWidth } from 'kailib'
 import { DIALOG_STYLES } from './styles';
 import { scrollbar } from '../styles/scrollbar';
@@ -55,16 +55,19 @@ export class LitDialog extends LitElement{
                     <slot name = "header" 
                         @slotchange = "${this._headerChanged}"></slot>
                 </header>
-                ${pool.length > 1 
-                    ? html`<lit-icon 
-                        icon = "dropdown"                        
-                        @click = "${this.back}"
-                        ></lit-icon>` 
-                    : nothing}
-                <lit-icon 
+                <div class = "icons">
+                    ${pool.length > 1
+                        ? html`<lit-icon 
+                                    class = "arrow-back"
+                                    icon = "back"                        
+                                    @click = "${this.back}"
+                                ></lit-icon>` 
+                        : nothing
+                    }<lit-icon 
                         icon = "cancel" 
                         class = "close-icon" 
                         @click = "${this.close}"></lit-icon>
+                </div>
                 <main class = "ff-scrollbar"><slot></slot></main>
                 <footer>${this._footerTemplate()}</footer>
             </div>

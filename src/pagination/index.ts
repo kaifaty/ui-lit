@@ -32,23 +32,11 @@ export class LitPagination extends LitElement{
             --lit-input-padding: 3px 6px;
             width: 40px;
         }
-        button{
-            box-sizing: border-box;
-            padding: 3px 7px;
-            outline: none;
-            border: none;
-            background: transparent;
-            color: var(--lit-font-color, black);
-            margin: 0 1px;
-            cursor: pointer;
-            border-radius: 2px;
-            font-size: var(--lit-font-size, 12px);
+        lit-button{
+            --lit-button-background: var(--lit-pagination-button-background, transparent);
         }
-        button.selected{
-            background-color: var(--lit-button-background, #eee);
-        }
-        button:not(:focus):hover{
-            background-color: var(--lit-button-background-hover, #eee);
+        .selected{
+            --lit-button-background: var(--lit-pagination-button-background-selected, #eee);
         }
         .arrow-right{
             transform-origin: center;
@@ -61,6 +49,9 @@ export class LitPagination extends LitElement{
         .page-list{
             margin-left: 5px;
             font-size: var(--lit-font-size, 12px);
+            display: flex;
+            align-items: center;
+            
         }
     `
     ];
@@ -161,10 +152,13 @@ export class LitPagination extends LitElement{
     }
     private _pagesTemplate(){        
         return this.pageList.map(n => 
-        html`<button type = "button"
-                    data-page = "${n.value}"
-                    @click = "${this._onChange}"
-                    class = "${n.value === this.page ? 'selected' : ''}">${n.label}</button>`);
+        html`<lit-button 
+                borderless
+                type = "button"
+                size = "small"
+                data-page = "${n.value}"
+                @click = "${this._onChange}"
+                class = "${n.value === this.page ? 'selected' : ''}">${n.label}</lit-button>`);
     }
     render(){
         return html`

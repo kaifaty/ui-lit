@@ -1,4 +1,4 @@
-import { Directive, PartInfo, directive, PropertyPart } from 'lit/directive';
+import { Directive, PartInfo, directive, PropertyPart } from 'lit/directive.js';
 
 class InputValueDirective extends Directive {
     render(value: string){

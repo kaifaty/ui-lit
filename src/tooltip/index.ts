@@ -1,8 +1,10 @@
-import { styleMap } from 'lit/directives/style-map';
+import { styleMap } from 'lit/directives/style-map.js';
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing } from 'lit';
-import { customElement, state, property } from 'lit/decorators';
+import { customElement, state, property } from 'lit/decorators.js';
 import './tooltip-item';
+import { getRootRalitive } from '../helpers/getRalative';
+import { scrollbar } from '../styles/scrollbar';
 
 export interface ITooltipProps {
 
@@ -10,54 +12,28 @@ export interface ITooltipProps {
 
 @customElement('lit-tooltip')
 export class ToolTip extends LitElement{
-    static styles = css`
+    static styles = [css`
     :host{
         display: inline-block;
-        position: relative;
         cursor: pointer;
+        position: relative;
     }
-    `;
-    @property({type: Number}) width: number = 220;
-    @property({type: Number}) height: number = 30;
-    @property({type: String}) align: string = 'left';
+    `, scrollbar];
     @state() opened: boolean = false;
-    @state() top: number = 0;
-    @state() left: number = 0;
     
-    /*
-    get isMobile(){
 
-    }*/
-
-    connectedCallback(){
-        super.connectedCallback();
-    }
-    disconnectedCallback(){
-        super.disconnectedCallback();
-    }
-    willUpdate(){
-        if(this.opened){
-            const data = this.getPosition();
-            this.left = data.left;
-            this.top = data.top;
-        }
-    }
     private _tooltipTemplate(){
         if(!this.opened){
             return nothing;
         }
         const styles = {
-           //  width: this.width + "px",
-           //  height: this.height + "px",
-            top: this.top + "px",
-            left: this.left + "px",
-            textAlign: this.align,
+            ...this.getPosition(),
         }
         return html`
-        <tooltip-item 
-            .opened = "${this.opened}"
+        <tooltip-item
+            class = "ff-scrollbar"
             @close = "${this.close}"
-            @tooltipUpdated = "${this._onTooltipUpdated}"
+            
             style = "${styleMap(styles)}"><slot name = "tooltip"></slot></tooltip-item>`;
     }
     render(){
@@ -76,10 +52,6 @@ export class ToolTip extends LitElement{
     public close(){
         this.opened = false;
     }
-    private _onTooltipUpdated = (e: CustomEvent) => {
-        this.width = e.detail.width;
-        this.height = e.detail.height;
-    }
     private _onClick = () => {
         if(this.opened){
             this.close();
@@ -88,36 +60,49 @@ export class ToolTip extends LitElement{
             this.open();
         }
     }
-    private checkTop (rect: DOMRect) {
-        return rect.y - this.height < 0
-    };
-    private checkRight (rect: DOMRect) { 
-        return rect.x + rect.width + this.width < window.innerWidth - 10
-    };
-    private checkLeft (rect: DOMRect) {
-        return rect.x - this.width > 10;
-    }
-
-    getTop = (rect: DOMRect) => this.checkTop(rect) ? rect.height : -this.height;
-    getLeft = (rect: DOMRect) => {
-        if(this.checkRight(rect)){
-            return rect.width;
-        }
-        else if(this.checkLeft(rect)) {
-            return -this.width;
-        }
-        else {
-            return 10 - rect.x;
-        }
-    };
     
     getPosition = () => {
-        const rect = this.shadowRoot!.querySelector("#content")!.getBoundingClientRect();
+        const el = getRootRalitive(this);
+        const targetRect = this.getBoundingClientRect();
+        const awailableWidth = window.visualViewport.width;
+        const awailableHeight = window.visualViewport.height
+        
+        const x = (targetRect.x) //|| rect.x;
+        const y = (targetRect.y) //|| rect.y;
+
+        const availableTop = y;
+        const availableBottom = awailableHeight - y;
+        const availableLeft = x;
+        const availableRight = awailableWidth - x;
+        return {
+            top: availableTop < availableBottom ? (availableTop + targetRect.height) + `px` : "initial",
+            bottom: availableTop > availableBottom ? availableBottom + `px` : "initial",
+            maxHeight: availableTop < availableBottom ? (availableBottom - 10) + `px` : (availableTop - 10) + `px`,
+
+            left: availableLeft < availableRight ? (availableLeft + targetRect.width) + `px` : 'initial',
+            right: availableLeft > availableRight ? (availableRight + 10) + `px` : 'initial', 
+            maxWidth: availableLeft < availableRight ? (availableRight - targetRect.width - 10)  + `px` : (availableLeft - 10) + 'px'
+        };
+        
+        /*
+        const x = (targetRect.x - rect.x) //|| rect.x;
+        const y = (targetRect.y - rect.y) //|| rect.y;
+        
+
+        const availableTop = y;
+        const availableBottom = awailableHeight - y;
+        const availableLeft = x;
+        const availableRight = awailableWidth - x;
 
         return {
-            top: this.getTop(rect), 
-            left: this.getLeft(rect)
-        };
+            top: availableTop < availableBottom ? (availableTop + targetRect.height) + `px` : "initial",
+            bottom: availableTop > availableBottom ? availableBottom + `px` : "initial",
+            maxHeight: availableTop < availableBottom ? (availableBottom - 20) + `px` : (availableTop - 20) + `px`,
+
+            left: availableLeft < availableRight ? (availableLeft + targetRect.width) + `px` : 'initial',
+            right: availableLeft > availableRight ? availableRight + `px` : 'initial', 
+            maxWidth: availableLeft < availableRight ? (availableRight - targetRect.width - 20)  + `px` : (availableLeft - 20) + 'px'
+        };*/
         
     }
     

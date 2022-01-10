@@ -4,18 +4,6 @@ export const input = css`
     display: var(--lit-input-display, inline-block);
     height: var(--lit-input-height);
 }
-:host(:not([valid])) input{
-    border: 1px solid var(--lit-error-border, #ff7e6d);
-}
-:host(:not([valid])) input:focus{
-    outline: 1px solid var(--lit-error-border, #ff7e6d);
-}
-:host([disabled]){
-    opacity: 0.5;
-}
-:host([readonly]){
-    opacity: 0.5;
-}
 .wrapper{
     position: relative;
     height: 100%;

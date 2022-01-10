@@ -1,6 +1,6 @@
 import { css } from 'lit';
 export const noselect = css `
-.noselect {
+:host, .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */

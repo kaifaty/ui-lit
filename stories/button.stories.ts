@@ -4,20 +4,24 @@ import '../dist/button'
 import {ButtonProps } from  '../src/button'
 
 const _Button = (data: ButtonProps) => {
-  return html`<lit-button 
-    type = "${data.type || 'button'}"
-    .primary = "${!!data.primary}"
-    .disabled = "${!!data.disabled}"
-    .borderless = "${!!data.borderless}"
-    .success = "${!!data.success}"
-    .danger = "${!!data.danger}"
-    .switchOn = "${!!data.switchOn}"
-    .notifyOnClick = "${!!data.notifyOnClick}"
-    .loading = "${!!data.loading}"
-    size = "${data.size || 'medium'}">
-    <span slot = "icon-befor22e">11</span>
-  Button
-  </lit-button>
+  return html`
+  
+  <div style = "position: absolute; top: 300px; left: 300px;">
+    <lit-button 
+      type = "${data.type || 'button'}"
+      .primary = "${!!data.primary}"
+      .disabled = "${!!data.disabled}"
+      .borderless = "${!!data.borderless}"
+      .success = "${!!data.success}"
+      .danger = "${!!data.danger}"
+      .switchOn = "${!!data.switchOn}"
+      .notifyOnClick = "${!!data.notifyOnClick}"
+      .loading = "${!!data.loading}"
+      size = "${data.size || 'medium'}">
+      <span slot = "icon-befor22e">11</span>
+    Button
+    </lit-button>
+  </div>
   `;
 };
 

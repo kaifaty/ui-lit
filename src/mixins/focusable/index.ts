@@ -1,6 +1,7 @@
 import type { LitElement } from 'lit';
 import { Focusable } from './inderface';
 import { property } from 'lit/decorators.js';
+import {isChildOf } from 'kailib'
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -9,20 +10,28 @@ export const focusable = <T extends Constructor<LitElement>>(superClass: T) => {
         
         @property({type: Boolean, reflect: true}) autofocus: boolean = false;
         
-        constructor(...args: any[]) {
-            super(...args);
-        }
         public get isFocused(){
-            return !!this.shadowRoot?.querySelector('input:focus');
+            const focusable = this.shadowRoot?.querySelector('[focusable]');
+            if(focusable){
+                return (focusable as Focusable).isFocused;
+            }
+            return !!this.shadowRoot?.querySelector('*:focus');
+        }
+        connectedCallback(): void {
+            super.connectedCallback();
+            this.setAttribute('focusable', '');
         }
         
         focus(){
-            const el = this.shadowRoot?.querySelector('input, button, textarea');            
+            const el = this.shadowRoot?.querySelector('input, button, textarea, lit-ripple, lit-button, [focusable]',);  
             if(el){
                 (el as HTMLElement).focus();
                 if(el instanceof HTMLInputElement){
                     el.setSelectionRange(el.value.length, el.value.length);
                 }                
+            }
+            else{
+                super.focus();
             }
         }
         
@@ -34,5 +43,5 @@ export const focusable = <T extends Constructor<LitElement>>(superClass: T) => {
         }
     }
     
-    return FocusableElement as Constructor<Focusable> & T;
+    return FocusableElement as Constructor<Focusable & LitElement > & T;
 }

@@ -6,6 +6,7 @@ import './assets/style.css'
 
 const Text = (data: ITextareaProps) => 
     html`<lit-textarea 
+        .disabled = "${data.disabled}"
         value = "${data.value}"
         name = "${data.name}"
         placeholder = "${data.placeholder}"
@@ -20,6 +21,7 @@ Default.args = {
     value: '',
     name: 'area',
     placeholder: 'Type text',
+    disabled: false
 
 }
 

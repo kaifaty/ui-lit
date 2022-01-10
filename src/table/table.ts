@@ -1,6 +1,6 @@
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing, TemplateResult, svg } from 'lit';
-import { customElement, property, state } from 'lit/decorators';
+import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat';
 import '../pagination';
 import { scrollbar } from '../styles/scrollbar';

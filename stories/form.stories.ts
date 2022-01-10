@@ -1,11 +1,13 @@
-import { TemplateResult, html } from 'lit';
+import { TemplateResult, html } from 'lit-html';
 import '../dist/form';
-import type { IFormProps } from '../form';
+import type { IFormProps } from '../src/form';
 import { Story, Meta } from '@storybook/web-components';
 
+const success = () => alert('submit');
 const Button = (data: IFormProps) => 
     html`<lit-form 
-        style = "width: 350px; display: grid; gap: 10px; grid-template-columns: auto auto;"
+        @submit = "${success}"
+        style = "width: 350px; display: grid; gap: 20px; grid-template-columns: 1fr 1fr; align-items: center;"
         ?disabled = "${data.disabled}"
         ?noValidate = "${data.noValidate}">
             <label-element for = "name">Name:</label-element> 
@@ -14,10 +16,10 @@ const Button = (data: IFormProps) =>
             <label-element for = "salary">Salary:</label-element> 
             <lit-numberfield id = "salary" decimals = "2" icon = "USDT" min = "500" ?required = "${true}"></lit-numberfield>
             
-            <label-element for = "live"></label-element>
-            <input type = "checkbox">
-            <div style = "grid-column: 1/3;">
-                <lit-button type = "submit">Submit</lit-button>
+            <label-element for = "live">Is Alive</label-element>
+            <lit-checkbox id = "live"></lit-checkbox>
+            <div style = "grid-column: 1/3; display: flex; justify-content: center;">
+                <lit-button primary type = "submit">Submit</lit-button>
             </div>
     </lit-form>`;
 

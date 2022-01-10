@@ -1,6 +1,6 @@
 import { classMap } from 'lit/directives/class-map';
 import { html, LitElement, css } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 
 @customElement("lit-tree-subview")
 export class LitTreeSubView extends LitElement{

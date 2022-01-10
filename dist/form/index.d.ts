@@ -13,11 +13,11 @@ export interface IFormElement {
 declare type TReturnData = Record<string, string | boolean | number>;
 export declare class LitFrom extends LitElement implements IFormElement, IFormProps {
     static styles: import("lit").CSSResult;
-    _elements: FormAssociatedElement[];
+    noValidate: boolean;
+    private _elements;
     get length(): number;
     get elements(): FormAssociatedElement[];
-    noValidate: boolean;
-    _disabled: boolean;
+    private _disabled;
     get disabled(): boolean;
     set disabled(value: boolean);
     render(): import("lit").TemplateResult<1>;

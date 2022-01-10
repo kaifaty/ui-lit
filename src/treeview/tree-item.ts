@@ -1,4 +1,4 @@
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 import { LitElement, html, css } from 'lit';
 
 @customElement("lit-tree-item")

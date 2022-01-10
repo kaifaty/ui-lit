@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 import { FormAssociatedElement } from '../mixins/form-associated/interface';
 import '../label';
 import type { LitCheckbox } from '../checkbox/index';
@@ -23,7 +23,8 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         display: block;
     }
     `;
-    _elements: FormAssociatedElement[] = []
+    @property({type: Boolean}) noValidate: boolean = false;
+    private _elements: FormAssociatedElement[] = []
 
     get length(){
         return this._elements.length;
@@ -31,8 +32,8 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
     get elements(){
         return this._elements;
     }
-    @property({type: Boolean}) noValidate: boolean = false;
-    _disabled: boolean = false;
+
+    private _disabled: boolean = false;
     get disabled(){ 
         return this.disabled
     }
@@ -70,10 +71,10 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         e.detail.onAttatch?.(this);
 
     } 
-    detatchElement(el: HTMLElement){
+    public detatchElement(el: HTMLElement){
         this._elements = this._elements.filter(it => el !== it);
     }
-    getData(){
+    public getData(){
         const data: TReturnData = {};
         this._elements.forEach(it => {
             if(!it.name || it.disabled) return;
@@ -99,16 +100,16 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         return true;
     }
     public reportValidity(): boolean{
-        for(const el of this.elements){
+        for (const el of this.elements) {
             el.validate();
-            if(!el.reportValidity()){
+            if (!el.reportValidity()) {
                 return false;
             }
         }
         return true;
     }
 
-    submit(): false | TReturnData{
+    public submit(): false | TReturnData{
         if(!this.noValidate && !this.reportValidity()){
             return false;
         }
@@ -119,7 +120,7 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         }))
         return data;
     }
-    reset(){
+    public reset(){
 
     }
 }

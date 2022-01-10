@@ -1,12 +1,12 @@
 import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 import '../label';
 let LitFrom = class LitFrom extends LitElement {
     constructor() {
         super(...arguments);
-        this._elements = [];
         this.noValidate = false;
+        this._elements = [];
         this._disabled = false;
         // ==== Events ==== 
         this._handleSubmit = (e) => {

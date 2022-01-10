@@ -10,13 +10,13 @@ import { TInputMode } from '../textfield/index';
 import { labled } from '../mixins/labled';
 import { focusable } from '../mixins/focusable/index';
 import { Focusable } from '../mixins/focusable/inderface';
+import { notificatable } from '../mixins/notificatable/index';
 
 
 export interface NumberProps extends FormAssociated, Focusable{
     replaceToRange: boolean,
     useCancelButton: boolean,
     placeholder: string,
-    inputmode: string,
     value: string,
     decimals: number,
     valueAsNumber: number,
@@ -32,10 +32,37 @@ const CtrAvailable: (number | string)[] = [
     86, 67, 88, 90, 65
 ];
 
+const filterZeroues = (decimals: string) => {
+    let res = '';
+    let nonZeroExist = false;
+    for(let i = decimals.length - 1; i >= 0; i--){
+        if(decimals[i] !== '0'){
+            nonZeroExist = true;
+        }
+        if(nonZeroExist){
+            res = decimals[i] + res;
+        }
+    }
+    return res;
+}
+const filterNotNumbers = (str: string) => {
+    let res = '';
+    for(let i = 0; i < str.length; i ++){
+        const code = str.charCodeAt(i);
+        if(code === 46 || code >= 48 && code <= 57){
+            res += str[i]
+        }
+    }
+    return res;
+}
+
 @customElement("lit-numberfield")
-export class LitNumberField extends focusable(labled(formAssociated(LitElement))) implements NumberProps{
+export class LitNumberField extends focusable(labled(notificatable(formAssociated(LitElement)))) implements NumberProps{
     static get styles (){
-        return input
+        return [
+            ...super.elementStyles, 
+            input
+        ]
     };
 
     static get properties(){        
@@ -49,22 +76,19 @@ export class LitNumberField extends focusable(labled(formAssociated(LitElement))
     @property({type: Number}) min: number = NaN;
     @property({type: Number}) max: number = NaN;
     @property({type: Number}) decimals: number = 8;
-    @property({type: Boolean}) readonly: boolean = false;
-    @property({type: Boolean}) autofocus: boolean = false;
     @property({type: Boolean}) replaceToRange: boolean = false;
     
     @property({type: String}) placeholder: string = '';
-    @property({type: String}) inputmode: TInputMode = 'text';
+    @property({type: String}) inputmode: 'decimal' | 'numeric' = 'decimal';
 
     @property({type: Boolean}) useCancelButton: boolean = false;
     @property() icon: string | TemplateResult = '';
 
-    _selectionBeforeRender = 0;
-    inputRef: Ref<HTMLInputElement> = createRef();
+    private _selectionBeforeRender = 0;
+    private _inputRef: Ref<HTMLInputElement> = createRef();
 
-    _valueAsNumber: number = NaN;
     get valueAsNumber(){
-        return this._valueAsNumber;
+        return Number(this._value);
     }
     set valueAsNumber(value: number){
         if(typeof value === 'number'){            
@@ -76,26 +100,31 @@ export class LitNumberField extends focusable(labled(formAssociated(LitElement))
         
     }
 
-    _value: string = '';
+    private _value: string = '';
     get value(){
         return this._value;
     }
     set value(value: string){
         const oldValue = this._value;
         this._value = this._valueResolve(value);
-        this._valueAsNumber = Number(this._value);        
         this.requestUpdate('value', oldValue);
     }
 
-    public get isFocused(){
-        return !!this.shadowRoot?.querySelector('input:focus');
-    }
-    
     private _valueResolve(rawValue: string){
-        let value = rawValue.replace(",", ".");
-        const arr = value.split(".");
-        if(arr.length > 1){
-            value = arr[0] + "." + arr.slice(1).join("").slice(0, this.decimals);
+        let value = filterNotNumbers(rawValue.replace(",", "."));
+        let [ceil, ...decs] = value.split(".");
+        if(decs.length){
+            const decimals = decs.join("");
+            const filtered = filterZeroues(decimals);
+            if(filtered){
+                value = ceil + "." + filtered.slice(0, this.decimals);
+            }
+            else if(decimals){
+                value = ceil;
+            }
+            else{
+                value = ceil + ".";
+            }
         }
         if(this.replaceToRange){
             const asNumber = Number(value);
@@ -113,10 +142,11 @@ export class LitNumberField extends focusable(labled(formAssociated(LitElement))
         return html`<lit-icon 
                         @click = "${this._clearValue}"
                         icon = "remove" 
+                        danger
                         class = "danger icon"></lit-icon>`;
     }
     willUpdate(){
-        this._selectionBeforeRender = this.inputRef.value?.selectionStart || 0;
+        this._selectionBeforeRender = this._inputRef.value?.selectionStart || 0;
     }
     render(){
         return html`
@@ -127,11 +157,10 @@ export class LitNumberField extends focusable(labled(formAssociated(LitElement))
                    ?readonly = "${this.readonly}"
                    placeholder = "${this.placeholder}"
                    spellcheck = "${this.spellcheck}"
-                   inputmode = "${this.inputmode}"
+                   inputmode = "decimal"
                    @input = "${this._handleInput}" 
-                   @keydown = "${this._handleKeyDown}"
                    @change = "${this._handleChange}"
-                   ${ref(this.inputRef)}
+                   ${ref(this._inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}
             <div class = "icon"><slot name = "icon"></slot></div>
@@ -140,10 +169,9 @@ export class LitNumberField extends focusable(labled(formAssociated(LitElement))
     updated(props: Map<string | number | symbol, unknown>){
         super.updated(props);
         if(this._selectionBeforeRender !== undefined){
-            this.inputRef.value?.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
+            this._inputRef.value?.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
         }
-        this.validate();
-        
+        this.validate();        
     }
     
     public validate(){
@@ -197,6 +225,7 @@ export class LitNumberField extends focusable(labled(formAssociated(LitElement))
         }
     }
 }
+
 declare global {
     interface HTMLElementTagNameMap {
       'lit-numberfield': LitNumberField;

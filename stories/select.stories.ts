@@ -1,33 +1,39 @@
 
-import { html } from 'lit';
+import { TemplateResult, html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/select';
-import type { IPropsSelect } from '../select';
 
 
-const Select = (data: IPropsSelect) => 
+import type { IPropsSelect } from '../src/select/interface';
+
+const Number = (data: IPropsSelect) => 
     html`
-    <div>
-        <lit-select 
-            .items = "${data.items}"
-            .value = "${data.value}"
-            .disabled = "${data.disabled}"
-            .optionsWidth = "${data.optionsWidth}"
-            .optionsHeight = "${data.optionsHeight}">
-        </lit-select>
-    </div>
+    <lit-select 
+        required
+        .disabled = "${data.disabled}"
+        .readonly = "${data.readonly}">
+        <lit-opt-group>
+            <lit-option value = "1">test 1</lit-option>
+            <lit-option value = "2">test 2</lit-option>
+            <lit-option value = "3">test 3</lit-option>
+        </lit-opt-group>
+        <lit-opt-group>
+            <lit-option value = "15">group 2 - 1</lit-option>
+            <lit-option value = "16">group 2 - 2</lit-option>
+            <lit-option value = "17">group 2 - 3</lit-option>
+        </lit-opt-group>
+    </lit-select>
+
     `;
 
-const Template: Story<Partial<IPropsSelect>> = (args) => Select(args as IPropsSelect);
+
+const Template: Story<Partial<IPropsSelect>> = (args) => Number(args as IPropsSelect);
 
 export const Default = Template.bind({});
 Default.args = {
     value: '1',
     disabled:  false,
     readonly:  false,
-    optionsWidth:  0,
-    optionsHeight:  0,
-    items: [...Array(5)].map((it, i) => ({value: i, content: `Item ${i}`}))
 }
 export default {
     title: 'Form Assosiated/Select',

@@ -5,6 +5,7 @@ import { classMap } from 'lit/directives/class-map.js';
 import { button } from './styles';
 import '../spinner';
 import '../icon';
+import '../ripple';
 import { focusable } from '../mixins/focusable/index';
 
 
@@ -136,7 +137,8 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
         }
     }
     /** @ignore  */
-    _loading: boolean = false;
+    private _loading: boolean = false;
+    
     get loading(){
         return this._loading;
     }
@@ -155,6 +157,7 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
         
 
     }
+
     /** @prop {"button" | "submit"} type */
     @property({type: String, attribute: true}) type: Type = 'button';
     @property({type: String, reflect: true, attribute: true}) size: TSize = 'medium'; 
@@ -176,6 +179,8 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
 
     /** @prop {boolean} danger - Danger  */
     @property({type: Boolean, reflect: true}) danger: boolean = false;
+
+    @property({type: Boolean, reflect: true}) between: boolean = false;
     /** @prop {boolean} switchOn - switch State. true - enabled, false disabled */
     
     @property({type: Boolean, reflect: true}) switchOn: boolean = false;
@@ -183,29 +188,22 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
 
     /** @ignore  */
     @state() _notifyIcon: boolean  = false;
-    /** @ignore  */
-    @state() hover: boolean = false;
-    /** @ignore  */
-    @state() pressed: boolean = false;
-    /** @ignore  */
-    @state() focused: boolean = false;
+
 
     @property({type: Number}) tabindex: number = 0;
 
     /** @ignore  */
-    #notifyTimeout = 0;
+    private _notifyTimeout = 0;
     /** @ignore  */
-    #width = 0;
+    private _width = 0;
 
     /** @ignore  */
     private get classes(){
         return {
             wrapper: true,
             noselect: true,
-            hover: this.hover,
-            pressed: this.pressed,
-            focus: this.focused,
-            checkmark: this._notifyIcon
+            checkmark: this._notifyIcon,
+            accent: this.primary || this.success || this.danger
         };
     }
 
@@ -221,76 +219,38 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
                     <slot name = "icon-after"></slot>`;
     }
 
+
     /**
      * @slot icon-before - You can put some elements before content
      * @slot icon-after - You can put some elements after content
      */
     render(){
-        const styles = this.#width ? {width: this.#width + 'px'} : {};
+        const styles = this._width ? {width: this._width + 'px'} : {};
         return html`
-        <button tabindex = "${this.tabindex}" 
-            style = "${styleMap(styles)}"
-            class = "${classMap(this.classes)}" 
-            @click = "${this.click}"
-            @focus = "${this._onFocus}"
-            @blur = "${this._onBlur}"
-            @mouseover = "${this._onMouseOver}"
-            @mouseout = "${this._onMouseOut}"
-            @mousedown = "${this._onMouseDown}"
-            @touchstart = "${this._onTouchStart}"
-        >${this._contentTemplate()}</button>`;
+            <lit-ripple 
+                role = "button"
+                aria-pressed = "${this.type === 'switch' ? this.switchOn : 'undefined'}"
+                tabindex = "${this.tabindex}" 
+                style = "${styleMap(styles)}"
+                class = "${classMap(this.classes)}" 
+                @click = "${this.click}"
+                @focus = "${this._onFocus}"
+                @blur = "${this._onBlur}"
+            >${this._contentTemplate()}</lit-ripple>`;
     }
 
     // ==== Events ====
     /** @ignore  */
-    private _onMouseDown(e: MouseEvent){
-        this.pressed = true;
-        // e.preventDefault();
-        document.addEventListener('mouseup', this._onMouseUp);
-    }
-    /** @ignore  */
-    private _onMouseUp = (e: MouseEvent) => {
-        this.pressed = false;
-        // e.preventDefault();
-        document.removeEventListener('mouseup', this._onMouseUp);
-    }
-    /** @ignore  */
-    private _onTouchStart(e: TouchEvent){
-        this.pressed = true;
-        document.addEventListener('touchcancel', this._onEndTouch);
-        document.addEventListener('touchend', this._onEndTouch);
-        // e.preventDefault();
-    }
-    /** @ignore  */
-    private _onEndTouch = (e: TouchEvent) => {
-        this.pressed = false;
-        document.removeEventListener('touchcancel', this._onEndTouch);
-        document.removeEventListener('touchend', this._onEndTouch);
-        // e.preventDefault();
-    }
-    /** @ignore  */
-    private _onMouseOver(e: MouseEvent){
-        this.hover = true;
-        e.preventDefault();
-    }
-    /** @ignore  */
-    private _onMouseOut(e: MouseEvent){
-        this.hover = false;
-        e.preventDefault();
-    }
-    /** @ignore  */
     private _onBlur(){
-        this.focused = false;
         document.removeEventListener('keydown', this._onKeyDown);
     }
     /** @ignore  */
     private _onFocus(){
-        this.focused = true;
         document.addEventListener('keydown', this._onKeyDown);
     }
     /** @ignore  */
-    private _onKeyDown(e: KeyboardEvent){
-        if(e.key === "Enter"){
+    private _onKeyDown = (e: KeyboardEvent) => {
+        if(e.key === "Enter" || e.key === "Space"){
             this.submit();
         }
     }
@@ -323,11 +283,11 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
         }
         if(this.notifyOnClick){
             this._notifyIcon = true;
-            this.#width = this.clientWidth;
-            clearTimeout(this.#notifyTimeout);
-            this.#notifyTimeout = window.setTimeout(() => {
+            this._width = this.clientWidth;
+            clearTimeout(this._notifyTimeout);
+            this._notifyTimeout = window.setTimeout(() => {
                 this._notifyIcon = false;
-                this.#width = 0;
+                this._width = 0;
             }, 1000)
         }
     }

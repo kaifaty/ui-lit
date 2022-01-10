@@ -1,6 +1,6 @@
 import { __decorate } from "tslib";
 import { LitElement, html, css } from 'lit';
-import { property, customElement } from 'lit/decorators';
+import { property, customElement } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined';
 let LitLink = class LitLink extends LitElement {
     constructor() {

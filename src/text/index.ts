@@ -1,4 +1,4 @@
-import { property, customElement } from 'lit/decorators';
+import { property, customElement } from 'lit/decorators.js';
 import { LitElement, css, html } from 'lit';
 
 type TextStatus = "error" | "danger" | "attention" | "success" | "accented" | "none";

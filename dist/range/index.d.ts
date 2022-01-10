@@ -1,4 +1,3 @@
-import { ResizeObserverController } from './../controllers/ResizeObserverController';
 import { LitElement, TemplateResult } from 'lit';
 import type { FormAssociated } from '../mixins/form-associated/interface';
 export interface IRangeProps extends FormAssociated {
@@ -11,10 +10,29 @@ export interface IRangeProps extends FormAssociated {
     startFromMin: boolean;
     showPercent: boolean;
 }
-declare const LitRange_base: (new (...args: any[]) => import("../mixins/form-associated/interface").FormAssociatedElement) & typeof LitElement;
-/** <lit-range></lit-range> */
+declare const LitRange_base: (new (...args: any[]) => import("../mixins/focusable/inderface").Focusable & LitElement) & (new (...args: any[]) => import("../mixins/labled/inderface").ILabled) & (new (...args: any[]) => import("../mixins/form-associated/interface").FormAssociatedElement) & (new (...args: any[]) => import("../mixins/form-associated/interface").FormAssociatedElement) & typeof LitElement;
+/**
+ * <lit-range></lit-range>
+ *
+ * @cssprop --lit-range-thumb-size Thumb size
+ *
+ * @cssprop --lit-range-track Track color
+ * @cssprop --lit-range-track-hover Track color when hovered
+ *
+ * @cssprop --lit-range-thumb Thumb color
+ * @cssprop --lit-range-thumb-shadow Thumb shadow
+ *
+ * @cssprop --lit-range-points-background Points background
+ *
+ * @cssprop --lit-range-filled Fillted color
+ * @cssprop --lit-range-filled-hover Fillted color
+ *
+ *
+ * @cssprop --lit-range-outline-focus Outline when focused
+ *
+ * */
 export declare class LitRange extends LitRange_base {
-    static get styles(): import("lit").CSSResult[];
+    static get styles(): import("lit").CSSResultOrNative[];
     static get properties(): {
         value: {
             type: StringConstructor;
@@ -35,31 +53,37 @@ export declare class LitRange extends LitRange_base {
     usePoints: boolean;
     startFromMin: boolean;
     _wrapper: HTMLElement;
-    RO: ResizeObserverController;
-    _points: number[];
-    _timeout: number;
-    _trackSize: number;
-    _trackStartX: number;
-    _thumbSize: number;
-    _padding: number;
-    _rect: DOMRect | null;
-    _min: number;
-    _percent: number;
+    private _RO;
+    private _points;
+    private _timeout;
+    private _trackSize;
+    private _trackStartX;
+    private _thumbSize;
+    private _padding;
+    private _rect;
+    private _min;
+    private _percent;
+    tabindex: number;
     get min(): number;
     set min(value: number);
-    _max: number;
+    private _max;
     get max(): number;
     set max(value: number);
+    get percent(): number;
     get valueAsNumber(): number;
     set valueAsNumber(value: number);
-    _value: string;
+    private _value;
     get value(): string;
     set value(value: string);
-    connectedCallback(): void;
-    willUpdate(): void;
-    render(): TemplateResult<1>;
     get minPercent(): number;
     isDisabled(): boolean;
+    connectedCallback(): void;
+    willUpdate(): void;
+    private _pointersTemplate;
+    private _percentTemplate;
+    private _thumbTemplate;
+    render(): TemplateResult<1>;
+    private _recalcValue;
     private _dispatch;
     private _calcTrackStartX;
     private _calcTackWidth;
@@ -71,6 +95,8 @@ export declare class LitRange extends LitRange_base {
     private _hidePercent;
     private _movePosition;
     setPercent(value: number): void;
+    private _onFocus;
+    private _onBlur;
     private _onChangeSize;
     private _touchStart;
     private _touchMove;
@@ -79,14 +105,11 @@ export declare class LitRange extends LitRange_base {
     private _mouseMove;
     private _mouseUp;
     private _handlePointerDown;
-    private _handlePointerMove;
     private _handlePointerUp;
+    private _handlePointerMove;
     private _handlePointOver;
     private _handlePointLeave;
-    private _pointersTemplate;
-    private _percentTemplate;
-    private _blockedVolume;
-    private _thumbTemplate;
+    private _handleKeyboard;
 }
 declare global {
     interface HTMLElementTagNameMap {

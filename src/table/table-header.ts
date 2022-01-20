@@ -10,113 +10,13 @@ import '../number';
 import '../divider';
 import '../button';
 import { isClickInElement, getHost } from 'kailib';
+import { tableHeaderStyles, filterWidth } from './styles';
 
 
-const filterWidth = 230;
 let dialogOpened = false;
 @customElement('lit-table-header')
 export class LitTableHeader extends LitElement{
-    static styles = [css`
-    :host{
-        padding: var(--lit-cell-header-padding, 0 15px);
-        font-weight: 600;
-        font-size: var(--lit-table-header-font-size, inherit);
-        --lit-icon-font-size: 8px;
-        --lit-icon-color: var(--lit-table-icon-color, rgba(0,0,0,0.2));
-        background-color: var(--lit-table-header-background, #eee);
-        position: relative;
-        display: flex;
-        height: 100%;
-        
-    }
-    
-    .sort-icons{
-        display: flex;
-        padding: var(--lit-table-sort-padding, 0 5px);
-        flex-direction: column;
-        align-items: center;
-        line-height: 0.9;
-        margin-left: 4px;
-    }
-    .sort-icons:hover {
-        background-color: var(--lit-table-icon-background-hover, rgba(0, 0, 0, 0.1));
-        --lit-icon-color: var(--lit-table-icon-color-hover, rgba(0, 0, 0, 0.5));
-    }
-    :host([sortDirection = "descend"]) .sorted lit-icon[icon = "dropdown"],
-    :host([sortDirection = "ascend"]) .sorted lit-icon[icon = "dropup"],
-    .filters-checked{
-        --lit-icon-color: var(--lit-table-icon-color-selected, hsl(210, 90%, 60%));
-    }
-    [icon = "filter"]{
-        padding: var(--lit-table-filter-padding, 6px 4px);
-        border-radius: 3px;
-    }
-    [icon = "filter"]:hover{
-        background-color: var(--lit-table-icon-background-hover, rgba(0, 0, 0, 0.1));
-        --lit-icon-color: var(--lit-table-icon-color-hover, rgba(0, 0, 0, 0.5));
-        
-    }
-    .sorter{
-        cursor: pointer;
-    }
-    .wrapper{
-        display: flex;
-        align-items: center;
-    }
-    .filter-template{
-        position: absolute;
-        font-size: 12px;
-        top: 1px;
-        left: 1px;
-        font-weight: 400;
-        padding: 10px;
-        width: ${filterWidth}px;
-        border-radius: 5px;
-        background-color: var(--lit-table-filter-content-background, #fff);
-        box-shadow: 0 0 6px rgba(0,0,0,0.6);
-        z-index: 1;
-        display: grid;
-        grid-template-rows: auto 25px;
-        gap: 10px;
-        
-    }
-    :host([right]) .filter-template{
-        right: 1px;
-        left: initial;
-    }
-    .filter-template footer{
-        display: flex;
-        justify-content: space-between;
-
-    }
-    .filter-template checkbox-element{
-        margin-right: 7px;
-    }
-    lit-label{
-        flex-direction: column;
-        align-items: start;
-        text-align: left;
-    }
-    .flex-center{
-        display: flex;
-        align-items: center;
-    }
-    .rows{
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        align-items: center;
-    }
-    .row{
-        display: contents;
-    }
-    :host([align = center]){
-        justify-content: center;
-    }
-    :host([align = right]){
-        justify-content: right;
-    }
-    `, noselect];
+    static styles = [tableHeaderStyles, noselect];
     
     @property({type: String, reflect: true}) align: string = 'left';
     @property({type: Object}) item?: TColumnItem;

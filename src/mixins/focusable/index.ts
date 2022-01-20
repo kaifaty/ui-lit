@@ -1,7 +1,6 @@
 import type { LitElement } from 'lit';
 import { Focusable } from './inderface';
 import { property } from 'lit/decorators.js';
-import {isChildOf } from 'kailib'
 
 type Constructor<T> = new (...args: any[]) => T;
 
@@ -17,13 +16,14 @@ export const focusable = <T extends Constructor<LitElement>>(superClass: T) => {
             }
             return !!this.shadowRoot?.querySelector('*:focus');
         }
+        
         connectedCallback(): void {
             super.connectedCallback();
             this.setAttribute('focusable', '');
         }
         
         focus(){
-            const el = this.shadowRoot?.querySelector('input, button, textarea, lit-ripple, lit-button, [focusable]',);  
+            const el = this.shadowRoot?.querySelector('input, button, textarea, lit-button, [focusable]');  
             if(el){
                 (el as HTMLElement).focus();
                 if(el instanceof HTMLInputElement){

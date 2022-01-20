@@ -49,7 +49,6 @@ export declare class LitNumberField extends LitNumberField_base implements Numbe
     private _clearValue;
     private _handleChange;
     private _handleInput;
-    private _handleKeyDown;
 }
 declare global {
     interface HTMLElementTagNameMap {

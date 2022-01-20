@@ -10,12 +10,6 @@ import { createRef, ref } from 'lit/directives/ref.js';
 import { labled } from '../mixins/labled';
 import { focusable } from '../mixins/focusable/index';
 import { notificatable } from '../mixins/notificatable/index';
-const AvailabledKeys = ['Control', 'Backspace', 'Delete', ',', '.', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End', "Enter"];
-const Numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'];
-const CtrAvailable = [
-    'a', 'v', 'c', 'x', 'z',
-    86, 67, 88, 90, 65
-];
 const filterZeroues = (decimals) => {
     let res = '';
     let nonZeroExist = false;
@@ -33,7 +27,7 @@ const filterNotNumbers = (str) => {
     let res = '';
     for (let i = 0; i < str.length; i++) {
         const code = str.charCodeAt(i);
-        if (code === 46 || code >= 48 && code <= 57) {
+        if (code === 45 || code === 46 || code >= 48 && code <= 57) {
             res += str[i];
         }
     }
@@ -92,7 +86,7 @@ let LitNumberField = class LitNumberField extends focusable(labled(notificatable
         let [ceil, ...decs] = value.split(".");
         if (decs.length) {
             const decimals = decs.join("");
-            const filtered = filterZeroues(decimals);
+            const filtered = Number(value) ? filterZeroues(decimals) : decimals;
             if (filtered) {
                 value = ceil + "." + filtered.slice(0, this.decimals);
             }
@@ -186,14 +180,6 @@ let LitNumberField = class LitNumberField extends focusable(labled(notificatable
         this.value = e.target.value;
         if (oldValue !== this._value) {
             this.dispatchEvent(new CustomEvent("changed", { detail: this.value, bubbles: true }));
-        }
-    }
-    _handleKeyDown(e) {
-        if (!AvailabledKeys.includes(e.key) &&
-            !Numbers.includes(e.key) &&
-            !(CtrAvailable.includes(e.key) && (e.ctrlKey || e.metaKey) ||
-                CtrAvailable.includes(e.keyCode) && (e.ctrlKey || e.metaKey))) {
-            e.preventDefault();
         }
     }
 };

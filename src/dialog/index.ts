@@ -18,6 +18,8 @@ export interface IDialogProps {
     close(): void
 }
 let pool: LitDialog[] = [];
+
+
 @customElement('lit-dialog')
 export class LitDialog extends LitElement{
     static get styles() {

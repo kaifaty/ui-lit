@@ -1,3 +1,4 @@
+import { iconCSSVarNames } from './../icon/styles';
 import { LitElement, html, css } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined';
@@ -22,7 +23,7 @@ export class LitLink extends LitElement{
     }
     :host(:not([type=button])) a{
         color: var(--lit-link-color, hsl(200, 80%, 55%));
-        --lit-icon-color: var(--lit-link-color);
+        ${iconCSSVarNames.color}: var(--lit-link-color);
         text-decoration: none;
         cursor: pointer;
         display: inline-flex;

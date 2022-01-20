@@ -131,6 +131,8 @@ export declare class LitButton extends LitButton_base implements ButtonProps {
     get loading(): boolean;
     set loading(value: boolean);
     /** @prop {"button" | "submit"} type */
+    align: 'start' | 'center' | 'end';
+    /** @prop {"button" | "submit"} type */
     type: Type;
     size: TSize;
     /** @prop {boolean} disabled - Disable element */
@@ -146,6 +148,7 @@ export declare class LitButton extends LitButton_base implements ButtonProps {
     between: boolean;
     /** @prop {boolean} switchOn - switch State. true - enabled, false disabled */
     switchOn: boolean;
+    accent: boolean;
     notifyOnClick: boolean;
     /** @ignore  */
     _notifyIcon: boolean;

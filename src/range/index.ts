@@ -1,5 +1,5 @@
 import { ResizeObserverController } from './../controllers/ResizeObserverController';
-import { LitElement, html, TemplateResult, nothing, css } from 'lit';
+import { LitElement, html, CSSResultOrNative, nothing, css, unsafeCSS } from 'lit';
 import { customElement, property, state, query } from 'lit/decorators.js';
 import type { FormAssociated } from '../mixins/form-associated/interface';
 import { formAssociated } from '../mixins/form-associated/index';
@@ -8,6 +8,8 @@ import { getClientX, IUIEvent } from 'kailib';
 import { labled } from '../mixins/labled/index';
 import { focusable } from '../mixins/focusable/index';
 import { notificatable } from '../mixins/notificatable/index';
+import { makeCSSProxy } from '../helpers/cssproxy';
+import { rangeStyles } from './style';
 
 export interface IRangeProps extends FormAssociated {
     value: string
@@ -49,118 +51,7 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         return [
             ...super.elementStyles,
             noselect, 
-            css`
-            :host{
-                display: inline-block;
-                --size: var(--lit-range-thumb-size, 16px);
-                --pointer: 8px;
-                --pointer-border: 2px;
-                --poiner-width: calc(var(--pointer) + var(--pointer-border));
-                --line-height: 4px;
-                --to-middle: calc((var(--size) - var(--pointer)) / 2);
-                --top-margin: 8px;
-                --padding: 12px;
-                --default-filled: hsl(264, 100%, 60%);
-                padding: 1px;
-                box-sizing: border-box;
-                contain: content;
-
-            }
-            :host([showPercent]) .wrapper{
-                padding-bottom: 15px;
-            }
-            .wrapper:focus{
-                outline: var(--lit-range-outline-focus, 1px dashed rgba(0,0,0,0.5));
-            }
-            :host([hover]),
-            :host([pressed]){                
-                --default-filled: hsl(264, 100%, 50%);
-                --lit-range-track: var(--lit-range-track-hover, #ddd);
-                --lit-range-filled: var(--lit-range-filled-hover, hsl(264, 100%, 50%));
-            }
-            :host([hover]){
-                --lit-range-thumb: var(--lit-range-thumb-hover,  hsl(264, 10%, 20%));
-            }
-            :host([pressed]){
-                
-                --lit-range-thumb: var(--lit-range-thumb-pressed,  hsl(264, 90%, 60%));
-            }
-            .wrapper{
-                min-width: 200px;
-                position: relative;
-                box-sizing: border-box;
-                padding: 5px var(--padding);
-            }
-            .thumb, .point, .track-line{
-                cursor: pointer;
-            }
-            .percent{
-                opacity: 1;
-                text-align: center;
-                left: 0;
-                position: absolute;
-                text-align: center;
-                transform-origin: center;
-                font-size: 12px;
-                will-change: transform;
-                left: calc(var(--size) / 2 * -1);
-            }
-            .percent.hidden{
-                opacity: 0;
-            }
-            .track{
-                display: flex;
-                position: relative;
-                width: 100%;
-                border-radius: 5px;
-                box-sizing: border-box;
-                position: relative;
-            }
-            .track-line{
-                width: 100%;
-                height: var(--line-height);
-                margin: var(--top-margin) auto;
-                border-radius: 5px;
-                outline: 1px solid #999;
-            }
-            .thumb-wrapper{
-                position: absolute;
-                z-index: 3;
-                left: calc(var(--size) / 2 * -1);
-                top: calc(var(--top-margin) - var(--size) / 2 + var(--line-height) / 2);
-                width: var(--size, 14px);
-                height: var(--size, 14px);
-                will-change: transform;
-            }
-            .thumb.fullfiled{
-                background-color: var(--lit-range-filled, var(--default-filled));
-            }
-            .thumb{
-                border-radius: 100%;
-                width: 100%;
-                height: 100%;
-                background-color: var(--lit-range-thumb,  hsl(264, 10%, 40%));
-                outline: 2px solid  hsl(264, 100%, 99%);
-                box-shadow: var(--lit-range-thumb-shadow, 0 1px 3px hsl(264, 100%, 20%));
-                
-            }
-            .point{
-                position: absolute;
-                top: calc(var(--top-margin) - var(--pointer) / 2 + var(--line-height) / 2);
-                width: var(--pointer);
-                height: var(--pointer);
-                border-radius: var(--pointer);
-                background-color: var(--lit-range-points-background, #eee);
-                box-shadow: 0 0 0 var(--pointer-border) var(--lit-range-filled, var(--default-filled));
-                transform: translate(-50%, 0);
-                z-index: 1;
-            }
-            .point.filled{
-                background-color: var(--lit-range-filled, var(--default-filled));
-            }
-            `,
-            
-
+            rangeStyles
         ]
     } 
     
@@ -172,7 +63,7 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
             max: {type: Number},
         }
     }
-    @state() offsetX: number = 0;
+    
     @state() isPercentHidden: boolean = true;
     @state() disabledByVol: boolean = true;
     @property({type: Number}) decimals: number = 8;
@@ -190,7 +81,11 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     private _rect: DOMRect | null = null;
     private _min: number = 0;
     private _percent: number = 0;
+    private _offsetX: number = 0;
     tabindex: number = 0;
+    get offsetX(){
+        return this._offsetX
+    }
     get min() {
         return this._min;
     }
@@ -269,6 +164,12 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
     }
+    updated(props: Map<string, unknown>){
+        super.updated(props);
+        if(props.has("value")){
+            this.style.setProperty(`--percent`, this._percent + "%")
+        }
+    }
 
     // ==== templates ==== 
     private _pointersTemplate(){
@@ -283,13 +184,13 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     }
     private _percentTemplate(){
         if(!this.showPercent) return nothing;
-        const left = this.offsetX + this._padding - (this._thumbSize + 7) * this._percent / 100;
+        const left = this._offsetX + this._padding - (this._thumbSize + 7) * this._percent / 100;
         return  html`<div style = "transform: translateX(${left}px);"
                         class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `
     }
     private _thumbTemplate(){
-        const offset = (this.offsetX ).toFixed(1);
-        return html`<div class = "thumb-wrapper }" 
+        const offset = (this._offsetX).toFixed(1);
+        return html`<div class = "thumb-wrapper" 
             style = "transform: translateX(${offset}px);">
             ${this.isDisabled() 
                 ? nothing 
@@ -299,32 +200,29 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     }
 
     render(){
+        
         return html`
         <div tabindex = "${this.tabindex}"
             role = "slider" 
             class = "wrapper"
-            @focus = "${this._onFocus}"
-            @blur = "${this._onBlur}"
+            @keydown = "${this._handleKeyboard}"
             aria-valuemin="${this.min}"
             aria-valuemax="${this.max}"
             aria-valuenow="${this.value}">
             <div class = "track"
                 ${this._RO.observe(this._onChangeSize)}
-                @mousedown = "${this._mouserDown}"
-                @mouseover = "${this._handlePointOver}"
-                @mouseout = "${this._handlePointLeave}"
-                @touchstart = "${this._touchStart}">
+                @pointerdown = "${this._pointerDown}"
+                @pointermove = "${this._pointerMove}"
+                @pointerleave = "${this._pointerLeave}"
+                @pointerover = "${this._pointerOver}"
+                @lostpointercapture = "${this._pointerLostCapture}">
                 ${this._thumbTemplate()}
-                <div style = "background: linear-gradient(to right,  var(--lit-range-filled, var(--default-filled)) ${this._percent}%, var(--lit-range-track, #eee) ${this._percent}%);"
-                    class = "track-line"></div>
+                <div class = "track-line"></div>
                 ${this._pointersTemplate()}
             </div>
             ${this._percentTemplate()}
         </div>`;
-    }
-
-    
-    
+    }    
 
 
     // ==== Actions ==== 
@@ -338,6 +236,7 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         }
         this._value = val.toFixed(this.decimals);
     }
+
     private _dispatch() {
         this.dispatchEvent(new CustomEvent("changed", {
             detail: {
@@ -423,8 +322,8 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     
     private _updateOffset(){
         const offsetX = Math.round((this._trackSize ) * this._percent / 100 * 1e2) / 1e2;
-        if(offsetX !== this.offsetX){
-            this.offsetX = offsetX;
+        if(offsetX !== this._offsetX){
+            this._offsetX = offsetX;
         }
     }
 
@@ -439,72 +338,49 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         if(this.isDisabled()) return;
         requestAnimationFrame(() => {
             const offset =  this._calcOffset(x);
-            this._percent = this._calcPercentByOffset(offset);
-            this._value = this._calcValueByPercent(this._percent).toString();
-            this._updateOffset();
+            const percent = this._calcPercentByOffset(offset);
+            this.value = this._calcValueByPercent(percent).toString();
             this._dispatch();
          })
     }
 
     public setPercent(value: number){
         this._percent = Math.max(Math.min(value, 100), 0);
-        this.requestUpdate();
+        this.value = this._calcValueByPercent(this._percent).toString();
         setTimeout(()=> this._dispatch())
     }
     
     
     // ==== Events ==== 
 
-    private _onFocus(){
-        document.addEventListener("keydown", this._handleKeyboard)
+    private _pointerDown = (e: PointerEvent) => {        
+        (e.target as HTMLElement).setPointerCapture(e.pointerId);
+        this._handlePointerDown();
+        this._handlePointerMove(e.clientX);
+        e.preventDefault();
     }
-    private _onBlur(){
-        document.removeEventListener("keydown", this._handleKeyboard)
+    private _pointerMove = (e: PointerEvent) => {
+        if(!e.isPrimary || !this.hasAttribute("pressed")) return;
+        this._handlePointerMove(e.clientX);
+        e.preventDefault();
     }
+    private _pointerLostCapture = (e: PointerEvent) => {
+        this._handlePointerUp(e.clientX);
+        e.preventDefault();
+    }
+    private _pointerLeave = (e: PointerEvent) => {
+        this._handlePointLeave(e);
+    }
+    private _pointerOver = (e: PointerEvent) => {
+        this._handlePointOver(e);
+    }
+
     private _onChangeSize = (rect: DOMRect) => {
         this._rect = this.getBoundingClientRect();
         this._trackSize = this._calcTackWidth(rect);
         this._trackStartX = this._calcTrackStartX(rect);
         this._updateOffset();
-    }
-    private _touchStart = (e: TouchEvent) => {
-        document.addEventListener('touchmove', this._touchMove);
-        document.addEventListener('touchend', this._touchEnd);
-        document.addEventListener('touchcancel', this._touchEnd);
-        this._handlePointerDown();
-        this._handlePointerMove(e.touches[0].clientX);
-        e.preventDefault();
-        
-    }
-    private _touchMove = (e: TouchEvent) => {
-        this._handlePointerMove(e.touches[0].clientX);
-        e.preventDefault();
-    }
-    private _touchEnd = (e: TouchEvent) => {
-        document.removeEventListener('touchmove', this._touchMove);
-        document.removeEventListener('touchend', this._touchEnd);
-        document.removeEventListener('touchcancel', this._touchEnd);
-        this._handlePointerUp(e.touches[0].clientX);
-        e.preventDefault();
-    }
-
-    private _mouserDown = (e: MouseEvent) => {
-        document.addEventListener('mousemove', this._mouseMove);
-        document.addEventListener('mouseup', this._mouseUp);        
-        this._handlePointerDown();
-        this._handlePointerMove(e.clientX);
-        e.preventDefault();
-    }
-    private _mouseMove = (e: MouseEvent) => {
-        this._handlePointerMove(e.clientX);
-        e.preventDefault();
-    }
-
-    private _mouseUp = (e: MouseEvent) => {
-        document.removeEventListener('mousemove', this._mouseMove);
-        document.removeEventListener('mouseup', this._mouseUp);
-        e.preventDefault();
-        this._handlePointerUp(e.clientX);
+        this.requestUpdate();
     }
 
     private _handlePointerDown = () => {

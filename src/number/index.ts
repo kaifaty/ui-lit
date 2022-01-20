@@ -25,13 +25,6 @@ export interface NumberProps extends FormAssociated, Focusable{
     icon: string | TemplateResult,
 }
 
-const AvailabledKeys = [ 'Control', 'Backspace', 'Delete', ',', '.', 'ArrowLeft', 'ArrowRight', 'Shift', 'Home', 'End', "Enter" ];
-const Numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0' ]
-const CtrAvailable: (number | string)[] = [
-    'a', 'v', 'c', 'x', 'z',
-    86, 67, 88, 90, 65
-];
-
 const filterZeroues = (decimals: string) => {
     let res = '';
     let nonZeroExist = false;
@@ -49,7 +42,7 @@ const filterNotNumbers = (str: string) => {
     let res = '';
     for(let i = 0; i < str.length; i ++){
         const code = str.charCodeAt(i);
-        if(code === 46 || code >= 48 && code <= 57){
+        if(code === 45 || code === 46 || code >= 48 && code <= 57){
             res += str[i]
         }
     }
@@ -115,7 +108,7 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
         let [ceil, ...decs] = value.split(".");
         if(decs.length){
             const decimals = decs.join("");
-            const filtered = filterZeroues(decimals);
+            const filtered = Number(value) ? filterZeroues(decimals) : decimals;
             if(filtered){
                 value = ceil + "." + filtered.slice(0, this.decimals);
             }
@@ -211,18 +204,6 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
             this.dispatchEvent(new CustomEvent("changed", {detail: this.value, bubbles: true}));
         }
         
-    }
-    private _handleKeyDown(e: KeyboardEvent){
-        if(
-            !AvailabledKeys.includes(e.key) && 
-            !Numbers.includes(e.key) && 
-            !(
-                CtrAvailable.includes(e.key) && (e.ctrlKey || e.metaKey) || 
-                CtrAvailable.includes(e.keyCode) && (e.ctrlKey || e.metaKey)
-            )
-        ){    
-            e.preventDefault();
-        }
     }
 }
 

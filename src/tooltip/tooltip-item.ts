@@ -24,6 +24,7 @@ export class TooltimItem extends LitElement{
         box-shadow: 0 0 8px var(--lit-tooltip-shadow, rgba(0,0,0,0.5));
         position: fixed;
         isolation: isolate;
+        z-index: 10;
     }
     div{
         max-width: 320px;

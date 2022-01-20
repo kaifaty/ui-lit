@@ -1,8 +1,49 @@
 import { css } from 'lit';
+import { makeCSSProxy, makeCSSNameProxy } from '../helpers/cssproxy';
+const inputCSSVar = {
+    display: {
+        name: "display",
+        default: "inline-block"
+    },
+    height: {
+        name: "height",
+        default: ""
+    },
+    color: {
+        name: "color",
+        default: "inherit"
+    },
+    background: {
+        name: "background",
+        default: "#fff"
+    },
+    fontSize: {
+        name: "font-size",
+        default: "inherit"
+    },
+    padding: {
+        name: "padding",
+        default: "6px 8px"
+    },
+    border: {
+        name: "border",
+        default: "1px solid hsla(222, 20%, 60%, 0.5)"
+    },
+    align: {
+        name: "align",
+        default: "initial"
+    },
+    outlineFocus: {
+        name: "outline-focus",
+        default: "1px solid  hsla(222, 20%, 60%, 0.5)"
+    },
+};
+const _v = makeCSSProxy(inputCSSVar, "--lit-input-");
+export const inputCSSVarNames = makeCSSNameProxy(inputCSSVar, "--lit-input-");
 export const input = css `
 :host{
-    display: var(--lit-input-display, inline-block);
-    height: var(--lit-input-height);
+    display: ${_v.display};
+    height: ${_v.height};
 }
 .wrapper{
     position: relative;
@@ -20,13 +61,13 @@ export const input = css `
 input, textarea{
     height: 100%;
     width: 100%;
-    font-size: var(--lit-input-font-size, inherit);
+    font-size: ${_v.fontSize};
     box-sizing: border-box;
-    padding: var(--lit-input-padding, 6px 8px);
-    border: 1px solid var(--lit-input-border, hsla(222, 20%, 60%, 0.5));
-    text-align: var(--lit-input-align, initial);
-    background-color: var(--lit-input-background, #fff);
-    color: var(--lit-input-color, inherit);
+    padding: ${_v.padding};
+    border: ${_v.border};
+    text-align: ${_v.align};
+    background: ${_v.background};
+    color: ${_v.color};
     font-family: inherit;
 }
 input::-webkit-calendar-picker-indicator { display: none }
@@ -38,7 +79,7 @@ input[type=date]::-webkit-outer-spin-button {
 }
 input:focus, 
 textarea:focus{
-    outline:  1px solid var(--lit-input-outline-focus, hsla(222, 20%, 60%, 0.5));
+    outline: ${_v.outlineFocus};
 }
 input:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.3s ease;}
 input:focus::-moz-placeholder          {opacity: 0; transition: opacity 0.3s ease;}

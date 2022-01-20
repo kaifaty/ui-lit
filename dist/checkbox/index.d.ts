@@ -9,10 +9,6 @@ import { LitElement } from 'lit';
  * @cssprop --lit-switcher-control-shadow Switcher control shadow
  * @cssprop --lit-switcher-off-background Switcher control background
  *
- *
- *
- *
- *
  */
 export interface ICheckboxProps {
     checked: boolean;

@@ -11,31 +11,13 @@ import type { LitOption } from './option';
 import { focusable } from '../mixins/focusable/index';
 import { labled } from '../mixins/labled/index';
 import { notificatable } from '../mixins/notificatable/index';
-
+import { selectStyles } from './styles';
 
 
 @customElement("lit-select")
 export class LitSelect extends focusable(labled(notificatable(formAssociated(LitElement)))) implements IPropsSelect{
     static get styles (){
-        return [
-            ...super.elementStyles, 
-            css`
-        :host{
-            display: inline-block;
-            position: relative;
-            color: var(--lit-select-color, black);
-        }
-        .wrapper{
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        lit-button{
-            width: 100%;
-            min-width: 70px;
-        }
-
-        `, ]
+        return [...super.elementStyles, selectStyles]
     };
     static get properties(){
         return {
@@ -46,16 +28,13 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
     @property({type: Number}) tabindex: number = 0;
     @property({type: Boolean}) multiple: boolean = false;
     //@property({type: String}) type: 'select-one' | 'select-multiple' = 'select-one';
-    private _keyboardEventSet = false;
 
+    
+    isMenu = false;
     private _open: boolean = false;
     set open(value: boolean){
         if(value === this._open){
             return;
-        }
-        if(!this._keyboardEventSet && value){
-            document.addEventListener('keydown', this._handlekeyDown as EventListener);
-            this._keyboardEventSet = false;
         }
         const oldValue = this._open;
         this._open = value;
@@ -75,6 +54,16 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
 
     @state() options: LitOption[] = [];
 
+    set selectedIndex(value: number){
+        if(value > this.length - 1 || value < 0) return;
+        this._setValue(this.options[value].value)
+    }
+    get selectedIndex(){
+        for(let i = 0; i < this.length; i ++){
+            if(this.options[i].value === this.value) return i;
+        }
+        return -1;
+    }
     get selectedContent(){
         const selected = this.options.find(it => it.selected);
         if(selected){
@@ -83,22 +72,14 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         return '-'
     }
 
-    private _setValue = (value: string, notify = true) => {
-        
+    private _setValue = (value: string, notify = true) => {        
         if(value === this.value){
             return;
         }
+        this._value = value;
         const exist = this.options.find(it => it.value === value);
         if(!exist) return;
-        this._value = value;
-        this.options.forEach(it => {
-            if(it.value === value){
-                it.selected = true;
-            }
-            else{
-                it.selected = false;
-            }
-        })
+        this.options.forEach(it => it.selected = it.value === value)
         this.requestUpdate()
         if(notify){
             this.dispatchEvent(new CustomEvent('changed', {
@@ -132,6 +113,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         this.requestUpdate()
         
     }
+
     connectedCallback(): void {
         super.connectedCallback();
         this.addEventListener('optionConnected', this._optionConnect as EventListener);
@@ -154,33 +136,35 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         return this.options.length;
     }    
 
-    move(forward = true){
-        let index = this.options.findIndex(it => it.selected);
-        index += forward ? 1 : -1;
-        if(index < 0) index = 0;
-        if(index > this.options.length - 1) index = this.options.length - 1;
-
-        this._setValue(this.options[index].value);
-    }
-
     private _toggle(){
         if(this.disabled) return;
-        if(this.open){
-            this._hide();
-        }
-        else{
-            this._show();
-        }
+        if(this.open) this.hide();
+        else this.show();
     }
 
-    private _hide = () => {
+    hide(){
         if(!this.open) return;
         this.open = false;
     }
-
-    private _show = () => {
+    show(){
         if(this.open) return;
         this.open = true;
+    }
+    private _getSlotElements = (slot = this.shadowRoot!.querySelector(`.slot`)): any => {
+        const elements = (slot as HTMLSlotElement)?.assignedElements();
+        if(elements[0] instanceof HTMLSlotElement){
+            return this._getSlotElements(elements[0]);
+        }
+        return elements.reduce((acc, v) => {
+            if([`lit-menu-item`, `lit-option`].includes(v.tagName.toLowerCase())){
+                acc.push(v as HTMLElement);
+            }
+            else{
+                v.querySelectorAll('lit-menu-item, lit-option')
+                 .forEach(n => acc.push(n as HTMLElement))
+            }
+            return acc;
+        }, [] as HTMLElement[]);
     }
 
     render(){        
@@ -191,8 +175,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
             .tabindex = "${this.tabindex}"
             aria-expanded = "${this.open}"
             class = "selected" 
-            @focus = "${this._onFocus}"
-            @blur = "${this._onBlur}"
+            @keydown = "${this._handlekeyDown}"
             @click = "${this._toggle}">
             <slot name = "selected">
                 ${unsafeHTML(this.selectedContent)}
@@ -203,44 +186,48 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
             ></lit-icon>
         </lit-button>
         <lit-listbox 
-            @listboxClose = "${this._onCloseByListbox}"
+            @focusNext = "${this._focusNext}"
+            @focusPrev = "${this._focusPrev}"
+            @listboxClose = "${this.hide}"
             .open = "${this.open}">
-            <slot></slot>
-        </lit-listbox>
-        `;
+            <slot class = "slot"></slot>
+        </lit-listbox>`;
     }
 
-    private _onFocus(){
-        if(this._keyboardEventSet) return;
-        document.addEventListener('keydown', this._handlekeyDown as EventListener);
-        this._keyboardEventSet = true;
+
+    private _focusNext = (e: CustomEvent) => {
+        (document.activeElement?.nextElementSibling as HTMLElement)?.focus();
+    }
+    private _focusPrev = (e: CustomEvent) => {
+        (document.activeElement?.previousElementSibling as HTMLElement)?.focus();
     }
 
-    private _onBlur(){
-        document.removeEventListener('keydown', this._handlekeyDown as EventListener);
-        this._keyboardEventSet = false;
-    }
-
-    private _onCloseByListbox(e: CustomEvent){
-        this.open = false;
-    }
-
-    private _handlekeyDown = (e: KeyboardEvent) => {
+    private _handlekeyDown = (e: KeyboardEvent) => {    
         if(e.key === "Enter" || e.key === " "){
             this.open = !this.open;
         }
         if(e.key === "ArrowDown"){
-            this.move()
+            
+            if(this.isMenu){
+                const d = this._getSlotElements();
+                console.log(d)
+                d[this.selectedIndex + 1]?.focus();
+            }
+            else{
+                this.selectedIndex = this.selectedIndex + 1;
+            }
+            e.preventDefault();
         }
         if(e.key === "ArrowUp"){
-            this.move(false)
+            this.selectedIndex = this.selectedIndex - 1;
+            e.preventDefault();
         }
         if(e.key === "Escape"){
-            this.open = false;
+            this.hide();
         }
         if(e.key === "Tab"){
             if(this.open){
-                this._hide();
+                this.hide();
                 e.preventDefault();
             }
         }

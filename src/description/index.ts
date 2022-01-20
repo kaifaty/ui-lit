@@ -15,7 +15,7 @@ import { LitElement, html, css } from 'lit';
 export class LitDescription extends LitElement{
     static styles = css`
     :host{
-        display: var(--lit-description-display, inline-block);
+        display: var(--lit-description-display, block);
         padding: var(--lit-description-padding, 10px 0);
         font-style: var(--lit-description-font-style, normal);
         font-size: var(--lit-description-font-size, 12px);

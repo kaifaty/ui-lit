@@ -1,4 +1,84 @@
 import { css } from 'lit';
+import { makeCSSProxy, makeCSSNameProxy } from '../helpers/cssproxy';
+import { iconCSSVarNames } from '../icon/styles';
+
+const dialogCSSVars = {
+    overlapIndex: {
+        name: "z-index",
+        default: 100,
+    },
+    overlapBackground: {
+        name: "background",
+        default: `rgba(0,0,0,0.7)`,
+    },
+    overlapMaxHeight: {
+        name: "max-height",
+        default: `initial`,
+    },
+    width: {
+        name: "width",
+        default: `600px`,
+    },
+    height: {
+        name: "height",
+        default: `300px`,
+    },
+    minHeight: {
+        name: "min-height",
+        default: `initial`,
+    },
+    color: {
+        name: "color",
+        default: `black`,
+    },
+    backgroundColor: {
+        name: "background-color",
+        default: `#fefefe`,
+    },
+    radius: {
+        name: "radius",
+        default: `3px`,
+    },
+    boxshadow: {
+        name: "boxshadow",
+        default: `rgba(0,0,0,0.7)`,
+    },
+    headerPadding: {
+        name: "header-padding",
+        default: `15px 20px`,
+    },
+    headerBackgroundColor: {
+        name: "header-background-color",
+        default: `#111`,
+    },
+    headerColor: {
+        name: "header-color",
+        default: `#fefefe`,
+    },
+    mainPadding: {
+        name: "main-color",
+        default: `15px 20px`,
+    },
+    footerPadding: {
+        name: "footer-color",
+        default: `15px 20px`,
+    },
+    iconColor: {
+        name: "footer-color",
+        default: `15px 20px`,
+    },
+    get zIndex () {
+        return {
+            name: "z-index",
+            default: this.overlapIndex.default + 1,
+        }
+    },
+};
+
+const _v = makeCSSProxy(dialogCSSVars, "--lit-dialog-");
+
+export const dialogCSSVarNames = makeCSSNameProxy(dialogCSSVars, "--lit-dialog-");
+
 
 export const DIALOG_STYLES = css`
 :host{
@@ -9,7 +89,6 @@ export const DIALOG_STYLES = css`
 }
 .overlap{
     display: flex;
-    /*--dialog-z-index: 125;*/
     isolation: isolate;
     margin: 0;
     left: 0;
@@ -18,8 +97,8 @@ export const DIALOG_STYLES = css`
     width: 100%;
     height: 100%;
     position: fixed;
-    z-index: var(--lit-dialog-z-index, 100);
-    background-color: var(--lit-dialog-overlap, rgba(0,0,0,0.7));
+    z-index: ${_v.overlapIndex};
+    background-color: ${_v.overlapBackground};
     visibility: hidden;
 }
 :host([opened]) .overlap{
@@ -28,28 +107,28 @@ export const DIALOG_STYLES = css`
     justify-content: center;
 }
 .dialog{          
-    max-height: var(--lit-dialog-max-height, initial);
-    width: var(--lit-dialog-width, 600px);
-    height: var(--lit-dialog-height, 300px);
-    min-height: var(--lit-dialog-minHeight, initial);
-    z-index: calc(var(--lit-dialog-z-index, 100) + 1);
-    color: black;
-    color: var(--lit-dialog-color, black);
-    background-color: var(--lit-dialog-background, #fefefe);
-    border-radius: var(--lit-dialog-radius, 3px);
+    max-height: ${_v.overlapMaxHeight};
+    width: ${_v.width};
+    height: ${_v.height};
+    min-height: ${_v.minHeight};
+    z-index: ${_v.zIndex};
+    color: ${_v.color};
+    background-color: ${_v.backgroundColor};
+    border-radius: ${_v.radius};
+    box-shadow: 1px 1px 8px ${_v.boxshadow};
     box-sizing: border-box;
     word-wrap: break-word;
     display: flex;
     flex-direction: column;
-    box-shadow: 1px 1px 8px var(--lit-dialog-boxshadow, rgba(0,0,0,0.7));
     position: relative;
+    ${iconCSSVarNames.color}: ${_v.headerColor};
 }
 
 slot[name = header]::slotted(*){
-    padding: var(--lit-dialog-header-padding, 15px 20px);
     position: relative;
-    background-color: var(--lit-dialog-header-background, #111);
-    color: var(--lit-dialog-header-color, #fefefe);
+    padding: ${_v.headerPadding};
+    background-color: ${_v.headerBackgroundColor};
+    color: ${_v.headerColor};
     font-size: 16px;
 }
 
@@ -60,12 +139,12 @@ main{
     flex: 1 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: var(--lit-dialog-main-padding, 15px 20px);
+    padding: ${_v.mainPadding};
 }
 footer{
     display: flex;
     justify-content: space-between;
-    padding: var(--lit-dialog-footer-padding, 15px 20px);
+    padding: ${_v.footerPadding};
 }
 .closebtn-wrapper{
     display: flex;
@@ -81,6 +160,5 @@ footer{
 .arrow-back{
     padding: 10px;
     cursor: pointer;
-    color: var(--lit-dialog-control-icons, #aaa);
-    --icon-font-size: 18px;
+    ${iconCSSVarNames.fontSize}: 18px;
 }`

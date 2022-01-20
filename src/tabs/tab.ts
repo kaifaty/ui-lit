@@ -1,8 +1,10 @@
+import { buttonCSSVarsNames } from './../button/styles';
 import { LitElement, html, css, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import type { TTabType, LitTabs } from './tabs';
 import '../button'
 import { focusable } from '../mixins/focusable/index';
+import { _vTabs as _v } from './styles';
 
 /**
  * --lit-tab-color Tab color
@@ -21,17 +23,25 @@ export class LitTab extends focusable(LitElement){
         display: block;
         flex: 1 0 auto;
         position: relative;
+        ${buttonCSSVarsNames.background}: ${_v.background};
+        ${buttonCSSVarsNames.color}: ${_v.color};
+        height: 32px;
     }
     :host(:not([selected])){
-        --lit-button-color: var(--lit-tab-color-default, #666);
+        ${buttonCSSVarsNames.color}: ${_v.colorDefault};
     }
     :host([selected]) .border{
         display: block;
+        
+    }
+    :host([tab]){
+        ${buttonCSSVarsNames.border}: none;
     }
     lit-button{
         width: 100%;
         contain: content;
         display: block;
+        height: calc(100% - 2px);
     }
     .active.border{
         transform: none !important; 
@@ -42,8 +52,9 @@ export class LitTab extends focusable(LitElement){
         position: absolute;
         width: 100%;
         height: 2px;
-        background-color: var(--lit-theme-primary, hsl(264, 100%, 66%));
-        bottom: -2px;
+        background-color: ${_v.color};
+        bottom: 0;
+        transform-origin: left;
     }
     `;
     @property({type: String}) value = "";
@@ -54,6 +65,7 @@ export class LitTab extends focusable(LitElement){
     //private _keyPressController = new KeyDownController(this);
     private _currentX = 0;
     private _prevRect?: DOMRect | null = null;
+    private _currentWidthScale = 1
 
     @state() active: boolean = false;
 
@@ -69,7 +81,9 @@ export class LitTab extends focusable(LitElement){
     }
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {        
         if(_changedProperties.has("selected") && this.selected && this._prevRect){
-            this._currentX = (this._prevRect?.x || 0) - this.getBoundingClientRect().x;            
+            const rect = this.getBoundingClientRect();
+            this._currentX = (this._prevRect?.x || 0) - rect.x;      
+            this._currentWidthScale = Math.round(this._prevRect.width / rect.width * 1e2) / 1e2;
         }
     }
 
@@ -77,7 +91,7 @@ export class LitTab extends focusable(LitElement){
         super.disconnectedCallback();
         this._tabsHost?.disconncetTab(this);
     }
-    setSelect(value: boolean, prevRect?: DOMRect | null){
+    setSelection(value: boolean, prevRect?: DOMRect | null){
         this._prevRect = prevRect;
         this.selected = value;
     }
@@ -90,33 +104,26 @@ export class LitTab extends focusable(LitElement){
     render(){
         return html`
         <lit-button 
-            .tabindex = "${this.selected ? 0 : -1}"
+            .tabindex = "${0}"
             @click = "${this._selectNotify}" 
-            @focus = "${this._onFocus}"
-            @blur = "${this._onBlur}"
             ?borderless = "${this.type === 'tab'}">
             <slot></slot>
         </lit-button>
         <div class = "border ${this.active ? 'active' : ''}" 
-             style = "transform: translateX(${this._currentX}px);"></div>`;
-    }
-    private _onFocus(){
-        document.addEventListener('keydown', this.handlekeyDown);
-    }
-    private _onBlur(){
-        document.removeEventListener('keydown', this.handlekeyDown);
+             style = "transform: translateX(${this._currentX}px)  scaleX(${this._currentWidthScale});"></div>`;
     }
     protected updated(_changedProperties: Map<string | number | symbol, unknown>): void {
         if(this.selected){
             if(!this.active){
-                setTimeout(() => this.active = true);
+                setTimeout(() => this.active = true, 10);
             }
         }
         else{
             this.active = false;
         }
     }
-    handlekeyDown = (e: KeyboardEvent) => {
+    /*
+    private _handlekeyDown = (e: KeyboardEvent) => {
         if(e.key === "ArrowRight"){
             (this.nextElementSibling as LitTab | null)?.focus?.()
         }
@@ -126,7 +133,7 @@ export class LitTab extends focusable(LitElement){
         if(e.key === "Enter" || e.key === " "){
             this._selectNotify();
         }
-    }
+    }*/
 }
 declare global {
     interface HTMLElementTagNameMap {

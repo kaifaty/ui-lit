@@ -3,6 +3,9 @@ import { expect, assert } from '@esm-bundle/chai';
 import './index'
 
 const getSelect = () => document.querySelector("lit-select")!;
+
+const getButton = () => getSelect().shadowRoot?.querySelector("lit-button");
+
 describe('Test Button', async () => {
     
     beforeEach(async () => {
@@ -30,13 +33,21 @@ describe('Test Button', async () => {
     });
     it('is should be move forward', async() => {
         const select = getSelect();
-        select.move()
+        getButton()!.dispatchEvent(new KeyboardEvent("keydown", {
+            key: "ArrowDown",
+            bubbles: true, 
+            composed: true
+        }));
         expect(select.value).equal('1');
     });
     it('is should be move back', async() => {
         const select = getSelect();
         select.value = '5';
-        select.move(false)
+        getButton()!.dispatchEvent(new KeyboardEvent("keydown", {
+            key: "ArrowUp",
+            bubbles: true, 
+            composed: true
+        }));
         expect(select.value).equal('4');
     });
     
@@ -49,7 +60,7 @@ describe('Test Button', async () => {
     it('should close on key escape', async() => {
         const select = getSelect();
         select.open = true;
-        select.dispatchEvent(new KeyboardEvent("keydown", {
+        getButton()!.dispatchEvent(new KeyboardEvent("keydown", {
             key: "Escape",
             bubbles: true, 
             composed: true
@@ -59,7 +70,7 @@ describe('Test Button', async () => {
     it('should close on key tab', async() => {
         const select = getSelect();
         select.open = true;
-        select.dispatchEvent(new KeyboardEvent("keydown", {
+        getButton()!.dispatchEvent(new KeyboardEvent("keydown", {
             key: "Tab",
             bubbles: true, 
             composed: true
@@ -69,8 +80,8 @@ describe('Test Button', async () => {
     it('should open on enter', async() => {
         const select = getSelect();
         await new Promise(r => setTimeout(r, 0));
-        select.focus();
-        select.dispatchEvent(new KeyboardEvent("keydown", {
+        getButton()!.focus();
+        getButton()!.dispatchEvent(new KeyboardEvent("keydown", {
             key: "Enter",
             bubbles: true, 
             composed: true

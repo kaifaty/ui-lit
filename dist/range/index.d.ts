@@ -1,4 +1,4 @@
-import { LitElement, TemplateResult } from 'lit';
+import { LitElement, CSSResultOrNative } from 'lit';
 import type { FormAssociated } from '../mixins/form-associated/interface';
 export interface IRangeProps extends FormAssociated {
     value: string;
@@ -32,7 +32,7 @@ declare const LitRange_base: (new (...args: any[]) => import("../mixins/focusabl
  *
  * */
 export declare class LitRange extends LitRange_base {
-    static get styles(): import("lit").CSSResultOrNative[];
+    static get styles(): CSSResultOrNative[];
     static get properties(): {
         value: {
             type: StringConstructor;
@@ -45,7 +45,6 @@ export declare class LitRange extends LitRange_base {
             type: NumberConstructor;
         };
     };
-    offsetX: number;
     isPercentHidden: boolean;
     disabledByVol: boolean;
     decimals: number;
@@ -63,7 +62,9 @@ export declare class LitRange extends LitRange_base {
     private _rect;
     private _min;
     private _percent;
+    private _offsetX;
     tabindex: number;
+    get offsetX(): number;
     get min(): number;
     set min(value: number);
     private _max;
@@ -79,10 +80,11 @@ export declare class LitRange extends LitRange_base {
     isDisabled(): boolean;
     connectedCallback(): void;
     willUpdate(): void;
+    updated(props: Map<string, unknown>): void;
     private _pointersTemplate;
     private _percentTemplate;
     private _thumbTemplate;
-    render(): TemplateResult<1>;
+    render(): import("lit").TemplateResult<1>;
     private _recalcValue;
     private _dispatch;
     private _calcTrackStartX;
@@ -95,15 +97,12 @@ export declare class LitRange extends LitRange_base {
     private _hidePercent;
     private _movePosition;
     setPercent(value: number): void;
-    private _onFocus;
-    private _onBlur;
+    private _pointerDown;
+    private _pointerMove;
+    private _pointerLostCapture;
+    private _pointerLeave;
+    private _pointerOver;
     private _onChangeSize;
-    private _touchStart;
-    private _touchMove;
-    private _touchEnd;
-    private _mouserDown;
-    private _mouseMove;
-    private _mouseUp;
     private _handlePointerDown;
     private _handlePointerUp;
     private _handlePointerMove;

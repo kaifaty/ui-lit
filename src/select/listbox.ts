@@ -1,82 +1,44 @@
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import { TSelectItem } from './interface';
 import { mobileAndTabletCheck } from 'kailib';
 import { scrollbar } from '../styles/scrollbar';
+import { listboxStyles } from './styles';
 
 
 
 
 @customElement("lit-listbox")
 export class ListBox extends LitElement{
-    static styles = [css`
-    :host{
-        display: none;
-        box-sizing: border-box;
-        position: absolute;
-        isolation: isolate;
-        box-sizing: border-box;
-    }
-    :host([open]){
-        display: block;
-    }
-    .wrapper{
-        overflow-y: auto;
-        overflow-x: hidden;
-        border: var(--lit-listbox-border, 1px solid #eee);
-        color: var(--lit-listbox-color, hsl(246, 15%, 5%));
-        box-shadow: var(--lit-listbox-shadow, 3px 3px 3px rgba(0,0,0,0.3));
-        background-color: var(--lit-listbox-background);
-
-    }
-    :host([mobile][open]) {
-        position: fixed;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.45);
-        z-index: 1;
-    }
-    :host([mobile]) .wrapper{
-        border-radius: 10px;
-        min-width: 280px;
-        max-width: 90%;
-        max-height: 50%;
-        margin: 0 auto;
-        border: none;
-        color: var(--lit-listbox-mobile-color, hsl(246, 15%, 99%));
-        background-color: var(--lit-listbox-mobile-background, hsl(246, 15%, 18%));
-        box-shadow: var(--lit-border-mobile-shadow, 3px 3px 3px rgba(0,0,0,0.3));
-
-    }
-    :host([mobile]){
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-    }`, 
-    scrollbar];
+    static styles = [listboxStyles, scrollbar];
     @property({type: Boolean, reflect: true}) open: boolean = false;    
     @property({type: Boolean, reflect: true}) mobile: boolean = mobileAndTabletCheck();
     
 
     private _calcPosition(){
         if(!this.isConnected || this.mobile) return;
-        const rect = (this.parentNode as ShadowRoot).querySelector('lit-button')!.getBoundingClientRect();
+        const rect = (this.parentNode as ShadowRoot).host!.getBoundingClientRect();
         const topAvailable = rect.top;
         const bottomAvailable = window.visualViewport.height - rect.bottom;
+        const floatRight = window.visualViewport.width / 2 - rect.left < 0;
+        const wrapper = this.shadowRoot!.querySelector(".wrapper") as HTMLElement;   
+
         this.style.minWidth = rect.width + "px"; 
 
-        const wrapper = this.shadowRoot!.querySelector(".wrapper") as HTMLElement;            
+        if(floatRight){
+            this.style.right = '0';
+            this.style.left = 'initial';
+        }
+        else{
+            this.style.right = 'initial';
+            this.style.left = '0';
+        }
         if(topAvailable > bottomAvailable){
             this.style.top = 'initial';
             this.style.bottom = rect.height + "px";
             if(wrapper){
                 wrapper.style.maxHeight = (topAvailable - 2)  + "px";
             }
+            this.style.setProperty('--shadow-pos', "-1");
         }
         else{
             this.style.top = rect.height + "px";
@@ -84,7 +46,9 @@ export class ListBox extends LitElement{
             if(wrapper){
                 wrapper.style.maxHeight = (bottomAvailable - 2)  + "px";
             }
+            this.style.setProperty('--shadow-pos', "1");
         }
+
     }
     
     private _onClick = (e: Event) => {

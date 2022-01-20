@@ -12,16 +12,19 @@ export class LitQRCode extends LitElement{
     @query('canvas') canvas!: HTMLCanvasElement;
     static styles = css`
     :host{
-        display: flex;
+        display: inline-flex;
         justify-content: center;
+        align-items: center;
+        contain: content;
     }
     canvas{
         display: block;
-        width: var(--lit-qrcode-width, 200px);
     }`;
     @property({type: String}) value: string = '';
+    @property({type: Number}) width: number = 200;
+
     private _setQRCode(){
-        QRCode.toCanvas(this.canvas, this.value, {width: 200});
+        QRCode.toCanvas(this.canvas, this.value, {width: this.width});
     }
     updated(){
         this._setQRCode()

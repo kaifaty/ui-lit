@@ -34,8 +34,10 @@ export class LitCircle extends LitElement{
     static styles = css`
     :host{
         display: block;
-        height: var(--lit-percent-size, 14px);
-        width: var(--lit-percent-size, 14px);
+        --size: 14px;
+        height: var(--size);
+        width: var(--size);
+        contain: strict;
     }
     canvas{
         width: 100%;
@@ -44,11 +46,11 @@ export class LitCircle extends LitElement{
     }
     `;    
     static get properties(){
-        return {
+        return { 
             percent: {type: Number}
         }
     }
-    _percent: number = 0;
+    private _percent: number = 0;
     get percent(){
         return this._percent;
     }
@@ -57,15 +59,32 @@ export class LitCircle extends LitElement{
         this._percent = value;
         this.requestUpdate();
     }
-    _color: string = "#aaa";
+    private _color: string = "#aaa";
     @property({type: Number, attribute: true}) size: number = 14;
     @property({type: Number, attribute: true}) ratio: number = 2;
 
+    private _size = 0;
+    private _defaultSize = 14;
+
+    connectedCallback(): void {
+        super.connectedCallback();
+        const styles = window.getComputedStyle(this);
+        this._color = styles.getPropertyValue("--lit-circle-color");
+    }
+    willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
+        if(_changedProperties.has('size')){
+            this._size = this.size 
+                ? this.size 
+                : parseInt(window.getComputedStyle(this).getPropertyValue(`--lit-percent-size`)) || this._defaultSize;
+
+            this.style.setProperty('--size', this._size + "px");
+        }
+    }
     get lineWidth() {
         return 1 * this.ratio;
     }
     get radius(){
-        return this.size * this.ratio / 2 ;
+        return this._size * this.ratio / 2 ;
     }
     renderCircle = (ctx: CanvasRenderingContext2D) => {
         if(!ctx) return;
@@ -91,13 +110,7 @@ export class LitCircle extends LitElement{
         ctx.stroke();
     }
     render(){
-        return html`<canvas ${canvasDirective(this.renderCircle, this.size, this.ratio)}></canvas>`;
-    }
-    firstUpdated(){
-        const styles = window.getComputedStyle(this);
-        this._color = styles.getPropertyValue("--lit-circle-color");
-        
-        this.requestUpdate();
+        return html`<canvas ${canvasDirective(this.renderCircle, this._size, this.ratio)}></canvas>`;
     }
 }
 

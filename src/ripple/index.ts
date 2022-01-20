@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { state, customElement, property } from 'lit/decorators.js';
+import { customElement, property } from 'lit/decorators.js';
 import { noselect } from '../styles/noselect';
 
 
@@ -10,16 +10,17 @@ export class Ripple extends LitElement{
         css`
     :host{
         display: block;
-        height: 100%;
-        width: 100%;
         box-sizing: border-box;
         cursor: pointer;
-        position: relative;
-        z-index: 1;
+        overflow: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
         --click-x: 0;
         --click-y: 0;
         --click-size: 100px;
-        contain: content;
     }
     :host::after,
     :host::before{
@@ -28,12 +29,12 @@ export class Ripple extends LitElement{
         top: 0;
         left: 0;
         pointer-events: none;
-        background-color: var(--lit-theme-primary, hsl(264, 100%, 46%));
+        background-color: var(--ripple-background, #000);
     }
     :host::before{
         width: 100%;
         height: 100%;
-        z-index: -2;
+        z-index: 1;
         opacity: 0;
     }
     :host::after{
@@ -41,40 +42,27 @@ export class Ripple extends LitElement{
         height: var(--click-size);
         opacity: 0;
         border-radius: 50%;
-        z-index: -1;
+        z-index: 1;
     }
     :host([hover])::before{
-        opacity: 0.05;
+        opacity: var(--ripple-opacity-hover, 0.1);
     }
     :host(:focus)::before{
-        opacity: 0.09;
+        opacity: var(--ripple-opacity-focus, 0.15);
     }
     :host([pressed])::after{
-        opacity: 0.12;
+        opacity: var(--ripple-opacity-pressed, 0.2);
         top: var(--click-y);
         left: var(--click-x);
         animation: ripple 0.3s ease-out;
         transform: scale(2);
-    }
-
-    :host(.accent)::before{
-        opacity: 1;
-    }
-    :host(.accent[hover])::before{
-        opacity: 0.7;
-    }
-    :host(.accent:focus)::before{
-        opacity: 0.80;
-    }
-    :host(.accent[pressed])::after{
-        opacity: 0.75;
     }
     @keyframes ripple {
         0% {
             transform: scale(0);
         }
         30% {
-            transform: scale(0.3);
+            transform: scale(1);
         }
         100% {
             transform: scale(2.2);
@@ -98,10 +86,6 @@ export class Ripple extends LitElement{
         this.removeEventListener('mouseout', this._onMouseOut);
         this.removeEventListener('mousedown', this._onMouseDown);
         this.removeEventListener('touchstart', this._onTouchStart);
-    }
-
-    protected render(): unknown {        
-        return html`<slot></slot>`
     }
     
     private _startPress(x: number, y: number){

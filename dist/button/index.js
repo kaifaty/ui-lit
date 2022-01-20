@@ -15,6 +15,8 @@ let LitButton = class LitButton extends focusable(LitElement) {
         /** @ignore  */
         this._loading = false;
         /** @prop {"button" | "submit"} type */
+        this.align = 'center';
+        /** @prop {"button" | "submit"} type */
         this.type = 'button';
         this.size = 'medium';
         /** @prop {boolean} disabled - Disable element */
@@ -32,6 +34,7 @@ let LitButton = class LitButton extends focusable(LitElement) {
         this.between = false;
         /** @prop {boolean} switchOn - switch State. true - enabled, false disabled */
         this.switchOn = false;
+        this.accent = false;
         this.notifyOnClick = false;
         /** @ignore  */
         this._notifyIcon = false;
@@ -42,8 +45,9 @@ let LitButton = class LitButton extends focusable(LitElement) {
         this._width = 0;
         /** @ignore  */
         this._onKeyDown = (e) => {
-            if (e.key === "Enter" || e.key === "Space") {
+            if (e.key === "Enter" || e.key === " ") {
                 this.submit();
+                e.preventDefault();
             }
         };
     }
@@ -71,10 +75,11 @@ let LitButton = class LitButton extends focusable(LitElement) {
     /** @ignore  */
     get classes() {
         return {
+            button: true,
             wrapper: true,
             noselect: true,
             checkmark: this._notifyIcon,
-            accent: this.primary || this.success || this.danger
+            accent: this.primary || this.success || this.danger || this.accent
         };
     }
     /** @ignore  */
@@ -85,7 +90,7 @@ let LitButton = class LitButton extends focusable(LitElement) {
         return html `${this.loading
             ? html `<lit-spinner small></lit-spinner>`
             : html `<slot name = "icon-before"></slot>`}
-                    <span><slot></slot></span>
+                    <div part = "content" class = "content"><slot></slot></div>
                     <slot name = "icon-after"></slot>`;
     }
     /**
@@ -95,8 +100,8 @@ let LitButton = class LitButton extends focusable(LitElement) {
     render() {
         const styles = this._width ? { width: this._width + 'px' } : {};
         return html `
-            <lit-ripple 
-                role = "button"
+            <button role = "button"
+                
                 aria-pressed = "${this.type === 'switch' ? this.switchOn : 'undefined'}"
                 tabindex = "${this.tabindex}" 
                 style = "${styleMap(styles)}"
@@ -104,7 +109,7 @@ let LitButton = class LitButton extends focusable(LitElement) {
                 @click = "${this.click}"
                 @focus = "${this._onFocus}"
                 @blur = "${this._onBlur}"
-            >${this._contentTemplate()}</lit-ripple>`;
+            >${this._contentTemplate()}</button><lit-ripple></lit-ripple>`;
     }
     // ==== Events ====
     /** @ignore  */
@@ -154,6 +159,9 @@ let LitButton = class LitButton extends focusable(LitElement) {
 LitButton.styles = button;
 __decorate([
     property({ type: String, attribute: true })
+], LitButton.prototype, "align", void 0);
+__decorate([
+    property({ type: String, attribute: true })
 ], LitButton.prototype, "type", void 0);
 __decorate([
     property({ type: String, reflect: true, attribute: true })
@@ -179,6 +187,9 @@ __decorate([
 __decorate([
     property({ type: Boolean, reflect: true })
 ], LitButton.prototype, "switchOn", void 0);
+__decorate([
+    property({ type: Boolean, reflect: true })
+], LitButton.prototype, "accent", void 0);
 __decorate([
     property({ type: Boolean })
 ], LitButton.prototype, "notifyOnClick", void 0);

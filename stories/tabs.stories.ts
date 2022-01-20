@@ -11,9 +11,8 @@ const Tabs = (data: ITabs) =>
             type = "${data.type || 'button'}"
             ?disabled = "${data.disabled}">
         <lit-tab value = "1">Tab 1</lit-tab>
-        <lit-tab value = "2">Tab 2</lit-tab>
+        <lit-tab value = "2">Tab looong 2</lit-tab>
         <lit-tab value = "3">Tab 3</lit-tab>
-        <lit-tab value = "4">Tab 4</lit-tab>
     </lit-tabs>`;
 
 const Template: Story<Partial<ITabs>> = (args) => Tabs(args as ITabs);

@@ -52,12 +52,13 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
     
     @property({type: String}) pattern: string = '';
     @property({type: String}) placeholder: string = '';
+    @property({type: String}) autocomplete: 'on' | 'off' | 'current-password' = 'off';
     @property({type: String}) inputmode: TInputMode = 'text';
     @property({type: String}) type: TFileldTypes = 'text';
 
     @property({type: Boolean}) useCancelButton: boolean = false;
     @property() icon: string | TemplateResult = '';
-    #inputRef: Ref<HTMLInputElement> = createRef();
+    private _inputRef: Ref<HTMLInputElement> = createRef();
 
     @state() hiddenPassword = true
 
@@ -102,7 +103,6 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
         }
         return this.type
     }
-
 
     public validate(){
         if(this.type === 'date'){
@@ -160,7 +160,8 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
         ${super.render()}
         <div class = "wrapper" >
             <input type = "${this._getType()}" 
-                ${ref(this.#inputRef)}
+                ${ref(this._inputRef)}
+                autocomplete = "${this.autocomplete}"
                 placeholder = "${this.placeholder}"
                 spellcheck = "${this.spellcheck}"
                 inputmode = "${this.inputmode}"

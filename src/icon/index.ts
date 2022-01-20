@@ -1,5 +1,6 @@
 import { LitElement, css, PropertyDeclarations,  } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
+import { iconStyle } from './styles';
 
 export interface IIconProps{
     material: boolean
@@ -113,49 +114,7 @@ export class LitIcon extends LitElement{
         }
     };
     @property({type: String, reflect: true}) icon: string = '';
-    static styles = css`
-    :host{
-        cursor: pointer;
-        display: inline-block;
-        cursor: pointer;
-        text-transform: none !important;
-        font-family: var(--lit-icon-font-family, 'Icons');
-        color: var(--lit-icon-color, #000);
-        font-size: var(--lit-icon-font-size, 12px);
-        
-        font-weight: normal;
-        font-style: normal;
-        line-height: 1;
-        letter-spacing: normal;
-        text-transform: none;
-        display: inline-block;
-        white-space: nowrap;
-        word-wrap: normal;
-        direction: ltr;
-        -moz-font-feature-settings: 'liga';
-        -moz-osx-font-smoothing: grayscale;
-
-        -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-            -khtml-user-select: none; /* Konqueror HTML */
-            -moz-user-select: none; /* Old versions of Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-                user-select: none; /* Non-prefixed version, currently
-                                        supported by Chrome, Edge, Opera and Firefox */
-    }
-    :host([danger]),
-    :host([error]){
-        color: var(--lit-error-color, red);
-    }
-    :host([success]){
-        color: var(--lit-success-color, green);
-    }
-    :host([icon=back]),
-    :host([icon=arrow-left]){
-        transform-origin: center;
-        transform: rotate(90deg);
-    }
-    `
+    static styles = iconStyle;
     render(){
         const code = LitIcon.iconsMap[this.icon];
         if(code){

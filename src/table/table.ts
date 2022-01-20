@@ -5,6 +5,7 @@ import { repeat } from 'lit/directives/repeat';
 import '../pagination';
 import { scrollbar } from '../styles/scrollbar';
 import { ResizeObserverController } from '../controllers/ResizeObserverController';
+import { tableStyles } from './styles';
 
 export type ISourceItem = {
     key: string;
@@ -18,7 +19,7 @@ export interface TFilterItem {
     value: string | number | boolean;
     checked?: boolean;
     placeholder?: string;
-    //name?: string
+    name?: string
     type?: TFilterType
     onFilter?: (value: string | number | boolean, record: ISourceItem) => boolean;
 }
@@ -56,87 +57,7 @@ export class TableElement extends LitElement{
             headerHeight: {type: Number},
         }
     }
-    static styles = [css`
-    :host{
-        display: grid;
-        --lit-cells: 4;
-        --row-height: 30px;
-        --header-height: 50px;
-        font-size: var(--lit-table-font-size);
-        position: relative;
-    }
-    :host([pagination]){
-        display: grid;
-        grid-template-rows: auto 26px;
-    }
-    :host(:not([pagination])) footer{
-        display: none;
-    }
-    
-    table{
-        border-collapse: collapse;
-        width: 100%;
-    }
-    table.nodata {
-        height: 100%;
-    }
-    table.nodata td{
-        height: auto;
-    }
-    tbody td{
-        padding: var(--lit-cell-padding, 0 15px);
-        height: var(--row-height);
-        white-space: nowrap;
-    }
-    tbody td.ellipses{
-        max-width: 1px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-    tbody td.half-hidden{
-        opacity: 0.5;
-    }
-    th{
-        height: var(--header-height, 35px);
-        padding: 0;
-    }
-    th:not(:last-child) lit-table-header::after{
-        content: '';
-        position: absolute;
-        width: 1px;
-        height: 50%;
-        display: inline-block;
-        background-color: var(--lit-table-header-separator, rgba(0,0,0,0.2));
-        top: 50%;
-        right: 0;
-        transform: translate(0, -50%);
-    }
-    main{
-        overflow-y: auto;
-    }
-    .nodata svg{
-        fill: var(--lit-icon-color);
-        opacity: 0.1;
-    }
-    lit-pagination{
-        display: flex;
-        align-content: end;
-    }
-    footer{
-        display: flex;
-        justify-content: space-between;
-    }
-    .ellipses.col-wrapper{
-        display: flex;
-        align-items: center;
-        overflow:hidden;
-    }
-    .ellipses.col-wrapper > *{
-        text-overflow:ellipsis;
-        overflow:hidden;
-        white-space:nowrap;
-    }
-    `, scrollbar];
+    static styles = [tableStyles, scrollbar];
     private  RO = new ResizeObserverController(this);
     private  _columns: TColumnItem[] = [];
     set columns(value: TColumnItem[]){

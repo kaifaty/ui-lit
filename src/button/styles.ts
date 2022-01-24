@@ -20,9 +20,73 @@ export const buttonCSSVars = {
         name: "display",
         default: "inline-flex",
     },
+    primaryColor: {
+        name: "primary-color",
+        default: "hsl(264, 80%, 98%)",
+    },
+    primaryBackground: {
+        name: "primary-background",
+        default: "hsl(264, 80%, 55%)",
+    },
+    primaryRipple: {
+        name: "primary-ripple",
+        default: "hsl(264, 80%, 98%)",
+    },
+    primaryBorder: {
+        name: "primary-border",
+        default: "1px solid hsl(264, 80%, 55%)",
+    },
+    primaryOutlineFocus: {
+        name: "primary-outline-focus",
+        default: "1px solid hsl(264, 80%, 75%)",
+    },
+    successColor: {
+        name: "success-color",
+        default: "hsl(110, 80%, 4%)",
+    },
+    successBackground: {
+        name: "success-background",
+        default: "hsl(110, 80%, 55%)",
+    },
+    successRipple: {
+        name: "success-ripple",
+        default: "hsl(110, 80%, 98%)",
+    },
+    successBorder: {
+        name: "success-border",
+        default: "1px solid hsl(110, 80%, 55%)",
+    },
+    successOutlineFocus: {
+        name: "success-outline-focus",
+        default: "1px solid hsl(110, 80%, 35%)",
+    },
+    dangerColor: {
+        name: "danger-color",
+        default: "hsl(5, 80%, 98%)",
+    },
+    dangerRipple: {
+        name: "danger-ripple",
+        default: "hsl(5, 80%, 98%)",
+    },
+    dangerBackground: {
+        name: "danger-background",
+        default: "hsl(5, 80%, 55%)",
+    },
+    dangerBorder: {
+        name: "danger-border",
+        default: "1px solid hsl(5, 80%, 55%)",
+    },
+    dangerOutlineFocus: {
+        name: "danger-outline-focus",
+        default: "1px solid hsl(5, 80%, 35%)",
+    },
     iconGap: {
         name: "icon-gap",
         default: "8px",
+    },
+    justify: {
+        name: "justify",
+        default: "center",
     },
     smallHeight: {
         name: "small-height",
@@ -94,7 +158,7 @@ export const buttonCSSVars = {
     },
     background: {
         name: "background",
-        default: "hsl(264, 100%, 46%)",
+        default: "initial",
     },
     backgroundFocus: {
         name: "background-focus",
@@ -119,7 +183,8 @@ export const buttonCSSVars = {
     switchOnOutlineFocus: {
         name: "switch-outline-focus",
         default: "1px solid hsl(264, 100%, 46%)",
-    }
+    },
+    
 } 
 
 const _prefix = "--lit-button-" ;
@@ -137,7 +202,7 @@ export const button = [
     :host{
         display: ${_v.display};
         position: relative;
-        ${iconCSSVarNames.color}: ${_v.color};      
+        ${iconCSSVarNames.color}: ${_v.color};
     }
     
     :host([size = "small"]) .wrapper{
@@ -172,10 +237,10 @@ export const button = [
         -webkit-tap-highlight-color: transparent;
         cursor: pointer;
         display: grid;
-        gap: var(--lit-button-icon-gap, 8px);
+        gap: ${_v.iconGap};
         box-sizing: border-box;
         align-items: center;
-        justify-content: center;
+        justify-content: ${_v.justify};
         grid-auto-flow: column;
         width: 100%;
         height: 100%;
@@ -188,7 +253,7 @@ export const button = [
         font-weight: ${_v.weight};
         color: ${_v.color};
         font-family: inherit;
-        background-color: initial;
+        background-color: ${_v.background};
         overflow: hidden;
     }
     :host .wrapper:focus{
@@ -224,24 +289,44 @@ export const button = [
     :host([borderless]) .wrapper,
     :host([borderless]) .wrapper.hover{
         border: none;
-        
-    }`,
-    ...defaultStates.map(k => {
-        const key = unsafeCSS(k.key);
-        const h = unsafeCSS(k.defaultColor);
-        const color = unsafeCSS(((k.defaultColor < 30 || k.defaultColor > 190) ? 95 : 5) + "%");
+    }
 
-        return css`
-        :host([${key}]){
-            --${key}-hue: var(--lit-${key}-hue, ${h});       
-            --ripple-background:  hsl(var(--${key}-hue), 95%, 14%);
-            ${iconCSSVarNames.color}: var(--lit-button-${key}-color, hsl(var(--${key}-hue), 95%, 98%));
-        }
-        :host([${key}]) .wrapper{
-            color: var(${buttonCSSPrefix}${key}-color, hsl(var(--${key}-hue), 95%, ${color}));
-            border: var(${buttonCSSPrefix}${key}-border, 1px solid hsl(var(--${key}-hue), 50%, 85%));
-            background: var(${buttonCSSPrefix}${key}-background, hsl(var(--${key}-hue), 95%, 55%));
-        }
-        `
-    })
+    :host([primary]){
+        ${iconCSSVarNames.color}: ${_v.primaryColor};
+        --ripple-background: ${_v.primaryRipple};
+    }
+    :host([primary]) .wrapper{
+        color: ${_v.primaryColor};
+        background: ${_v.primaryBackground};
+        border: ${_v.primaryBorder};
+    }
+    :host([primary]) .wrapper:focus{
+        outline: ${_v.primaryOutlineFocus};
+    }
+
+    :host([success]){
+        ${iconCSSVarNames.color}: ${_v.successColor};
+        --ripple-background: ${_v.successRipple};
+    }
+    :host([success]) .wrapper{
+        color: ${_v.successColor};
+        background: ${_v.successBackground};
+        border: ${_v.successBorder};
+    }
+    :host([success]) .wrapper:focus{
+        outline: ${_v.successOutlineFocus};
+    }
+
+    :host([danger]){
+        ${iconCSSVarNames.color}: ${_v.dangerColor};
+        --ripple-background: ${_v.dangerRipple};
+    }
+    :host([danger]) .wrapper{
+        color: ${_v.dangerColor};
+        background: ${_v.dangerBackground};
+        border: ${_v.dangerBorder};
+    }
+    :host([danger]) .wrapper:focus{
+        outline: ${_v.dangerOutlineFocus};
+    }`
 ];

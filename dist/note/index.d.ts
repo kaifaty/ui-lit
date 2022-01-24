@@ -1,10 +1,9 @@
 import { LitElement } from 'lit';
-import { OuterClickRemoveController } from '../controllers/OuterClickRemoveController';
 export declare class LitNote extends LitElement {
     static styles: import("lit").CSSResult;
-    _hosted: number;
-    _minShowTime: number;
-    _handle: OuterClickRemoveController;
+    private _hosted;
+    private _minShowTime;
+    private _handle;
     getSize(): {
         width: number;
         height: number;

@@ -1,2 +1,2 @@
-export declare const inputCSSVarNames: Record<"display" | "height" | "padding" | "border" | "color" | "background" | "outlineFocus" | "fontSize" | "align", import("lit").CSSResultOrNative>;
+export declare const inputCSSVarNames: Record<"outlineFocus" | "color" | "fontSize" | "display" | "height" | "padding" | "border" | "background" | "align" | "errorBorder" | "errorOutline", import("lit").CSSResultOrNative>;
 export declare const input: import("lit").CSSResult;

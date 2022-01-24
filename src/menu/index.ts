@@ -1,15 +1,12 @@
-import { LitElement, html, css } from 'lit';
+import { LitElement, html } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
 import '../button';
 import './item';
+import { menuStyles } from './styles';
 
 @customElement('lit-menu')
 export class LitMenu extends LitElement{
-    static styles = css`
-    :host{
-        display: inline-block;
-    }
-    `
+    static styles = menuStyles
     @property({type: String}) label: string = '';
 
     protected render() {

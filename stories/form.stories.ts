@@ -21,7 +21,16 @@ const Button = (data: IFormProps) =>
             <div style = "grid-column: 1/3; display: flex; justify-content: center;">
                 <lit-button primary type = "submit">Submit</lit-button>
             </div>
-    </lit-form>`;
+    </lit-form>
+    <form @submit = "${e => e.preventDefault()}">
+        
+        <label-element for = "name">Name:</label-element> 
+        <lit-textfield autocomplete = "on" name = "email" id = "name" ></lit-textfield>
+        <input name = "qwe">
+        <button type = "submit">Submit</button>
+    </form>
+    
+    `;
 
 
 const Template: Story<Partial<IFormProps>> = (args) => Button(args as IFormProps);

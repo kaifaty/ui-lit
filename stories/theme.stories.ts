@@ -73,8 +73,41 @@ const Theme = (data: IThemeProps) =>
             <lit-theme-configer></lit-theme-configer>
         </header>
         <lit-divider></lit-divider>
-        <main>
-            
+        <main style = "--lit-circle-color: #fff;">
+            <div>
+                <lit-header level = "3">Text</lit-header>
+                <lit-text>Text</lit-text><br>
+                <lit-text status = "success">Text success</lit-text><br>
+                <lit-text status = "attention">Text attention</lit-text><br>
+                <lit-text status = "danger">Text danger</lit-text><br>
+                <lit-text status = "accented">Text accented</lit-text><br>
+            </div>
+            <div>
+                <lit-header level = "3">Link</lit-header>
+                <lit-link underlined>Underlined link</lit-link><br><br>
+                <lit-link>Link</lit-link>
+            </div>
+            <div>
+                <lit-header level = "3">Note</lit-header>
+                <lit-note>Note</lit-note><br><br>
+                <lit-note error>Error Note</lit-note>
+            </div>
+            <div>
+                <lit-header level = "3">Tooltip</lit-header>
+                <lit-tooltip >
+                    Tooltip
+                    <span slot = "tooltip">Content</span>
+                </lit-tooltip>
+            </div>
+            <div>
+                <lit-header level = "3">Panel</lit-header>
+                <lit-panel value = "1">
+                    Panel text 
+                </lit-panel>
+                <lit-panel value = "1" danger>
+                    Panel danger 
+                </lit-panel>
+            </div>
             <div>
                 <lit-header level = "3">Select</lit-header>
                 <lit-select value = "1">
@@ -111,6 +144,8 @@ const Theme = (data: IThemeProps) =>
             <div>
                 <lit-header level = "3">Table</lit-header>
                 <lit-table 
+                    pagination
+                    paginationToHeight
                     .rowHeight = "${40}"
                     .dataSource = "${tableData}" 
                     .columns = "${columns}">
@@ -130,19 +165,17 @@ const Theme = (data: IThemeProps) =>
             <div>
                 <lit-header level = "3">Inputs</lit-header>
                 <div class = "containter">
+                    <lit-label for = "number">Number field</lit-label> 
+                    <lit-numberfield id = "number" placeholder = "number"></lit-numberfield>
+                
+                    <lit-label for = "textfield">Text field</lit-label> 
+                    <lit-textfield id = "textfield" placeholder = "text"></lit-textfield>
 
-                        <lit-label for = "number">Number field</lit-label> 
-                        <lit-numberfield id = "number" placeholder = "number"></lit-numberfield>
-                    
-                        <lit-label for = "textfield">Text field</lit-label> 
-                        <lit-textfield id = "textfield" placeholder = "text"></lit-textfield>
-
-                        <div>
-                            <lit-label for = "textarea">Text area</lit-label>
-                            <lit-description>Description of text area</lit-description>
-                        </div>
-                        <lit-textarea id = "textarea" placeholder = "textarea"></lit-textarea>
-                    
+                    <div>
+                        <lit-label for = "textarea">Text area</lit-label>
+                        <lit-description>Description of text area</lit-description>
+                    </div>
+                    <lit-textarea id = "textarea" placeholder = "textarea"></lit-textarea>                    
                 </div>
             </div>
             <div>
@@ -187,10 +220,9 @@ const Theme = (data: IThemeProps) =>
                     <lit-spinner></lit-spinner>
                 </div>
             </div>
-            <div>
+            <div >
                 <lit-header level = "3">Circle</lit-header>
                 <lit-circle 
-                    style = "--lit-circle-color: #d11198;"
                     size = "50"
                     percent = "55"></lit-circle>
             </div>

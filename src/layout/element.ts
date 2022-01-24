@@ -2,61 +2,11 @@ import { LitElement, html, css } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import '../icon';
 import type { LitLayoutGrid } from './grid';
+import { element } from './styles';
 
 @customElement("lit-layout")
 export class LitLayout extends LitElement{
-  static styles = css`
-    :host{
-      display: block;
-      box-sizing: border-box;
-      width: var(--width, 200px);
-      height: var(--height, 200px);
-      padding: var(--lit-layout-padding, 3px);
-      position: absolute;
-      left: var(--left, 0);
-      top: var(--top, 0);
-      z-index: var(--z-index, 1);
-    }
-    .wrapper{
-      background-color: var(--lit-layout-background, #ccc);
-      padding: 3px 6px;
-      box-sizing: border-box;
-      height: 100%;
-
-    }
-
-    .resize, .move{
-      opacity: 0.5;
-      font-size: 10px;
-    }
-    .move{
-      position: absolute;
-      right: -4px;
-      top: -2px;
-      z-index: 10;
-      padding: 5px;
-      
-    }
-    .resize{
-      position: absolute;
-      right: -3px;
-      bottom: -2px;
-      transform-origin: center;
-      transform: scaleX(-1);
-      cursor: nw-resize;
-      padding: 5px;
-      z-index: 10;
-      --icon-font-size: 7px;
-    }
-    .move{
-      cursor: move;
-      padding: 0 4px 0 0;
-    }
-    :host(.move),
-    :host(.resize){
-      pointer-events: none;
-    }
-  `;
+  static styles = element;
   @property({type: Number}) minWidth: number = 240;
   @property({type: Number}) maxWidth: number = 520;
   @property({type: Number}) minHeight: number = 240;

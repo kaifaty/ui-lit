@@ -7,7 +7,6 @@ import { ICircleProps } from '../src/circlepercent';
  
 const Circle = (data: ICircleProps) => 
     html`<lit-circle 
-            style = "--lit-circle-color: #d11198; --lit-percent-size: 50px;"
             size = "50"
             percent = "${data.percent}"></lit-circle>`;
 

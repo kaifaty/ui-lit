@@ -6,7 +6,6 @@ import '../icon';
 import { input } from '../styles/input';
 import { live } from 'lit/directives/live.js';
 import { createRef, ref, Ref } from 'lit/directives/ref.js';
-import { TInputMode } from '../textfield/index';
 import { labled } from '../mixins/labled';
 import { focusable } from '../mixins/focusable/index';
 import { Focusable } from '../mixins/focusable/inderface';

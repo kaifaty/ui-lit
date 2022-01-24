@@ -12,6 +12,18 @@ export const selectCSSVars = {
         name: "height",
         default: "30px"
     },
+    background: {
+        name: "background",
+        default: "initial"
+    },
+    rippleBackground: {
+        name: "ripple-background",
+        default: "hsl(264, 65%, 55%)"
+    },
+    border: {
+        name: "border",
+        default: "1px solid #ccc"
+    },
     padding: {
         name: "padding",
         default: "0 14px"
@@ -22,15 +34,11 @@ export const selectCSSVars = {
     },
     optionBackground: {
         name: "option-background",
-        default: "hsl(246, 65%, 69%)"
+        default: "hsl(264, 65%, 99%)"
     },
     circleColor:{
         name: "option-circle-color",
-        default: "hsl(246, 65%, 55%)"
-    },
-    listboxBackground:{
-        name: "listbox-background",
-        default: "#fff"
+        default: "hsl(264, 65%, 55%)"
     },
     listboxBorder:{
         name: "listbox-border",
@@ -45,7 +53,7 @@ export const selectCSSVars = {
         default: "hsl(246, 15%, 99%)"
     },
     fullscreenBackground:{
-        name: "fullscreen-color",
+        name: "fullscreen-background",
         default: "hsl(246, 15%, 18%)"
     },
     fullscreenOverlayBackground:{
@@ -53,7 +61,7 @@ export const selectCSSVars = {
         default: "rgba(0,0,0,0.6)"
     },
     fullscreenShadow:{
-        name: "fullscreen-color",
+        name: "fullscreen-shadow",
         default: "rgba(0,0,0,0.3)"
     }
 }
@@ -68,7 +76,9 @@ export const selectStyles = css`
     position: relative;
     height: ${_v.height};
     ${button.mediumPadding}: ${_v.padding};
-    
+    ${button.border}: ${_v.border};
+    ${button.borderRadius}: 0;
+    --ripple-background: ${_v.rippleBackground};
 }
 ::part(content){
     overflow: hidden;
@@ -85,6 +95,8 @@ lit-button{
     height: 100%;
     ${button.mediumHeight}: 100%;
     color: ${_v.color};
+    ${button.background}: ${_v.background};
+    
 }`;
 
 export const optionStyles = css`
@@ -92,6 +104,7 @@ export const optionStyles = css`
     display: block;
     height: ${_v.height};
     color: ${_v.optionColor};
+    ${buttonCSSVarsNames.background}: ${_v.optionBackground};
 }
 :host([selected]) span::after{
     width: 8px;
@@ -109,6 +122,7 @@ export const optionStyles = css`
 }
 lit-button{
     width: 100%;
+
 }
 :host(:not([selected])) lit-button:hover span::after,
 :host(:not([selected])) lit-button[pressed] span::after
@@ -148,17 +162,6 @@ export const listboxStyles = css`
     max-height: 330px;
     border: ${_v.listboxBorder};
     box-shadow: 3px calc(3px * var(--shadow-pos)) 6px ${_v.listboxShadow};    
-    background-color: ${_v.listboxBackground};    
-}
-:host([mobile][open]) {
-    position: fixed;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    background-color: ${_v.fullscreenOverlayBackground};
-    z-index: 1;
 }
 :host([mobile]) .wrapper{
     border-radius: 5px;
@@ -169,13 +172,21 @@ export const listboxStyles = css`
     border: none;
     color: ${_v.fullscreenColor};
     box-shadow: 3px 3px 3px ${_v.fullscreenShadow};    
-    --ripple-background: ${_v.fullscreenBackground};    
+    ${button.background}: ${_v.fullscreenBackground}; 
 
 }
 :host([mobile]){
+    display: none;
+    background-color: ${_v.fullscreenOverlayBackground};
+    align-items: center;
+    justify-content: center;
     position: fixed;
-    height: 100%;
-    width: 100%;
+    width: 100vw;
+    height: 100vh;
     top: 0;
     left: 0;
+    z-index: 1;
+}
+:host([mobile][open]) {
+    display: flex;
 }`

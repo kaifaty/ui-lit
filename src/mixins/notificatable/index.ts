@@ -15,16 +15,6 @@ type TNotificatable = FormAssociatedElement & INotification;
 export const notificatable = <T extends Constructor<FormAssociatedElement>>(superClass: T) => {
     class Notificatable extends superClass implements TNotificatable{
         
-        static styles = [
-            ...(superClass as any).elementStyles, 
-            css`    
-            :host([invalid]) input{
-                border: 1px solid var(--lit-error-border, #ff7e6d);
-            }
-            :host([invalid]) input:focus{
-                outline: 1px solid var(--lit-error-border, #ff7e6d);
-            }`
-        ];
         
         @property({type: Boolean, reflect: true}) showNote: boolean = false;
         private _noteRef = createRef<LitNote>();
@@ -55,18 +45,18 @@ export const notificatable = <T extends Constructor<FormAssociatedElement>>(supe
             if(this.showNote){
                 return html`<lit-note 
                     @close = "${this._handleCloseNote}" 
-                    style = "transform: translate(0, 100%);"
+                    error
+                    style = "transform: translate(0, calc(3px + 100%));"
                     class = "error" ${ref(this._noteRef)}>${this.validationMessage}</lit-note>`;
             }
             return nothing;
         }
-        /*
-        reportValidity(){            
-            const validity = super.reportValidity();
-            this.showNote = !validity;
-            return validity;
+        protected updated(_changedProperties: Map<string | number | symbol, unknown>): void {
+            super.updated(_changedProperties);
+            if(this.showNote === true){
+                
+            }
         }
-        */
         private _handleCloseNote(){
             this.showNote = false;
         }

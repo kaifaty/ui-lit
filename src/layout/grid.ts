@@ -2,6 +2,7 @@ import { LitElement, html, css } from 'lit';
 import { property, customElement, query, state, queryAll} from 'lit/decorators.js';
 import type { LitLayout } from './element';
 import { scrollbar } from '../styles/scrollbar';
+import { grid } from './styles';
 
 export interface TPosition {
     top: number, 
@@ -20,42 +21,7 @@ export interface ILayoutElementProps extends TPosition{
 
 @customElement("lit-layout-grid")
 export class LitLayoutGrid extends LitElement{
-    static styles = [
-        css`
-        :host{
-            display: block;
-            width: 100%;
-            height: 100%;
-        }
-        .wrapper{
-            overflow: auto;         
-            width: 100%;
-            height: 100%;
-            position: relative;
-            background-color: var(--lit-layout-grid-background, #eee);
-            
-        }
-        .wrapper.move{
-            cursor: move;
-        }
-        .shadow{
-            display: none;
-            position: absolute;
-            background-color: var(--lit-layout-shadow-background, #fff);
-            z-index: 0;
-            top: 0;
-            left: 0;
-            opacity: 0.5;
-        }
-        .move .shadow{
-            transition: ease-out 0.1s;
-        }
-        .shadow.show{
-            display: block;
-        }
-        `,
-        scrollbar
-    ];
+    static styles = [grid, scrollbar];
     
     @query(".shadow") shadow!: HTMLElement;
     @query(".wrapper ") wrapper!: HTMLElement;

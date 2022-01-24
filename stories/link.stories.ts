@@ -8,6 +8,7 @@ import { Story, Meta } from '@storybook/web-components';
 
 const Link = (data: ILinkProps) => 
     html`<lit-link 
+        .underlined = "${data.underlined}"
         .rel = "${data.rel}"
         .target = "${data.target}"
         .href = "${data.href ? data.href : undefined}"
@@ -21,6 +22,7 @@ Default.args = {
     href: '/',
     rel: '',
     target: '_blank',
+    underlined: false,
 }
 export default {
     title: 'Text/Link Element',

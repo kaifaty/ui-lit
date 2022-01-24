@@ -5,79 +5,69 @@ const defaultFilled = "hsl(264, 100%, 60%)";
 
 export const RangeCSSVars = {
     size: {
-        name: "--lit-range-thumb-size",
+        name: "thumb-size",
         default: "16px"
     },
     outlineFocus: {
-        name: "--lit-range-outline-focus",
+        name: "outline-focus",
         default: "1px dashed rgba(0,0,0,0.5)"
     },
     
     trackBackground: {
-        name: "--lit-range-track-background",
+        name: "track-background",
         default: "#eee"
     },
     trackBackgroundHover: {
-        name: "--lit-range-track-background-hover",
+        name: "track-background-hover",
         default: "#ddd"
     },
     trackOutline: {
-        name: "--lit-range-track-outline",
+        name: "track-outline",
         default: "1px solid #999"
     },
 
 
     thumbBackground: {
-        name: "--lit-range-thumb-background",
+        name: "thumb-background",
         default: "hsl(264, 10%, 40%)" 
     },
     thumbBackgroundHover: {
-        name: "--lit-range-thumb-background-hover",
+        name: "thumb-background-hover",
         default: "hsl(264, 10%, 20%)"
     },
     thumbBackgroundPressed: {
-        name: "--lit-range-thumb-background-pressed",
+        name: "thumb-background-pressed",
         default: defaultFilled
     },
     thumbOutline: {
-        name: "--lit-range-thumb-outline",
+        name: "thumb-outline",
         default: "2px solid  hsl(264, 100%, 99%)"
     },
     thumbOutlineFullfiled: {
-        name: "--lit-range-thumb-fillfiled-outline",
-        default: "var(--lit-range-thumb-outline, 2px solid  hsl(264, 100%, 99%))"
+        name: "thumb-fillfiled-outline",
+        default: "var(thumb-outline, 2px solid  hsl(264, 100%, 99%))"
     },
     thumbShadow: {
-        name: "--lit-range-thumb-shadow",
+        name: "thumb-shadow",
         default: "0 1px 3px hsl(264, 100%, 20%)"
     },
     pointBackground: {
-        name: "--lit-range-points-background",
+        name: "points-background",
         default: "#eee"
     },
-    pointOutlineColor: {
-        name: "--lit-range-points-outline-color",
-        default: "hsl(264, 100%, 80%)"
-    },
-
-    pointOutlineColorHover: {
-        name: "--lit-range-points-outline-color-hover",
-        default: "hsl(264, 100%, 80%)"
-    },
-
     filled: {
-        name: "--lit-range-filled",
+        name: "filled",
         default: defaultFilled
     },
     filledHover: {
-        name: "--lit-range-filled-hover",
+        name: "filled-hover",
         default: "hsl(264, 100%, 50%)"
     },
 }
 
-const _v = makeCSSProxy(RangeCSSVars);
+const _v = makeCSSProxy(RangeCSSVars, "--lit-range-");
 
-export const cssRangeNames = makeCSSNameProxy(RangeCSSVars);
+export const rangeCSSNames = makeCSSNameProxy(RangeCSSVars, "--lit-range-");
 
 
 export const rangeStyles = css`
@@ -105,13 +95,7 @@ export const rangeStyles = css`
 .wrapper:focus{
     outline: ${_v.outlineFocus};
 }
-:host([hover]),
-:host([pressed]){                
-    --lit-range-track-background: ${_v.trackBackgroundHover};
-    --lit-range-filled: ${_v.filledHover};
-    --lit-range-track-background: ${_v.trackBackgroundHover};
-    
-}
+
 .wrapper{
     min-width: 100px;
     position: relative;
@@ -142,6 +126,9 @@ export const rangeStyles = css`
     position: relative;
     cursor: pointer;
 }
+:host([hover]) .track-line{
+    background: linear-gradient(to right, ${_v.filledHover} var(--percent), ${_v.trackBackgroundHover} var(--percent));
+}
 .track-line{
     width: 100%;
     height: var(--line-height);
@@ -158,10 +145,12 @@ export const rangeStyles = css`
     width: var(--size, 14px);
     height: var(--size, 14px);
 }
+
 .thumb.fullfiled{
     background-color: ${_v.filled};
     outline: ${_v.thumbOutlineFullfiled};
 }
+
 
 :host([hover]) .thumb{
     background-color: ${_v.thumbBackgroundHover};
@@ -185,7 +174,7 @@ export const rangeStyles = css`
     height: var(--pointer);
     border-radius: var(--pointer);
     background-color: ${_v.pointBackground};
-    outline: var(--pointer-border) solid ${_v.pointOutlineColor};
+    outline: var(--pointer-border) solid ${_v.trackBackground};
     transform: translate(-50%, 0);
     z-index: 1;
 }
@@ -193,10 +182,11 @@ export const rangeStyles = css`
     outline: var(--pointer-border) solid ${_v.filled};
     background-color: ${_v.filled};
 }
-:host([hover]) .point{
-    outline: var(--pointer-border) solid ${_v.pointOutlineColorHover};
-}
 :host([hover]) .point.filled{
-    outline: var(--pointer-border) solid ${_v.pointOutlineColorHover};
+    outline: var(--pointer-border) solid ${_v.filledHover};
+    background-color: ${_v.filledHover};
+}
+:host([hover]) .point:not(.filled){
+    outline: var(--pointer-border) solid ${_v.trackBackgroundHover};
 }
 `;

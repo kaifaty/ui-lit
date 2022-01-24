@@ -61,10 +61,10 @@ export const iconStyle = css`
 }
 :host([danger]),
 :host([error]){
-    color: ${_v.successColor};
+    color: ${_v.errorColor};
 }
 :host([success]){
-    color: ${_v.errorColor};
+    color: ${_v.successColor};
 }
 :host([icon=back]),
 :host([icon=arrow-left]){

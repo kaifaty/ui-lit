@@ -1,12 +1,9 @@
-import { noselectText } from '../styles/noselect';
-import { classMap } from 'lit/directives/class-map';
 import { LitElement, css, unsafeCSS, html, TemplateResult } from 'lit';
 import { formAssociated } from '../mixins/form-associated/index';
 import { property, customElement } from 'lit/decorators.js';
 import { FormAssociatedProps } from '../mixins/form-associated/interface';
 import { scrollbar } from '../styles/scrollbar';
 import { LitTab } from './tab';
-import { labled } from '../mixins/labled/index';
 import { focusable } from '../mixins/focusable/index';
 import { _vTabs as _v } from './styles';
 
@@ -40,14 +37,17 @@ export class LitTabs extends focusable(formAssociated(LitElement)) implements IT
         }
         .wrapper{
             display: flex;
+            width: 100%;
         }
         .scroll-wrapper:focus{
             outline: ${_v.outline};
         }
         .scroll-wrapper{
             overflow-y: hidden;
+            width: 100%;
         }
         .scroller{
+            width: 100%;
             overflow-x: scroll;
             overflow-y: hidden;
             margin-bottom: -17px;
@@ -57,7 +57,7 @@ export class LitTabs extends focusable(formAssociated(LitElement)) implements IT
         `, scrollbar];
     } 
 
-    @property({type: String}) type: TTabType = 'button';
+    @property({type: String}) type: TTabType = 'tab';
 
     private _tabs: LitTab[] = [];
     private _value: string = '';
@@ -65,6 +65,10 @@ export class LitTabs extends focusable(formAssociated(LitElement)) implements IT
     set selectedIndex(value: number){
         if(value > this._tabs.length || value < 0) return;
         this.value = this._tabs[value].value;
+        this.dispatchEvent(new CustomEvent('changed', {
+            detail: this.value,
+            bubbles: true
+        }));
     }
     get selectedIndex(){
         for(let i = 0; i < this._tabs.length; i++){

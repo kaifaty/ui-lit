@@ -161,7 +161,7 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
         <div class = "wrapper" >
             <input type = "${this._getType()}" 
                 ${ref(this._inputRef)}
-                autocomplete = "${this.autocomplete}"
+                autocomplete = "on"
                 placeholder = "${this.placeholder}"
                 spellcheck = "${this.spellcheck}"
                 inputmode = "${this.inputmode}"

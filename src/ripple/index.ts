@@ -21,6 +21,7 @@ export class Ripple extends LitElement{
         --click-x: 0;
         --click-y: 0;
         --click-size: 100px;
+        z-index: 0;
     }
     :host::after,
     :host::before{

@@ -237,7 +237,6 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
         const styles = this._width ? {width: this._width + 'px'} : {};
         return html`
             <button role = "button"
-                
                 aria-pressed = "${this.type === 'switch' ? this.switchOn : 'undefined'}"
                 tabindex = "${this.tabindex}" 
                 style = "${styleMap(styles)}"
@@ -245,7 +244,7 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
                 @click = "${this.click}"
                 @focus = "${this._onFocus}"
                 @blur = "${this._onBlur}"
-            >${this._contentTemplate()}</button><lit-ripple></lit-ripple>`;
+            >${this._contentTemplate()}</button><lit-ripple @click = "${this.click}"></lit-ripple>`;
     }
 
     // ==== Events ====

@@ -8,6 +8,7 @@ import type { IRangeProps } from '../src/range';
 const Range = (data: IRangeProps) => 
     html`
     <lit-range 
+        style = "width: 200px;"
         .value = "${data.value}"
         .valueAsNumber = "${data.valueAsNumber}"
         .min = "${data.min}"

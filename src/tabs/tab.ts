@@ -4,7 +4,7 @@ import { customElement, property, state } from 'lit/decorators.js';
 import type { TTabType, LitTabs } from './tabs';
 import '../button'
 import { focusable } from '../mixins/focusable/index';
-import { _vTabs as _v } from './styles';
+import { _vTabs as _v, tabsCSSVars } from './styles';
 
 /**
  * --lit-tab-color Tab color
@@ -35,7 +35,7 @@ export class LitTab extends focusable(LitElement){
         
     }
     :host([tab]){
-        ${buttonCSSVarsNames.border}: none;
+        border: none;
     }
     lit-button{
         width: 100%;
@@ -52,7 +52,7 @@ export class LitTab extends focusable(LitElement){
         position: absolute;
         width: 100%;
         height: 2px;
-        background-color: ${_v.color};
+        background-color: ${_v.indicator};
         bottom: 0;
         transform-origin: left;
     }

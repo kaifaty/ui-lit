@@ -38,6 +38,14 @@ const inputCSSVar = {
         name: "outline-focus",
         default: "1px solid  hsla(222, 20%, 60%, 0.5)"
     },
+    errorBorder: {
+        name: "error-border",
+        default: "1px solid hsl(5, 66%, 55%)"
+    },
+    errorOutline: {
+        name: "error-outline",
+        default: "1px solid hsl(5, 66%, 55%)"
+    },
 }
 
 const _v = makeCSSProxy(inputCSSVar, "--lit-input-");
@@ -94,8 +102,12 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active{
     box-shadow: 0 0 0 30px white inset
 }
-
-textarea{
+  
+:host([invalid]) input{
+    border: ${_v.errorBorder};
+}
+:host([invalid]) input:focus{
+    outline: ${_v.errorOutline};
 }
 
 textarea:focus::-webkit-input-placeholder {opacity: 0; transition: opacity 0.3s ease;}

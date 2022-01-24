@@ -21,7 +21,7 @@ export interface TFilterItem {
     placeholder?: string;
     name?: string
     type?: TFilterType
-    onFilter?: (value: string | number | boolean, record: ISourceItem) => boolean;
+    onFilter?: (value: string | number | boolean, record: ISourceItem, filters?: Map<string, TFilterItem[]> ) => boolean;
 }
 interface IFilters extends TFilterItem{
     key: string
@@ -161,7 +161,7 @@ export class TableElement extends LitElement{
                 cols[key].forEach(f => {
                     if (f.value || f.checked) {
                         const result = f.onFilter 
-                                        ? f.onFilter(f.value, it)
+                                        ? f.onFilter(f.value, it, this._filters)
                                         : it[key] == f.value
                         rowFilters.push(result);
                     }

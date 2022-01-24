@@ -36,7 +36,7 @@ export class LitOption extends focusable(LitElement){
             detail: this.value,
             composed: true,
             bubbles: true
-        }))
+        }));
     }
     updated(_changedProperties: Map<string | number | symbol, unknown>): void {
         this.ariaLabel = this.label || this.textContent || "";
@@ -49,9 +49,14 @@ export class LitOption extends focusable(LitElement){
                         tabIndex = "1"
                         @focus = "${this._focus}" 
                         @blur = "${this._blur}" >
-                    <slot></slot> <span slot = "icon-after"></span></lit-button>`
+                    <slot @slotchange = "${this._slotChange}"></slot> <span slot = "icon-after"></span></lit-button>`
     }
-    
+    private _slotChange(e: Event){
+        this.dispatchEvent(new CustomEvent('slotChanged', {
+            composed: true,
+            bubbles: true
+        }));
+    }
     private _focus(){
         document.addEventListener('keydown', this._handleFocus);
     }

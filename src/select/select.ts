@@ -30,7 +30,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
     //@property({type: String}) type: 'select-one' | 'select-multiple' = 'select-one';
 
     
-    isMenu = false;
+    public isMenu = false;
     private _open: boolean = false;
     set open(value: boolean){
         if(value === this._open){
@@ -67,7 +67,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
     get selectedContent(){
         const selected = this.options.find(it => it.selected);
         if(selected){
-            return selected.innerHTML
+            return selected.innerHTML;
         }
         return '-'
     }
@@ -118,11 +118,13 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         super.connectedCallback();
         this.addEventListener('optionConnected', this._optionConnect as EventListener);
         this.addEventListener('optionSelect', this._optionSelect as EventListener);
+        this.addEventListener('slotChanged', this._slotChanged as EventListener);
     }
     disconnectedCallback(): void {
         super.disconnectedCallback();
         this.removeEventListener('optionConnected', this._optionConnect as EventListener);
         this.removeEventListener('optionSelect', this._optionSelect as EventListener);
+        this.removeEventListener('slotChanged', this._slotChanged as EventListener);
     }
 
     optionDisconnect = (option: LitOption) => {
@@ -194,11 +196,13 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         </lit-listbox>`;
     }
 
-
-    private _focusNext = (e: CustomEvent) => {
+    private _slotChanged = () => {
+        this.requestUpdate();
+    }
+    private _focusNext(e: CustomEvent){
         (document.activeElement?.nextElementSibling as HTMLElement)?.focus();
     }
-    private _focusPrev = (e: CustomEvent) => {
+    private _focusPrev(e: CustomEvent){
         (document.activeElement?.previousElementSibling as HTMLElement)?.focus();
     }
 
@@ -207,10 +211,8 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
             this.open = !this.open;
         }
         if(e.key === "ArrowDown"){
-            
             if(this.isMenu){
                 const d = this._getSlotElements();
-                console.log(d)
                 d[this.selectedIndex + 1]?.focus();
             }
             else{

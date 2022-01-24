@@ -2,6 +2,7 @@ import { customElement, property } from 'lit/decorators.js';
 import { LitElement, css, html } from 'lit';
 import '../icon'
 import '../number'
+import { paginationStyles } from './style';
 
 export interface IPaginationProps{
     page: number
@@ -18,43 +19,7 @@ export class LitPagination extends LitElement{
             page: {type: Number},
         }
     }
-    static styles = [
-        css`
-        :host{
-            display: flex;
-            align-items: center;
-            box-sizing: border-box;
-            
-        }
-        lit-numberfield{
-            --lit-input-align: center;
-            --lit-input-font-size: 12px;
-            --lit-input-padding: 3px 6px;
-            width: 40px;
-        }
-        lit-button{
-            --lit-button-background: var(--lit-pagination-button-background, transparent);
-        }
-        .selected{
-            --lit-button-background: var(--lit-pagination-button-background-selected, #eee);
-        }
-        .arrow-right{
-            transform-origin: center;
-            transform: rotate(-90deg);
-        }
-        .arrow-left{
-            transform-origin: center;
-            transform: rotate(90deg);
-        }
-        .page-list{
-            margin-left: 5px;
-            font-size: var(--lit-font-size, 12px);
-            display: flex;
-            align-items: center;
-            
-        }
-    `
-    ];
+    static styles = paginationStyles;
 
 
     _page: number | null = 0;

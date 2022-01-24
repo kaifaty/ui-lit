@@ -1,13 +1,14 @@
 import { LitElement, css, html, noChange } from 'lit';
 import {property, customElement, query} from 'lit/decorators.js'
 import { Directive, PartInfo, PartType, ElementPart, directive } from 'lit/directive.js';
+import { circleStyles } from './styles';
 
 export interface ICircleProps{
     percent: number
 }
 class CanvasDirective extends Directive{
-    _inited = false;
-    _ctx: CanvasRenderingContext2D | null = null;
+    private _inited = false;
+    private _ctx: CanvasRenderingContext2D | null = null;
 
     constructor(partInfo: PartInfo){
         super(partInfo);
@@ -27,29 +28,18 @@ class CanvasDirective extends Directive{
         args[0](this._ctx);
     }
 }
+
 const canvasDirective = directive(CanvasDirective);
 
 @customElement('lit-circle')
 export class LitCircle extends LitElement{
-    static styles = css`
-    :host{
-        display: block;
-        --size: 14px;
-        height: var(--size);
-        width: var(--size);
-        contain: strict;
-    }
-    canvas{
-        width: 100%;
-        height: 100%;
-        display: block;
-    }
-    `;    
+    static styles = circleStyles;
     static get properties(){
         return { 
             percent: {type: Number}
         }
     }
+    
     private _percent: number = 0;
     get percent(){
         return this._percent;
@@ -62,14 +52,15 @@ export class LitCircle extends LitElement{
     private _color: string = "#aaa";
     @property({type: Number, attribute: true}) size: number = 14;
     @property({type: Number, attribute: true}) ratio: number = 2;
+    @property({type: String}) color: string = '';
 
     private _size = 0;
     private _defaultSize = 14;
 
     connectedCallback(): void {
         super.connectedCallback();
-        const styles = window.getComputedStyle(this);
-        this._color = styles.getPropertyValue("--lit-circle-color");
+        const styles = window.getComputedStyle(this);        
+        this._color = this.color || styles.getPropertyValue("color");
     }
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
         if(_changedProperties.has('size')){

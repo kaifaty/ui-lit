@@ -211,11 +211,12 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
             aria-valuenow="${this.value}">
             <div class = "track"
                 ${this._RO.observe(this._onChangeSize)}
-                @pointerdown = "${this._pointerDown}"
-                @pointermove = "${this._pointerMove}"
-                @pointerleave = "${this._pointerLeave}"
-                @pointerover = "${this._pointerOver}"
-                @lostpointercapture = "${this._pointerLostCapture}">
+                @touchstart = "${this._onPreventTouch}"
+                @pointerdown = "${this._onPointerDown}"
+                @pointermove = "${this._onPointerMove}"
+                @pointerleave = "${this._onPointLeave}"
+                @pointerover = "${this._onPointerOver}"
+                @lostpointercapture = "${this._onPointerLostCapture}">
                 ${this._thumbTemplate()}
                 <div class = "track-line"></div>
                 ${this._pointersTemplate()}
@@ -352,27 +353,26 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     
     
     // ==== Events ==== 
-
-    private _pointerDown = (e: PointerEvent) => {        
+    private _onPreventTouch = (e: TouchEvent) => {
+        e.preventDefault();
+    }
+    private _onPointerDown = (e: PointerEvent) => {        
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
         this._handlePointerDown();
         this._handlePointerMove(e.clientX);
         e.preventDefault();
     }
-    private _pointerMove = (e: PointerEvent) => {
+    private _onPointerMove = (e: PointerEvent) => {
         if(!e.isPrimary || !this.hasAttribute("pressed")) return;
         this._handlePointerMove(e.clientX);
         e.preventDefault();
     }
-    private _pointerLostCapture = (e: PointerEvent) => {
+    private _onPointerLostCapture = (e: PointerEvent) => {
         this._handlePointerUp(e.clientX);
         e.preventDefault();
     }
-    private _pointerLeave = (e: PointerEvent) => {
-        this._handlePointLeave(e);
-    }
-    private _pointerOver = (e: PointerEvent) => {
-        this._handlePointOver(e);
+    private _onPointerOver = (e: PointerEvent) => {
+        this._onPointOver(e);
     }
 
     private _onChangeSize = (rect: DOMRect) => {
@@ -398,14 +398,14 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         this._movePosition(x);
         this.isPercentHidden = false;
     }
-    private _handlePointOver = (e: Event) => {
+    private _onPointOver = (e: Event) => {
         if(this.isDisabled()) return;
         clearTimeout(this._timeout);
         this.isPercentHidden = false;
         this.setAttribute('hover', '');
         e.preventDefault();
     }
-    private _handlePointLeave = (e: Event) => {
+    private _onPointLeave = (e: Event) => {
         e.preventDefault();
         this._hidePercent();
         this.removeAttribute('hover');

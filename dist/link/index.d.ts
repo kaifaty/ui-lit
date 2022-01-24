@@ -4,6 +4,7 @@ export interface ILinkProps {
     href?: string;
     rel?: string;
     target?: TLinkTartget;
+    underlined?: boolean;
 }
 export declare class LitLink extends LitElement {
     static styles: import("lit").CSSResult;
@@ -13,6 +14,8 @@ export declare class LitLink extends LitElement {
     target: TLinkTartget;
     underlined: boolean;
     render(): import("lit").TemplateResult<1>;
+    private onMouseover;
+    private onMouseout;
 }
 declare global {
     interface HTMLElementTagNameMap {

@@ -52,27 +52,27 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
         this._max = 100;
         this._value = '0';
         // ==== Events ==== 
-        this._pointerDown = (e) => {
+        this._onPreventTouch = (e) => {
+            e.preventDefault();
+        };
+        this._onPointerDown = (e) => {
             e.target.setPointerCapture(e.pointerId);
             this._handlePointerDown();
             this._handlePointerMove(e.clientX);
             e.preventDefault();
         };
-        this._pointerMove = (e) => {
+        this._onPointerMove = (e) => {
             if (!e.isPrimary || !this.hasAttribute("pressed"))
                 return;
             this._handlePointerMove(e.clientX);
             e.preventDefault();
         };
-        this._pointerLostCapture = (e) => {
+        this._onPointerLostCapture = (e) => {
             this._handlePointerUp(e.clientX);
             e.preventDefault();
         };
-        this._pointerLeave = (e) => {
-            this._handlePointLeave(e);
-        };
-        this._pointerOver = (e) => {
-            this._handlePointOver(e);
+        this._onPointerOver = (e) => {
+            this._onPointOver(e);
         };
         this._onChangeSize = (rect) => {
             this._rect = this.getBoundingClientRect();
@@ -96,7 +96,7 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
             this._movePosition(x);
             this.isPercentHidden = false;
         };
-        this._handlePointOver = (e) => {
+        this._onPointOver = (e) => {
             if (this.isDisabled())
                 return;
             clearTimeout(this._timeout);
@@ -104,7 +104,7 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
             this.setAttribute('hover', '');
             e.preventDefault();
         };
-        this._handlePointLeave = (e) => {
+        this._onPointLeave = (e) => {
             e.preventDefault();
             this._hidePercent();
             this.removeAttribute('hover');
@@ -254,11 +254,12 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
             aria-valuenow="${this.value}">
             <div class = "track"
                 ${this._RO.observe(this._onChangeSize)}
-                @pointerdown = "${this._pointerDown}"
-                @pointermove = "${this._pointerMove}"
-                @pointerleave = "${this._pointerLeave}"
-                @pointerover = "${this._pointerOver}"
-                @lostpointercapture = "${this._pointerLostCapture}">
+                @touchstart = "${this._onPreventTouch}"
+                @pointerdown = "${this._onPointerDown}"
+                @pointermove = "${this._onPointerMove}"
+                @pointerleave = "${this._onPointLeave}"
+                @pointerover = "${this._onPointerOver}"
+                @lostpointercapture = "${this._onPointerLostCapture}">
                 ${this._thumbTemplate()}
                 <div class = "track-line"></div>
                 ${this._pointersTemplate()}

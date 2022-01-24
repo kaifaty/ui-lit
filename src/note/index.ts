@@ -1,38 +1,15 @@
 import { LitElement, html, css } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import { OuterClickRemoveController } from '../controllers/OuterClickRemoveController';
+import { noteStyles } from './styles';
 
 
 @customElement("lit-note")
 export class LitNote extends LitElement{
-    static styles = css`
-    :host{
-        display: block;
-        position: absolute;/*
-        visibility: hidden;
-        opacity: 0;*/
-        transition: 0.4s ease-in;
-        border: 1px solid var(--lit-note-border);
-        z-index: 10;
-        padding: 5px;
-        border-radius: 1px;
-        box-sizing: border-box;
-        background-color: var(--lit-note-background, rgba(255,255,255,0.85));
-        color: var(--lit-note-color);
-    }
-    :host(.visible){
-        visibility: visible;
-        opacity: 1;
-    }
-    :host(.error){
-        background-color: var(--lit-note-error-background, #fff);
-        color: var(--lit-note-error-color, red);
-        border: 1px solid var(--lit-note-error-border, #ff7e6d);
-    }
-    `;
-    _hosted: number = 0;
-    _minShowTime: number = 500; 
-    _handle = new OuterClickRemoveController(this);
+    static styles = noteStyles;
+    private _hosted: number = 0;
+    private _minShowTime: number = 500; 
+    private _handle = new OuterClickRemoveController(this);
     getSize(){
         const bound = this.getBoundingClientRect()
         return {

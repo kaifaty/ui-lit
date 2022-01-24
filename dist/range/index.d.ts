@@ -97,17 +97,17 @@ export declare class LitRange extends LitRange_base {
     private _hidePercent;
     private _movePosition;
     setPercent(value: number): void;
-    private _pointerDown;
-    private _pointerMove;
-    private _pointerLostCapture;
-    private _pointerLeave;
-    private _pointerOver;
+    private _onPreventTouch;
+    private _onPointerDown;
+    private _onPointerMove;
+    private _onPointerLostCapture;
+    private _onPointerOver;
     private _onChangeSize;
     private _handlePointerDown;
     private _handlePointerUp;
     private _handlePointerMove;
-    private _handlePointOver;
-    private _handlePointLeave;
+    private _onPointOver;
+    private _onPointLeave;
     private _handleKeyboard;
 }
 declare global {

@@ -1,7 +1,8 @@
-import { LitElement } from 'lit';
+import { LitElement, TemplateResult } from 'lit';
 import '../spinner';
 import '../icon';
-import '../ripple';
+import '../link';
+import { TLinkTartget } from '../link/interface';
 /**
  *
  * @cssprop --lit-button-display - Controls the display of button
@@ -132,6 +133,8 @@ export declare class LitButton extends LitButton_base implements ButtonProps {
     set loading(value: boolean);
     /** @prop {"button" | "submit"} type */
     align: 'start' | 'center' | 'end';
+    href: string | null;
+    target: TLinkTartget;
     /** @prop {"button" | "submit"} type */
     type: Type;
     size: TSize;
@@ -158,14 +161,28 @@ export declare class LitButton extends LitButton_base implements ButtonProps {
     /** @ignore  */
     private _width;
     /** @ignore  */
+    private _radiant;
+    /** @ignore  */
+    private _animationFrame;
+    /** @ignore  */
+    private _pressed;
+    /** @ignore  */
     private get classes();
     /** @ignore  */
     private _contentTemplate;
+    private wrapperTemplate;
     /**
      * @slot icon-before - You can put some elements before content
      * @slot icon-after - You can put some elements after content
      */
-    render(): import("lit").TemplateResult<1>;
+    render(): TemplateResult<1 | 2>;
+    private _startAnimation;
+    private _onTouchstart;
+    private _onMouseOver;
+    private _onMouseOut;
+    private _onMouseDown;
+    private _startPress;
+    private _endPress;
     /** @ignore  */
     private _onBlur;
     /** @ignore  */

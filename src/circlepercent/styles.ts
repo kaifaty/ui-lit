@@ -20,7 +20,7 @@ export const circleStyles = css`
     height: var(--size);
     width: var(--size);
     contain: strict;
-    color: inherit;
+    color: ${_v.color};
 }
 canvas{
     width: 100%;

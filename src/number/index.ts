@@ -27,6 +27,7 @@ export interface NumberProps extends FormAssociated, Focusable{
 const filterZeroues = (decimals: string) => {
     let res = '';
     let nonZeroExist = false;
+    if(!decimals) return res;
     for(let i = decimals.length - 1; i >= 0; i--){
         if(decimals[i] !== '0'){
             nonZeroExist = true;
@@ -83,8 +84,19 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
         return Number(this._value);
     }
     set valueAsNumber(value: number){
-        if(typeof value === 'number'){            
-            this.value = value ? value.toFixed(this.decimals) : '';
+        if(!value){
+            this.value = '';
+            return;
+        }
+        if(typeof value === 'number'){      
+            const [ceil, dec] = value.toFixed(this.decimals).split(".");
+            const filtered = filterZeroues(dec);
+            if(filtered){
+                this.value = ceil + "." + filtered;
+            }
+            else{
+                this.value = ceil;
+            }
         }
         else if(typeof value === 'string'){
             this.value = value;
@@ -103,20 +115,12 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
     }
 
     private _valueResolve(rawValue: string){
+        if(!rawValue) return '';
         let value = filterNotNumbers(rawValue.replace(",", "."));
-        let [ceil, ...decs] = value.split(".");
-        if(decs.length){
-            const decimals = decs.join("");
-            const filtered = Number(value) ? filterZeroues(decimals) : decimals;
-            if(filtered){
-                value = ceil + "." + filtered.slice(0, this.decimals);
-            }
-            else if(decimals){
-                value = ceil;
-            }
-            else{
-                value = ceil + ".";
-            }
+        const [ceil, ...decs] = value.split(".");
+        const decimals = decs.join("");
+        if(decimals.length){
+            value = ceil + "." + decimals.slice(0, this.decimals);
         }
         if(this.replaceToRange){
             const asNumber = Number(value);
@@ -137,7 +141,8 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
                         danger
                         class = "danger icon"></lit-icon>`;
     }
-    willUpdate(){
+    willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
+        super.willUpdate(_changedProperties);
         this._selectionBeforeRender = this._inputRef.value?.selectionStart || 0;
     }
     render(){

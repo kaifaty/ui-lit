@@ -5,6 +5,7 @@ import { html as _html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
 import '../dist/theme';
 import '../dist/theme/switcher';
+import '../dist/theme/pallete';
 import { IThemeProps } from '../dist/theme/interface';
 
 const tableData = [
@@ -48,7 +49,7 @@ const Theme = (data: IThemeProps) =>
         main{
             display: grid; 
             gap: 50px 150px; 
-            grid-template-columns: repeat(auto-fit, minmax(300px, auto));
+            grid-template-columns: repeat(auto-fit, minmax(250px, auto));
             padding: 30px 50px;
         }
         header{
@@ -56,13 +57,24 @@ const Theme = (data: IThemeProps) =>
             display: grid;
             gap: 20px;
         }
+        .pallete{
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .pallete-color{
+            display: flex;
+            width: 40px; 
+            height: 60px;
+            align-items: center;
+            justify-content: center;
+        }
         .row-between{
             display: flex; 
             justify-content: space-between; 
             align-items: center;
         }
     </style>
-    <lit-theme >
+    <lit-theme theme = "dark">
         <header>
             <div class = "row-between">
                 <lit-header level = "2" style = "margin: 0;">Switch theme</lit-header> 
@@ -70,10 +82,63 @@ const Theme = (data: IThemeProps) =>
                     <lit-theme-switcher></lit-theme-switcher>
                 </div>
             </div>
-            <lit-theme-configer></lit-theme-configer>
+            <div class = "row-between">
+                <div>
+                    <lit-theme-configer name = "positive"></lit-theme-configer>
+                    <lit-pallete name = "primary"></lit-pallete>
+                </div>
+                <div>
+                    <lit-theme-configer name = "primary"></lit-theme-configer>
+                    <lit-pallete name = "negative"></lit-pallete>
+                </div>
+                <div>
+                    <lit-theme-configer name = "negative"></lit-theme-configer>
+                    <lit-pallete name = "positive"></lit-pallete>
+                </div>
+            </div>
         </header>
         <lit-divider></lit-divider>
-        <main style = "--lit-circle-color: #fff;">
+        <main>
+            <div >
+                <lit-header level = "3">Buttons</lit-header>
+                <div style = "display: grid; width: 300px; gap: 5px;">
+                    <lit-button borderless>Borderless</lit-button>
+                    <lit-button>Button</lit-button>
+                    <lit-button primary>Primary</lit-button>
+                    <lit-button success>Success</lit-button>
+                    <lit-button danger>Danger</lit-button>
+                    <lit-button type = "switch">Switch</lit-button>
+                </div>
+            </div>
+            <div>
+                <div class = "pallete">
+                </div>
+            </div>
+            <div>
+                <lit-header level = "3">Icons</lit-header>
+                <lit-icon icon = "account"></lit-icon>
+                <lit-icon icon = "telegram"></lit-icon>
+                <lit-icon icon = "cancel" danger></lit-icon>
+            </div>
+            <div>
+                <lit-header level = "3">Table</lit-header>
+                <lit-table 
+                    pagination
+                    paginationToHeight
+                    .rowHeight = "${40}"
+                    .dataSource = "${tableData}" 
+                    .columns = "${columns}">
+                </lit-table>
+            </div>
+            <div>
+                <lit-header level = "3">Tabs</lit-header>
+                <lit-tabs value = "1" type = "tab" style = "width: 200px">
+                    <lit-tab value = "1">Tab1</lit-tab>
+                    <lit-tab value = "2">Tab2</lit-tab>
+                    <lit-tab value = "3">Tab3</lit-tab>
+                    <lit-tab value = "4">Tab5</lit-tab>
+                </lit-tabs>
+            </div>
             <div>
                 <lit-header level = "3">Text</lit-header>
                 <lit-text>Text</lit-text><br>
@@ -85,7 +150,9 @@ const Theme = (data: IThemeProps) =>
             <div>
                 <lit-header level = "3">Link</lit-header>
                 <lit-link underlined>Underlined link</lit-link><br><br>
-                <lit-link>Link</lit-link>
+                <lit-link target = "_blank" href = "https://google.com">Link</lit-link>
+                
+                <lit-button href = "https://google.com">Button Link</lit-button>
             </div>
             <div>
                 <lit-header level = "3">Note</lit-header>
@@ -106,6 +173,9 @@ const Theme = (data: IThemeProps) =>
                 </lit-panel>
                 <lit-panel value = "1" danger>
                     Panel danger 
+                </lit-panel>
+                <lit-panel value = "1" success>
+                    Panel success 
                 </lit-panel>
             </div>
             <div>
@@ -142,27 +212,6 @@ const Theme = (data: IThemeProps) =>
                 </lit-dialog>
             </div>
             <div>
-                <lit-header level = "3">Table</lit-header>
-                <lit-table 
-                    pagination
-                    paginationToHeight
-                    .rowHeight = "${40}"
-                    .dataSource = "${tableData}" 
-                    .columns = "${columns}">
-                </lit-table>
-            </div>
-            <div >
-                <lit-header level = "3">Buttons</lit-header>
-                <div style = "display: grid; width: 300px; gap: 5px;">
-                    <lit-button borderless>Borderless</lit-button>
-                    <lit-button>Button</lit-button>
-                    <lit-button primary>Primary</lit-button>
-                    <lit-button success>Success</lit-button>
-                    <lit-button danger>Danger</lit-button>
-                    <lit-button type = "switch">Switch</lit-button>
-                </div>
-            </div>
-            <div>
                 <lit-header level = "3">Inputs</lit-header>
                 <div class = "containter">
                     <lit-label for = "number">Number field</lit-label> 
@@ -193,15 +242,6 @@ const Theme = (data: IThemeProps) =>
                     <lit-label for = "checkbox">Checkbox</lit-label> 
                     <lit-checkbox id = "checkbox" type = "checkbox"></lit-checkbox>
                 </div>
-            </div>
-            <div>
-                <lit-header level = "3">Tabs</lit-header>
-                <lit-tabs value = "1" type = "tab" style = "width: 200px">
-                    <lit-tab value = "1">Tab1</lit-tab>
-                    <lit-tab value = "2">Tab2</lit-tab>
-                    <lit-tab value = "3">Tab3</lit-tab>
-                    <lit-tab value = "4">Tab5</lit-tab>
-                </lit-tabs>
             </div>
             <div>
                 <lit-header level = "3">TreeView</lit-header>

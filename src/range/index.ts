@@ -4,13 +4,21 @@ import { customElement, property, state, query } from 'lit/decorators.js';
 import type { FormAssociated } from '../mixins/form-associated/interface';
 import { formAssociated } from '../mixins/form-associated/index';
 import { noselect } from '../styles/noselect';
-import { getClientX, IUIEvent } from 'kailib';
 import { labled } from '../mixins/labled/index';
 import { focusable } from '../mixins/focusable/index';
 import { notificatable } from '../mixins/notificatable/index';
-import { makeCSSProxy } from '../helpers/cssproxy';
 import { rangeStyles } from './style';
+import {throttle} from 'helpful-decorators'
 
+type TRect = {
+    x: number
+    y: number
+    left: number
+    top: number
+    bottom: number
+    width: number
+    height: number
+}
 export interface IRangeProps extends FormAssociated {
     value: string
     valueAsNumber: number
@@ -53,8 +61,7 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
             noselect, 
             rangeStyles
         ]
-    } 
-    
+    }     
     static get properties(){        
         return {
             ...super.properties,
@@ -78,11 +85,12 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     private _trackStartX: number = 0;
     private _thumbSize: number = 0;
     private _padding: number = 0;
-    private _rect: DOMRect | null = null;
+    private _rect: TRect | null = null;
     private _min: number = 0;
     private _percent: number = 0;
     private _offsetX: number = 0;
     tabindex: number = 0;
+    private _trackElement: HTMLElement | null = null;
     get offsetX(){
         return this._offsetX
     }
@@ -160,25 +168,40 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
     }
 
+    protected firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): void {
+        super.firstUpdated(_changedProperties);        
+        this._trackElement = this.shadowRoot!.querySelector(".track");
+    }
+
     willUpdate(){         
         this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
     }
     updated(props: Map<string, unknown>){
         super.updated(props);
-        if(props.has("value")){
+        if(props.has("disabled") && this.disabled){
+            //this.style.setProperty(`--percent`, 0 + "%")
+        }
+        else if(props.has("disabled") && !this.disabled){
+            //this.style.setProperty(`--percent`, this._percent + "%")
+        }
+        //else 
+        if(props.has("value") || props.has("min") || props.has("max")){
             this.style.setProperty(`--percent`, this._percent + "%")
         }
+        
     }
 
     // ==== templates ==== 
     private _pointersTemplate(){
         if(this.usePoints){
-            return this._points.map(it => 
-                    html`<div                         
-                        data-value = "${it}"
-                        style = "left: ${it}%;"
-                        class = "point point-${it} ${this._percent >= it ? 'filled' : ''}"></div>`);
+            return this._points.map(it => {
+                const filled = this._percent >= it //&& !this.disabled
+                return html`<div                         
+                    data-value = "${it}"
+                    style = "left: ${it}%;"
+                    class = "point point-${it} ${filled ? 'filled' : ''}"></div>`
+            });
         }
         return nothing;
     }
@@ -200,7 +223,6 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     }
 
     render(){
-        
         return html`
         <div tabindex = "${this.tabindex}"
             role = "slider" 
@@ -229,10 +251,13 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     // ==== Actions ==== 
     private _recalcValue(){
         let val = this.valueAsNumber;
-        if(this.valueAsNumber > this.max){
+        if(this.min > this.max){
+            val = this.min;
+        }
+        else if(val > this.max){
             val = this.max;
         }
-        if(this.valueAsNumber < this.min){
+        else if(val < this.min){
             val = this.min;
         }
         this._value = val.toFixed(this.decimals);
@@ -250,11 +275,11 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         }));
     }
 
-    private _calcTrackStartX(rect: DOMRect){
-        return rect.x  + 2 * this._padding;
+    private _calcTrackStartX(rect: TRect){
+        return rect.x + 2 * this._padding;
     }
 
-    private _calcTackWidth(rect: DOMRect){
+    private _calcTackWidth(rect: TRect){
         return rect.width;
     }
 
@@ -356,11 +381,11 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     private _onPreventTouch = (e: TouchEvent) => {
         e.preventDefault();
     }
-    private _onPointerDown = (e: PointerEvent) => {        
+    private _onPointerDown = (e: PointerEvent) => {   
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
         this._handlePointerDown();
         this._handlePointerMove(e.clientX);
-        e.preventDefault();
+        e.preventDefault(); // Atop auto focus
     }
     private _onPointerMove = (e: PointerEvent) => {
         if(!e.isPrimary || !this.hasAttribute("pressed")) return;
@@ -369,13 +394,13 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     }
     private _onPointerLostCapture = (e: PointerEvent) => {
         this._handlePointerUp(e.clientX);
-        e.preventDefault();
+        // e.preventDefault();
     }
     private _onPointerOver = (e: PointerEvent) => {
         this._onPointOver(e);
     }
 
-    private _onChangeSize = (rect: DOMRect) => {
+    private _onChangeSize = (rect: TRect) => {
         this._rect = this.getBoundingClientRect();
         this._trackSize = this._calcTackWidth(rect);
         this._trackStartX = this._calcTrackStartX(rect);
@@ -384,11 +409,12 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     }
 
     private _handlePointerDown = () => {
+        this._rect = this.getBoundingClientRect();
         if(this.isDisabled()) return;
         this.isPercentHidden = false;
         this.setAttribute('pressed', '');
-
     }
+
     private _handlePointerUp = (x: number) => {
         this._hidePercent();
         this._movePosition(x);

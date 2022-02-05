@@ -1,11 +1,15 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { customElement, state, property } from 'lit/decorators.js';
 import { TTheme } from './interface';
 
 
 @customElement("lit-theme-switcher")
 export class ThemeSwitcher extends LitElement{
-    
+    static styles = css`
+    lit-button{
+        width: 100%;
+    }
+    `;
     @state() theme: TTheme = localStorage.appTheme || 'light';
     
     connectedCallback(): void {

@@ -1,12 +1,11 @@
-import { buttonCSSVarsNames } from './../button/styles';
 import { css } from 'lit';
-import { buttonCSSVarsNames as button, buttonCSSVars  } from '../button/styles';
+import { buttonCSSVarsNames as button } from '../button/styles';
 import { makeCSSProxy, makeCSSNameProxy } from '../helpers/cssproxy';
 
 export const selectCSSVars = {
     color: {
         name: "color",
-        default: `var(--lit-button-${buttonCSSVars.color.name}, ${buttonCSSVars.color.default})`
+        default: `hsl(264, 65%, 50%)`
     },
     height: {
         name: "height",
@@ -16,9 +15,17 @@ export const selectCSSVars = {
         name: "background",
         default: "initial"
     },
-    rippleBackground: {
-        name: "ripple-background",
-        default: "hsl(264, 65%, 55%)"
+    backgroundHover: {
+        name: "background-hover",
+        default: "initial"
+    },
+    outlineFocus: {
+        name: "outline-focus",
+        default: "1px solid hsl(264, 65%, 70%)"
+    },
+    ripple: {
+        name: "ripple",
+        default: "initial"
     },
     border: {
         name: "border",
@@ -34,6 +41,14 @@ export const selectCSSVars = {
     },
     optionBackground: {
         name: "option-background",
+        default: "hsl(264, 65%, 99%)"
+    },
+    optionRipple: {
+        name: "option-ripple",
+        default: "hsl(264, 65%, 60%)"
+    },
+    optionBackgroundHover: {
+        name: "option-background-hover",
         default: "hsl(264, 65%, 99%)"
     },
     circleColor:{
@@ -77,8 +92,8 @@ export const selectStyles = css`
     height: ${_v.height};
     ${button.mediumPadding}: ${_v.padding};
     ${button.border}: ${_v.border};
+    ${button.color}: ${_v.color};
     ${button.borderRadius}: 0;
-    --ripple-background: ${_v.rippleBackground};
 }
 ::part(content){
     overflow: hidden;
@@ -93,18 +108,22 @@ lit-button{
     width: 100%;
     min-width: 70px;
     height: 100%;
+    ${button.color}: ${_v.color};
     ${button.mediumHeight}: 100%;
-    color: ${_v.color};
-    ${button.background}: ${_v.background};
-    
+    ${button.background}: ${_v.background};    
+    ${button.backgroundHover}: ${_v.backgroundHover};    
+    ${button.ripple}: ${_v.ripple};
+    ${button.outlineFocus}: ${_v.outlineFocus};
 }`;
 
 export const optionStyles = css`
 :host{
     display: block;
     height: ${_v.height};
-    color: ${_v.optionColor};
-    ${buttonCSSVarsNames.background}: ${_v.optionBackground};
+    ${button.color}: ${_v.optionColor};
+    ${button.background}: ${_v.optionBackground};
+    ${button.backgroundHover}: ${_v.optionBackgroundHover};
+    ${button.ripple}: ${_v.optionRipple};
 }
 :host([selected]) span::after{
     width: 8px;
@@ -118,15 +137,15 @@ export const optionStyles = css`
     height: 8px;
     position: absolute;
     top: 2px;
-    left: 2px;
+    left: 2px !important;
 }
 lit-button{
     width: 100%;
-
+    ${button.outlineFocus}: none;
+    
 }
 :host(:not([selected])) lit-button:hover span::after,
-:host(:not([selected])) lit-button[pressed] span::after
-{
+:host(:not([selected])) lit-button[pressed] span::after{
     opacity: 0.3;
     background-color: ${_v.circleColor};
 }
@@ -139,7 +158,7 @@ span{
     height: 12px;
     margin-left: 15px;
     border-radius: 12px;
-    outline: 2px solid ${_v.circleColor};
+    border: 2px solid ${_v.circleColor};
     position: relative;
 }`;
 
@@ -151,7 +170,7 @@ export const listboxStyles = css`
     box-sizing: border-box;
     z-index: 10;
     --shadow-pos: -1;
-    ${buttonCSSVarsNames.border}: none;
+    ${button.border}: none;
 }
 :host([open]){
     display: block;

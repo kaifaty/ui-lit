@@ -28,7 +28,7 @@ export const paginationStyles = css`
     display: flex;
     align-items: center;
     box-sizing: border-box;
-    
+    padding: 1px 0;
 }
 lit-numberfield{
     --lit-input-align: center;
@@ -53,8 +53,10 @@ lit-button{
 .page-list{
     margin-left: 5px;
     font-size: ${_v.fontSize};
-    display: flex;
+    display: grid;
+    grid-auto-flow: column;
     align-items: center;
+    gap: 1px;
     
 }
 `

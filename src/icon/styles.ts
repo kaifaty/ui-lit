@@ -14,12 +14,12 @@ const iconCSSVars = {
         name: 'color',
         default: '#000'
     },
-    successColor: {
-        name: 'success-color',
+    positiveColor: {
+        name: 'positive-color',
         default: 'green'
     },
-    errorColor: {
-        name: 'error-color',
+    negativeColor: {
+        name: 'negative-color',
         default: 'red'
     },
 }
@@ -61,10 +61,10 @@ export const iconStyle = css`
 }
 :host([danger]),
 :host([error]){
-    color: ${_v.errorColor};
+    color: ${_v.negativeColor};
 }
 :host([success]){
-    color: ${_v.successColor};
+    color: ${_v.positiveColor};
 }
 :host([icon=back]),
 :host([icon=arrow-left]){

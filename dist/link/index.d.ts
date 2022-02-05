@@ -1,11 +1,5 @@
 import { LitElement } from 'lit';
-export declare type TLinkTartget = "_blank" | "_parent" | "_self" | "_top";
-export interface ILinkProps {
-    href?: string;
-    rel?: string;
-    target?: TLinkTartget;
-    underlined?: boolean;
-}
+import { TLinkTartget } from './interface';
 export declare class LitLink extends LitElement {
     static styles: import("lit").CSSResult;
     href: string | undefined;
@@ -13,9 +7,11 @@ export declare class LitLink extends LitElement {
     rel?: string;
     target: TLinkTartget;
     underlined: boolean;
+    tabindex: number;
     render(): import("lit").TemplateResult<1>;
     private onMouseover;
     private onMouseout;
+    click(): void;
 }
 declare global {
     interface HTMLElementTagNameMap {

@@ -1,12 +1,12 @@
 import { __decorate } from "tslib";
 import { styleMap } from 'lit/directives/style-map.js';
-import { LitElement, html, } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { button } from './styles';
 import '../spinner';
 import '../icon';
-import '../ripple';
+import '../link';
 import { focusable } from '../mixins/focusable/index';
 /** @tag lit-button */
 let LitButton = class LitButton extends focusable(LitElement) {
@@ -16,6 +16,8 @@ let LitButton = class LitButton extends focusable(LitElement) {
         this._loading = false;
         /** @prop {"button" | "submit"} type */
         this.align = 'center';
+        this.href = null;
+        this.target = "_self";
         /** @prop {"button" | "submit"} type */
         this.type = 'button';
         this.size = 'medium';
@@ -43,6 +45,31 @@ let LitButton = class LitButton extends focusable(LitElement) {
         this._notifyTimeout = 0;
         /** @ignore  */
         this._width = 0;
+        /** @ignore  */
+        this._radiant = 5;
+        /** @ignore  */
+        this._animationFrame = 0;
+        /** @ignore  */
+        this._pressed = false;
+        // ==== Events ====
+        // +++ Ripple +++
+        this._startAnimation = () => {
+            if (this._radiant < 1000 && this._pressed) {
+                this._radiant += 20;
+                this.style.setProperty(`--radiant`, this._radiant + "px");
+                this._animationFrame = requestAnimationFrame(this._startAnimation);
+            }
+        };
+        this._endPress = () => {
+            this._pressed = false;
+            this._radiant = 5;
+            cancelAnimationFrame(this._animationFrame);
+            this.removeAttribute('pressed');
+            this.removeAttribute('hover');
+            document.removeEventListener('mouseup', this._endPress);
+            document.removeEventListener('touchend', this._endPress);
+            document.removeEventListener('touchcancel', this._endPress);
+        };
         /** @ignore  */
         this._onKeyDown = (e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -93,24 +120,66 @@ let LitButton = class LitButton extends focusable(LitElement) {
                     <div part = "content" class = "content"><slot></slot></div>
                     <slot name = "icon-after"></slot>`;
     }
+    wrapperTemplate(content) {
+        if (this.href) {
+            return html `<lit-link 
+                        type = "button"
+                        target = "${this.target}"
+                        href = "${this.href}">${content}</lit-link>`;
+        }
+        return content;
+    }
     /**
      * @slot icon-before - You can put some elements before content
      * @slot icon-after - You can put some elements after content
      */
     render() {
         const styles = this._width ? { width: this._width + 'px' } : {};
-        return html `
-            <button role = "button"
-                aria-pressed = "${this.type === 'switch' ? this.switchOn : 'undefined'}"
-                tabindex = "${this.tabindex}" 
-                style = "${styleMap(styles)}"
-                class = "${classMap(this.classes)}" 
-                @click = "${this.click}"
-                @focus = "${this._onFocus}"
-                @blur = "${this._onBlur}"
-            >${this._contentTemplate()}</button><lit-ripple @click = "${this.click}"></lit-ripple>`;
+        const template = html `
+        <button role = "button"
+            aria-pressed = "${this.type === 'switch' ? this.switchOn : 'undefined'}"
+            tabindex = "${this.href ? -1 : this.tabindex}" 
+            style = "${styleMap(styles)}"
+            class = "${classMap(this.classes)}" 
+            @click = "${this.click}"
+            @focus = "${this._onFocus}"
+            @blur = "${this._onBlur}"
+            @mouseover = "${this._onMouseOver}"
+            @mouseout = "${this._onMouseOut}"
+            @mousedown = "${this._onMouseDown}"
+            
+            @touchstart = "${this._onTouchstart}"
+            @touchcancel = "${this._endPress}"
+            @touchend = "${this._endPress}"
+        >${this._contentTemplate()}</button>`;
+        return this.wrapperTemplate(template);
     }
-    // ==== Events ====
+    _onTouchstart(e) {
+        this._startPress(e.touches[0].clientX, e.touches[0].clientY);
+        document.addEventListener('touchend', this._endPress);
+        document.addEventListener('touchcancel', this._endPress);
+    }
+    _onMouseOver(e) {
+        this.setAttribute('hover', '');
+    }
+    _onMouseOut(e) {
+        this.removeAttribute('hover');
+    }
+    _onMouseDown(e) {
+        this._startPress(e.clientX, e.clientY);
+        document.addEventListener('mouseup', this._endPress);
+    }
+    _startPress(x, y) {
+        const rect = this.getBoundingClientRect();
+        this._pressed = true;
+        this.setAttribute('pressed', '');
+        const _x = x - rect.x;
+        const _y = y - rect.y;
+        this.style.setProperty(`--click-x`, _x + "px");
+        this.style.setProperty(`--click-y`, _y + "px");
+        this._startAnimation();
+    }
+    // --- Ripple ---
     /** @ignore  */
     _onBlur() {
         document.removeEventListener('keydown', this._onKeyDown);
@@ -119,7 +188,7 @@ let LitButton = class LitButton extends focusable(LitElement) {
     _onFocus() {
         document.addEventListener('keydown', this._onKeyDown);
     }
-    // ==== Actions ====
+    // ==== Actions ====    
     click() {
         this.submit();
     }
@@ -133,8 +202,12 @@ let LitButton = class LitButton extends focusable(LitElement) {
     }
     /** @event {CustomEvent} submitForm - for type = 'submit'. Submit to lit-form */
     submit() {
+        var _a, _b;
         if (this.disabled || this.loading)
             return;
+        if (this.href) {
+            (_b = (_a = this.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector("lit-link")) === null || _b === void 0 ? void 0 : _b.click();
+        }
         if (this.type === 'switch') {
             this.toggleSwitch();
         }
@@ -159,6 +232,12 @@ LitButton.styles = button;
 __decorate([
     property({ type: String, attribute: true })
 ], LitButton.prototype, "align", void 0);
+__decorate([
+    property({ type: String, attribute: true })
+], LitButton.prototype, "href", void 0);
+__decorate([
+    property({ type: String })
+], LitButton.prototype, "target", void 0);
 __decorate([
     property({ type: String, attribute: true })
 ], LitButton.prototype, "type", void 0);

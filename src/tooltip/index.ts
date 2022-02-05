@@ -39,9 +39,8 @@ export class ToolTip extends LitElement{
     render(){
         return [
                 this._tooltipTemplate(),
-                html`<div 
-                    @click = "${this._onClick}"
-                    id = "content">
+                html`<div @click = "${this._onClick}"
+                          id = "content">
                     <slot></slot>
                 </div>`
             ]
@@ -62,7 +61,6 @@ export class ToolTip extends LitElement{
     }
     
     getPosition = () => {
-        const el = getRootRalitive(this);
         const targetRect = this.getBoundingClientRect();
         const awailableWidth = window.visualViewport.width;
         const awailableHeight = window.visualViewport.height
@@ -83,26 +81,6 @@ export class ToolTip extends LitElement{
             right: availableLeft > availableRight ? (availableRight + 10) + `px` : 'initial', 
             maxWidth: availableLeft < availableRight ? (availableRight - targetRect.width - 10)  + `px` : (availableLeft - 10) + 'px'
         };
-        
-        /*
-        const x = (targetRect.x - rect.x) //|| rect.x;
-        const y = (targetRect.y - rect.y) //|| rect.y;
-        
-
-        const availableTop = y;
-        const availableBottom = awailableHeight - y;
-        const availableLeft = x;
-        const availableRight = awailableWidth - x;
-
-        return {
-            top: availableTop < availableBottom ? (availableTop + targetRect.height) + `px` : "initial",
-            bottom: availableTop > availableBottom ? availableBottom + `px` : "initial",
-            maxHeight: availableTop < availableBottom ? (availableBottom - 20) + `px` : (availableTop - 20) + `px`,
-
-            left: availableLeft < availableRight ? (availableLeft + targetRect.width) + `px` : 'initial',
-            right: availableLeft > availableRight ? availableRight + `px` : 'initial', 
-            maxWidth: availableLeft < availableRight ? (availableRight - targetRect.width - 20)  + `px` : (availableLeft - 20) + 'px'
-        };*/
         
     }
     

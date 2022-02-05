@@ -24,6 +24,13 @@ export const linkStyles = css`
         box-sizing: border-box;
         position: relative;
     }
+    a{
+        color: inherit;
+        text-decoration: none;
+    }
+    :host([type=button]) a{
+        color: inherit;
+    }
     :host(:not([type=button])) a{
         color: ${_v.color};
         ${iconCSSVarNames.color}: ${_v.color};

@@ -3,18 +3,6 @@ import { css, unsafeCSS } from 'lit';
 import { noselect } from '../styles/noselect';
 import { makeCSSProxy, makeCSSNameProxy } from '../helpers/cssproxy';
 
-
-const defaultStates = [{
-    key: 'primary',
-    defaultColor: 264
-}, {
-    key: 'success', 
-    defaultColor: 110
-}, {
-    key: 'danger',
-    defaultColor: 5
-}];
-
 export const buttonCSSVars = {
     display: {
         name: "display",
@@ -28,9 +16,13 @@ export const buttonCSSVars = {
         name: "primary-background",
         default: "hsl(264, 80%, 55%)",
     },
+    primaryBackgroundHover: {
+        name: "primary-background-hover",
+        default: "hsl(264, 80%, 60%)",
+    },
     primaryRipple: {
         name: "primary-ripple",
-        default: "hsl(264, 80%, 98%)",
+        default: "hsl(264, 80%, 75%)",
     },
     primaryBorder: {
         name: "primary-border",
@@ -48,9 +40,13 @@ export const buttonCSSVars = {
         name: "success-background",
         default: "hsl(110, 80%, 55%)",
     },
+    successBackgroundHover: {
+        name: "success-background-hover",
+        default: "hsl(110, 80%, 60%)",
+    },
     successRipple: {
         name: "success-ripple",
-        default: "hsl(110, 80%, 98%)",
+        default: "hsl(110, 80%, 65%)",
     },
     successBorder: {
         name: "success-border",
@@ -64,13 +60,17 @@ export const buttonCSSVars = {
         name: "danger-color",
         default: "hsl(5, 80%, 98%)",
     },
-    dangerRipple: {
-        name: "danger-ripple",
-        default: "hsl(5, 80%, 98%)",
-    },
     dangerBackground: {
         name: "danger-background",
         default: "hsl(5, 80%, 55%)",
+    },
+    dangerBackgroundHover: {
+        name: "danger-background-hover",
+        default: "hsl(5, 80%, 60%)",
+    },
+    dangerRipple: {
+        name: "danger-ripple",
+        default: "hsl(5, 80%, 65%)",
     },
     dangerBorder: {
         name: "danger-border",
@@ -164,6 +164,14 @@ export const buttonCSSVars = {
         name: "background-focus",
         default: "hsl(264, 100%, 55%)",
     },
+    backgroundHover: {
+        name: "background-hover",
+        default: "hsl(264, 100%, 93%)",
+    },
+    ripple: {
+        name: "ripple",
+        default: "hsl(264, 100%, 88%)",
+    },
     switchColor: {
         name: "switch-color",
         default: "hsl(264, 100%, 46%)",
@@ -203,6 +211,10 @@ export const button = [
         display: ${_v.display};
         position: relative;
         ${iconCSSVarNames.color}: ${_v.color};
+        --click-x: 0;
+        --click-y: 0;
+        --radiant: 5%;
+
     }
     
     :host([size = "small"]) .wrapper{
@@ -233,6 +245,7 @@ export const button = [
         justify-content: space-between;
     }
     .wrapper{
+        position: relative;
         -webkit-appearance: none;
         -webkit-tap-highlight-color: transparent;
         cursor: pointer;
@@ -254,8 +267,16 @@ export const button = [
         color: ${_v.color};
         font-family: inherit;
         background-color: ${_v.background};
+        
         overflow: hidden;
     }
+    :host(:not([type=switch])[hover]) .wrapper{        
+        background-color: ${_v.backgroundHover};
+    }
+    :host(:not([type=switch])[pressed]) .wrapper{
+        background: radial-gradient(circle at var(--click-x) var(--click-y), ${_v.ripple} 5px , ${_v.backgroundHover} var(--radiant));
+    }
+
     :host .wrapper:focus{
         outline: ${_v.outlineFocus};
     }
@@ -267,10 +288,12 @@ export const button = [
         width: 12.8px;
         justify-self: center;
     }
+    lit-link{
+        width: 100%;
+    }
 
     :host([type=switch]) .wrapper{
         color: ${_v.switchColor};
-        --ripple-background: transparent;
         ${iconCSSVarNames.color}: ${_v.switchColor};
     }
     :host([type=switch][switchOn]) .wrapper{
@@ -286,47 +309,66 @@ export const button = [
         outline: ${_v.switchOnOutlineFocus};
         border: ${_v.switchOnOutlineFocus};
     }
+
     :host([borderless]) .wrapper,
     :host([borderless]) .wrapper.hover{
         border: none;
     }
 
-    :host([primary]){
-        ${iconCSSVarNames.color}: ${_v.primaryColor};
-        --ripple-background: ${_v.primaryRipple};
-    }
     :host([primary]) .wrapper{
         color: ${_v.primaryColor};
         background: ${_v.primaryBackground};
         border: ${_v.primaryBorder};
+        ${iconCSSVarNames.color}: ${_v.primaryBackground};
     }
     :host([primary]) .wrapper:focus{
         outline: ${_v.primaryOutlineFocus};
     }
+    
+    :host([primary][hover]) .wrapper{        
+        background-color: ${_v.primaryBackgroundHover};
+    }
+    :host([primary][pressed]) .wrapper{
+        background: radial-gradient(circle at var(--click-x) var(--click-y), ${_v.primaryRipple} 5px , ${_v.primaryBackgroundHover} var(--radiant));
+    }
 
     :host([success]){
         ${iconCSSVarNames.color}: ${_v.successColor};
-        --ripple-background: ${_v.successRipple};
     }
     :host([success]) .wrapper{
         color: ${_v.successColor};
         background: ${_v.successBackground};
         border: ${_v.successBorder};
+        ${iconCSSVarNames.color}: ${_v.successColor};
     }
     :host([success]) .wrapper:focus{
         outline: ${_v.successOutlineFocus};
     }
+    :host([success][hover]) .wrapper{        
+        background-color: ${_v.successBackgroundHover};
+    }
+    :host([success][pressed]) .wrapper{
+        background: radial-gradient(circle at var(--click-x) var(--click-y), ${_v.successRipple} 5px , ${_v.successBackgroundHover} var(--radiant));
+    }
 
     :host([danger]){
         ${iconCSSVarNames.color}: ${_v.dangerColor};
-        --ripple-background: ${_v.dangerRipple};
     }
     :host([danger]) .wrapper{
         color: ${_v.dangerColor};
         background: ${_v.dangerBackground};
         border: ${_v.dangerBorder};
+        ${iconCSSVarNames.color}: ${_v.dangerColor};
     }
     :host([danger]) .wrapper:focus{
         outline: ${_v.dangerOutlineFocus};
-    }`
+    }
+    :host([danger][hover]) .wrapper{        
+        background-color: ${_v.dangerBackgroundHover};
+    }
+    :host([danger][pressed]) .wrapper{
+        background: radial-gradient(circle at var(--click-x) var(--click-y), ${_v.dangerRipple} 5px , ${_v.dangerBackgroundHover} var(--radiant));
+    }
+    
+    `
 ];

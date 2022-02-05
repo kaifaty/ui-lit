@@ -13,6 +13,8 @@ import { notificatable } from '../mixins/notificatable/index';
 const filterZeroues = (decimals) => {
     let res = '';
     let nonZeroExist = false;
+    if (!decimals)
+        return res;
     for (let i = decimals.length - 1; i >= 0; i--) {
         if (decimals[i] !== '0') {
             nonZeroExist = true;
@@ -66,8 +68,19 @@ let LitNumberField = class LitNumberField extends focusable(labled(notificatable
         return Number(this._value);
     }
     set valueAsNumber(value) {
+        if (!value) {
+            this.value = '';
+            return;
+        }
         if (typeof value === 'number') {
-            this.value = value ? value.toFixed(this.decimals) : '';
+            const [ceil, dec] = value.toFixed(this.decimals).split(".");
+            const filtered = filterZeroues(dec);
+            if (filtered) {
+                this.value = ceil + "." + filtered;
+            }
+            else {
+                this.value = ceil;
+            }
         }
         else if (typeof value === 'string') {
             this.value = value;
@@ -82,20 +95,13 @@ let LitNumberField = class LitNumberField extends focusable(labled(notificatable
         this.requestUpdate('value', oldValue);
     }
     _valueResolve(rawValue) {
+        if (!rawValue)
+            return '';
         let value = filterNotNumbers(rawValue.replace(",", "."));
-        let [ceil, ...decs] = value.split(".");
-        if (decs.length) {
-            const decimals = decs.join("");
-            const filtered = Number(value) ? filterZeroues(decimals) : decimals;
-            if (filtered) {
-                value = ceil + "." + filtered.slice(0, this.decimals);
-            }
-            else if (decimals) {
-                value = ceil;
-            }
-            else {
-                value = ceil + ".";
-            }
+        const [ceil, ...decs] = value.split(".");
+        const decimals = decs.join("");
+        if (decimals.length) {
+            value = ceil + "." + decimals.slice(0, this.decimals);
         }
         if (this.replaceToRange) {
             const asNumber = Number(value);
@@ -117,8 +123,9 @@ let LitNumberField = class LitNumberField extends focusable(labled(notificatable
                         danger
                         class = "danger icon"></lit-icon>`;
     }
-    willUpdate() {
+    willUpdate(_changedProperties) {
         var _a;
+        super.willUpdate(_changedProperties);
         this._selectionBeforeRender = ((_a = this._inputRef.value) === null || _a === void 0 ? void 0 : _a.selectionStart) || 0;
     }
     render() {

@@ -1,17 +1,9 @@
 import { LitElement, html, css } from 'lit';
 import { property, customElement } from 'lit/decorators.js';
-import { ifDefined } from 'lit/directives/if-defined';
+import { ifDefined } from 'lit/directives/if-defined.js';
 import { linkStyles } from './styles';
+import { TLinkTartget } from './interface';
 
-export type TLinkTartget = "_blank" | "_parent" | "_self" | "_top"
-
-export interface ILinkProps {
-    href?: string
-    rel?: string
-    target?: TLinkTartget
-    underlined?: boolean
-
-}
 @customElement("lit-link")
 export class LitLink extends LitElement{
     static styles = linkStyles;
@@ -20,22 +12,25 @@ export class LitLink extends LitElement{
     @property({type: String}) rel?: string = "nofollow";
     @property({type: String}) target: TLinkTartget = "_self";
     @property({type: Boolean, reflect: true}) underlined: boolean = false;
-
-
+    tabindex: number = 0;
     render(){
-        return html`<a 
-                    @mouseover = "${this.onMouseover}"
-                    @mouseout = "${this.onMouseout}"
-                    rel = "${ifDefined(this.rel)}"
-                    target = "${this.target}" 
-                    href = "${ifDefined(this.href)}"><slot></slot></a>`;
+        return html`<a @mouseover = "${this.onMouseover}"
+                        @mouseout = "${this.onMouseout}"
+                        tabindex = "${this.tabindex}"
+                        rel = "${ifDefined(this.rel)}"
+                        target = "${this.target}" 
+                        href = "${ifDefined(this.href)}"><slot></slot></a>`;
     }
     private onMouseover(){
         if(this.type === 'button') return;
         this.setAttribute("hover", "");
     }
     private onMouseout(){
+        if(this.type === 'button') return;
         this.removeAttribute("hover");
+    }
+    click(){
+        this.shadowRoot?.querySelector("a")?.click();
     }
 
 }

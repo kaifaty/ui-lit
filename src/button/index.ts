@@ -1,12 +1,13 @@
 import { styleMap } from 'lit/directives/style-map.js';
-import { LitElement, nothing, html, } from 'lit';
+import { LitElement, nothing, html, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { classMap } from 'lit/directives/class-map.js';
 import { button } from './styles';
 import '../spinner';
 import '../icon';
-import '../ripple';
+import '../link';
 import { focusable } from '../mixins/focusable/index';
+import { TLinkTartget } from '../link/interface';
 
 
 /**
@@ -161,6 +162,8 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
 
     /** @prop {"button" | "submit"} type */
     @property({type: String, attribute: true}) align: 'start' | 'center' | 'end' = 'center';
+    @property({type: String, attribute: true}) href: string | null = null;
+    @property({type: String}) target: TLinkTartget = "_self";
 
     /** @prop {"button" | "submit"} type */
     @property({type: String, attribute: true}) type: Type = 'button';
@@ -206,6 +209,15 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
     private _width = 0;
 
     /** @ignore  */
+    private _radiant = 5;
+    
+    /** @ignore  */
+    private _animationFrame = 0;
+
+    /** @ignore  */
+    private _pressed = false;
+
+    /** @ignore  */
     private get classes(){
         return {
             button: true,
@@ -228,6 +240,15 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
                     <slot name = "icon-after"></slot>`;
     }
 
+    private wrapperTemplate(content: TemplateResult){
+        if(this.href){
+            return html`<lit-link 
+                        type = "button"
+                        target = "${this.target}"
+                        href = "${this.href}">${content}</lit-link>`
+        }
+        return content;
+    }
 
     /**
      * @slot icon-before - You can put some elements before content
@@ -235,19 +256,76 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
      */
     render(){
         const styles = this._width ? {width: this._width + 'px'} : {};
-        return html`
-            <button role = "button"
-                aria-pressed = "${this.type === 'switch' ? this.switchOn : 'undefined'}"
-                tabindex = "${this.tabindex}" 
-                style = "${styleMap(styles)}"
-                class = "${classMap(this.classes)}" 
-                @click = "${this.click}"
-                @focus = "${this._onFocus}"
-                @blur = "${this._onBlur}"
-            >${this._contentTemplate()}</button><lit-ripple @click = "${this.click}"></lit-ripple>`;
+        const template = html`
+        <button role = "button"
+            aria-pressed = "${this.type === 'switch' ? this.switchOn : 'undefined'}"
+            tabindex = "${this.href ? - 1 : this.tabindex}" 
+            style = "${styleMap(styles)}"
+            class = "${classMap(this.classes)}" 
+            @click = "${this.click}"
+            @focus = "${this._onFocus}"
+            @blur = "${this._onBlur}"
+            @mouseover = "${this._onMouseOver}"
+            @mouseout = "${this._onMouseOut}"
+            @mousedown = "${this._onMouseDown}"
+            
+            @touchstart = "${this._onTouchstart}"
+            @touchcancel = "${this._endPress}"
+            @touchend = "${this._endPress}"
+        >${this._contentTemplate()}</button>`;
+
+        return this.wrapperTemplate(template);
     }
 
     // ==== Events ====
+
+    // +++ Ripple +++
+    private _startAnimation = () => {
+        if(this._radiant < 1000 && this._pressed){
+            this._radiant += 20;
+            this.style.setProperty(`--radiant`, this._radiant + "px");
+            this._animationFrame = requestAnimationFrame(this._startAnimation)
+        }
+    }
+    private _onTouchstart(e: TouchEvent){
+        this._startPress(e.touches[0].clientX, e.touches[0].clientY);
+        document.addEventListener('touchend', this._endPress);
+        document.addEventListener('touchcancel', this._endPress);
+    }
+    private _onMouseOver(e: MouseEvent){
+        this.setAttribute('hover', '');
+    }
+    private _onMouseOut(e: MouseEvent){
+        this.removeAttribute('hover');
+    }
+    private _onMouseDown(e: MouseEvent){
+        this._startPress(e.clientX, e.clientY);
+        document.addEventListener('mouseup', this._endPress);
+    }
+    
+    private _startPress(x: number, y: number){
+        const rect = this.getBoundingClientRect();
+        this._pressed = true;
+        this.setAttribute('pressed', '');
+        const _x = x - rect.x;
+        const _y = y - rect.y;
+        this.style.setProperty(`--click-x`, _x + "px");
+        this.style.setProperty(`--click-y`, _y + "px");
+        this._startAnimation();
+    }
+    private _endPress = () => {
+        this._pressed = false;
+        this._radiant = 5;
+        cancelAnimationFrame(this._animationFrame);
+        this.removeAttribute('pressed');
+        this.removeAttribute('hover');
+        document.removeEventListener('mouseup', this._endPress);
+        document.removeEventListener('touchend', this._endPress);
+        document.removeEventListener('touchcancel', this._endPress);
+    }
+
+    // --- Ripple ---
+
     /** @ignore  */
     private _onBlur(){
         document.removeEventListener('keydown', this._onKeyDown);
@@ -264,8 +342,7 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
         }
     }
 
-    // ==== Actions ====
-    
+    // ==== Actions ====    
     public click(){  
         this.submit()          
     }
@@ -281,6 +358,9 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
     /** @event {CustomEvent} submitForm - for type = 'submit'. Submit to lit-form */
     public submit(){
         if(this.disabled || this.loading) return;  
+        if(this.href){
+            this.shadowRoot?.querySelector("lit-link")?.click();
+        }
         if(this.type === 'switch'){
             this.toggleSwitch();
         }

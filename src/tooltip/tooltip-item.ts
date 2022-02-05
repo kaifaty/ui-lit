@@ -16,23 +16,31 @@ export class TooltimItem extends LitElement{
             this.style.right = this.props.right;
         }
     }
+    connectedCallback(): void {
+        super.connectedCallback();
+        setTimeout(() => {
+            document.addEventListener('click', this._onClick)
+        })
+    }
+    disconnectedCallback(): void {
+        super.connectedCallback();
+        document.removeEventListener('click', this._onClick)
+    }
 
     firstUpdated(){
         setTimeout(() => {
            this.classList.add('visible');
-           document.addEventListener('click', this._onClick)
         }, 1);
     }
-    private _onClick = (e: Event) => {
+    private _onClick = (e: Event) => {        
         if(!isClickInElement(e, this)){
-            document.removeEventListener('click', this._onClick);
             this._onClose();
         }
     }
     
     render(){
         return html`
-        <div style = ""><slot></slot></div>
+        <div><slot></slot></div>
         <lit-icon 
             @click = "${this._onClose}"
             icon = "cancel"></lit-icon>`;

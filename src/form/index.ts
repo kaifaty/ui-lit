@@ -3,19 +3,23 @@ import { customElement, property } from 'lit/decorators.js';
 import { FormAssociatedElement } from '../mixins/form-associated/interface';
 import '../label';
 import type { LitCheckbox } from '../checkbox/index';
-import { LitNumberField } from '../number/index';
+import type { LitNumberField } from '../number/index';
+import type { LitButton } from '../button/index';
 
+type TReturnData = Record<string, string | boolean | number>;
 export interface IFormProps {
     disabled: boolean
     noValidate: boolean
 }
 
+export type TAction = (data?: TReturnData) => Promise<TReturnData | false>;
+
 export interface IFormElement{
     checkValidity(): boolean
     reportValidity(): boolean
     submit(): void
+    getData(): TReturnData
 }
-type TReturnData = Record<string, string | boolean | number>;
 @customElement("lit-form")
 export class LitFrom extends LitElement implements IFormElement, IFormProps{
     static styles = css`
@@ -24,8 +28,25 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
     }
     `;
     @property({type: Boolean}) noValidate: boolean = false;
-    private _elements: FormAssociatedElement[] = []
+    @property({type: Object}) onAction?: TAction;
+    private _elements: FormAssociatedElement[] = [];
+    private _defaults: Record<string, string> = {};
+    private _button: LitButton | null = null;
 
+    get button(): LitButton | null{
+        
+
+        if(this._button) return this._button;
+        const slots = this.querySelectorAll("slot");
+        for(const slot of slots){
+            for(const el of slot.assignedElements()){
+                if(el.tagName.toLowerCase() === "lit-button" && (el as LitButton).type === 'submit'){
+                    return el as LitButton;
+                }
+            }
+        }
+        return null;
+    }
     get length(){
         return this._elements.length;
     }
@@ -64,24 +85,35 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
     // ==== Events ==== 
     private _handleSubmit = (e: Event) => {
         e.preventDefault();
+        e.stopPropagation();
+        
+        this._button = e.target as LitButton;
         this.submit();
     }
     private _handleFormAttached = (e: CustomEvent) => {
         this._elements.push(e.detail.element);
+        this._addToDefault(e.detail.element)
         e.detail.onAttatch?.(this);
-
     } 
+    private _addToDefault(el: FormAssociatedElement){
+        if(el.name){
+            this._defaults[el.name] = el.value;
+        }
+    }
     public detatchElement(el: HTMLElement){
         this._elements = this._elements.filter(it => el !== it);
     }
-    public getData(){
+    public getData(): TReturnData{
         const data: TReturnData = {};
         this._elements.forEach(it => {
             if(!it.name || it.disabled) return;
             if(it.tagName.toLocaleLowerCase() === "lit-checkbox"){
                 data[it.name] = (it as LitCheckbox).checked;
             }
-            else if(it.tagName.toLocaleLowerCase() === "lit-numberfiled"){
+            else if(it.tagName.toLocaleLowerCase() === "lit-numberfield"){
+                data[it.name] = (it as LitNumberField).valueAsNumber;
+            }
+            else if(it.tagName.toLocaleLowerCase() === "lit-range"){
                 data[it.name] = (it as LitNumberField).valueAsNumber;
             }
             else{
@@ -108,20 +140,50 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         }
         return true;
     }
-
-    public submit(): false | TReturnData{
+    private _startSpinButton(){
+        if(this.button){
+            this.button.loading = true;
+        }
+    }
+    private _stopSpinButton(){
+        const btn = this.button;
+        if(btn) {
+            btn.loading = false;
+        }
+        this._button = null;
+    }
+    public async submit(): Promise<false | TReturnData>{
         if(!this.noValidate && !this.reportValidity()){
             return false;
         }
         const data = this.getData();
+        if(this.onAction){
+            try{
+                this._startSpinButton();
+                await this.onAction(data);
+                this._stopSpinButton();
+            }
+            catch{
+                this._stopSpinButton();
+                return false;
+            }
+        }
+        
         this.dispatchEvent(new CustomEvent('submit', {
             detail: { data },
             bubbles: true
-        }))
+        }));
         return data;
     }
-    public reset(){
-
+    public async reset(){
+        // Check tabss on reset 
+        this.elements.forEach(it => it.value = this._defaults[it.name]);
+        return new Promise(r => {
+            setTimeout(() => {
+                this.elements.forEach(it => it.validityDefault());
+                r(true);
+            });
+        });
     }
 }
 declare global {

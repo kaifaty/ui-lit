@@ -44,6 +44,19 @@ const getLang = () => window.ValidationsMessagesLang || window.navigator.languag
 
 type Constructor<T> = new (...args: any[]) => T;
 
+const defaultValidity = {
+    badInput: false,
+    customError: false,
+    patternMismatch: false,
+    rangeOverflow: false,
+    rangeUnderflow: false,
+    stepMismatch: false,
+    tooLong: false,
+    tooShort: false,
+    typeMismatch: false,
+    valueMissing: false,
+};
+
 export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T) => {
     class FormAssociated extends superClass implements FormAssociated{
         private _formAssiciated =  true;
@@ -54,7 +67,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         }
         static styles = [
             ...(superClass as any).elementStyles, 
-            css`            
+            css`    
             :host([disabled]){
                 opacity: 0.5;
                 pointer-events: none;
@@ -72,18 +85,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
 
         //@property({type: Boolean}) valid: boolean = true;
 
-        public validity: ValidityStateFlags = {
-            badInput: false,
-            customError: false,
-            patternMismatch: false,
-            rangeOverflow: false,
-            rangeUnderflow: false,
-            stepMismatch: false,
-            tooLong: false,
-            tooShort: false,
-            typeMismatch: false,
-            valueMissing: false,
-        };
+        public validity: ValidityStateFlags = {...defaultValidity};
         public _value: string = '';
         get value(){
             return this._value
@@ -103,6 +105,13 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         public connectedCallback(): void {
             super.connectedCallback();
             this.addEventListener("keypress", this._handleKeypress);
+        }
+        public disconnectedCallback(){
+            super.disconnectedCallback();
+            this._submitForm?.detatchElement(this);
+        }
+        async firstUpdated(){
+            await this.updateComplete;
             this.dispatchEvent(new CustomEvent("fromAttached", {
                 bubbles: true,
                 composed: true,
@@ -113,13 +122,6 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
                     }
                 }
             }));
-        }
-        public disconnectedCallback(){
-            super.disconnectedCallback();
-            this._submitForm?.detatchElement(this);
-        }
-        async firstUpdated(){
-            await this.updateComplete;
             this.isFirstUpdated = true
         }
         get form(){
@@ -128,6 +130,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         get valid(){
             return this.checkValidity();
         }
+
         /** Validation */
         private _getErrorText(key: TValidationMessageKey){
             const text = window.ValidationsMessages?.[key][getLang()] 
@@ -165,11 +168,9 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         }
         reportValidity(): boolean{
             const valid = this.checkValidity();
-            this.dispatchEvent(new CustomEvent(valid ? 'valid' : 'invalid', {
-                detail: this,
-                composed: true,
-                bubbles: true
-            }))
+            if(!valid){
+                this.dispatchEvent(new CustomEvent('reportInvalid'));
+            }
             return valid;
         }
         validate(){           
@@ -180,16 +181,27 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
                 this.setValidity({valueMissing: false});
             }
         }
-        setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement){
-                
+        setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement){                
             if(!this.willValidate) return;
             this.validity = {...this.validity, ...flags};
             if(message){
                 this.customValidationMessage = message;
             }
+            this._updateValidity();
+        }
+        public validityDefault(){
+            this.setValidity({...defaultValidity});
             this.reportValidity();
         }
-        
+
+
+        private _updateValidity(){
+            this.dispatchEvent(new CustomEvent(this.checkValidity() ? 'valid' : 'invalid', {
+                detail: this,
+                composed: true,
+                bubbles: true
+            }));
+        }
         /** ========= */
 
         private _handleKeypress(e: KeyboardEvent): void {

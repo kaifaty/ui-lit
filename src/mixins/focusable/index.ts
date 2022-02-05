@@ -16,14 +16,16 @@ export const focusable = <T extends Constructor<LitElement>>(superClass: T) => {
             }
             return !!this.shadowRoot?.querySelector('*:focus');
         }
-        
+        private _getElement(){
+            return this.shadowRoot?.querySelector('input, button, textarea, lit-button, [focusable]');
+        }
         connectedCallback(): void {
             super.connectedCallback();
             this.setAttribute('focusable', '');
         }
         
         focus(){
-            const el = this.shadowRoot?.querySelector('input, button, textarea, lit-button, [focusable]');  
+            const el = this._getElement();  
             if(el){
                 (el as HTMLElement).focus();
                 if(el instanceof HTMLInputElement){

@@ -49,6 +49,7 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
         this._percent = 0;
         this._offsetX = 0;
         this.tabindex = 0;
+        this._trackElement = null;
         this._max = 100;
         this._value = '0';
         // ==== Events ==== 
@@ -59,7 +60,7 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
             e.target.setPointerCapture(e.pointerId);
             this._handlePointerDown();
             this._handlePointerMove(e.clientX);
-            e.preventDefault();
+            e.preventDefault(); // Atop auto focus
         };
         this._onPointerMove = (e) => {
             if (!e.isPrimary || !this.hasAttribute("pressed"))
@@ -69,7 +70,7 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
         };
         this._onPointerLostCapture = (e) => {
             this._handlePointerUp(e.clientX);
-            e.preventDefault();
+            // e.preventDefault();
         };
         this._onPointerOver = (e) => {
             this._onPointOver(e);
@@ -82,6 +83,7 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
             this.requestUpdate();
         };
         this._handlePointerDown = () => {
+            this._rect = this.getBoundingClientRect();
             if (this.isDisabled())
                 return;
             this.isPercentHidden = false;
@@ -206,23 +208,37 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
         this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
     }
+    firstUpdated(_changedProperties) {
+        super.firstUpdated(_changedProperties);
+        this._trackElement = this.shadowRoot.querySelector(".track");
+    }
     willUpdate() {
         this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
     }
     updated(props) {
         super.updated(props);
-        if (props.has("value")) {
+        if (props.has("disabled") && this.disabled) {
+            //this.style.setProperty(`--percent`, 0 + "%")
+        }
+        else if (props.has("disabled") && !this.disabled) {
+            //this.style.setProperty(`--percent`, this._percent + "%")
+        }
+        //else 
+        if (props.has("value") || props.has("min") || props.has("max")) {
             this.style.setProperty(`--percent`, this._percent + "%");
         }
     }
     // ==== templates ==== 
     _pointersTemplate() {
         if (this.usePoints) {
-            return this._points.map(it => html `<div                         
-                        data-value = "${it}"
-                        style = "left: ${it}%;"
-                        class = "point point-${it} ${this._percent >= it ? 'filled' : ''}"></div>`);
+            return this._points.map(it => {
+                const filled = this._percent >= it; //&& !this.disabled
+                return html `<div                         
+                    data-value = "${it}"
+                    style = "left: ${it}%;"
+                    class = "point point-${it} ${filled ? 'filled' : ''}"></div>`;
+            });
         }
         return nothing;
     }
@@ -270,10 +286,13 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
     // ==== Actions ==== 
     _recalcValue() {
         let val = this.valueAsNumber;
-        if (this.valueAsNumber > this.max) {
+        if (this.min > this.max) {
+            val = this.min;
+        }
+        else if (val > this.max) {
             val = this.max;
         }
-        if (this.valueAsNumber < this.min) {
+        else if (val < this.min) {
             val = this.min;
         }
         this._value = val.toFixed(this.decimals);

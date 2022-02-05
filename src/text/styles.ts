@@ -37,7 +37,7 @@ export const textCSSVarsNames = makeCSSNameProxy(textCSSVars, "--lit-text-");
 
 export const textStyles = css`
 :host{
-    display: block;
+    display: inline;
 }
 :host([status="error"]),
 :host([status="danger"]){

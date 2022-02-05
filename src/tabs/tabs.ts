@@ -5,7 +5,7 @@ import { FormAssociatedProps } from '../mixins/form-associated/interface';
 import { scrollbar } from '../styles/scrollbar';
 import { LitTab } from './tab';
 import { focusable } from '../mixins/focusable/index';
-import { _vTabs as _v } from './styles';
+import { _v, tabsStyles } from './styles';
 
 export type TTabType = 'button' | 'tab';
 export type TTab = {
@@ -23,38 +23,7 @@ export interface ITabs extends FormAssociatedProps{
 @customElement("lit-tabs")
 export class LitTabs extends focusable(formAssociated(LitElement)) implements ITabs{
     static get styles() {
-        return [
-        ...super.elementStyles,
-        css`
-        :host{
-            display: inline-block;
-            padding: 0 0 4px 0;
-            box-sizing: border-box;
-            position: relative;
-        }
-        :host([disabled]){
-            opacity: 0.5;
-        }
-        .wrapper{
-            display: flex;
-            width: 100%;
-        }
-        .scroll-wrapper:focus{
-            outline: ${_v.outline};
-        }
-        .scroll-wrapper{
-            overflow-y: hidden;
-            width: 100%;
-        }
-        .scroller{
-            width: 100%;
-            overflow-x: scroll;
-            overflow-y: hidden;
-            margin-bottom: -17px;
-            -webkit-overflow-scrolling: touch;
-            display: flex;
-        }
-        `, scrollbar];
+        return [...super.elementStyles, tabsStyles, scrollbar];
     } 
 
     @property({type: String}) type: TTabType = 'tab';
@@ -130,12 +99,11 @@ export class LitTabs extends focusable(formAssociated(LitElement)) implements IT
     }
     render(){
         return html`
-        <div class = "scroll-wrapper" 
-             @keydown = "${this._handleKeyEvent}">
-            <div class = "scroller">
-                <div class = "wrapper"><slot></slot></div>
-            </div>
-        </div>`;
+        <div 
+            tabindex = "0" 
+            @keydown = "${this._handleKeyEvent}" 
+            class = "wrapper"><slot></slot></div>
+        `;
     }
 
     private _handleKeyEvent = (e: KeyboardEvent) => {

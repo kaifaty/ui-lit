@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import '../ripple';
 import type { LitSelect } from './select';
 import { focusable } from '../mixins/focusable/index';
 import { optionStyles } from './styles';

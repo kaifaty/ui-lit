@@ -16,6 +16,9 @@ const Button = (data: IFormProps) =>
             <label-element for = "salary">Salary:</label-element> 
             <lit-numberfield id = "salary" decimals = "2" icon = "USDT" min = "500" ?required = "${true}"></lit-numberfield>
             
+            <label-element >Required:</label-element> 
+            <lit-numberfield required ></lit-numberfield>
+            
             <label-element for = "live">Is Alive</label-element>
             <lit-checkbox id = "live"></lit-checkbox>
             <div style = "grid-column: 1/3; display: flex; justify-content: center;">
@@ -25,8 +28,7 @@ const Button = (data: IFormProps) =>
     <form @submit = "${e => e.preventDefault()}">
         
         <label-element for = "name">Name:</label-element> 
-        <lit-textfield autocomplete = "on" name = "email" id = "name" ></lit-textfield>
-        <input name = "qwe">
+        <input minlength = "4" type = "text" >
         <button type = "submit">Submit</button>
     </form>
     

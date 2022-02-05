@@ -41,6 +41,8 @@ export type TColumnItem = {
     ellipses?: boolean
     halfHidden?: (data: any) => boolean
 }
+type TRowSelected = (data: any) => boolean;
+
 export type TSortDirections = 'ascend' | 'descend';
 
 const nodataSVG = svg`
@@ -94,6 +96,7 @@ export class TableElement extends LitElement{
     }
     get rowHeight(){return this._rowHeight}
 
+    @property({type: Object}) rowSelect?: TRowSelected;
     @property({type: Array}) dataSource: Array<ISourceItem> = [];
     @property({type: Boolean, reflect: true}) pagination: boolean = false;
     @property({type: Boolean}) paginationToHeight: boolean = false;
@@ -219,7 +222,9 @@ export class TableElement extends LitElement{
                 : this._data, 
             it => it.key, 
             it => html`
-            <tr>
+            <tr @click = "${this._onRowClick}" 
+                class = "${this.rowSelect?.(it) ? 'selected' : ''}"
+                data-key = "${it.key}">
                 ${this.columns.map((col, i) => {
                     const classes = {
                         ellipses: !!col.ellipses,
@@ -251,7 +256,7 @@ export class TableElement extends LitElement{
                 <tbody>
                 ${
                     !this._data.length 
-                        ? html`<tr><td colspan = "200" align = "center">
+                        ? html`<tr><td colspan = "200" style = "text-align: center;">
                                     ${nodataSVG}
                                 </td></tr>` 
                         : this._rowsTemplate()
@@ -274,7 +279,14 @@ export class TableElement extends LitElement{
             <slot></slot>
         </footer>`;
     }
-    
+    private _onRowClick(e: Event){
+        const key = (e.target as HTMLElement).closest('tr')?.dataset.key;
+        this.dispatchEvent(new CustomEvent("rowClick", {
+            detail: key,
+            bubbles: true,
+            composed: true
+        }));
+    }
     private _onResize = (rect: DOMRect) => {
         this._rect = rect;
         this.recalcPageLength();

@@ -11,6 +11,7 @@ export class LitLabel extends LitElement{
     :host{
         display: inline-flex;
         align-items: center;
+        color: var(--lit-label-color, inherit);
     }
     :host([disabled]){
         opacity: 0.5;

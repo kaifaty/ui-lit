@@ -1,6 +1,7 @@
 import { LitElement, html, css } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
-
+import { customElement, state, property } from 'lit/decorators.js';
+import { PalleteName, HCL } from './interface';
+import {firstUpper} from 'kailib';
 
 @customElement("lit-theme-configer")
 export class LitThemeConfiger extends LitElement{
@@ -8,7 +9,7 @@ export class LitThemeConfiger extends LitElement{
     :host{
         display: block;
     }
-    lit-header{
+    .wrapper lit-header{
         margin: 0;
     }
     .wrapper{
@@ -18,18 +19,54 @@ export class LitThemeConfiger extends LitElement{
         align-items: center;
     }
     `;
+    @property({type: String}) name: PalleteName = 'primary';
+    @property({type: Array}) params: HCL = [330, 75, 75];
 
-    @state() hue: number = localStorage.appThemeHue || "264";
     protected render() {
         return html`
+        <lit-header level = "4">${firstUpper(this.name)}</lit-header>
+        <slot></slot>
         <div class = "wrapper">
-            <slot><lit-header level = "5">Hue:</lit-header></slot>
-            <lit-range min = "0" max = "360" value = "${this.hue}"></lit-range>
-            <slot><lit-header level = "5">Saturation:</lit-header></slot>
-            <lit-range></lit-range>
+            <lit-header level = "5"><slot name = "hue">Hue:</slot></lit-header>
+            <lit-range 
+                @changed = "${this._changeH}" 
+                min = "0" 
+                max = "360" 
+                value = "${this.params[0]}"></lit-range>
+            <lit-header level = "5"><slot name = "hue">Chroma:</slot></lit-header>
+            <lit-range
+                @changed = "${this._changeS}" 
+                min = "0" 
+                max = "100" 
+                value = "${this.params[1]}"></lit-range>
+            <lit-header level = "5"><slot name = "hue">Luminance:</slot></lit-header>
+            <lit-range
+                @changed = "${this._changeL}" 
+                min = "0" 
+                max = "100" 
+                value = "${this.params[2]}"></lit-range>
         </div>`;
     }
-    private _change(){
-
+    private _changeH(e: CustomEvent){
+        this.params = [e.detail.valueAsNumber, this.params[1], this.params[2]];
+        this._dispatch();
+    }
+    private _changeS(e: CustomEvent){
+        this.params = [this.params[0], e.detail.valueAsNumber, this.params[2]];
+        this._dispatch();
+    }
+    private _changeL(e: CustomEvent){
+        this.params = [this.params[0], this.params[1], e.detail.valueAsNumber];
+        this._dispatch();
+    }
+    private _dispatch(){
+        this.dispatchEvent(new CustomEvent("changedPallete", {
+            detail: {
+                name: this.name,
+                params: this.params
+            },
+            composed: true,
+            bubbles: true
+        }))
     }
 }

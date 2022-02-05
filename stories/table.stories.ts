@@ -87,8 +87,20 @@ const dataSource = [...Array(35)].map((it, i) =>
     }) as any;
 
 // dataSource
+
+const click = (e: CustomEvent) => {
+  alert(e.detail);
+}
+const rowSelect = (d: typeof data) => {
+  return d.key == "7"
+}
 const Table = (text: string) => 
     html`
+    <style>
+      lit-table{
+        --lit-table-cursor: pointer;
+      }
+    </style>
     <lit-table
         style = "width: 380px; height: 400px;"
         pagination
@@ -96,8 +108,10 @@ const Table = (text: string) =>
         defaultSort = "age"
         .dataSource = "${dataSource}"
         .columns = "${columns}"
+        .rowSelect = "${rowSelect}"
         rowHeight = "25"
         headerHeight = "20"
+        @rowClick = "${click}"
     ></lit-table>`;
 
 

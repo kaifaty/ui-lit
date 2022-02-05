@@ -42,7 +42,7 @@ export declare class LitNumberField extends LitNumberField_base implements Numbe
     set value(value: string);
     private _valueResolve;
     private _cancelIconTemplate;
-    willUpdate(): void;
+    willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void;
     render(): TemplateResult<1>;
     updated(props: Map<string | number | symbol, unknown>): void;
     validate(): void;

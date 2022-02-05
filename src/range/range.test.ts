@@ -1,7 +1,6 @@
 import { expect, assert } from '@esm-bundle/chai';
 
 import './index'
-
 const getRangeFiled = () => document.querySelector("lit-range")!;
 
 describe('Test range', async () => {
@@ -33,7 +32,8 @@ describe('Test range', async () => {
         await new Promise(r => setTimeout(r, 0));
         expect(range.offsetX).equal(0);
     });
-    it('should calc offset from min', async() => {
+    
+    it('should recalc by min value', async() => {
         const range = getRangeFiled();        
         range.min = 50;
         range.max = 100;
@@ -41,7 +41,8 @@ describe('Test range', async () => {
         await new Promise(r => setTimeout(r, 0));
         expect(range.valueAsNumber).equal(50);
     });
-    it('should calc offset from min', async() => {
+    
+    it('should recalc by max value', async() => {
         const range = getRangeFiled();        
         range.min = 50;
         range.max = 100;

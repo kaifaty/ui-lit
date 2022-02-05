@@ -6,7 +6,7 @@ import {ButtonProps } from  '../src/button'
 const _Button = (data: ButtonProps) => {
   return html`
   
-  <div style = "position: absolute; top: 300px; left: 300px;">
+  <div>
     <lit-button 
       type = "${data.type || 'button'}"
       .primary = "${!!data.primary}"

@@ -54,6 +54,12 @@ describe('Test number', async () => {
         await true;
         expect(number.value).equal("0.000");
     });
+    it('should possible to input zeroes after point by keyboard, for example: 0.0001 ', async() => {
+        const number = getNymberFiled();
+        number.value = "1.000";
+        await true;
+        expect(number.value).equal("1.000");
+    });
     it('should save minus', async() => {
         const number = getNymberFiled();
         number.decimals = 1
@@ -67,6 +73,13 @@ describe('Test number', async () => {
         number.valueAsNumber = 1;
         await true;
         expect(number.value).equal("1");
+    });
+    it('should zero number by equal empty string', async() => {
+        const number = getNymberFiled();
+        number.decimals = 2
+        number.valueAsNumber = 0;
+        await true;
+        expect(number.value).equal("");
     });
     it('should splice zeroes when set as number', async() => {
         const number = getNymberFiled();

@@ -76,9 +76,13 @@ lit-icon{
     top: -8px;
     border-radius: 12px;
     padding: 2px;
+    width: 12px;
+    height: 12px;
     color: ${_v.iconColor};
     background: ${_v.iconBackground};
     box-shadow: ${_v.iconShadow};
-    
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 `

@@ -64,6 +64,7 @@ export declare class LitRange extends LitRange_base {
     private _percent;
     private _offsetX;
     tabindex: number;
+    private _trackElement;
     get offsetX(): number;
     get min(): number;
     set min(value: number);
@@ -79,6 +80,7 @@ export declare class LitRange extends LitRange_base {
     get minPercent(): number;
     isDisabled(): boolean;
     connectedCallback(): void;
+    protected firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): void;
     willUpdate(): void;
     updated(props: Map<string, unknown>): void;
     private _pointersTemplate;

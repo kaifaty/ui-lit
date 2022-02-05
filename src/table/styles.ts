@@ -10,6 +10,18 @@ const tableCSSVars ={
         name: "font-size",
         default: "inherit"
     },
+    cursor: {
+        name: "cursor",
+        default: "initial"
+    },
+    rowHover: {
+        name: "row-hover",
+        default: "#f5f5f5"
+    },
+    rowSelected: {
+        name: "row-selecte",
+        default: "#eee"
+    },
     cellPadding: {
         name: "cell-padding",
         default: "0 15px"
@@ -119,6 +131,8 @@ th{
     padding: 0;
     color: ${_v.headerColor};
 }
+
+
 th:not(:last-child) lit-table-header::after{
     content: '';
     position: absolute;
@@ -129,6 +143,15 @@ th:not(:last-child) lit-table-header::after{
     top: 50%;
     right: 0;
     transform: translate(0, -50%);
+}
+tbody tr{
+    cursor: ${_v.cursor};
+}
+tbody tr:hover{
+    background-color: ${_v.rowHover};
+}
+tbody tr.selected{
+    background-color: ${_v.rowSelected};
 }
 main{
     overflow-y: auto;

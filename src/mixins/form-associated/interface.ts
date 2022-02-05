@@ -28,6 +28,7 @@ export interface FormAssociatedProps {
     validate(): void;
     checkValidity(): boolean;
     reportValidity(): boolean;
+    validityDefault(): void;
     setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement): void;
 }
 

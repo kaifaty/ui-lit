@@ -9,6 +9,8 @@ import { KeyDownController } from '../controllers/KeyController';
 
 import '../icon';
 import '../button';
+import '../form';
+import { LitFrom } from '../form/index';
 export interface IDialogProps {
     opened: boolean
     closeBtnText: string
@@ -17,8 +19,8 @@ export interface IDialogProps {
     open(): void
     close(): void
 }
-let pool: LitDialog[] = [];
-
+let dialogs: LitDialog[] = [];
+const peekDialog = () => dialogs[dialogs.length - 1];
 
 @customElement('lit-dialog')
 export class LitDialog extends LitElement{
@@ -29,11 +31,12 @@ export class LitDialog extends LitElement{
     @property({type: Boolean, attribute: true, reflect: true}) opened: boolean = false;
     @property({type: Boolean, attribute: true, reflect: true}) useCancelBtn: boolean = true;
     @property({type: Object, attribute: false}) content: string | TemplateResult= "";
+    @property({type: Object, attribute: false}) onConfirm?: (data?: any) => Promise<any>;
+    
 
     @state() headerVisible = false;
     private _keyPressController = new KeyDownController(this);
 
-    resolve: Function | null = null;
 
     private _footerTemplate(){
         return html`${
@@ -49,16 +52,23 @@ export class LitDialog extends LitElement{
         }
         <slot name = "footer"></slot>`;
     }
+    public get form(): LitFrom | null | undefined{
+        return this.querySelector('lit-form') || this.shadowRoot?.querySelector('lit-form');
+    }
     render(){
         return html`
         <div class = "overlap">
-            <div class = "dialog" @click = "${this._onClick}">
+            <lit-form 
+                class = "dialog" 
+                .onAction = "${this.onConfirm}"
+                @submit = "${this._submit}"
+                @click = "${this._onClick}">
                 <header class = "${this.headerVisible ? 'visible': ''}">
                     <slot name = "header" 
                         @slotchange = "${this._headerChanged}"></slot>
                 </header>
                 <div class = "icons">
-                    ${pool.length > 1
+                    ${dialogs.length > 1
                         ? html`<lit-icon 
                                     class = "arrow-back"
                                     icon = "back"                        
@@ -72,80 +82,73 @@ export class LitDialog extends LitElement{
                 </div>
                 <main class = "ff-scrollbar"><slot></slot></main>
                 <footer>${this._footerTemplate()}</footer>
-            </div>
+            </lit-form>
         </div>`
     }
-
     // **** Actions **** 
     private _headerChanged = (e: Event) => {
         this.headerVisible = true;
     }
     private _show(){
         document.body.style.paddingRight = getScrollbarWidth() + "px";
-        document.body.style.overflow = 'hidden';            
-        this.opened = true;
+        document.body.style.overflow = 'hidden';                    
     }
     private _hide(){
         document.body.style.paddingRight = "initial";
         document.body.style.overflow = 'initial';
     }
+
+    private _focus(){
+        this.querySelector("lit-textfield, lit-numberfield")?.focus();
+    }
     public open(){
-        const opened = pool.filter(d => d === this)[0];
-        if(opened) return;
-        pool.forEach(it => it.removeAttribute('opened'));
-        pool.push(this);
-        this.opened = true;
+        if(!dialogs.includes(this)){
+            const prev = peekDialog();
+            if(prev) prev.opened = false;
+            dialogs.push(this);
+        }
         this._show();
-        
+        this._openInstance(this);        
         this.dispatchEvent(new CustomEvent('dialogOpened'));
-        return new Promise(r => {
-            this.resolve = r;
-        });
+        setTimeout(() => {
+            this._focus()
+        })
+    }
+    private _openInstance(dialog?: LitDialog){
+        if(!dialog) return;
+        dialog.opened = true;
     }
     public back(){
-        this.opened = false;
-        this._hide();
-        this.resolve?.(false);
-        this.resolve = null;
-        pool = pool.filter(it => it !== this);
-        pool[pool.length - 1]?.setAttribute('opened', '');
+        this._closeInstanse(dialogs.pop());
+        this._openInstance(peekDialog());
         this.dispatchEvent(new CustomEvent('dialogBack'));
     }
+    private _closeInstanse(dialog?: LitDialog){
+        if(!dialog) return;
+        dialog.opened = false;
+        dialog.shadowRoot?.querySelector("lit-form")?.reset();
+        dialog.dispatchEvent(new CustomEvent('dialogClose'));
+    }
     public close(){
-        this.opened = false;
         this._hide();
-        pool.forEach(it => {
-            it.resolve?.(false);
-            it.resolve = null;
-        });
-        pool = [];
-        this.dispatchEvent(new CustomEvent('dialogClose'));
+        dialogs.forEach(this._closeInstanse);
+        dialogs = [];
     }
     public confirm(){
-        const data = this.querySelector('lit-form');
-        if(data){
-            const result = data.submit();
-            if(result){
-                this.resolve?.(result);
-            }
-            else{
-                return;
-            }
-        }
-        else{
-            this.resolve?.(true);
-        }
-        this.resolve = null;
-        this.dispatchEvent(new CustomEvent('dialogConfirm'));
-        this.close();
-        
+        this.form?.submit();
     }
-    
+    private _onConfirm(){
+        this.dispatchEvent(new CustomEvent('dialogConfirm'));
+        this.back();
+    }
 
     // **** Events **** 
-    
+    private _submit(){
+        this._onConfirm();
+    }
+
     private _onClick(e: Event){
-        const el = e.target as HTMLElement;
+        const el = e.target as HTMLElement;        
         if(el.closest('[confirm]')){
             this.confirm();
         }
@@ -153,6 +156,8 @@ export class LitDialog extends LitElement{
             this.close();
         }
     }
+
+    // TODO ловушка для фокуса на модальном окне
     handlekeyDown(e: KeyboardEvent){
         if(e.key === "Escape"){
             this.close()

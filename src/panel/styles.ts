@@ -30,6 +30,18 @@ const panelCSSVars = {
         name: "danger-border",
         default: "1px solid initial",
     },
+    successBackground: {
+        name: "success-background",
+        default: "hsl(110, 85%, 75%)",
+    },
+    successColor: {
+        name: "success-color",
+        default: "hsl(0, 80%, 5%)",
+    },
+    successBorder: {
+        name: "success-border",
+        default: "1px solid initial",
+    },
 }
 
 const _v = makeCSSProxy(panelCSSVars, "--lit-panel-");
@@ -49,4 +61,9 @@ export const panelStyles = css`
     background-color: ${_v.dangerBackground};
     color: ${_v.dangerColor};
     border: ${_v.dangerBorder};
+}
+:host([success]){
+    background-color: ${_v.successBackground};
+    color: ${_v.successColor};
+    border: ${_v.successBorder};
 }`;

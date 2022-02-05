@@ -53,7 +53,7 @@ export const RangeCSSVars = {
     },
     pointBackground: {
         name: "points-background",
-        default: "#eee"
+        default: "#bbb"
     },
     filled: {
         name: "filled",
@@ -83,6 +83,7 @@ export const rangeStyles = css`
     --padding: 12px;
     --default-filled: hsl(264, 100%, 60%);
     --percent: 0;
+    --thumb-border-size: 2;
     
     padding: 1px;
     box-sizing: border-box;
@@ -141,14 +142,14 @@ export const rangeStyles = css`
     position: absolute;
     z-index: 3;
     left: calc(var(--size) / 2 * -1);
-    top: calc(var(--top-margin) - var(--size) / 2 + var(--line-height) / 2);
+    top: calc(var(--top-margin) - var(--size) / 2 + var(--line-height) / 2 - var(--thumb-border-size));
     width: var(--size, 14px);
     height: var(--size, 14px);
 }
 
 .thumb.fullfiled{
     background-color: ${_v.filled};
-    outline: ${_v.thumbOutlineFullfiled};
+    border: ${_v.thumbOutlineFullfiled};
 }
 
 
@@ -163,30 +164,30 @@ export const rangeStyles = css`
     width: 100%;
     height: 100%;
     background-color: ${_v.thumbBackground};
-    outline: ${_v.thumbOutline};
+    border: ${_v.thumbOutline};
     box-shadow: ${_v.thumbShadow};    
 }
 
 .point{
     position: absolute;
-    top: calc(var(--top-margin) - var(--pointer) / 2 + var(--line-height) / 2);
+    top: calc(var(--top-margin) - var(--pointer) / 2 + var(--line-height) / 2 - var(--pointer-border));
     width: var(--pointer);
     height: var(--pointer);
     border-radius: var(--pointer);
     background-color: ${_v.pointBackground};
-    outline: var(--pointer-border) solid ${_v.trackBackground};
+    border: var(--pointer-border) solid ${_v.trackBackground};
     transform: translate(-50%, 0);
     z-index: 1;
 }
 .point.filled{
-    outline: var(--pointer-border) solid ${_v.filled};
+    border: var(--pointer-border) solid ${_v.filled};
     background-color: ${_v.filled};
 }
 :host([hover]) .point.filled{
-    outline: var(--pointer-border) solid ${_v.filledHover};
+    border: var(--pointer-border) solid ${_v.filledHover};
     background-color: ${_v.filledHover};
 }
 :host([hover]) .point:not(.filled){
-    outline: var(--pointer-border) solid ${_v.trackBackgroundHover};
+    border: var(--pointer-border) solid ${_v.trackBackgroundHover};
 }
 `;

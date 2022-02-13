@@ -1,8 +1,6 @@
-import { ref, createRef } from 'lit/directives/ref.js';
-import { FormAssociatedElement, ValidityStateFlags } from '../form-associated/interface';
+import { FormAssociatedElement } from '../form-associated/interface';
 import { property } from 'lit/decorators.js';
-import { nothing, html, css, LitElement } from 'lit';
-import { LitNote } from '../../note/index';
+import { nothing, html, css } from 'lit';
 
 type Constructor<T> = new (...args: any[]) => T;
 

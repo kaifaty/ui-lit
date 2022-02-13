@@ -1,12 +1,13 @@
+import { button } from './../src/button/styles';
 
 
 import { html } from 'lit-html';
 import { html as _html } from 'lit';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/theme';
-import '../dist/theme/switcher';
-import '../dist/theme/pallete';
-import { IThemeProps } from '../dist/theme/interface';
+import '../src/theme';
+import '../src/theme/switcher';
+import '../src/theme/pallete';
+import { IThemeProps } from '../src/theme/interface';
 
 const tableData = [
     {key: 'checkbox', content: _html`<lit-checkbox></lit-checkbox>`},
@@ -31,6 +32,11 @@ const columns = [
     },
     {key: "content", title: "Content", valueFn: (it) => it.content},
 ];
+
+const toggle = () => {
+    const el = document.querySelector(`lit-sidebar`);
+    el.opened = !el.opened;
+}
 const Theme = (data: IThemeProps) => 
     html`
     <style>
@@ -80,6 +86,7 @@ const Theme = (data: IThemeProps) =>
                 <lit-header level = "2" style = "margin: 0;">Switch theme</lit-header> 
                 <div>
                     <lit-theme-switcher></lit-theme-switcher>
+                    <lit-button @click = "${toggle}">Nav</lit-button>
                 </div>
             </div>
             <div class = "row-between">
@@ -99,6 +106,32 @@ const Theme = (data: IThemeProps) =>
         </header>
         <lit-divider></lit-divider>
         <main>
+                    
+            <lit-select 
+                multiple
+                style = "width: 200px;"
+                .disabled = "${data.disabled}"
+                .readonly = "${data.readonly}">
+                    <lit-option value = "1">test 1</lit-option>
+                    <lit-option value = "2">test 2</lit-option>
+                    <lit-option value = "3">test 3</lit-option>
+                    <lit-option value = "4">test 4</lit-option>
+                    <lit-option value = "5">test 5</lit-option>
+                    <lit-option value = "6">Andry</lit-option>
+            </lit-select>
+            <lit-sidebar .opened = "${false}">
+                Sidebar
+                <br>
+                <br>
+                <lit-select value = "2">
+                    <lit-option value = "1">Value 1</lit-option>
+                    <lit-option value = "2">Value 2</lit-option>
+                </lit-select>
+                <lit-button>Button</lit-button>
+                <br>
+                <br>
+                <lit-button borderless>Borderless</lit-button>
+            </lit-sidebar>
             <div >
                 <lit-header level = "3">Buttons</lit-header>
                 <div style = "display: grid; width: 300px; gap: 5px;">

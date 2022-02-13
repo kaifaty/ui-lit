@@ -32,7 +32,7 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
     private _elements: FormAssociatedElement[] = [];
     private _defaults: Record<string, string> = {};
     private _button: LitButton | null = null;
-
+    private _loading = false;
     get button(): LitButton | null{
         
 
@@ -94,6 +94,7 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         this._elements.push(e.detail.element);
         this._addToDefault(e.detail.element)
         e.detail.onAttatch?.(this);
+        e.stopPropagation();
     } 
     private _addToDefault(el: FormAssociatedElement){
         if(el.name){
@@ -140,12 +141,14 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         }
         return true;
     }
-    private _startSpinButton(){
+    private _startLoading(){
+        this._loading = true;
         if(this.button){
             this.button.loading = true;
         }
     }
-    private _stopSpinButton(){
+    private _stopLoading(){
+        this._loading = false;
         const btn = this.button;
         if(btn) {
             btn.loading = false;
@@ -153,18 +156,19 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
         this._button = null;
     }
     public async submit(): Promise<false | TReturnData>{
+        if(this._loading) return false;
         if(!this.noValidate && !this.reportValidity()){
             return false;
         }
         const data = this.getData();
         if(this.onAction){
             try{
-                this._startSpinButton();
+                this._startLoading();
                 await this.onAction(data);
-                this._stopSpinButton();
+                this._stopLoading();
             }
             catch{
-                this._stopSpinButton();
+                this._stopLoading();
                 return false;
             }
         }
@@ -177,7 +181,12 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
     }
     public async reset(){
         // Check tabss on reset 
-        this.elements.forEach(it => it.value = this._defaults[it.name]);
+        this.elements.forEach(it => {
+            if(!['lit-tabs', 'lit-select'].includes(it.tagName.toLowerCase())){
+                it.value = this._defaults[it.name];
+                it.notify();
+            }            
+        });
         return new Promise(r => {
             setTimeout(() => {
                 this.elements.forEach(it => it.validityDefault());

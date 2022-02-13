@@ -11,7 +11,7 @@ const menuCSSVars = {
     },
     background: {
         name: "background",
-        default: "initial",
+        default: "#fff",
     },
     backgroundHover: {
         name: "background-hover",
@@ -20,6 +20,14 @@ const menuCSSVars = {
     ripple: {
         name: "ripple",
         default: "hsl(340, 50%, 60%)",
+    },
+    height: {
+        name: "height",
+        default: "30px",
+    },
+    mobileHeight: {
+        name: "mobileHeight",
+        default: "40px",
     },
 }
 
@@ -56,9 +64,13 @@ lit-button{
 export const menuStyles = css`
 :host{
     display: inline-block;
-    ${buttonCSSVarsNames.mediumHeight}: var(--lit-menu-item-height, 30px);
+    ${buttonCSSVarsNames.mediumHeight}: ${_v.height};
     ${buttonCSSVarsNames.justify}: start;
+}
+:host([mobile]){
+    ${buttonCSSVarsNames.mediumHeight}: ${_v.mobileHeight};
 }
 lit-select{
     width: 100%;
-}`
+}
+`

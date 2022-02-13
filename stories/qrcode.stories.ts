@@ -1,7 +1,7 @@
 
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/qrcode';
+import '../src/qrcode';
 import type { IQRCodeProps } from '../src/qrcode';
 
 

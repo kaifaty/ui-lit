@@ -133,11 +133,11 @@ export const buttonCSSVars = {
         default: "600",
     },
     textTransform: {
-        name: "weight",
+        name: "text-transform",
         default: "uppercase",
     },
     letterSpacing: {
-        name: "weight",
+        name: "letter-spacing",
         default: "normal",
     },
     outline: {

@@ -1,5 +1,5 @@
 import { TemplateResult, html } from 'lit-html';
-import '../dist/checkbox';
+import '../src/checkbox';
 import type { ICheckboxProps } from '../src/checkbox';
 import { Story, Meta } from '@storybook/web-components';
 import './assets/style.css'

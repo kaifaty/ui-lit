@@ -1,3 +1,6 @@
+import { search } from './../svgIcons/index';
+import { dropdown, cancel } from '../svgIcons';
+import { button } from './../button/styles';
 import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
 import { formAssociated } from '../mixins/form-associated/index';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -12,6 +15,7 @@ import { focusable } from '../mixins/focusable/index';
 import { labled } from '../mixins/labled/index';
 import { notificatable } from '../mixins/notificatable/index';
 import { selectStyles } from './styles';
+import { getEventDataset } from 'kailib';
 
 
 @customElement("lit-select")
@@ -26,8 +30,9 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
     }
     
     @property({type: Number}) tabindex: number = 0;
-    @property({type: Boolean}) multiple: boolean = false;
-    //@property({type: String}) type: 'select-one' | 'select-multiple' = 'select-one';
+    @property({type: Boolean, reflect: true}) multiple: boolean = false;
+    @property({type: Boolean, reflect: true}) searchable: boolean = false;
+    @property({type: String,}) searchPlaceholder: string = 'search';
 
     
     public isMenu = false;
@@ -38,21 +43,50 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         }
         const oldValue = this._open;
         this._open = value;
+        if(value){
+            this.setSearchValue('');
+        }
         this.requestUpdate('open', oldValue);
     }
     get open(){
         return this._open;
     }
 
-    private _value: string = '';
+    private _values: Set<string> = new Set();
+
+    private _toggleInValues(value: string){
+        if(this._values.has(value)){
+            this._values.delete(value);
+        }
+        else{
+            this._values.add(value);
+        }
+    }
+
+    private _setInValues(value: string){
+        this._values.clear();
+        this._values.add(value);
+    }
+    private _value: string = ''
     get value(){
-        return this._value
+        return this.selectedOptions[0]?.value;
     }
     set value(value: string){
+        this._value = value;
         this._setValue?.(value, false);
     }
 
     @state() options: LitOption[] = [];
+    private seatchValue = '';
+
+    setSearchValue(value: string){
+        this.seatchValue = value;
+        this.options.forEach(it => {
+            it.visability = it.innerText.toLocaleLowerCase().includes(value.toLocaleLowerCase())
+        })
+        this.requestUpdate();
+    }
+    
 
     set selectedIndex(value: number){
         if(value > this.length - 1 || value < 0) return;
@@ -64,34 +98,38 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         }
         return -1;
     }
+    get selectedOptions(){
+        return this.options.filter(it => it.selected);
+    }
+    get selectedValues(){
+        return [...this._values.values()];
+    }
     get selectedContent(){
-        const selected = this.options.find(it => it.selected);
-        if(selected){
-            return selected.innerHTML;
-        }
-        return '-'
+        return this.selectedOptions[0]?.innerHTML || '-'
     }
 
-    private _setValue = (value: string, notify = true) => {        
-        if(value === this.value){
-            return;
+    private _setValue = (value: string, notify = true) => {     
+        if(this.multiple){
+            this._toggleInValues(value);
+            if(this.searchable){
+                setTimeout(() => {
+                    this.shadowRoot?.querySelector("input")?.focus();
+                })
+            }
         }
-        this._value = value;
-        const exist = this.options.find(it => it.value === value);
-        if(!exist) return;
-        this.options.forEach(it => it.selected = it.value === value)
-        this.requestUpdate()
-        if(notify){
-            this.dispatchEvent(new CustomEvent('changed', {
-                detail: value,
-                bubbles: true,
-                composed: true
-            }));
+        else{
+            this._setInValues(value);
+            this.hide();
+        }
+        this.options.forEach(it => it.selected = this._values.has(it.value));
+        this.requestUpdate();
+        this.setSearchValue("");
+        if(notify){ 
+            this.notify()
         }
     }
 
-    private _optionSelect = (e: CustomEvent) => {
-        this.open = false;
+    private _optionSelect = (e: CustomEvent) => {        
         this._setValue(e.detail);
     }
 
@@ -99,27 +137,32 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         const option = e.detail;
         option.setSelectHost(this);
         this.options.push(option);
-        if(this.value){
-            if(option.value === this.value){
-                option.selected = true
-            }
-            else{
-                option.selected = false
-            }
+        if(option.value === this._value){
+            option.selected = true; 
         }
-        else if(option.selected){
-            this.value = option.value;
+        if(option.selected){
+            this._setValue(option.value);
         }
+
         this.requestUpdate()
         
     }
 
+    willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
+        if(!this._values.size){
+            this.setAttribute("empty", "");
+        }
+        else{
+            this.removeAttribute("empty");
+        }
+    }
     connectedCallback(): void {
         super.connectedCallback();
         this.addEventListener('optionConnected', this._optionConnect as EventListener);
         this.addEventListener('optionSelect', this._optionSelect as EventListener);
         this.addEventListener('slotChanged', this._slotChanged as EventListener);
     }
+
     disconnectedCallback(): void {
         super.disconnectedCallback();
         this.removeEventListener('optionConnected', this._optionConnect as EventListener);
@@ -140,18 +183,33 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
 
     private _toggle(){
         if(this.disabled) return;
-        if(this.open) this.hide();
-        else this.show();
+        if(this.open){
+            this.hide();
+        }
+        else{
+            this.show();
+            if(this.multiple){
+                this.shadowRoot?.querySelector("input")?.focus();
+            }
+        }
     }
 
     hide(){
         if(!this.open) return;
         this.open = false;
     }
+
     show(){
         if(this.open) return;
         this.open = true;
     }
+
+    private _clickCancel(e: Event){
+        const v = getEventDataset(e, '.cancel', 'value')!
+        this._setValue(v, true);
+        e.stopPropagation();
+    }
+
     private _getSlotElements = (slot = this.shadowRoot!.querySelector(`.slot`)): any => {
         const elements = (slot as HTMLSlotElement)?.assignedElements();
         if(elements[0] instanceof HTMLSlotElement){
@@ -169,46 +227,98 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         }, [] as HTMLElement[]);
     }
 
+    private _onSearchValue(e: Event){
+        this.setSearchValue((e.target as HTMLInputElement).value);
+        this.style.setProperty("--input-width", this.seatchValue.length * 8 + "px");
+    }
+    private _onSeatchClick(e: Event){
+        e.stopPropagation()
+    }
+    private _contentTemplate(){
+        if(this.multiple){
+            return [...this._values.values()].map(value => {
+                const option = this.options.filter(it => it.value === value)[0];
+                return html`<button class = "button">
+                    ${unsafeHTML(option.innerHTML)} 
+                    <span 
+                        class = "cancel"
+                        data-value = "${option.value}"
+                        @click = "${this._clickCancel}" >
+                        ${cancel()}
+                    </span>
+                </button>`;
+            });
+        }
+        return html`<slot name = "selected">${unsafeHTML(this.selectedContent)}</slot> `;
+    }
+    private _searchTamplate(){
+        if(!this.searchable) return nothing;
+        return html`<input .value = "${this.seatchValue}"
+                            @click = "${this._onSeatchClick}"
+                            @input = "${this._onSearchValue}"
+                            placeholder = "${this.multiple ? "" : this.searchPlaceholder}"
+                            type = "text" />`;
+    }
+    private _containerTemplate(data: TemplateResult){
+        if(this.multiple){
+            return html`
+            <div class = "wrapper"
+                 tabindex = "0"
+                 @keydown = "${this._handlekeyDown}"
+                 @click = "${this._toggle}">
+                ${data}
+            </div>`;
+        }
+        return html`<lit-button 
+                        @keydown = "${this._handlekeyDown}"
+                        @click = "${this._toggle}">
+                        <div class = "wrapper">${data}</div>    
+                    </lit-button>`
+    }
+    private _wrapperTemplate(){
+        return this._containerTemplate(html`
+        ${this._contentTemplate()}
+        ${this.multiple ? this._searchTamplate() : nothing}
+        <div class = "icon-wrapper">
+
+            ${
+                this.multiple && this.searchable && this.open 
+                    ? search()
+                    : dropdown(this.open)
+                
+            }
+        </div>`);
+    }
+
     render(){        
         return html`
         ${super.render()}
-        <lit-button 
-            between
-            .tabindex = "${this.tabindex}"
-            aria-expanded = "${this.open}"
-            class = "selected" 
-            @keydown = "${this._handlekeyDown}"
-            @click = "${this._toggle}">
-            <slot name = "selected">
-                ${unsafeHTML(this.selectedContent)}
-            </slot>
-            <lit-icon 
-                slot = "icon-after"
-                icon = "${this.open ? 'dropup' : 'dropdown'}" 
-            ></lit-icon>
-        </lit-button>
+        ${this._wrapperTemplate()}
         <lit-listbox 
             @focusNext = "${this._focusNext}"
             @focusPrev = "${this._focusPrev}"
             @listboxClose = "${this.hide}"
             .open = "${this.open}">
-            <slot class = "slot"></slot>
+            ${this.multiple ? nothing : this._searchTamplate()}
+            <slot></slot> 
         </lit-listbox>`;
     }
 
     private _slotChanged = () => {
         this.requestUpdate();
     }
+
     private _focusNext(e: CustomEvent){
         (document.activeElement?.nextElementSibling as HTMLElement)?.focus();
     }
+
     private _focusPrev(e: CustomEvent){
         (document.activeElement?.previousElementSibling as HTMLElement)?.focus();
     }
 
     private _handlekeyDown = (e: KeyboardEvent) => {    
         if(e.key === "Enter" || e.key === " "){
-            this.open = !this.open;
+            this._toggle();
         }
         if(e.key === "ArrowDown"){
             if(this.isMenu){
@@ -233,6 +343,14 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
                 e.preventDefault();
             }
         }
+    }
+
+    notify(){
+        this.dispatchEvent(new CustomEvent('changed', {
+            detail: this.value,
+            bubbles: true,
+            composed: true
+        }));
     }
 }
 

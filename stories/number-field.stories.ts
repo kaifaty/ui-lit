@@ -1,5 +1,5 @@
 import { TemplateResult, html } from 'lit-html';
-import '../dist/number';
+import '../src/number';
 import type { NumberProps } from '../src/number';
 import { Story, Meta } from '@storybook/web-components';
 import './assets/style.css'

@@ -1,5 +1,5 @@
 import { TemplateResult, html } from 'lit-html';
-import '../dist/textarea';
+import '../src/textarea';
 import type { ITextareaProps } from '../src/textarea';
 import { Story, Meta } from '@storybook/web-components';
 import './assets/style.css'

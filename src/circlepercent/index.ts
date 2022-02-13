@@ -49,7 +49,7 @@ export class LitCircle extends LitElement{
         this._percent = value;
         this.requestUpdate();
     }
-    private _color: string = "#aaa";
+    private _color: string = "";
     @property({type: Number, attribute: true}) size: number = 14;
     @property({type: Number, attribute: true}) ratio: number = 2;
     @property({type: String}) color: string = '';
@@ -57,12 +57,11 @@ export class LitCircle extends LitElement{
     private _size = 0;
     private _defaultSize = 14;
 
-    connectedCallback(): void {
-        super.connectedCallback();
-        const styles = window.getComputedStyle(this);        
-        this._color = this.color || styles.getPropertyValue("color");
-    }
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
+        if(!this._color || this._color === "rgb(0, 0, 0)"){
+            const styles = window.getComputedStyle(this);        
+            this._color = this.color || styles.getPropertyValue("color");
+        }
         if(_changedProperties.has('size')){
             this._size = this.size 
                 ? this.size 

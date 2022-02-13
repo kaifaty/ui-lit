@@ -1,7 +1,7 @@
 
 import { TemplateResult, html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/select';
+import '../src/select';
 
 
 import type { IPropsSelect } from '../src/select/interface';
@@ -9,9 +9,12 @@ import type { IPropsSelect } from '../src/select/interface';
 const Number = (data: IPropsSelect) => 
     html`
     <lit-select 
-        required
+        style = "width: 220px;"  
+        value = "2" 
         .disabled = "${data.disabled}"
-        .readonly = "${data.readonly}">
+        .readonly = "${data.readonly}"
+        .multiple = "${data.multiple}"
+        .searchable = "${data.searchable}">
         <lit-opt-group>
             <lit-option value = "1">test 1</lit-option>
             <lit-option value = "2">test 2</lit-option>
@@ -34,6 +37,8 @@ Default.args = {
     value: '1',
     disabled:  false,
     readonly:  false,
+    searchable:  false,
+    multiple:  false,
 }
 export default {
     title: 'Form Assosiated/Select',

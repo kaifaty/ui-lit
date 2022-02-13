@@ -1,8 +1,12 @@
+import { iconCSSVarNames, iconCSSVars } from './../icon/styles';
+import { buttonCSSVarsNames } from './../button/styles';
 import { css } from 'lit';
 import { buttonCSSVarsNames as button } from '../button/styles';
+import { buttonCSSValues as buttonValues } from '../button/styles';
 import { makeCSSProxy, makeCSSNameProxy } from '../helpers/cssproxy';
 
 export const selectCSSVars = {
+    
     color: {
         name: "color",
         default: `hsl(264, 65%, 50%)`
@@ -10,6 +14,10 @@ export const selectCSSVars = {
     height: {
         name: "height",
         default: "30px"
+    },
+    mobileHeight: {
+        name: "mobileHeight",
+        default: "40px"
     },
     background: {
         name: "background",
@@ -88,21 +96,94 @@ export const selectCSSVarNames = makeCSSNameProxy(selectCSSVars, "--lit-select-"
 export const selectStyles = css`
 :host{
     display: inline-block;
-    position: relative;
     height: ${_v.height};
     ${button.mediumPadding}: ${_v.padding};
     ${button.border}: ${_v.border};
     ${button.color}: ${_v.color};
+    ${button.textTransform}: none;
+    ${button.justify}: normal;
+    ${iconCSSVarNames.color}: ${_v.color};
     ${button.borderRadius}: 0;
+    --input-width: 0;
+}
+:host([multiple]){
+    height: initial;
+}
+:host(:not([multiple])) .wrapper{
+    display: flex;
+    align-items: center;
+}
+
+:host([multiple][searchable]) .wrapper{
+    cursor: text;
+}
+:host([multiple]) .wrapper{
+    cursor: text;
+    border: ${_v.border};
+    min-width: 100px;
+}
+.wrapper{
+    min-height: ${_v.height};
+    box-sizing: border-box;
+    padding: 1px;
+    padding-right: 22px;
+    cursor: pointer;
+    position: relative;
+}
+.wrapper:focus{
+    outline:  ${buttonValues.outlineFocus};
+}
+.icon-wrapper{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    top: 0;
+    right: 0;
+    height: 100%;
+}
+.selected{
+    display: flex;
+    flex-wrap: wrap;
+}
+input{ 
+    width: 100%;
+    background: transparent;
+    box-sizing: border-box;
+    color: ${_v.color};
+    border: none;
+    min-width: 4px;
+    min-height: calc(${_v.height} - 4px);
+    outline: none;
+    appearance: none;
+    margin: 0;
+    padding: 0 8px;
+}
+:host(:not([multiple])) input{
+    margin: 6px 14px 6px 14px;
+    padding: 0 5px;
+    width: calc(100% - 32px);
+    border: 1px solid #ddd;
+}
+:host([multiple]:not([empty])) input{
+    padding: 0;
+}
+
+:host([multiple]) input{
+    width: var(--input-width);
+}
+button{
+    margin: 2px;
+    ${iconCSSVarNames.color}: ${buttonValues.primaryColor};
+    color: ${buttonValues.primaryColor};
+    border: ${buttonValues.primaryBorder};
+    background: ${buttonValues.primaryBackground};
+    padding: 2px 5px;
 }
 ::part(content){
     overflow: hidden;
     text-overflow: ellipsis;
-}
-.wrapper{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 lit-button{
     width: 100%;
@@ -114,16 +195,28 @@ lit-button{
     ${button.backgroundHover}: ${_v.backgroundHover};    
     ${button.ripple}: ${_v.ripple};
     ${button.outlineFocus}: ${_v.outlineFocus};
-}`;
+}
+.cancel{
+    cursor: pointer;
+    fill: ${buttonValues.primaryColor};
+}
+.search, .dropdown{
+    fill: ${buttonValues.color};
+}
+`;
 
 export const optionStyles = css`
 :host{
     display: block;
-    height: ${_v.height};
     ${button.color}: ${_v.optionColor};
     ${button.background}: ${_v.optionBackground};
     ${button.backgroundHover}: ${_v.optionBackgroundHover};
     ${button.ripple}: ${_v.optionRipple};
+    ${button.mediumHeight}: ${_v.height};
+
+}
+:host([mobile]){
+    ${buttonCSSVarsNames.mediumHeight}: ${_v.mobileHeight};
 }
 :host([selected]) span::after{
     width: 8px;
@@ -139,10 +232,12 @@ export const optionStyles = css`
     top: 2px;
     left: 2px !important;
 }
+:host(:not([visability])){
+    display: none;
+}
 lit-button{
     width: 100%;
-    ${button.outlineFocus}: none;
-    
+    ${button.outlineFocus}: none;    
 }
 :host(:not([selected])) lit-button:hover span::after,
 :host(:not([selected])) lit-button[pressed] span::after{

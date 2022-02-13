@@ -1,7 +1,7 @@
 
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/pagination';
+import '../src/pagination';
 import type { IPaginationProps } from '../src/pagination';
 
 

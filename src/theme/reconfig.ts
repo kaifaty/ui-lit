@@ -24,7 +24,7 @@ export class LitThemeConfiger extends LitElement{
 
     protected render() {
         return html`
-        <lit-header level = "4">${firstUpper(this.name)}</lit-header>
+        <lit-header level = "4"><slot name = "name">${firstUpper(this.name)}</slot></lit-header>
         <slot></slot>
         <div class = "wrapper">
             <lit-header level = "5"><slot name = "hue">Hue:</slot></lit-header>
@@ -33,13 +33,13 @@ export class LitThemeConfiger extends LitElement{
                 min = "0" 
                 max = "360" 
                 value = "${this.params[0]}"></lit-range>
-            <lit-header level = "5"><slot name = "hue">Chroma:</slot></lit-header>
+            <lit-header level = "5"><slot name = "chroma">Chroma:</slot></lit-header>
             <lit-range
                 @changed = "${this._changeS}" 
                 min = "0" 
                 max = "100" 
                 value = "${this.params[1]}"></lit-range>
-            <lit-header level = "5"><slot name = "hue">Luminance:</slot></lit-header>
+            <lit-header level = "5"><slot name = "luminance">Luminance:</slot></lit-header>
             <lit-range
                 @changed = "${this._changeL}" 
                 min = "0" 

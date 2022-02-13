@@ -145,6 +145,9 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             };
             return text.replace(/\$\{([a-zA-Z0-9_.,=)( ]+)\}/g, (m, n) => {
                 let value = data[n];
+                if(typeof value === "number" && Math.log10(value) < -4){
+                    return value.toFixed(Math.abs(Math.ceil(Math.log10(value))) + 1);
+                }
                 return value !== undefined
                     ? String(value)
                     : m
@@ -180,6 +183,9 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             else if(this.validity.valueMissing){
                 this.setValidity({valueMissing: false});
             }
+            if(!this.value){
+                this.validityDefault();
+            }
         }
         setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement){                
             if(!this.willValidate) return;
@@ -211,6 +217,10 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
                     composed: true
                 }))
             }
+        }
+            
+        notify(){
+            this.dispatchEvent(new CustomEvent("changed", {detail: this.value, bubbles: true}));
         }
     };
     

@@ -1,7 +1,7 @@
 import { css } from 'lit';
 import { makeCSSProxy, makeCSSNameProxy } from '../helpers/cssproxy';
 
-const iconCSSVars = {
+const _iconCSSVars = {
     fontFamily: {
         name: 'font-family',
         default: 'Icons'
@@ -24,9 +24,11 @@ const iconCSSVars = {
     },
 }
 
-const _v = makeCSSProxy(iconCSSVars, "--lit-icon-");
+const _v = makeCSSProxy(_iconCSSVars, "--lit-icon-");
 
-export const iconCSSVarNames = makeCSSNameProxy(iconCSSVars, "--lit-icon-");
+export const iconCSSVarNames = makeCSSNameProxy(_iconCSSVars, "--lit-icon-");
+
+export const iconCSSVars = _v;
 
 
 export const iconStyle = css`

@@ -1,7 +1,7 @@
 
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/circlepercent';
+import '../src/circlepercent';
 import { ICircleProps } from '../src/circlepercent';
 
  

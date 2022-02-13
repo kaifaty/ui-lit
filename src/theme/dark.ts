@@ -19,6 +19,7 @@ import { textCSSVarsNames as text } from './../text/styles';
 import { linkCSSVarsNames as link } from './../link/styles';
 import { tooltipCSSVarsNames as tooltip} from './../tooltip/styles';
 import { panelCSSVarsNames as panel } from './../panel/styles';
+import { rangeCSSNames as sidebar } from '../sidebar/style';
 
 
 export const darkStyles = css`
@@ -49,13 +50,13 @@ export const darkStyles = css`
             ${note.color}: var(--primary--600);
             ${note.background}: var(--primary-200);
             ${note.border}: 1px solid var(--primary-100);
-            ${note.shadow}: 1px 1px 3px var(--primary-400);
+            ${note.shadow}: 1px 1px 3px var(--primary-1450);
 
 
             ${note.errorColor}: var(--negative--600);
             ${note.errorBackground}: var(--negative-200);
             ${note.errorBorder}: 1px solid var(--negative-100);
-            ${note.errorShadow}: 1px 1px 3px var(--negative-400);
+            ${note.errorShadow}: 1px 1px 3px var(--negative-1450);
 
 
             ${tooltip.color}: var(--primary--600);
@@ -172,9 +173,9 @@ export const darkStyles = css`
             ${table.rowHover}: var(--primary-1250);
             ${table.headerBackground}: var(--primary-1150);
 
-            ${table.headerIconColor}: var(--primary-1300);
-            ${table.headerIconColorHover}: var(--primary-100);
-            ${table.headerIconColorSelected}: var(--primary-100);
+            ${table.headerIconColor}: #777;
+            ${table.headerIconColorHover}: var(--primary--500);
+            ${table.headerIconColorSelected}: var(--primary-0);
             ${table.headerIconBackgroundHover}: var(--primary-1250);
 
             ${table.headerFilterContentBackground}: var(--primary-900);
@@ -205,5 +206,13 @@ export const darkStyles = css`
             ${dialog.boxshadow}: var(--primary-1200);
 
 
+            ${sidebar.color}: var(--primary--600);
+            ${sidebar.background}: var(--primary-1400);
+            ${sidebar.backgroundHover}: var(--primary-1200);
+            ${sidebar.ripple}: var(--primary-900);
+            ${sidebar.backgroundFocus}: var(--primary-300);
+            ${sidebar.outlineFocus}: 1px solid var(--primary-700);
+            ${sidebar.border}: 1px solid var(--primary-900);
+            ${sidebar.circle}: var(--primary-500);
         }
     `;

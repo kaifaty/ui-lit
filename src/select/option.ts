@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { LitSelect } from './select';
 import { focusable } from '../mixins/focusable/index';
 import { optionStyles } from './styles';
+import { mobileAndTabletCheck } from 'kailib';
 
 @customElement("lit-option")
 export class LitOption extends focusable(LitElement){
@@ -11,9 +12,11 @@ export class LitOption extends focusable(LitElement){
     @property({type: Boolean, reflect: true}) selected: boolean = false;
     @property({type: String}) label: string = '';
     @property({type: String}) value: string = '';
+    @property({type: Boolean, reflect: true}) visability: boolean = true;
+    @property({type: Boolean, reflect: true}) mobile: boolean = mobileAndTabletCheck();
     private _selectHost: LitSelect | null = null
     
-    setSelectHost(host: LitSelect){
+    public setSelectHost(host: LitSelect){
         this._selectHost = host;
     }
     connectedCallback(): void {
@@ -30,17 +33,9 @@ export class LitOption extends focusable(LitElement){
         this._selectHost?.optionDisconnect(this)
         this.removeEventListener('click', this.select);
     }
-    select = () => {
-        this.dispatchEvent(new CustomEvent('optionSelect', {
-            detail: this.value,
-            composed: true,
-            bubbles: true
-        }));
-    }
     updated(_changedProperties: Map<string | number | symbol, unknown>): void {
         this.ariaLabel = this.label || this.textContent || "";
     }
-
     render(){
         return html`<lit-button 
                         between
@@ -49,6 +44,14 @@ export class LitOption extends focusable(LitElement){
                         @focus = "${this._focus}" 
                         @blur = "${this._blur}" >
                     <slot @slotchange = "${this._slotChange}"></slot> <span slot = "icon-after"></span></lit-button>`
+    }
+
+    private select = () => {
+        this.dispatchEvent(new CustomEvent('optionSelect', {
+            detail: this.value,
+            composed: true,
+            bubbles: true
+        }));
     }
     private _slotChange(e: Event){
         this.dispatchEvent(new CustomEvent('slotChanged', {

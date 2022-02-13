@@ -1,5 +1,5 @@
 
-import '../dist/divider';
+import '../src/divider';
 import type { IDividerProps } from '../src/divider';
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';

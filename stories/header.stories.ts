@@ -2,7 +2,7 @@
 
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/header';
+import '../src/header';
 import { IHeaderProps } from '../src/header';
 
  

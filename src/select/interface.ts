@@ -8,5 +8,6 @@ export type TSelectItem = {
 
 
 export interface IPropsSelect extends FormAssociatedProps{
-    
+    multiple: boolean
+    searchable: boolean
 }

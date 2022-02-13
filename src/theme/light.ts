@@ -19,6 +19,9 @@ import { textCSSVarsNames as text } from './../text/styles';
 import { linkCSSVarsNames as link } from './../link/styles';
 import { tooltipCSSVarsNames as tooltip} from './../tooltip/styles';
 import { panelCSSVarsNames as panel } from './../panel/styles';
+import { rangeCSSNames as sidebar } from '../sidebar/style';
+
+
 
 export const stylesLight = css`
 :host([theme = "light"]){
@@ -201,4 +204,15 @@ export const stylesLight = css`
     ${dialog.headerColor}: var(--primary--650);
     ${dialog.overlapBackground}: var(--primary-op-08-1500);
     ${dialog.boxshadow}: var(--primary-1500);
+
+    
+    ${sidebar.color}: var(--primary--600);
+    ${sidebar.background}: var(--primary-1300);
+    ${sidebar.backgroundHover}: var(--primary-1200);
+    ${sidebar.ripple}: var(--primary-900);
+    ${sidebar.backgroundFocus}: var(--primary-300);
+    ${sidebar.outlineFocus}: 1px solid var(--primary-700);
+    ${sidebar.border}: 1px solid var(--primary-900);
+    ${sidebar.circle}: var(--primary-500);
+
 }`;

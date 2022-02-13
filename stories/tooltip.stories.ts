@@ -1,7 +1,7 @@
 
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/tooltip';
+import '../src/tooltip';
 import { ITooltipProps } from '../src/tooltip';
 
 

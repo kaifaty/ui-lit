@@ -344,6 +344,7 @@ export class LitButton extends focusable(LitElement) implements ButtonProps{
 
     // ==== Actions ====    
     public click(){  
+        window.navigator.vibrate?.(20);
         this.submit()          
     }
 

@@ -63,8 +63,8 @@ export declare class LitRange extends LitRange_base {
     private _min;
     private _percent;
     private _offsetX;
+    private _lastX;
     tabindex: number;
-    private _trackElement;
     get offsetX(): number;
     get min(): number;
     set min(value: number);
@@ -80,7 +80,6 @@ export declare class LitRange extends LitRange_base {
     get minPercent(): number;
     isDisabled(): boolean;
     connectedCallback(): void;
-    protected firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): void;
     willUpdate(): void;
     updated(props: Map<string, unknown>): void;
     private _pointersTemplate;
@@ -88,7 +87,6 @@ export declare class LitRange extends LitRange_base {
     private _thumbTemplate;
     render(): import("lit").TemplateResult<1>;
     private _recalcValue;
-    private _dispatch;
     private _calcTrackStartX;
     private _calcTackWidth;
     private _calcOffset;
@@ -111,6 +109,7 @@ export declare class LitRange extends LitRange_base {
     private _onPointOver;
     private _onPointLeave;
     private _handleKeyboard;
+    notify(): void;
 }
 declare global {
     interface HTMLElementTagNameMap {

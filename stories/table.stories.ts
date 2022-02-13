@@ -1,7 +1,7 @@
 
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/table';
+import '../src/table';
 import { ISourceItem } from '../src/table/table';
 
 const data = {

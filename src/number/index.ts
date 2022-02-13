@@ -10,7 +10,10 @@ import { labled } from '../mixins/labled';
 import { focusable } from '../mixins/focusable/index';
 import { Focusable } from '../mixins/focusable/inderface';
 import { notificatable } from '../mixins/notificatable/index';
+import { isiOS } from 'kailib'
 
+
+const _isIOS = isiOS();
 
 export interface NumberProps extends FormAssociated, Focusable{
     replaceToRange: boolean,
@@ -141,9 +144,12 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
                         danger
                         class = "danger icon"></lit-icon>`;
     }
+    get selectionStart(){
+        return this._inputRef.value?.selectionStart  || 0;
+    }
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
         super.willUpdate(_changedProperties);
-        this._selectionBeforeRender = this._inputRef.value?.selectionStart || 0;
+        this._selectionBeforeRender = this.selectionStart;
     }
     render(){
         return html`
@@ -165,7 +171,7 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
     }
     updated(props: Map<string | number | symbol, unknown>){
         super.updated(props);
-        if(this._selectionBeforeRender !== undefined){
+        if(this._selectionBeforeRender !== this.selectionStart && !_isIOS){
             this._inputRef.value?.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
         }
         this.validate();        
@@ -201,11 +207,13 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
     private _handleChange(e: Event){
         this.reportValidity();
     }
+
     private _handleInput(e: Event){
         const oldValue = this._value;
-        this.value = (e.target as HTMLInputElement).value as string;
+        const value = (e.target as HTMLInputElement).value as string; 
+        this.value = value;
         if(oldValue !== this._value){
-            this.dispatchEvent(new CustomEvent("changed", {detail: this.value, bubbles: true}));
+            this.notify();
         }
         
     }

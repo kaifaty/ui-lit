@@ -18,6 +18,13 @@ export const scrollbarCSSVarNames = makeCSSNameProxy(scrollbarCSSVars, "--lit-sc
 export const scrollbar = css`
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-corner{
+  background: transparent;
+}
+::-webkit-resizer{
+  background: transparent;
 }
 ::-webkit-scrollbar-track {
   background: ${_v.track};

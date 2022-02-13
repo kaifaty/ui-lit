@@ -3,11 +3,13 @@ import { property, customElement } from 'lit/decorators.js';
 import '../button';
 import './item';
 import { menuStyles } from './styles';
+import { mobileAndTabletCheck } from 'kailib';
 
 @customElement('lit-menu')
 export class LitMenu extends LitElement{
     static styles = menuStyles
     @property({type: String}) label: string = '';
+    @property({type: Boolean, reflect: true}) mobile: boolean = mobileAndTabletCheck();
 
     protected render() {
         return html`

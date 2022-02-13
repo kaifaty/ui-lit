@@ -25,6 +25,7 @@ export interface FormAssociatedProps {
     //findLabel(): LitLabel | null
     readonly validationMessage: string;
     validity: ValidityStateFlags;
+    notify(): void;
     validate(): void;
     checkValidity(): boolean;
     reportValidity(): boolean;

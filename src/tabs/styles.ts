@@ -95,6 +95,7 @@ export const tabsStyles = css`
     }
     :host(:focus-within){
         outline: ${_v.outline};
+        outline-offset: 2px;
     }
     :host([disabled]){
         opacity: 0.5;
@@ -102,5 +103,8 @@ export const tabsStyles = css`
     .wrapper{
         display: flex;
         width: 100%;
+    }
+    .wrapper:focus{
+        outline: none;
     }
     `

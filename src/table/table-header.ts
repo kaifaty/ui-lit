@@ -2,7 +2,7 @@ import { ifDefined } from 'lit/directives/if-defined';
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
-import { TColumnItem, TFilterItem, TSortDirections,  } from './table';
+import { TColumnItem, TFilterItem, TSortDirections,  } from './interface';
 import type { TableElement  } from './table';
 import { noselect } from '../styles/noselect';
 import '../textfield';
@@ -24,7 +24,9 @@ export class LitTableHeader extends LitElement{
     @property({type: String}) sort: string = '';
     @property({type: String, reflect: true}) sortDirection: string = 'ascend';
     _filterVisible = false;
-    _host: TableElement | null = null
+    _host: TableElement | null = null;
+    @state() _sortHover = false;
+    @state() _filterHover = false;
     
     connectedCallback(){
         super.connectedCallback();
@@ -33,6 +35,7 @@ export class LitTableHeader extends LitElement{
     }
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
         if(this.filterVisible && this._host?.rect){
+            
             if(this.offsetLeft + filterWidth > this._host.rect.width){
                 this.setAttribute("right", '');
             }
@@ -73,11 +76,32 @@ export class LitTableHeader extends LitElement{
         }
         return directions[index + 1];
     }
-
+    private _pointer =  (type: string, state: boolean) => {
+        if(type === "sort" && !this._sortHover){
+            this._sortHover = state;
+        }
+        if(type === "filter" && !this._filterHover){
+            this._filterHover = state;
+        }
+    }
+    private _hover = (type: string, state: boolean) => {
+        if(type === "sort"){
+            this._sortHover = state;
+        }
+        if(type === "filter"){
+            this._filterHover = state;
+        }
+    }
     /** Templates */
     private _sortTemplate(){
         if(this.item?.sorter){        
-            return html`<div class = "sort-icons">
+            return html`<div 
+                @mouseover = "${() => this._hover("sort", true)}" 
+                @mouseout = "${() => this._hover("sort", false)}" 
+                @pointerdown = "${() => this._pointer("sort", true)}" 
+                @pointerup = "${() => this._pointer("sort", false)}" 
+                ?hover = "${this._sortHover}"
+                class = "sort-icons">
                 ${this.directions.slice().sort().map(it => {
                     if(it ==='ascend'){
                         return html`<lit-icon icon = "dropup"></lit-icon>`;
@@ -96,6 +120,11 @@ export class LitTableHeader extends LitElement{
         }
         return html`<lit-icon 
                         @click = "${this._onFilterToggle}" 
+                        @mouseover = "${() => this._hover("filter", true)}" 
+                        @mouseout = "${() => this._hover("filter", false)}" 
+                        @pointerdown = "${() => this._pointer("filter", true)}" 
+                        @pointerup = "${() => this._pointer("filter", false)}" 
+                        ?hover = "${this._filterHover}"
                         class = "${classMap(map)}"
                         icon = "filter"></lit-icon>`;
     }
@@ -113,7 +142,7 @@ export class LitTableHeader extends LitElement{
                     .checked = "${item.checked || false}"
                     name = "${i}"></lit-checkbox>`;
         }
-        if(type === 'number'){
+        else if(type === 'number'){
             return html`
                 <lit-label>
                     ${item.text}
@@ -123,7 +152,7 @@ export class LitTableHeader extends LitElement{
                     value = "${item.value}"
                     placeholder = "${ifDefined(item.placeholder)}"></lit-numberfield>`;
         }
-        if(
+        else if(
             type === 'text' || 
             type === 'date'
         ){

@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import '../select/option'
 import { focusable } from '../mixins/focusable/index';
 import { menuItemStyles } from './styles';
+import { mobileAndTabletCheck } from 'kailib';
 
 
 
@@ -10,6 +11,7 @@ import { menuItemStyles } from './styles';
 export class LitMenuItem extends focusable(LitElement){
     static styles = menuItemStyles;
 
+    
     @property({type: String}) value: string = '';
     render(){
         return html`<lit-button 

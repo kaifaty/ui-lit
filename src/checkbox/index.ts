@@ -85,6 +85,9 @@ export class LitCheckbox extends labled(formAssociated(LitElement)) implements I
     public toggle(){
         if(this.readonly || this.disabled) return;
         this.checked = !this.checked;
+        this.notify();
+    }
+    notify(){
         this.dispatchEvent(new CustomEvent("changed", {
             bubbles: true,
             detail: {

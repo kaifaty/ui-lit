@@ -1,7 +1,7 @@
-import '../dist/dialog';
-import '../dist/tooltip';
-import '../dist/range';
-import '../dist/header';
+import '../src/dialog';
+import '../src/tooltip';
+import '../src/range';
+import '../src/header';
 import type { IDialogProps } from '../src/dialog';
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';

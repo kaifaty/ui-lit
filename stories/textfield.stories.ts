@@ -1,5 +1,5 @@
 import { html } from 'lit-html';
-import '../dist/textfield';
+import '../src/textfield';
 import type { TextProps } from '../src/textfield';
 import { Story, Meta } from '@storybook/web-components';
 import './assets/style.css'

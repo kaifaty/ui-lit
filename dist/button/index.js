@@ -190,6 +190,8 @@ let LitButton = class LitButton extends focusable(LitElement) {
     }
     // ==== Actions ====    
     click() {
+        var _a, _b;
+        (_b = (_a = window.navigator).vibrate) === null || _b === void 0 ? void 0 : _b.call(_a, 20);
         this.submit();
     }
     /** @event {CustomEvent} switchChanged - for type = 'switch'. Return current switchOn state. */

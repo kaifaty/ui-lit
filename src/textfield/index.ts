@@ -1,3 +1,4 @@
+import { live } from 'lit/directives/live.js';
 import { LitElement, html, css, nothing, TemplateResult } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { formAssociated } from '../mixins/form-associated/index';
@@ -9,6 +10,9 @@ import { labled } from '../mixins/labled';
 import { focusable } from '../mixins/focusable/index';
 import { Focusable } from '../mixins/focusable/inderface';
 import { notificatable } from '../mixins/notificatable/index';
+import { isiOS } from 'kailib';
+
+const _isIOS = isiOS();
 
 export type TInputMode = 'none' | 'text' | 'decimal' | 'numeric' | 'tel' | 'search' | 'email' | 'url'
 
@@ -58,10 +62,15 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
 
     @property({type: Boolean}) useCancelButton: boolean = false;
     @property() icon: string | TemplateResult = '';
+    
+    private _selectionBeforeRender = 0;
     private _inputRef: Ref<HTMLInputElement> = createRef();
 
     @state() hiddenPassword = true
 
+    get selectionStart(){
+        return this._inputRef.value?.selectionStart  || 0;
+    }
     get valueAsDate(){
         return new Date(this.value);
     }
@@ -95,7 +104,6 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
         this._value = value;
         this.requestUpdate('value', oldValue);
     }
-    
     
     private _getType(){
         if(this.type === 'password'){
@@ -170,20 +178,26 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
                 size = "${this.size}"
                 @input = "${this._onInput}" 
                 @change = "${this._onChange}"
-                .value = "${this.value}">
+                .value = ${live(this.value)}>
             ${this._iconslotTemplate()}
         </div>`;
     }
+    
+    willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
+        super.willUpdate(_changedProperties);
+        this._selectionBeforeRender = this.selectionStart;
+    }
     updated(_changedProperties: Map<string | number | symbol, unknown>){
         super.updated(_changedProperties);
+        if(this._selectionBeforeRender !== this.selectionStart && !_isIOS){
+            this._inputRef.value?.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
+        }
         this.validate();
     }
+     
     private _clearValue(){
         this.value = '';
-        this.dispatchEvent(new CustomEvent("changed", {
-            detail: this.value,
-            bubbles: true,
-        }));
+        this.notify();
     }
 
     private toggleHiddenPassword(e: Event){
@@ -191,17 +205,11 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
     }
     private _onChange(e: Event){
         this.reportValidity();
-        this.dispatchEvent(new CustomEvent("change", {
-            detail: this.value,
-            bubbles: true,
-        }));
+        this.notify();
     }
     private _onInput(e: Event){      
         this.value = (e.target as HTMLInputElement).value as string;
-        this.dispatchEvent(new CustomEvent("changed", {
-            detail: this.value,
-            bubbles: true,
-        }))
+        this.notify();
     }
 }
 declare global {

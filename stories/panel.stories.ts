@@ -1,7 +1,7 @@
 
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/panel';
+import '../src/panel';
 
 
 const panel = ({text, danger}) => 

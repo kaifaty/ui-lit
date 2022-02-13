@@ -48,76 +48,16 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
         this._min = 0;
         this._percent = 0;
         this._offsetX = 0;
+        this._lastX = 0;
         this.tabindex = 0;
-        this._trackElement = null;
         this._max = 100;
         this._value = '0';
-        // ==== Events ==== 
-        this._onPreventTouch = (e) => {
-            e.preventDefault();
-        };
-        this._onPointerDown = (e) => {
-            e.target.setPointerCapture(e.pointerId);
-            this._handlePointerDown();
-            this._handlePointerMove(e.clientX);
-            e.preventDefault(); // Atop auto focus
-        };
-        this._onPointerMove = (e) => {
-            if (!e.isPrimary || !this.hasAttribute("pressed"))
-                return;
-            this._handlePointerMove(e.clientX);
-            e.preventDefault();
-        };
-        this._onPointerLostCapture = (e) => {
-            this._handlePointerUp(e.clientX);
-            // e.preventDefault();
-        };
-        this._onPointerOver = (e) => {
-            this._onPointOver(e);
-        };
         this._onChangeSize = (rect) => {
             this._rect = this.getBoundingClientRect();
             this._trackSize = this._calcTackWidth(rect);
             this._trackStartX = this._calcTrackStartX(rect);
             this._updateOffset();
             this.requestUpdate();
-        };
-        this._handlePointerDown = () => {
-            this._rect = this.getBoundingClientRect();
-            if (this.isDisabled())
-                return;
-            this.isPercentHidden = false;
-            this.setAttribute('pressed', '');
-        };
-        this._handlePointerUp = (x) => {
-            this._hidePercent();
-            this._movePosition(x);
-            this.removeAttribute('pressed');
-        };
-        this._handlePointerMove = (x) => {
-            this._movePosition(x);
-            this.isPercentHidden = false;
-        };
-        this._onPointOver = (e) => {
-            if (this.isDisabled())
-                return;
-            clearTimeout(this._timeout);
-            this.isPercentHidden = false;
-            this.setAttribute('hover', '');
-            e.preventDefault();
-        };
-        this._onPointLeave = (e) => {
-            e.preventDefault();
-            this._hidePercent();
-            this.removeAttribute('hover');
-        };
-        this._handleKeyboard = (e) => {
-            if (e.key === "ArrowRight" || e.key === "ArrowTop") {
-                this.setPercent(this._percent + 1);
-            }
-            if (e.key === "ArrowLeft" || e.key === "ArrowBottom") {
-                this.setPercent(this._percent - 1);
-            }
         };
     }
     static get styles() {
@@ -208,23 +148,12 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
         this._thumbSize = parseInt(window.getComputedStyle(this).getPropertyValue("--pointer"));
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
     }
-    firstUpdated(_changedProperties) {
-        super.firstUpdated(_changedProperties);
-        this._trackElement = this.shadowRoot.querySelector(".track");
-    }
     willUpdate() {
         this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
     }
     updated(props) {
         super.updated(props);
-        if (props.has("disabled") && this.disabled) {
-            //this.style.setProperty(`--percent`, 0 + "%")
-        }
-        else if (props.has("disabled") && !this.disabled) {
-            //this.style.setProperty(`--percent`, this._percent + "%")
-        }
-        //else 
         if (props.has("value") || props.has("min") || props.has("max")) {
             this.style.setProperty(`--percent`, this._percent + "%");
         }
@@ -245,9 +174,9 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
     _percentTemplate() {
         if (!this.showPercent)
             return nothing;
-        const left = this._offsetX + this._padding - (this._thumbSize + 7) * this._percent / 100;
+        const left = this._offsetX + this._padding - (this._thumbSize + 6) * this._percent / 100;
         return html `<div style = "transform: translateX(${left}px);"
-                        class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `;
+                          class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `;
     }
     _thumbTemplate() {
         const offset = (this._offsetX).toFixed(1);
@@ -296,17 +225,6 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
             val = this.min;
         }
         this._value = val.toFixed(this.decimals);
-    }
-    _dispatch() {
-        this.dispatchEvent(new CustomEvent("changed", {
-            detail: {
-                value: this.value,
-                percent: this._percent,
-                valueAsNumber: this.valueAsNumber,
-                type: 'range'
-            },
-            bubbles: true,
-        }));
     }
     _calcTrackStartX(rect) {
         return rect.x + 2 * this._padding;
@@ -388,17 +306,90 @@ let LitRange = class LitRange extends focusable(labled(notificatable(formAssocia
     _movePosition(x) {
         if (this.isDisabled())
             return;
+        this._lastX = x;
         requestAnimationFrame(() => {
             const offset = this._calcOffset(x);
             const percent = this._calcPercentByOffset(offset);
             this.value = this._calcValueByPercent(percent).toString();
-            this._dispatch();
+            this.notify();
         });
     }
     setPercent(value) {
         this._percent = Math.max(Math.min(value, 100), 0);
         this.value = this._calcValueByPercent(this._percent).toString();
-        setTimeout(() => this._dispatch());
+        setTimeout(() => this.notify());
+    }
+    // ==== Events ==== 
+    _onPreventTouch(e) {
+        e.preventDefault();
+    }
+    _onPointerDown(e) {
+        e.target.setPointerCapture(e.pointerId);
+        this._handlePointerDown();
+        this._handlePointerMove(e.clientX);
+        e.preventDefault();
+        // Atop auto focus
+    }
+    _onPointerMove(e) {
+        if (!e.isPrimary || !this.hasAttribute("pressed"))
+            return;
+        this._handlePointerMove(e.clientX);
+        e.preventDefault();
+    }
+    _onPointerLostCapture(e) {
+        this._handlePointerUp(this._lastX);
+        // e.preventDefault();
+    }
+    _onPointerOver(e) {
+        this._onPointOver(e);
+    }
+    _handlePointerDown() {
+        this._rect = this.getBoundingClientRect();
+        if (this.isDisabled())
+            return;
+        this.isPercentHidden = false;
+        this.setAttribute('pressed', '');
+    }
+    _handlePointerUp(x) {
+        this._hidePercent();
+        this._movePosition(x);
+        this.removeAttribute('pressed');
+    }
+    _handlePointerMove(x) {
+        this._movePosition(x);
+        this.isPercentHidden = false;
+    }
+    _onPointOver(e) {
+        if (this.isDisabled())
+            return;
+        clearTimeout(this._timeout);
+        this.isPercentHidden = false;
+        this.setAttribute('hover', '');
+        e.preventDefault();
+    }
+    _onPointLeave(e) {
+        e.preventDefault();
+        this._hidePercent();
+        this.removeAttribute('hover');
+    }
+    _handleKeyboard(e) {
+        if (e.key === "ArrowRight" || e.key === "ArrowTop") {
+            this.setPercent(this._percent + 1);
+        }
+        if (e.key === "ArrowLeft" || e.key === "ArrowBottom") {
+            this.setPercent(this._percent - 1);
+        }
+    }
+    notify() {
+        this.dispatchEvent(new CustomEvent("changed", {
+            detail: {
+                value: this.value,
+                percent: this._percent,
+                valueAsNumber: this.valueAsNumber,
+                type: 'range'
+            },
+            bubbles: true,
+        }));
     }
 };
 __decorate([

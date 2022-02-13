@@ -21,6 +21,7 @@ export declare class LitFrom extends LitElement implements IFormElement, IFormPr
     private _elements;
     private _defaults;
     private _button;
+    private _loading;
     get button(): LitButton | null;
     get length(): number;
     get elements(): FormAssociatedElement[];
@@ -37,8 +38,8 @@ export declare class LitFrom extends LitElement implements IFormElement, IFormPr
     getData(): TReturnData;
     checkValidity(): boolean;
     reportValidity(): boolean;
-    private _startSpinButton;
-    private _stopSpinButton;
+    private _startLoading;
+    private _stopLoading;
     submit(): Promise<false | TReturnData>;
     reset(): Promise<unknown>;
 }

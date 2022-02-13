@@ -1,7 +1,7 @@
 
 import { TemplateResult, html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/menu';
+import '../src/menu';
 
 
 import type { IPropsSelect } from '../src/select/interface';

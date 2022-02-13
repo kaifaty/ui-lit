@@ -2,7 +2,7 @@
 
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
-import '../dist/treeview';
+import '../src/treeview';
 import { ITreeViewProps } from '../src/treeview';
 
  

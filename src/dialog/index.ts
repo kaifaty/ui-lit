@@ -99,7 +99,7 @@ export class LitDialog extends LitElement{
     }
 
     private _focus(){
-        this.querySelector("lit-textfield, lit-numberfield")?.focus();
+        (this.querySelector("lit-textfield, lit-numberfield") as HTMLElement)?.focus();
     }
     public open(){
         if(!dialogs.includes(this)){
@@ -126,7 +126,7 @@ export class LitDialog extends LitElement{
     private _closeInstanse(dialog?: LitDialog){
         if(!dialog) return;
         dialog.opened = false;
-        dialog.shadowRoot?.querySelector("lit-form")?.reset();
+        dialog.form?.reset();
         dialog.dispatchEvent(new CustomEvent('dialogClose'));
     }
     public close(){

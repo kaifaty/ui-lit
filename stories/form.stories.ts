@@ -1,5 +1,5 @@
-import { TemplateResult, html } from 'lit-html';
-import '../dist/form';
+import { html } from 'lit-html';
+import '../src/form';
 import type { IFormProps } from '../src/form';
 import { Story, Meta } from '@storybook/web-components';
 

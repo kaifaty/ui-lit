@@ -10,6 +10,8 @@ import { createRef, ref } from 'lit/directives/ref.js';
 import { labled } from '../mixins/labled';
 import { focusable } from '../mixins/focusable/index';
 import { notificatable } from '../mixins/notificatable/index';
+import { isiOS } from 'kailib';
+const _isIOS = isiOS();
 const filterZeroues = (decimals) => {
     let res = '';
     let nonZeroExist = false;
@@ -123,10 +125,13 @@ let LitNumberField = class LitNumberField extends focusable(labled(notificatable
                         danger
                         class = "danger icon"></lit-icon>`;
     }
-    willUpdate(_changedProperties) {
+    get selectionStart() {
         var _a;
+        return ((_a = this._inputRef.value) === null || _a === void 0 ? void 0 : _a.selectionStart) || 0;
+    }
+    willUpdate(_changedProperties) {
         super.willUpdate(_changedProperties);
-        this._selectionBeforeRender = ((_a = this._inputRef.value) === null || _a === void 0 ? void 0 : _a.selectionStart) || 0;
+        this._selectionBeforeRender = this.selectionStart;
     }
     render() {
         return html `
@@ -149,7 +154,7 @@ let LitNumberField = class LitNumberField extends focusable(labled(notificatable
     updated(props) {
         var _a;
         super.updated(props);
-        if (this._selectionBeforeRender !== undefined) {
+        if (this._selectionBeforeRender !== this.selectionStart && !_isIOS) {
             (_a = this._inputRef.value) === null || _a === void 0 ? void 0 : _a.setSelectionRange(this._selectionBeforeRender, this._selectionBeforeRender);
         }
         this.validate();
@@ -184,9 +189,10 @@ let LitNumberField = class LitNumberField extends focusable(labled(notificatable
     }
     _handleInput(e) {
         const oldValue = this._value;
-        this.value = e.target.value;
+        const value = e.target.value;
+        this.value = value;
         if (oldValue !== this._value) {
-            this.dispatchEvent(new CustomEvent("changed", { detail: this.value, bubbles: true }));
+            this.notify();
         }
     }
 };

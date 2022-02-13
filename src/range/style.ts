@@ -91,7 +91,7 @@ export const rangeStyles = css`
 
 }
 :host([showPercent]) .wrapper{
-    padding-bottom: 15px;
+    padding-bottom: 17px;
 }
 .wrapper:focus{
     outline: ${_v.outlineFocus};
@@ -113,7 +113,8 @@ export const rangeStyles = css`
     transform-origin: center;
     font-size: 12px;
     will-change: transform;
-    left: calc(var(--size) / 2 * -1);
+    bottom: 0;
+    left: calc(var(--size) / 2 * -1 + 4px);
 }
 .percent.hidden{
     opacity: 0;

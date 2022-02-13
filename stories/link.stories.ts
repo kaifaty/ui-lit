@@ -1,7 +1,7 @@
 import { ifDefined } from 'lit/directives/if-defined';
 
-import '../dist/link';
-import type { ILinkProps } from '../src/link';
+import '../src/link';
+import type { ILinkProps } from '../src/link/interface';
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 

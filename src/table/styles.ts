@@ -210,8 +210,8 @@ export const tableHeaderStyles = css`
     padding: ${_v.headerFilterPadding};
     border-radius: 3px;
 }
-.sort-icons:hover,
-[icon = "filter"]:hover{
+.sort-icons[hover],
+[icon = "filter"][hover]{
     background-color: ${_v.headerIconBackgroundHover};
     ${iconCSSVarNames.color}: ${_v.headerIconColorHover};
     
@@ -232,6 +232,7 @@ export const tableHeaderStyles = css`
     padding: 10px;
     width: ${filterWidth}px;
     border-radius: 5px;
+    box-sizing: border-box;
     background-color: ${_v.headerFilterContentBackground};
     box-shadow: 0 0 6px ${_v.headerFilterContentShadow};
     z-index: 3;

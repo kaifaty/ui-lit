@@ -6,44 +6,8 @@ import '../pagination';
 import { scrollbar } from '../styles/scrollbar';
 import { ResizeObserverController } from '../controllers/ResizeObserverController';
 import { tableStyles } from './styles';
+import { TColumnItem, TRowSelected, ISourceItem, TSortDirections, TFilterItem } from './interface';
 
-export type ISourceItem = {
-    key: string;
-    [key: string]: string | number | Record<string, any>;
-}
-export type TFilterType = 'checkbox' | 'text' | 'number' | 'date';
-export interface TFilterItem {
-    divider?: boolean,
-    title?: string;
-    text: string;
-    value: string | number | boolean;
-    checked?: boolean;
-    placeholder?: string;
-    name?: string
-    type?: TFilterType
-    onFilter?: (value: string | number | boolean, record: ISourceItem, filters?: Map<string, TFilterItem[]> ) => boolean;
-}
-interface IFilters extends TFilterItem{
-    key: string
-}
-export type TColumnItem = {
-    title: string;
-    key: string;
-    valueFn?: (data: any) => string | TemplateResult
-    filters?: TFilterItem[];
-    //onFilter?: (value: string, record: ISourceItem) => boolean;
-    sorter?: boolean | ((a: ISourceItem, b: ISourceItem, direction: TSortDirections) => number); 
-    sortDirections?: TSortDirections[];
-    width?: number
-    percent?: number
-    defaultSort?: boolean
-    align?: string
-    ellipses?: boolean
-    halfHidden?: (data: any) => boolean
-}
-type TRowSelected = (data: any) => boolean;
-
-export type TSortDirections = 'ascend' | 'descend';
 
 const nodataSVG = svg`
 <svg class = "nodata-svg" width="50" height="50" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">

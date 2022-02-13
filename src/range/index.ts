@@ -89,8 +89,8 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     private _min: number = 0;
     private _percent: number = 0;
     private _offsetX: number = 0;
+    private _lastX: number = 0;
     tabindex: number = 0;
-    private _trackElement: HTMLElement | null = null;
     get offsetX(){
         return this._offsetX
     }
@@ -168,24 +168,12 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         this._padding = parseInt(window.getComputedStyle(this).getPropertyValue("--padding"));
     }
 
-    protected firstUpdated(_changedProperties: Map<string | number | symbol, unknown>): void {
-        super.firstUpdated(_changedProperties);        
-        this._trackElement = this.shadowRoot!.querySelector(".track");
-    }
-
     willUpdate(){         
         this._value = this._calcValueByPercent(this._percent).toFixed(this.decimals);
         this._updateOffset();
     }
     updated(props: Map<string, unknown>){
         super.updated(props);
-        if(props.has("disabled") && this.disabled){
-            //this.style.setProperty(`--percent`, 0 + "%")
-        }
-        else if(props.has("disabled") && !this.disabled){
-            //this.style.setProperty(`--percent`, this._percent + "%")
-        }
-        //else 
         if(props.has("value") || props.has("min") || props.has("max")){
             this.style.setProperty(`--percent`, this._percent + "%")
         }
@@ -207,9 +195,9 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     }
     private _percentTemplate(){
         if(!this.showPercent) return nothing;
-        const left = this._offsetX + this._padding - (this._thumbSize + 7) * this._percent / 100;
+        const left = this._offsetX + this._padding - (this._thumbSize + 6) * this._percent / 100;
         return  html`<div style = "transform: translateX(${left}px);"
-                        class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `
+                          class = "noselect percent ${this.isPercentHidden ? 'hidden' : ''}">${this._percent}%</div> `
     }
     private _thumbTemplate(){
         const offset = (this._offsetX).toFixed(1);
@@ -263,17 +251,6 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         this._value = val.toFixed(this.decimals);
     }
 
-    private _dispatch() {
-        this.dispatchEvent(new CustomEvent("changed", {
-            detail: {
-                value: this.value,
-                percent: this._percent,
-                valueAsNumber: this.valueAsNumber,
-                type: 'range'
-            },
-            bubbles: true,
-        }));
-    }
 
     private _calcTrackStartX(rect: TRect){
         return rect.x + 2 * this._padding;
@@ -362,41 +339,43 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
     
     private _movePosition(x: number){
         if(this.isDisabled()) return;
+        this._lastX = x;
         requestAnimationFrame(() => {
             const offset =  this._calcOffset(x);
             const percent = this._calcPercentByOffset(offset);
             this.value = this._calcValueByPercent(percent).toString();
-            this._dispatch();
+            this.notify();
          })
     }
 
     public setPercent(value: number){
         this._percent = Math.max(Math.min(value, 100), 0);
         this.value = this._calcValueByPercent(this._percent).toString();
-        setTimeout(()=> this._dispatch())
+        setTimeout(()=> this.notify())
     }
     
     
     // ==== Events ==== 
-    private _onPreventTouch = (e: TouchEvent) => {
+    private _onPreventTouch(e: TouchEvent){
         e.preventDefault();
     }
-    private _onPointerDown = (e: PointerEvent) => {   
+    private _onPointerDown(e: PointerEvent){   
         (e.target as HTMLElement).setPointerCapture(e.pointerId);
         this._handlePointerDown();
         this._handlePointerMove(e.clientX);
-        e.preventDefault(); // Atop auto focus
+        e.preventDefault(); 
+        // Atop auto focus
     }
-    private _onPointerMove = (e: PointerEvent) => {
+    private _onPointerMove(e: PointerEvent){
         if(!e.isPrimary || !this.hasAttribute("pressed")) return;
         this._handlePointerMove(e.clientX);
         e.preventDefault();
     }
-    private _onPointerLostCapture = (e: PointerEvent) => {
-        this._handlePointerUp(e.clientX);
+    private _onPointerLostCapture(e: PointerEvent){
+        this._handlePointerUp(this._lastX);
         // e.preventDefault();
     }
-    private _onPointerOver = (e: PointerEvent) => {
+    private _onPointerOver(e: PointerEvent){
         this._onPointOver(e);
     }
 
@@ -408,35 +387,35 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         this.requestUpdate();
     }
 
-    private _handlePointerDown = () => {
+    private _handlePointerDown(){
         this._rect = this.getBoundingClientRect();
         if(this.isDisabled()) return;
         this.isPercentHidden = false;
         this.setAttribute('pressed', '');
     }
 
-    private _handlePointerUp = (x: number) => {
+    private _handlePointerUp(x: number){
         this._hidePercent();
         this._movePosition(x);
         this.removeAttribute('pressed');
     }
-    private _handlePointerMove = (x: number) => {
+    private _handlePointerMove(x: number){
         this._movePosition(x);
         this.isPercentHidden = false;
     }
-    private _onPointOver = (e: Event) => {
+    private _onPointOver(e: Event){
         if(this.isDisabled()) return;
         clearTimeout(this._timeout);
         this.isPercentHidden = false;
         this.setAttribute('hover', '');
         e.preventDefault();
     }
-    private _onPointLeave = (e: Event) => {
+    private _onPointLeave(e: Event){
         e.preventDefault();
         this._hidePercent();
         this.removeAttribute('hover');
     }
-    private _handleKeyboard = (e: KeyboardEvent) => {
+    private _handleKeyboard(e: KeyboardEvent){
         if(e.key === "ArrowRight" || e.key === "ArrowTop"){
             this.setPercent(this._percent + 1)
             
@@ -447,6 +426,17 @@ export class LitRange extends focusable(labled(notificatable(formAssociated(LitE
         }
     }
 
+    notify(){
+        this.dispatchEvent(new CustomEvent("changed", {
+            detail: {
+                value: this.value,
+                percent: this._percent,
+                valueAsNumber: this.valueAsNumber,
+                type: 'range'
+            },
+            bubbles: true,
+        }));
+    }
     
 }
 

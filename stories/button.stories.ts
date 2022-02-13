@@ -1,6 +1,6 @@
 import { Story, Meta } from '@storybook/web-components';
 import { html } from 'lit-html';
-import '../dist/button'
+import '../src/button'
 import {ButtonProps } from  '../src/button'
 
 const _Button = (data: ButtonProps) => {

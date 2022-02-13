@@ -9,6 +9,7 @@ let LitFrom = class LitFrom extends LitElement {
         this._elements = [];
         this._defaults = {};
         this._button = null;
+        this._loading = false;
         this._disabled = false;
         // ==== Events ==== 
         this._handleSubmit = (e) => {
@@ -22,6 +23,7 @@ let LitFrom = class LitFrom extends LitElement {
             this._elements.push(e.detail.element);
             this._addToDefault(e.detail.element);
             (_b = (_a = e.detail).onAttatch) === null || _b === void 0 ? void 0 : _b.call(_a, this);
+            e.stopPropagation();
         };
     }
     get button() {
@@ -112,12 +114,14 @@ let LitFrom = class LitFrom extends LitElement {
         }
         return true;
     }
-    _startSpinButton() {
+    _startLoading() {
+        this._loading = true;
         if (this.button) {
             this.button.loading = true;
         }
     }
-    _stopSpinButton() {
+    _stopLoading() {
+        this._loading = false;
         const btn = this.button;
         if (btn) {
             btn.loading = false;
@@ -125,18 +129,20 @@ let LitFrom = class LitFrom extends LitElement {
         this._button = null;
     }
     async submit() {
+        if (this._loading)
+            return false;
         if (!this.noValidate && !this.reportValidity()) {
             return false;
         }
         const data = this.getData();
         if (this.onAction) {
             try {
-                this._startSpinButton();
+                this._startLoading();
                 await this.onAction(data);
-                this._stopSpinButton();
+                this._stopLoading();
             }
             catch {
-                this._stopSpinButton();
+                this._stopLoading();
                 return false;
             }
         }
@@ -148,7 +154,12 @@ let LitFrom = class LitFrom extends LitElement {
     }
     async reset() {
         // Check tabss on reset 
-        this.elements.forEach(it => it.value = this._defaults[it.name]);
+        this.elements.forEach(it => {
+            if (!['lit-tabs', 'lit-select'].includes(it.tagName.toLowerCase())) {
+                it.value = this._defaults[it.name];
+                it.notify();
+            }
+        });
         return new Promise(r => {
             setTimeout(() => {
                 this.elements.forEach(it => it.validityDefault());

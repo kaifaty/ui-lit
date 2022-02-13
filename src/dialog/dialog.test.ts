@@ -51,7 +51,7 @@ describe('Test dialog', async () => {
         dialog.open();
         numberfield!.value = "777";
         dialog.close();
-        await true;
+        await new Promise(r => setTimeout(r));
         expect(numberfield?.value).equal("555");
     });
 })

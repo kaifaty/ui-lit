@@ -100,7 +100,6 @@ export const selectStyles = css`
     ${button.mediumPadding}: ${_v.padding};
     ${button.border}: ${_v.border};
     ${button.color}: ${_v.color};
-    ${button.textTransform}: none;
     ${button.justify}: normal;
     ${iconCSSVarNames.color}: ${_v.color};
     ${button.borderRadius}: 0;

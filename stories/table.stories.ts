@@ -2,7 +2,7 @@
 import { html } from 'lit-html';
 import { Story, Meta } from '@storybook/web-components';
 import '../src/table';
-import { ISourceItem } from '../src/table/table';
+import { ISourceItem } from '../src/table';
 
 const data = {
     key: '1',
@@ -36,12 +36,16 @@ const columns = [
         value: 22,
       },
       {
-        text: 'More then', 
-        placeholder: '> then',       
-        type: 'text',
-        onFilter: (value: unknown, row: ISourceItem) => {
-            return row.age > value
-        }
+        text: 'Select', 
+        placeholder: '',       
+        type: 'select',
+        items: [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+        ]
       },
       {
         text: 'More then', 

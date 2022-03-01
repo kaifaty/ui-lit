@@ -5,8 +5,9 @@ import '../label';
 import type { LitCheckbox } from '../checkbox/index';
 import type { LitNumberField } from '../number/index';
 import type { LitButton } from '../button/index';
+import { LitSelect } from '../select/select';
 
-type TReturnData = Record<string, string | boolean | number>;
+type TReturnData = Record<string, string | boolean | number | string[]>;
 export interface IFormProps {
     disabled: boolean
     noValidate: boolean
@@ -116,6 +117,9 @@ export class LitFrom extends LitElement implements IFormElement, IFormProps{
             }
             else if(it.tagName.toLocaleLowerCase() === "lit-range"){
                 data[it.name] = (it as LitNumberField).valueAsNumber;
+            }
+            else if(it.tagName.toLocaleLowerCase() === "lit-select" && (it as LitSelect).multiple){
+                data[it.name] = (it as LitSelect).selectedValues;
             }
             else{
                 data[it.name] = it.value;

@@ -1,3 +1,4 @@
+import { selectCSSVarNames } from './../select/styles';
 import { ifDefined } from 'lit/directives/if-defined';
 import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing } from 'lit';
@@ -9,6 +10,7 @@ import '../textfield';
 import '../number';
 import '../divider';
 import '../button';
+import '../select';
 import { isClickInElement, getHost } from 'kailib';
 import { tableHeaderStyles, filterWidth } from './styles';
 
@@ -16,15 +18,20 @@ import { tableHeaderStyles, filterWidth } from './styles';
 let dialogOpened = false;
 @customElement('lit-table-header')
 export class LitTableHeader extends LitElement{
-    static styles = [tableHeaderStyles, noselect];
+    static styles = [
+        css`
+        ${selectCSSVarNames.listboxHeight}: var(--max-select-height);
+        `,
+        tableHeaderStyles, 
+        noselect];
     
     @property({type: String, reflect: true}) align: string = 'left';
     @property({type: Object}) item?: TColumnItem;
     @property({type: Array}) filters?: TFilterItem[];
     @property({type: String}) sort: string = '';
     @property({type: String, reflect: true}) sortDirection: string = 'ascend';
-    _filterVisible = false;
-    _host: TableElement | null = null;
+    private _filterVisible = false;
+    private _host: TableElement | null = null;
     @state() _sortHover = false;
     @state() _filterHover = false;
     
@@ -128,6 +135,11 @@ export class LitTableHeader extends LitElement{
                         class = "${classMap(map)}"
                         icon = "filter"></lit-icon>`;
     }
+
+    protected updated(_changedProperties: Map<string | number | symbol, unknown>): void {
+        
+    }
+
     private _filterItemTemplate(item: TFilterItem, i: number){
         let type = item.type;
         if(item.type === 'number'){
@@ -166,6 +178,26 @@ export class LitTableHeader extends LitElement{
                     name = "${i.toString()}" 
                     value = "${item.value}"
                     placeholder = "${ifDefined(item.placeholder)}"></lit-textfield>`;
+        }
+        else if(
+            type === 'select'
+        ){
+            return html`
+                <lit-label>
+                    ${item.text}
+                </lit-label>
+                <lit-select 
+                    name = "${i.toString()}" 
+                    searchable
+                    multiple
+                    value = "${item.value}"
+                    placeholder = "${ifDefined(item.placeholder)}">
+                    ${
+                        item.items?.map(it => html`<lit-option 
+                            ?selected = "${Array.isArray(item.value) ? item.value.includes(it) : false}"
+                            value = "${it}">${it}</lit-option>`)
+                    }
+                </lit-select>`;
         }
         return nothing;
     }
@@ -238,7 +270,6 @@ export class LitTableHeader extends LitElement{
             this._onFilterToggle(e);
         }
     }
-
     private _onChangeSort(){
         if(dialogOpened) return;
         if(!this.item?.sorter) return;
@@ -251,15 +282,25 @@ export class LitTableHeader extends LitElement{
             bubbles: true
         }));
     }
-
     private _onSubmitFilter(e: CustomEvent){
         this._hideFilter()
         const data = e.detail.data;
+
+
+        //console.log(data)
+
         const filters = this.filtersData!.map((it, i) => {
             if(!it.type || it.type === 'checkbox'){
                 return {
                     ...it, 
                     checked: data[i]
+                }
+            }
+            if(it.type === 'select'){
+                return {
+                    ...it, 
+                    value: data[i],
+                    checked: data[i].length
                 }
             }
             return {

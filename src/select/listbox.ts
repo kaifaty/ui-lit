@@ -23,7 +23,6 @@ export class ListBox extends LitElement{
         const topAvailable = rect.top;
         const bottomAvailable = window.visualViewport.height - rect.bottom;
         const floatRight = window.visualViewport.width / 2 - rect.left < 0;
-
         this.style.minWidth = rect.width + "px"; 
         if(floatRight){
             this.style.right = '0';
@@ -42,7 +41,7 @@ export class ListBox extends LitElement{
             this.style.setProperty('--shadow-pos', "-1");
         }
         else{
-            this.style.top = "initial";
+            this.style.top = host.clientHeight + "px";
             this.style.transform = 'none';
             if(wrapper){
                 wrapper.style.maxHeight = (bottomAvailable - 2)  + "px";

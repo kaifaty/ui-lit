@@ -15,6 +15,10 @@ export const selectCSSVars = {
         name: "height",
         default: "30px"
     },
+    listboxHeight: {
+        name: "listbox-height",
+        default: "330px"
+    },
     mobileHeight: {
         name: "mobileHeight",
         default: "40px"
@@ -100,7 +104,6 @@ export const selectStyles = css`
     ${button.mediumPadding}: ${_v.padding};
     ${button.border}: ${_v.border};
     ${button.color}: ${_v.color};
-    ${button.textTransform}: none;
     ${button.justify}: normal;
     ${iconCSSVarNames.color}: ${_v.color};
     ${button.borderRadius}: 0;
@@ -129,6 +132,8 @@ export const selectStyles = css`
     padding-right: 22px;
     cursor: pointer;
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
 }
 .wrapper:focus{
     outline:  ${buttonValues.outlineFocus};
@@ -147,6 +152,10 @@ export const selectStyles = css`
     display: flex;
     flex-wrap: wrap;
 }
+.search-wrapper{
+    padding: 0 4px;
+    display: inline-block;
+}
 input{ 
     width: 100%;
     background: transparent;
@@ -164,7 +173,7 @@ input{
     margin: 6px 14px 6px 14px;
     padding: 0 5px;
     width: calc(100% - 32px);
-    border: 1px solid #ddd;
+    border: ${_v.listboxBorder};
 }
 :host([multiple]:not([empty])) input{
     padding: 0;
@@ -237,6 +246,8 @@ export const optionStyles = css`
 }
 lit-button{
     width: 100%;
+    height: 100%;
+    display: block;
     ${button.outlineFocus}: none;    
 }
 :host(:not([selected])) lit-button:hover span::after,
@@ -266,6 +277,8 @@ export const listboxStyles = css`
     z-index: 10;
     --shadow-pos: -1;
     ${button.border}: none;
+    background: ${_v.optionBackground};
+
 }
 :host([open]){
     display: block;
@@ -273,7 +286,7 @@ export const listboxStyles = css`
 .wrapper{
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: 330px;
+    max-height: ${_v.listboxHeight};
     border: ${_v.listboxBorder};
     box-shadow: 3px calc(3px * var(--shadow-pos)) 6px ${_v.listboxShadow};    
 }

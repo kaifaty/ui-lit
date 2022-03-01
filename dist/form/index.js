@@ -91,6 +91,9 @@ let LitFrom = class LitFrom extends LitElement {
             else if (it.tagName.toLocaleLowerCase() === "lit-range") {
                 data[it.name] = it.valueAsNumber;
             }
+            else if (it.tagName.toLocaleLowerCase() === "lit-select" && it.multiple) {
+                data[it.name] = it.selectedValues;
+            }
             else {
                 data[it.name] = it.value;
             }

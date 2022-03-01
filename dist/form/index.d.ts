@@ -2,7 +2,7 @@ import { LitElement } from 'lit';
 import { FormAssociatedElement } from '../mixins/form-associated/interface';
 import '../label';
 import type { LitButton } from '../button/index';
-declare type TReturnData = Record<string, string | boolean | number>;
+declare type TReturnData = Record<string, string | boolean | number | string[]>;
 export interface IFormProps {
     disabled: boolean;
     noValidate: boolean;

@@ -18,7 +18,6 @@ const _Button = (data: ButtonProps) => {
       .notifyOnClick = "${!!data.notifyOnClick}"
       .loading = "${!!data.loading}"
       size = "${data.size || 'medium'}">
-      <span slot = "icon-befor22e">11</span>
     Button
     </lit-button>
   </div>

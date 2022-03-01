@@ -102,7 +102,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         return this.options.filter(it => it.selected);
     }
     get selectedValues(){
-        return [...this._values.values()];
+        return [...this._values.values()].filter(it => it);
     }
     get selectedContent(){
         return this.selectedOptions[0]?.innerHTML || '-'
@@ -238,6 +238,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         if(this.multiple){
             return [...this._values.values()].map(value => {
                 const option = this.options.filter(it => it.value === value)[0];
+                if(!option) return "";
                 return html`<button class = "button">
                     ${unsafeHTML(option.innerHTML)} 
                     <span 
@@ -253,11 +254,11 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
     }
     private _searchTamplate(){
         if(!this.searchable) return nothing;
-        return html`<input .value = "${this.seatchValue}"
+        return html`<div class = "search-wrapper"><input .value = "${this.seatchValue}"
                             @click = "${this._onSeatchClick}"
                             @input = "${this._onSearchValue}"
                             placeholder = "${this.multiple ? "" : this.searchPlaceholder}"
-                            type = "text" />`;
+                            type = "text" /></div>`;
     }
     private _containerTemplate(data: TemplateResult){
         if(this.multiple){
@@ -280,12 +281,10 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         ${this._contentTemplate()}
         ${this.multiple ? this._searchTamplate() : nothing}
         <div class = "icon-wrapper">
-
             ${
                 this.multiple && this.searchable && this.open 
                     ? search()
                     : dropdown(this.open)
-                
             }
         </div>`);
     }

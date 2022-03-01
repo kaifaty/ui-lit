@@ -127,10 +127,23 @@ export class TableElement extends LitElement{
                 const rowFilters: boolean[] = [];
                 cols[key].forEach(f => {
                     if (f.value || f.checked) {
-                        const result = f.onFilter 
-                                        ? f.onFilter(f.value, it, this._filters)
-                                        : it[key] == f.value
-                        rowFilters.push(result);
+                        if(f.onFilter){
+                            rowFilters.push(f.onFilter(f.value, it, this._filters));
+                        }
+                        else{
+                            if(Array.isArray(f.value)){
+                                if(!f.value.length){
+                                    rowFilters.push(true);
+                                }
+                                else{
+                                    rowFilters.push(f.value.includes(it[key]) || f.value.includes(it[key].toString()));
+                                }
+                            }
+                            else{
+                                rowFilters.push(it[key] == f.value);
+                            }
+                            
+                        }
                     }
                 });
                 if (rowFilters.length && rowFilters.filter(it => !it)[0] === false) {

@@ -4,12 +4,13 @@ export type ISourceItem = {
     key: string;
     [key: string]: string | number | Record<string, any>;
 }
-export type TFilterType = 'checkbox' | 'text' | 'number' | 'date';
+export type TFilterType = 'checkbox' | 'text' | 'number' | 'date' | 'select';
 export interface TFilterItem {
     divider?: boolean,
     title?: string;
     text: string;
     value: string | number | boolean;
+    items?: string[];
     checked?: boolean;
     placeholder?: string;
     name?: string

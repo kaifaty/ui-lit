@@ -3,7 +3,7 @@ import { css } from 'lit';
 import { makeCSSProxy, makeCSSNameProxy } from '../helpers/cssproxy';
 
 
-export const filterWidth = 230;
+export const filterWidth = 250;
 
 const tableCSSVars ={
     fontSize: {
@@ -236,7 +236,6 @@ export const tableHeaderStyles = css`
     background-color: ${_v.headerFilterContentBackground};
     box-shadow: 0 0 6px ${_v.headerFilterContentShadow};
     z-index: 3;
-    contain: content;
     display: grid;
     grid-template-rows: auto 25px;
     gap: 10px;

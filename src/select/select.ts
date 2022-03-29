@@ -9,7 +9,7 @@ import '../button';
 import './listbox';
 import './group';
 import './option';
-import { IPropsSelect } from './interface';
+import { IPropsSelect, TListboxPosition } from './interface';
 import type { LitOption } from './option';
 import { focusable } from '../mixins/focusable/index';
 import { labled } from '../mixins/labled/index';
@@ -33,6 +33,8 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
     @property({type: Boolean, reflect: true}) multiple: boolean = false;
     @property({type: Boolean, reflect: true}) searchable: boolean = false;
     @property({type: String,}) searchPlaceholder: string = 'search';
+
+    @property({type: String}) listboxPosition: TListboxPosition = 'auto';
 
     
     public isMenu = false;
@@ -240,7 +242,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
                 const option = this.options.filter(it => it.value === value)[0];
                 if(!option) return "";
                 return html`<button class = "button">
-                    ${unsafeHTML(option.innerHTML)} 
+                    ${unsafeHTML(option.innerHTML)}
                     <span 
                         class = "cancel"
                         data-value = "${option.value}"
@@ -294,6 +296,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         ${super.render()}
         ${this._wrapperTemplate()}
         <lit-listbox 
+            .position = "${this.listboxPosition}"
             @focusNext = "${this._focusNext}"
             @focusPrev = "${this._focusPrev}"
             @listboxClose = "${this.hide}"

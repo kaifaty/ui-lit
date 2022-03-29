@@ -142,6 +142,7 @@ export class LitTableHeader extends LitElement{
 
     private _filterItemTemplate(item: TFilterItem, i: number){
         let type = item.type;
+        const value = Array.isArray(item.value) ? item.value[0] : item.value;
         if(item.type === 'number'){
             type = 'text';
         }
@@ -176,7 +177,7 @@ export class LitTableHeader extends LitElement{
                 <lit-textfield 
                     type = "${type}"
                     name = "${i.toString()}" 
-                    value = "${item.value}"
+                    value = "${value}"
                     placeholder = "${ifDefined(item.placeholder)}"></lit-textfield>`;
         }
         else if(
@@ -190,7 +191,8 @@ export class LitTableHeader extends LitElement{
                     name = "${i.toString()}" 
                     searchable
                     multiple
-                    value = "${item.value}"
+                    listboxPosition = "top"
+                    value = "${value}"
                     placeholder = "${ifDefined(item.placeholder)}">
                     ${
                         item.items?.map(it => html`<lit-option 
@@ -286,9 +288,6 @@ export class LitTableHeader extends LitElement{
         this._hideFilter()
         const data = e.detail.data;
 
-
-        //console.log(data)
-
         const filters = this.filtersData!.map((it, i) => {
             if(!it.type || it.type === 'checkbox'){
                 return {
@@ -311,7 +310,8 @@ export class LitTableHeader extends LitElement{
         });
         this.dispatchEvent(new CustomEvent("changeFilter", {
             detail: {key: this.item?.key, filters},
-            bubbles: true
+            bubbles: true,
+            composed: true,
         }));
     }
 
@@ -319,7 +319,8 @@ export class LitTableHeader extends LitElement{
         this._hideFilter()
         this.dispatchEvent(new CustomEvent("resetFilter", {
             detail: this.item?.key,
-            bubbles: true
+            bubbles: true,
+            composed: true,
         }))
     }
 

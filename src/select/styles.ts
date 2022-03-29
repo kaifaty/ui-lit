@@ -116,7 +116,9 @@ export const selectStyles = css`
     display: flex;
     align-items: center;
 }
-
+:host(:not([multiple])) .search-wrapper{
+    width: 100%;
+}
 :host([multiple][searchable]) .wrapper{
     cursor: text;
 }

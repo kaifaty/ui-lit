@@ -1,9 +1,10 @@
+import { textCSSVarsNames } from './../text/styles';
 import { iconCSSVarNames } from './../icon/styles';
 import { css } from 'lit';
 import { makeCSSProxy, makeCSSNameProxy } from '../helpers/cssproxy';
 
 
-export const filterWidth = 250;
+export const filterWidth = 265;
 
 const tableCSSVars ={
     fontSize: {
@@ -125,6 +126,10 @@ tbody td.ellipses{
 }
 tbody td.half-hidden{
     opacity: 0.5;
+}
+tbody td.status-error{
+    color: var(${textCSSVarsNames.colorDanger});
+    ${iconCSSVarNames.color}: var(${textCSSVarsNames.colorDanger});
 }
 th{
     height: var(--header-height, 35px);

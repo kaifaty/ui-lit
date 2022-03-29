@@ -81,6 +81,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         @property({type: Boolean}) required: boolean = false;
         @property({type: Boolean, reflect: true}) readonly: boolean = false;
         @property({type: Boolean}) willValidate: boolean = true;
+        @property({type: Boolean}) validateOnChange: boolean = false;
         @property({type: String}) name: string = '';
 
         //@property({type: Boolean}) valid: boolean = true;
@@ -100,6 +101,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
         public step?: number = NaN;
         public pattern?: string = '';
         private _submitForm: LitFrom | null = null;
+        private _valueOnInit = '';
 
         
         public connectedCallback(): void {
@@ -122,6 +124,7 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
                     }
                 }
             }));
+            this._valueOnInit = this._value;
             this.isFirstUpdated = true
         }
         get form(){
@@ -167,6 +170,9 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
             if(!this.isFirstUpdated){
                 return true;
             }
+            if(this.validateOnChange && this._valueOnInit === this._value){
+                return true;
+            }
             return !Object.values(this.validity).filter(it => it).length;
         }
         reportValidity(): boolean{
@@ -187,8 +193,10 @@ export  const formAssociated = <T extends Constructor<LitElement>>(superClass: T
                 this.validityDefault();
             }
         }
-        setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement){                
-            if(!this.willValidate) return;
+        setValidity(flags: ValidityStateFlags, message?: string, anchor?: HTMLElement){ 
+            if(!this.willValidate) {
+                return;
+            }
             this.validity = {...this.validity, ...flags};
             if(message){
                 this.customValidationMessage = message;

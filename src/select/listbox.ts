@@ -3,13 +3,13 @@ import { customElement, property } from 'lit/decorators.js';
 import { mobileAndTabletCheck } from 'kailib';
 import { scrollbar } from '../styles/scrollbar';
 import { listboxStyles } from './styles';
-
-
+import { TListboxPosition } from './interface';
 
 
 @customElement("lit-listbox")
 export class ListBox extends LitElement{
     static styles = [listboxStyles, scrollbar];
+    @property({type: String}) position: TListboxPosition = 'auto';    
     @property({type: Boolean, reflect: true}) open: boolean = false;    
     @property({type: Boolean, reflect: true}) mobile: boolean = mobileAndTabletCheck();
     
@@ -32,7 +32,7 @@ export class ListBox extends LitElement{
             this.style.right = 'initial';
             this.style.left = '0';
         }
-        if(topAvailable > bottomAvailable){
+        if(topAvailable > bottomAvailable && this.position === 'auto'){
             this.style.top = '0';
             this.style.transform = 'translateY(calc(-100% - 1px))';
             if(wrapper){

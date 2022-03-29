@@ -33,6 +33,7 @@ export type TColumnItem = {
     defaultSort?: boolean
     align?: string
     ellipses?: boolean
+    getStatus?: (data: any) => string
     halfHidden?: (data: any) => boolean
 }
 export type TRowSelected = (data: any) => boolean;

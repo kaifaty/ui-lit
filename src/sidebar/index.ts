@@ -133,7 +133,7 @@ export class LitSidebar extends LitElement{
         this._dispatch();
     }
     private _dispatch(){
-        this.dispatchEvent(new CustomEvent("changed", {
+        this.dispatchEvent(new CustomEvent("openChanged", {
             bubbles: true,
             composed: true,
             detail: this.opened

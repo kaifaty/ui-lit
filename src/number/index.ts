@@ -113,6 +113,9 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
     }
     set value(value: string){
         const oldValue = this._value;
+        if(Number(value) === Number(oldValue)){
+            return;
+        }
         this._value = this._valueResolve(value);
         this.requestUpdate('value', oldValue);
     }
@@ -144,6 +147,9 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
                         danger
                         class = "danger icon"></lit-icon>`;
     }
+    private _onClick(e: Event){
+        e.stopPropagation();
+    }
     get selectionStart(){
         return this._inputRef.value?.selectionStart  || 0;
     }
@@ -163,6 +169,7 @@ export class LitNumberField extends focusable(labled(notificatable(formAssociate
                    inputmode = "decimal"
                    @input = "${this._handleInput}" 
                    @change = "${this._handleChange}"
+                   @click = "${this._onClick}"
                    ${ref(this._inputRef)}
                    .value = ${live(this.value)}>
             ${this._cancelIconTemplate()}

@@ -178,7 +178,7 @@ export const darkStyles = css`
             ${table.headerIconColorSelected}: var(--primary-0);
             ${table.headerIconBackgroundHover}: var(--primary-1250);
 
-            ${table.headerFilterContentBackground}: var(--primary-900);
+            ${table.headerFilterContentBackground}: var(--primary-1200);
             ${table.headerFilterContentShadow}: var(--primary-1400);
 
             ${pagination.backgroundSelected}: var(--primary-1000);

@@ -95,9 +95,22 @@ const dataSource = [...Array(35)].map((it, i) =>
 const click = (e: CustomEvent) => {
   alert(e.detail);
 }
+
+const buttonClick = () => {
+  const d = document.querySelector("lit-table");
+  d.setFilter("age", 0,
+    {
+      text: 'Age = 22',
+      value: 22,
+      checked: true
+    },
+  )
+}
+
 const rowSelect = (d: typeof data) => {
   return d.key == "7"
 }
+
 const Table = (text: string) => 
     html`
     <style>
@@ -105,6 +118,7 @@ const Table = (text: string) =>
         --lit-table-cursor: pointer;
       }
     </style>
+    <button @click = "${buttonClick}">Filter</button>
     <lit-table
         style = "width: 380px; height: 400px;"
         pagination

@@ -161,7 +161,8 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
         return html`<lit-icon 
                         @click = "${this._clearValue}"
                         icon = "cancel" 
-                        class = "danger icon cancel"></lit-icon>`;
+                        danger
+                        class = "icon cancel"></lit-icon>`;
     }
     render(){
         return html`
@@ -178,11 +179,14 @@ export class LitTextField extends focusable(labled(notificatable(formAssociated(
                 size = "${this.size}"
                 @input = "${this._onInput}" 
                 @change = "${this._onChange}"
+                @click = "${this._onClick}"
                 .value = ${live(this.value)}>
             ${this._iconslotTemplate()}
         </div>`;
     }
-    
+    private _onClick(e: Event){
+        e.stopPropagation();
+    }
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
         super.willUpdate(_changedProperties);
         this._selectionBeforeRender = this.selectionStart;

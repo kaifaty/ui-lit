@@ -175,20 +175,28 @@ export class TableElement extends LitElement{
         const filters = this._filters.get(key);
         const CFilters = this.columns.filter(c => c.key === key)[0].filters!;
         
-        return filters?.map((f, i) => ({...f, text: CFilters[i].text}))
+        return filters?.map((f, i) => ({...f, text: CFilters[i].text})) || CFilters
+    }
+    setFilter(key: string, id: number, filter: TFilterItem){
+        const filters = this.getColumnFilters(key);
+        if(filters && id < filters.length){
+            filters[id] = filter;
+        }
+        this._filters.set(key, filters || [filter]);
+        this.requestUpdate();
     }
     private _headerTemplate(){
         return this.columns.map((col, i) => {
             return html`<th>
                 <lit-table-header 
-                .filters = "${this.getColumnFilters(col.key)}"
-                @changeFilter = "${this._changeFilter}"
-                @resetFilter = "${this._resetFilter}"
-                style = "min-width: ${col.width ? col.width + "px" : "auto" }"
-                .align = "${col.align || "left"}"
-                .sort = "${this.sort}"
-                .sortDirection = "${this.sortDirection}"
-                .item = "${col}"></lit-table-header>
+                    .filters = "${this.getColumnFilters(col.key)}"
+                    @changeFilter = "${this._changeFilter}"
+                    @resetFilter = "${this._resetFilter}"
+                    style = "min-width: ${col.width ? col.width + "px" : "auto" }"
+                    .align = "${col.align || "left"}"
+                    .sort = "${this.sort}"
+                    .sortDirection = "${this.sortDirection}"
+                    .item = "${col}"></lit-table-header>
             </th>`
         });
     }
@@ -205,6 +213,7 @@ export class TableElement extends LitElement{
                 ${this.columns.map((col, i) => {
                     const classes = {
                         ellipses: !!col.ellipses,
+                        ['status-' + (col.getStatus?.(it) || 'none')]: true,
                         'half-hidden': col.halfHidden ? col.halfHidden(it) : false
                     }                    
                     return html `<td .align = "${col.align || "left"}"
@@ -256,6 +265,7 @@ export class TableElement extends LitElement{
             <slot></slot>
         </footer>`;
     }
+
     private _onRowClick(e: Event){
         const key = (e.target as HTMLElement).closest('tr')?.dataset.key;
         this.dispatchEvent(new CustomEvent("rowClick", {

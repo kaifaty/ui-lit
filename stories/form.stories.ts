@@ -14,7 +14,7 @@ const Button = (data: IFormProps) =>
             <lit-textfield id = "name" value = "Mike"></lit-textfield>
 
             <label-element for = "salary">Salary:</label-element> 
-            <lit-numberfield id = "salary" decimals = "2" icon = "USDT" value = "400" min = "500" ?required = "${true}" ></lit-numberfield>
+            <lit-numberfield id = "salary" decimals = "2" icon = "USDT" value = "400" min = "500" ?required = "${true}" .validateOnChange = "${true}"></lit-numberfield>
             
             <label-element >Required:</label-element> 
             <lit-numberfield required ></lit-numberfield>

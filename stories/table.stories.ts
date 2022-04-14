@@ -64,6 +64,20 @@ const columns = [
       },
     ],
 },
+
+{
+  key: "name",
+  title: "name",
+  filters: [
+    {     
+      type: 'checkbox',
+      text: '> 10 && < 15',
+      onFilter: (value: unknown, row: ISourceItem) => {
+          return row.age > 10 && row.age < 15
+      }
+    },
+  ],
+},
 {
     title: 'Address',
     dataIndex: 'address',
@@ -75,7 +89,7 @@ const columns = [
         type: 'checkbox',
         text: '> 10 && < 15',
         onFilter: (value: unknown, row: ISourceItem) => {
-            return row.age > 10 && row.age < 15
+            return row.address > 30 && row.address < 55
         }
       },
     ],
@@ -120,7 +134,7 @@ const Table = (text: string) =>
     </style>
     <button @click = "${buttonClick}">Filter</button>
     <lit-table
-        style = "width: 380px; height: 400px;"
+        style = "width: 330px; height: 400px;"
         pagination
         paginationToHeight        
         defaultSort = "age"

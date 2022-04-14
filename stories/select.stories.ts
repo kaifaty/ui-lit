@@ -16,8 +16,8 @@ const Number = (data: IPropsSelect) =>
         .multiple = "${data.multiple}"
         .searchable = "${data.searchable}">
         <lit-opt-group>
-            <lit-option value = "1">test 1</lit-option>
-            <lit-option value = "2">test 2</lit-option>
+            <lit-option value = "1" disabled>test 1</lit-option>
+            <lit-option value = "2" disabled>test 2</lit-option>
             <lit-option value = "3">test 3</lit-option>
         </lit-opt-group>
         <lit-opt-group>

@@ -1,6 +1,6 @@
 {
   "name": "ui-lit",
-  "version": "0.0.36",
+  "version": "0.0.259",
   "description": "UI Elements on LIT",
   "main": "dist/index.js",
   "browserslist": [
@@ -53,10 +53,10 @@
     "@open-wc/testing": "^2.5.33",
     "@parcel/packager-ts": "^2.0.0",
     "@parcel/transformer-typescript-types": "^2.0.0",
-    "@storybook/addon-actions": "^6.4.19",
-    "@storybook/addon-essentials": "^6.4.19",
-    "@storybook/addon-links": "^6.4.19",
-    "@storybook/web-components": "^6.4.19",
+    "@storybook/addon-actions": "^6.4.21",
+    "@storybook/addon-essentials": "^6.4.21",
+    "@storybook/addon-links": "^6.4.21",
+    "@storybook/web-components": "^6.4.21",
     "@types/mocha": "^8.2.2",
     "@types/qrcode": "^1.4.1",
     "@web/dev-server": "^0.1.17",

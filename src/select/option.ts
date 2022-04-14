@@ -10,6 +10,7 @@ export class LitOption extends focusable(LitElement){
     static styles = optionStyles;
     // @property({type: Boolean, reflect: true}) disabled: boolean = false;
     @property({type: Boolean, reflect: true}) selected: boolean = false;
+    @property({type: Boolean, reflect: true}) disabled: boolean = false;
     @property({type: String}) label: string = '';
     @property({type: String}) value: string = '';
     @property({type: Boolean, reflect: true}) visability: boolean = true;
@@ -20,8 +21,7 @@ export class LitOption extends focusable(LitElement){
         this._selectHost = host;
     }
     connectedCallback(): void {
-        super.connectedCallback();
-        this.addEventListener('click', this.select);        
+        super.connectedCallback();      
         this.dispatchEvent(new CustomEvent('optionConnected', {
             bubbles: true,
             composed: true,
@@ -31,32 +31,27 @@ export class LitOption extends focusable(LitElement){
     disconnectedCallback(): void {
         super.disconnectedCallback();
         this._selectHost?.optionDisconnect(this)
-        this.removeEventListener('click', this.select);
     }
     updated(_changedProperties: Map<string | number | symbol, unknown>): void {
         this.ariaLabel = this.label || this.textContent || "";
     }
     render(){
         return html`<lit-button 
+                        ?disabled = "${this.disabled}"
+                        @click = "${this.toggleSelect}"
                         between
                         borderless
                         tabIndex = "1"
                         @focus = "${this._focus}" 
                         @blur = "${this._blur}" >
-                    <slot @slotchange = "${this._slotChange}"></slot> <span slot = "icon-after"></span></lit-button>`
+                    <slot @slotchange = "${this._notify}"></slot> <span slot = "icon-after"></span></lit-button>`
     }
 
-    private select = () => {
-        this.dispatchEvent(new CustomEvent('optionSelect', {
-            detail: this.value,
+    private toggleSelect(){
+        this.dispatchEvent(new CustomEvent('optionChange', {
             composed: true,
-            bubbles: true
-        }));
-    }
-    private _slotChange(e: Event){
-        this.dispatchEvent(new CustomEvent('slotChanged', {
-            composed: true,
-            bubbles: true
+            bubbles: true,
+            detail: this
         }));
     }
     private _focus(){
@@ -82,4 +77,10 @@ export class LitOption extends focusable(LitElement){
         }
     }
 
+    private _notify(){
+        this.dispatchEvent(new CustomEvent('optionChanged', {
+            composed: true,
+            bubbles: true,
+        }));
+    }
 }

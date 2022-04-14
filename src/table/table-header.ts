@@ -41,13 +41,30 @@ export class LitTableHeader extends LitElement{
         this._host = getHost(this)! as TableElement;
     }
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
-        if(this.filterVisible && this._host?.rect){
-            
-            if(this.offsetLeft + filterWidth > this._host.rect.width){
-                this.setAttribute("right", '');
+        if(this.filterVisible && this._host?.rect){  
+            const width = this.clientWidth;     
+            const avalableLeft = this.offsetLeft + width
+            const avalableRight = this._host.rect.width - this.offsetLeft
+
+            const overflowLeft = filterWidth - avalableLeft > 0
+            const overflowRight = filterWidth - avalableRight > 0
+
+            if(!overflowRight){
+                this.style.setProperty("--left-offset", "1px")
+                this.style.setProperty("--right-offset", "initial")
+            }
+            else if(!overflowLeft){
+                this.style.setProperty("--left-offset", "initial")
+                this.style.setProperty("--right-offset", "1px")
+            }
+            else if(avalableRight > avalableLeft)
+            {
+                this.style.setProperty("--left-offset", `-${this.offsetLeft - 5}px`)
+                this.style.setProperty("--right-offset", "initial")
             }
             else{
-                this.removeAttribute("right");
+                this.style.setProperty("--left-offset", `initial`)
+                this.style.setProperty("--right-offset", `-${avalableRight - width - 5}px`)
             }
         }
     }
@@ -141,6 +158,7 @@ export class LitTableHeader extends LitElement{
     }
 
     private _filterItemTemplate(item: TFilterItem, i: number){
+        console.log(item.value)
         let type = item.type;
         const value = Array.isArray(item.value) ? item.value[0] : item.value;
         if(item.type === 'number'){
@@ -192,12 +210,15 @@ export class LitTableHeader extends LitElement{
                     searchable
                     multiple
                     listboxPosition = "top"
-                    value = "${value}"
                     placeholder = "${ifDefined(item.placeholder)}">
                     ${
-                        item.items?.map(it => html`<lit-option 
-                            ?selected = "${Array.isArray(item.value) ? item.value.includes(it) : false}"
-                            value = "${it}">${it}</lit-option>`)
+                        item.items?.map(it => 
+                            html`<lit-option 
+                                .selected = "${Array.isArray(item.value) 
+                                    ? item.value.includes(it) 
+                                    : item.value === it
+                                    }"
+                                value = "${it}">${it}</lit-option>`)
                     }
                 </lit-select>`;
         }
@@ -299,7 +320,7 @@ export class LitTableHeader extends LitElement{
                 return {
                     ...it, 
                     value: data[i],
-                    checked: data[i].length
+                    checked: Boolean(data[i].length)
                 }
             }
             return {
@@ -308,6 +329,7 @@ export class LitTableHeader extends LitElement{
                 checked: !!data[i]
             }
         });
+        console.log(filters)
         this.dispatchEvent(new CustomEvent("changeFilter", {
             detail: {key: this.item?.key, filters},
             bubbles: true,

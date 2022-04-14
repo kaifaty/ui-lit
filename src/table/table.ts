@@ -3,6 +3,7 @@ import { LitElement, html, css, nothing, TemplateResult, svg } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { repeat } from 'lit/directives/repeat';
 import '../pagination';
+import './table-header'
 import { scrollbar } from '../styles/scrollbar';
 import { ResizeObserverController } from '../controllers/ResizeObserverController';
 import { tableStyles } from './styles';
@@ -122,31 +123,32 @@ export class TableElement extends LitElement{
         }
 
         return this.dataSource.filter(it => {
-            const keys = Object.keys(cols);
+            const keys = Object.keys(cols);            
             for(const key of keys){
-                const rowFilters: boolean[] = [];
-                cols[key].forEach(f => {
-                    if (f.value || f.checked) {
-                        if(f.onFilter){
-                            rowFilters.push(f.onFilter(f.value, it, this._filters));
-                        }
-                        else{
-                            if(Array.isArray(f.value)){
-                                if(!f.value.length){
-                                    rowFilters.push(true);
-                                }
-                                else{
-                                    rowFilters.push(f.value.includes(it[key]) || f.value.includes(it[key].toString()));
-                                }
-                            }
-                            else{
-                                rowFilters.push(it[key] == f.value);
-                            }
-                            
+                const data = cols[key].filter(f => f.value || f.checked);
+                if(!data.length){
+                    continue;
+                }
+                let colFilter = false;
+                for(const f of cols[key]){
+                    if(f.onFilter){
+                        if(f.onFilter(f.value, it, this._filters)){
+                            colFilter = true;
                         }
                     }
-                });
-                if (rowFilters.length && rowFilters.filter(it => !it)[0] === false) {
+                    else if(Array.isArray(f.value)){
+                        if(f.value.includes(it[key]) || f.value.includes(it[key].toString())){
+                            colFilter = true
+                        }
+                    }
+                    else if(it[key] === f.value){
+                        colFilter = true
+                    }
+                    if(colFilter){
+                        break;
+                    }
+                };
+                if (!colFilter) {
                     return false;
                 }
             };

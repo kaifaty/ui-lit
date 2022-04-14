@@ -196,6 +196,8 @@ export const tableHeaderStyles = css`
     position: relative;
     display: flex;
     height: 100%;
+    --left-offset: initial;
+    --right-offset: initial;
 }
 
 .sort-icons{
@@ -232,7 +234,8 @@ export const tableHeaderStyles = css`
     position: absolute;
     font-size: 12px;
     top: 1px;
-    left: 1px;
+    left: var(--left-offset);
+    right: var(--right-offset);
     font-weight: 400;
     padding: 10px;
     width: ${filterWidth}px;
@@ -245,10 +248,6 @@ export const tableHeaderStyles = css`
     grid-template-rows: auto 25px;
     gap: 10px;
     
-}
-:host([right]) .filter-template{
-    right: 1px;
-    left: initial;
 }
 .filter-template footer{
     display: flex;

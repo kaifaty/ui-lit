@@ -175,7 +175,7 @@ export declare class LitButton extends LitButton_base implements ButtonProps {
      * @slot icon-before - You can put some elements before content
      * @slot icon-after - You can put some elements after content
      */
-    render(): TemplateResult<1 | 2>;
+    render(): TemplateResult<2 | 1>;
     private _startAnimation;
     private _onTouchstart;
     private _onMouseOver;

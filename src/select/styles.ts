@@ -17,7 +17,7 @@ export const selectCSSVars = {
     },
     listboxHeight: {
         name: "listbox-height",
-        default: "330px"
+        default: "initial"
     },
     mobileHeight: {
         name: "mobileHeight",
@@ -192,6 +192,9 @@ button{
     background: ${buttonValues.primaryBackground};
     padding: 2px 5px;
 }
+button:disabled{
+    opacity: 0.5;
+}
 ::part(content){
     overflow: hidden;
     text-overflow: ellipsis;
@@ -246,6 +249,10 @@ export const optionStyles = css`
 :host(:not([visability])){
     display: none;
 }
+
+:host([disabled]){
+    pointer-events: none;
+}
 lit-button{
     width: 100%;
     height: 100%;
@@ -276,7 +283,7 @@ export const listboxStyles = css`
     box-sizing: border-box;
     position: absolute;
     box-sizing: border-box;
-    z-index: 10;
+    z-index: 30;
     --shadow-pos: -1;
     ${button.border}: none;
     background: ${_v.optionBackground};
@@ -288,9 +295,9 @@ export const listboxStyles = css`
 .wrapper{
     overflow-y: auto;
     overflow-x: hidden;
-    max-height: ${_v.listboxHeight};
+    height: ${_v.listboxHeight};
     border: ${_v.listboxBorder};
-    box-shadow: 3px calc(3px * var(--shadow-pos)) 6px ${_v.listboxShadow};    
+    box-shadow: 2px calc(2px * var(--shadow-pos)) 6px ${_v.listboxShadow};    
 }
 :host([mobile]) .wrapper{
     border-radius: 5px;

@@ -1,6 +1,5 @@
 import { search } from './../svgIcons/index';
 import { dropdown, cancel } from '../svgIcons';
-import { button } from './../button/styles';
 import { html, LitElement, css, TemplateResult, nothing, unsafeCSS } from 'lit';
 import { formAssociated } from '../mixins/form-associated/index';
 import { customElement, property, state } from 'lit/decorators.js';
@@ -16,6 +15,7 @@ import { labled } from '../mixins/labled/index';
 import { notificatable } from '../mixins/notificatable/index';
 import { selectStyles } from './styles';
 import { getEventDataset } from 'kailib';
+export * from './option';
 
 
 @customElement("lit-select")
@@ -36,7 +36,8 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
 
     @property({type: String}) listboxPosition: TListboxPosition = 'auto';
 
-    
+    private _optionMap: Set<LitOption> = new Set();
+    private _connectedTime = 0;
     public isMenu = false;
     private _open: boolean = false;
     set open(value: boolean){
@@ -46,7 +47,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         const oldValue = this._open;
         this._open = value;
         if(value){
-            this.setSearchValue('');
+            this.searchValue = ''
         }
         this.requestUpdate('open', oldValue);
     }
@@ -54,134 +55,158 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         return this._open;
     }
 
-    private _values: Set<string> = new Set();
-
-    private _toggleInValues(value: string){
-        if(this._values.has(value)){
-            this._values.delete(value);
-        }
-        else{
-            this._values.add(value);
-        }
-    }
-
-    private _setInValues(value: string){
-        this._values.clear();
-        this._values.add(value);
-    }
-    private _value: string = ''
     get value(){
         return this.selectedOptions[0]?.value;
     }
     set value(value: string){
-        this._value = value;
-        this._setValue?.(value, false);
+        const option = this._optionByValue(value);
+        if(!option){
+            //Make possible to set value to lit-select on init
+            if((Date.now() - this._connectedTime < 20) || !this._connectedTime){
+                this._connectedTime = Date.now();
+                setTimeout(()=> {
+                    this.value = value
+                }, 20)
+            }
+            else{
+                console.warn("No option with value:", value);
+            }
+            return;
+        }
+        this.selectOption(option)
     }
 
-    @state() options: LitOption[] = [];
-    private seatchValue = '';
-
-    setSearchValue(value: string){
-        this.seatchValue = value;
+    private _searchValue = '';
+    get searchValue(){
+        return this._searchValue;
+    }
+    set searchValue(value: string){
+        this._searchValue = value;
         this.options.forEach(it => {
             it.visability = it.innerText.toLocaleLowerCase().includes(value.toLocaleLowerCase())
         })
         this.requestUpdate();
     }
     
-
+    get length(){
+        return this.options.length;
+    }    
+    get options(){
+        return [...this._optionMap.values()]
+    }
+    get sortedOptions(){
+        return [...this.querySelectorAll('lit-option')] as LitOption[]
+    }
+    
     set selectedIndex(value: number){
-        if(value > this.length - 1 || value < 0) return;
-        this._setValue(this.options[value].value)
+        if(value > this.length - 1 || value < 0) return;    
+        const option = this.sortedOptions[value];
+        if(option){
+            this.selectOption(option)
+        }
     }
     get selectedIndex(){
+        const options = this.sortedOptions;
         for(let i = 0; i < this.length; i ++){
-            if(this.options[i].value === this.value) return i;
+            if(options[i].selected) return i;
         }
         return -1;
     }
+    
     get selectedOptions(){
-        return this.options.filter(it => it.selected);
+        return this.options.filter(item => item.selected);
     }
     get selectedValues(){
-        return [...this._values.values()].filter(it => it);
+        return this.selectedOptions.map(item => item.value);
     }
     get selectedContent(){
         return this.selectedOptions[0]?.innerHTML || '-'
     }
+    private _optionByValue(value: string){
+        return this.options.find(item => item.value === value);
+    }
 
-    private _setValue = (value: string, notify = true) => {     
+    private _selectValue(value: string){
+        const option = this._optionByValue(value);
+        if(!option){
+            console.warn("No option with value:", value);
+            return;
+        }
+        this.selectOption(option);
+    }
+    private _unSelectValue(value: string){
+        const option = this._optionByValue(value);
+        if(!option){
+            console.warn("No option with value:", value);
+            return;
+        }
+        this.unSelectOption(option);
+    }
+    selectOption(option: LitOption){
         if(this.multiple){
-            this._toggleInValues(value);
-            if(this.searchable){
-                setTimeout(() => {
-                    this.shadowRoot?.querySelector("input")?.focus();
-                })
-            }
+            option.selected = !option.selected;
+        }
+        else if (option.selected){
+            return;
         }
         else{
-            this._setInValues(value);
-            this.hide();
+            this.selectedOptions.forEach(option => option.selected = false);
+            option.selected = true;
         }
-        this.options.forEach(it => it.selected = this._values.has(it.value));
         this.requestUpdate();
-        this.setSearchValue("");
-        if(notify){ 
-            this.notify()
+    }
+    unSelectOption(option: LitOption){
+        option.selected = false;    
+        this.requestUpdate();
+    }
+
+
+    private _onOptionChange = (e: CustomEvent) => {
+        const option = e.detail as LitOption;
+        if(!this.multiple && option.selected){
+            return;
         }
+        this.selectOption(option);
+        this.notify();
     }
-
-    private _optionSelect = (e: CustomEvent) => {        
-        this._setValue(e.detail);
+    private _onOptionChanged = () => {
+        this.requestUpdate();
     }
-
-    private _optionConnect = (e: CustomEvent) => {
-        const option = e.detail;
+    private _onOptionConnect = (e: CustomEvent) => {
+        const option = e.detail as LitOption;
+        this._optionMap.add(option);
         option.setSelectHost(this);
-        this.options.push(option);
-        if(option.value === this._value){
-            option.selected = true; 
-        }
-        if(option.selected){
-            this._setValue(option.value);
-        }
-
-        this.requestUpdate()
-        
+        this.requestUpdate();
     }
+    
+    optionDisconnect = (option: LitOption) => {
+        this._optionMap.delete(option);
+        this.requestUpdate();
+    }
+
 
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
-        if(!this._values.size){
+        if(!this._optionMap.size){
             this.setAttribute("empty", "");
         }
         else{
             this.removeAttribute("empty");
         }
     }
+
     connectedCallback(): void {
         super.connectedCallback();
-        this.addEventListener('optionConnected', this._optionConnect as EventListener);
-        this.addEventListener('optionSelect', this._optionSelect as EventListener);
-        this.addEventListener('slotChanged', this._slotChanged as EventListener);
+        this.addEventListener('optionConnected', this._onOptionConnect as EventListener);
+        this.addEventListener('optionChanged', this._onOptionChanged as EventListener);
+        this.addEventListener('optionChange', this._onOptionChange as EventListener);
     }
 
     disconnectedCallback(): void {
         super.disconnectedCallback();
-        this.removeEventListener('optionConnected', this._optionConnect as EventListener);
-        this.removeEventListener('optionSelect', this._optionSelect as EventListener);
-        this.removeEventListener('slotChanged', this._slotChanged as EventListener);
+        this.removeEventListener('optionConnected', this._onOptionConnect as EventListener);
+        this.removeEventListener('optionChange', this._onOptionChange as EventListener);
     }
 
-    optionDisconnect = (option: LitOption) => {
-        const index = this.options.indexOf(option);
-        if(~index){
-            this.options.splice(index, 1);
-        }
-    }
-
-    get length(){
-        return this.options.length;
-    }    
 
     private _toggle(){
         if(this.disabled) return;
@@ -208,7 +233,8 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
 
     private _clickCancel(e: Event){
         const v = getEventDataset(e, '.cancel', 'value')!
-        this._setValue(v, true);
+        this._unSelectValue(v);
+        this.notify();
         e.stopPropagation();
     }
 
@@ -230,18 +256,18 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
     }
 
     private _onSearchValue(e: Event){
-        this.setSearchValue((e.target as HTMLInputElement).value);
-        this.style.setProperty("--input-width", this.seatchValue.length * 8 + "px");
+        const value = (e.target as HTMLInputElement).value;
+        this.searchValue = value;
+        this.style.setProperty("--input-width", this.searchValue.length * 8 + "px");
     }
     private _onSeatchClick(e: Event){
         e.stopPropagation()
     }
     private _contentTemplate(){
         if(this.multiple){
-            return [...this._values.values()].map(value => {
-                const option = this.options.filter(it => it.value === value)[0];
+            return this.selectedOptions.map(option => {
                 if(!option) return "";
-                return html`<button class = "button">
+                return html`<button class = "button" ?disabled = "${option.disabled}">
                     ${unsafeHTML(option.innerHTML)}
                     <span 
                         class = "cancel"
@@ -252,11 +278,11 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
                 </button>`;
             });
         }
-        return html`<slot name = "selected">${unsafeHTML(this.selectedContent)}</slot> `;
+        return html`<slot name = "selected">${unsafeHTML(this.selectedOptions[0]?.innerHTML || '-')}</slot>`;
     }
     private _searchTamplate(){
         if(!this.searchable) return nothing;
-        return html`<div class = "search-wrapper"><input .value = "${this.seatchValue}"
+        return html`<div class = "search-wrapper"><input .value = "${this.searchValue}"
                             @click = "${this._onSeatchClick}"
                             @input = "${this._onSearchValue}"
                             placeholder = "${this.multiple ? "" : this.searchPlaceholder}"
@@ -306,9 +332,6 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         </lit-listbox>`;
     }
 
-    private _slotChanged = () => {
-        this.requestUpdate();
-    }
 
     private _focusNext(e: CustomEvent){
         (document.activeElement?.nextElementSibling as HTMLElement)?.focus();

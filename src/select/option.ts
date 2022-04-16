@@ -78,7 +78,7 @@ export class LitOption extends focusable(LitElement){
     }
 
     private _notify(){
-        this.dispatchEvent(new CustomEvent('optionChanged', {
+        this.dispatchEvent(new CustomEvent('optionSlotChanged', {
             composed: true,
             bubbles: true,
         }));

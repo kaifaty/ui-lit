@@ -19,6 +19,10 @@ export const selectCSSVars = {
         name: "listbox-height",
         default: "initial"
     },
+    listboxMaxHeight: {
+        name: "listbox-max-height",
+        default: "300px"
+    },
     mobileHeight: {
         name: "mobileHeight",
         default: "40px"
@@ -297,6 +301,7 @@ export const listboxStyles = css`
     overflow-x: hidden;
     height: ${_v.listboxHeight};
     border: ${_v.listboxBorder};
+    max-height: ${_v.listboxHeight};
     box-shadow: 2px calc(2px * var(--shadow-pos)) 6px ${_v.listboxShadow};    
 }
 :host([mobile]) .wrapper{

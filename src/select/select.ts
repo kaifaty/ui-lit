@@ -154,6 +154,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
             option.selected = true;
         }
         this.requestUpdate();
+        this.notify();
     }
     unSelectOption(option: LitOption){
         option.selected = false;    
@@ -167,9 +168,11 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
             return;
         }
         this.selectOption(option);
-        this.notify();
+        if(!this.multiple){
+            this.hide();
+        }
     }
-    private _onOptionChanged = () => {
+    private _onOptionSlotChanged = () => {
         this.requestUpdate();
     }
     private _onOptionConnect = (e: CustomEvent) => {
@@ -197,13 +200,14 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
     connectedCallback(): void {
         super.connectedCallback();
         this.addEventListener('optionConnected', this._onOptionConnect as EventListener);
-        this.addEventListener('optionChanged', this._onOptionChanged as EventListener);
+        this.addEventListener('optionSlotChanged', this._onOptionSlotChanged as EventListener);
         this.addEventListener('optionChange', this._onOptionChange as EventListener);
     }
 
     disconnectedCallback(): void {
         super.disconnectedCallback();
         this.removeEventListener('optionConnected', this._onOptionConnect as EventListener);
+        this.removeEventListener('optionSlotChanged', this._onOptionSlotChanged as EventListener);
         this.removeEventListener('optionChange', this._onOptionChange as EventListener);
     }
 

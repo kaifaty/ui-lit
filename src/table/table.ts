@@ -16,7 +16,7 @@ const nodataSVG = svg`
 </svg>`;
 
 @customElement("lit-table")
-export class TableElement extends LitElement{
+export class LitTable extends LitElement{
     static get properties(){
         return {
             columns: {type: Array},
@@ -75,6 +75,9 @@ export class TableElement extends LitElement{
 
     private _filters: Map<string, TFilterItem[]> = new Map();
 
+    setPage(page: number){
+        this.shadowRoot?.querySelector('lit-pagination')?.setPage(page)
+    }
     get rect(){
         return this._rect;
     }
@@ -312,6 +315,6 @@ export class TableElement extends LitElement{
 }
 declare global {
     interface HTMLElementTagNameMap {
-      'lit-table': TableElement;
+      'lit-table': LitTable;
     }
 }

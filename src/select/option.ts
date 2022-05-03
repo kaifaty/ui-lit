@@ -84,3 +84,9 @@ export class LitOption extends focusable(LitElement){
         }));
     }
 }
+
+declare global {
+    interface HTMLElementTagNameMap {
+      'lit-option': LitOption;
+    }
+}

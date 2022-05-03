@@ -23,7 +23,15 @@ export const focusable = <T extends Constructor<LitElement>>(superClass: T) => {
             super.connectedCallback();
             this.setAttribute('focusable', '');
         }
-        
+        blur(): void {
+            const el = this._getElement();  
+            if(el){
+                (el as HTMLElement).blur()
+            }
+            else {
+                super.blur();
+            }
+        }
         focus(){
             const el = this._getElement();  
             if(el){

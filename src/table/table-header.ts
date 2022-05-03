@@ -4,7 +4,7 @@ import { classMap } from 'lit/directives/class-map';
 import { LitElement, html, css, nothing } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import { TColumnItem, TFilterItem, TSortDirections,  } from './interface';
-import type { TableElement  } from './table';
+import type { LitTable  } from './table';
 import { noselect } from '../styles/noselect';
 import '../textfield';
 import '../number';
@@ -31,14 +31,14 @@ export class LitTableHeader extends LitElement{
     @property({type: String}) sort: string = '';
     @property({type: String, reflect: true}) sortDirection: string = 'ascend';
     private _filterVisible = false;
-    private _host: TableElement | null = null;
+    private _host: LitTable | null = null;
     @state() _sortHover = false;
     @state() _filterHover = false;
     
     connectedCallback(){
         super.connectedCallback();
         this.sortDirection = this.directions[0] || 'ascend';
-        this._host = getHost(this)! as TableElement;
+        this._host = getHost(this)! as LitTable;
     }
     willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
         if(this.filterVisible && this._host?.rect){  

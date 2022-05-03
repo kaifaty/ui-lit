@@ -130,6 +130,7 @@ export const selectStyles = css`
     cursor: text;
     border: ${_v.border};
     min-width: 100px;
+    flex-wrap: wrap;
 }
 .wrapper{
     min-height: ${_v.height};
@@ -139,7 +140,6 @@ export const selectStyles = css`
     cursor: pointer;
     position: relative;
     display: flex;
-    flex-wrap: wrap;
 }
 .wrapper:focus{
     outline:  ${buttonValues.outlineFocus};
@@ -301,7 +301,7 @@ export const listboxStyles = css`
     overflow-x: hidden;
     height: ${_v.listboxHeight};
     border: ${_v.listboxBorder};
-    max-height: ${_v.listboxHeight};
+    max-height: ${_v.listboxMaxHeight};
     box-shadow: 2px calc(2px * var(--shadow-pos)) 6px ${_v.listboxShadow};    
 }
 :host([mobile]) .wrapper{

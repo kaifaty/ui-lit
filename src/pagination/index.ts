@@ -106,6 +106,10 @@ export class LitPagination extends LitElement{
         }
         return page;
     }
+    setPage(page: number){
+        this._setPage(page);
+        this.shadowRoot?.querySelectorAll('lit-button').forEach(n => n.blur())
+    }
     private _setPage(page: number | null){
         const oldValue = this.page;
         this.page = page;

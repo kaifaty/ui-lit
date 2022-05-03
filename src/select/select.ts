@@ -155,6 +155,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
         }
         this.requestUpdate();
         this.notify();
+        setTimeout(() => this.focus(), 20);
     }
     unSelectOption(option: LitOption){
         option.selected = false;    

@@ -17,7 +17,6 @@ import { selectStyles } from './styles';
 import { getEventDataset } from 'kailib';
 export * from './option';
 
-
 @customElement("lit-select")
 export class LitSelect extends focusable(labled(notificatable(formAssociated(LitElement)))) implements IPropsSelect{
     static get styles (){
@@ -283,6 +282,7 @@ export class LitSelect extends focusable(labled(notificatable(formAssociated(Lit
                 </button>`;
             });
         }
+        
         return html`<slot name = "selected">${unsafeHTML(this.selectedOptions[0]?.innerHTML || '-')}</slot>`;
     }
     private _searchTamplate(){

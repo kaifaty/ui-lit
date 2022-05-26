@@ -5,6 +5,17 @@ import { focusable } from '../mixins/focusable/index';
 import { optionStyles } from './styles';
 import { mobileAndTabletCheck } from 'kailib';
 
+const options: [LitOption, string][] = []
+
+setInterval(() => {
+    options.forEach(item => {
+        if(item[1] !== item[0].textContent){
+            item[0].notify()
+            item[1] = item[0].textContent || ""
+        }
+    })
+}, 600)
+
 @customElement("lit-option")
 export class LitOption extends focusable(LitElement){
     static styles = optionStyles;
@@ -22,6 +33,9 @@ export class LitOption extends focusable(LitElement){
     }
     connectedCallback(): void {
         super.connectedCallback();      
+        setTimeout(() => {
+            options.push([this, this.textContent || ""])
+        })
         this.dispatchEvent(new CustomEvent('optionConnected', {
             bubbles: true,
             composed: true,
@@ -30,6 +44,7 @@ export class LitOption extends focusable(LitElement){
     }
     disconnectedCallback(): void {
         super.disconnectedCallback();
+        options.filter(item => item[0] !== this)
         this._selectHost?.optionDisconnect(this)
     }
     updated(_changedProperties: Map<string | number | symbol, unknown>): void {
@@ -44,7 +59,7 @@ export class LitOption extends focusable(LitElement){
                         tabIndex = "1"
                         @focus = "${this._focus}" 
                         @blur = "${this._blur}" >
-                    <slot @slotchange = "${this._notify}"></slot> <span slot = "icon-after"></span></lit-button>`
+                    <slot @slotchange = "${this.notify}"></slot> <span slot = "icon-after"></span></lit-button>`
     }
 
     private toggleSelect(){
@@ -77,7 +92,7 @@ export class LitOption extends focusable(LitElement){
         }
     }
 
-    private _notify(){
+    notify(){
         this.dispatchEvent(new CustomEvent('optionSlotChanged', {
             composed: true,
             bubbles: true,

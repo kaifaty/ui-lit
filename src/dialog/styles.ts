@@ -155,6 +155,7 @@ footer{
     position: absolute;
     right: 0;
     top: 0;
+    z-index: 222;
 }
 .close-icon, 
 .arrow-back{

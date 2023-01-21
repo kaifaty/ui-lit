@@ -1,0 +1,38 @@
+{
+  "name": "@ui-lit/types",
+  "version": "1.0.0",
+  "private": false,
+  "description": "",
+  "keywords": [
+    "user-interface",
+    "lit-element",
+    "lit",
+    "UI",
+    "UI kit",
+    "Webcomponent UI"
+  ],
+  "homepage": "https://github.com/kaifaty/ui-lit/packages/types",
+  "bugs": {
+    "url": "https://github.com/kaifaty/ui-lit/issues"
+  },
+  "license": "MIT",
+  "author": "kaifaty",
+  "sideEffects": false,
+  "type": "module",
+  "main": "build/index.js",
+  "source": "./src/index.ts",
+  "types": "build/index.d.ts",
+  "files": [
+    "/build",
+    "/package.json",
+    "/README.md",
+    "/src"
+  ],
+  "scripts": {
+    "build": "rimraf ./build/ && npm run build:types",
+    "build:types": "tsc"
+  },
+  "browserslist": [
+    "last 4 chrome versions"
+  ]
+}

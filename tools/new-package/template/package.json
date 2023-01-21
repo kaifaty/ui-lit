@@ -1,0 +1,63 @@
+{
+  "name": "@ui-lit/<%= name %>",
+  "version": "1.0.0",
+  "private": false,
+  "description": "",
+  "keywords": [
+    "user-interface",
+    "lit-element",
+    "lit",
+    "UI",
+    "UI kit",
+    "Webcomponent UI"
+  ],
+  "homepage": "https://github.com/kaifaty/ui-lit/packages/<%= name %>",
+  "bugs": {
+    "url": "https://github.com/kaifaty/ui-lit/issues"
+  },
+  "license": "MIT",
+  "author": "kaifaty",
+  "sideEffects": false,
+  "type": "module",
+  "main": "build/index.js",
+  "source": "./src/index.ts",
+  "types": "build/index.d.ts",
+  "files": [
+    "/build",
+    "/package.json",
+    "/README.md",
+    "/src"
+  ],
+  "scripts": {
+    "build": "rimraf ./build/ && npm run build:parcel && npm run build:types",
+    "build:parcel": "parcel build --target=build",
+    "build:types": "tsc",
+    "demo": "parcel serve --target=demo",
+    "dev": "parcel watch",
+    "test": "tsx src/index.test.ts",
+    "test:watch": "tsx watch src/index.test.ts"
+  },
+  "browserslist": [
+    "last 4 chrome versions"
+  ],
+  "dependencies": {
+  },
+  "targets": {
+    "build": {
+      "context": "browser",
+      "distDir": "./build/",
+      "source": "./src/index.ts",
+      "isLibrary": true,
+      "optimize": true,
+      "outputFormat": "esmodule"
+    },
+    "demo": {
+      "context": "browser",
+      "distDir": "./build/demo/",
+      "source": "./src/demo/index.html",
+      "isLibrary": false,
+      "includeNodeModules": true,
+      "scopeHoist": false
+    }
+  }
+}

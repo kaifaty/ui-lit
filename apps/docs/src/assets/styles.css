@@ -1,0 +1,126 @@
+*{
+    box-sizing: border-box;
+}
+html{
+    font-family: -apple-system, BlinkMacSystemFont, "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    font-size: 100%;
+}
+body{
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+nav{
+    padding: 40px 30px;
+    display: flex;
+    flex-direction: column;
+}
+.wrapper{
+    width: 100%;
+}
+header{
+    position: relative;
+    padding: 40px 50px;
+    grid-column: 1 / 3;
+    background: hsl(20, 20%, 15%);
+    color: #fafafa;
+}
+header > div{
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 5px;
+}
+header lit-theme-switcher{
+    position: absolute;
+    right: 20px; 
+    top: 10px;
+}
+
+header lit-header[level="1"]{
+    display: flex;
+    align-items: center;
+    margin: 0;
+}
+header lit-header[level="5"]{
+    margin-top: 1rem;
+    font-weight: 300;
+}
+header .zip{
+    display: inline-block;
+    margin-top: 10px;
+}
+main{
+    position: relative;
+    z-index: 0;
+    padding: 40px;
+}
+main lit-header:first-child {
+    margin-top: 0;
+}
+.buttons{
+    display: grid;
+    gap: 5px;
+    width: 200px;
+    align-content: center;
+    justify-content: center;
+}
+tree-view{
+    font-size: 16px;
+    font-weight: 300;
+}
+ul{
+    font-size: 18px;
+}
+lit-range{
+    width: 230px;
+}
+lit-nav-burger{
+    display: none;
+}
+
+@media screen and (max-width: 600px){
+    .wrapper{
+        grid-template-columns: auto;
+    }
+    header{
+        padding: 20px 20px;
+        grid-column: 1 / 2;
+    }
+    header > div{
+        gap: 10px;
+        grid-template-columns: auto;
+    }
+    header lit-theme-switcher{
+        right: 70px;
+    }
+    lit-nav-burger{
+        display: block;
+    }
+    nav{
+        display: none;
+    }
+    main{
+        padding: 20px;
+    }
+    .buttons{
+        display: block;
+        width: initial;
+    }
+}
+@font-face {
+    font-family: 'Icons';
+    src: url('./icons.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+/* fallback */
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url('./material.woff2') format('woff2');
+}

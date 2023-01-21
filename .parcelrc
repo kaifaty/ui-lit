@@ -1,0 +1,8 @@
+{
+  "extends": "@parcel/config-default",
+  "resolvers": ["parcel-resolver-fix-ts-esm-shit", "..."],
+  "namers": [
+    "parcel-namer-struct",
+    "..."
+  ]
+}

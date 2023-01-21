@@ -1,0 +1,32 @@
+{
+  "compilerOptions": {
+    "allowUnreachableCode": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "noLib": false,
+    "removeComments": true,
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": false,
+    "target": "ESNext",
+    "moduleDetection": "force",
+    "emitDeclarationOnly": true,
+    "plugins": [
+      {
+        "name": "ts-lit-plugin",
+        "strict": true,
+        "rules": {
+          "no-missing-import": "off",
+          "no-unknown-tag-name": "off",
+          "no-unknown-event": "warning"
+        }
+      }
+    ]
+  },
+  "exclude": ["node_modules", "build", "dist"]
+}
+

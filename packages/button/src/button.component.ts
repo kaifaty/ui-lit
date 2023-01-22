@@ -2,15 +2,13 @@ import {css, html, LitElement, TemplateResult} from 'lit'
 import {property, state} from 'lit/decorators.js'
 import {classMap} from 'lit/directives/class-map.js'
 import {styleMap} from 'lit/directives/style-map.js'
-import {iconCSSVarNames} from 'ui-lit/icon/styles'
 
-import {} from '@ui-lit/utils'
+import {LitIcon} from '@ui-lit/icon'
 
-import {definable, focusable, stylable} from '../../mixins'
-import {noselect} from '../../styles'
-import {LitIcon} from '../icon'
-import {LinkTarget, LitLink} from '../link'
-import {LitSpinner} from '../spinner'
+import {definable, noselect, focusable, stylable} from '@ui-lit/utils'
+
+import {LinkTarget, LitLink} from '@ui-lit/link'
+import {LitSpinner} from '@ui-lit/spinner'
 
 import {buttonCCSVarsMap, PREFIX} from './styles.map'
 import type {ButtonEvents, ButtonSize, ButtonType} from './types'
@@ -120,7 +118,7 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
     noselect,
     css`
       :host {
-        ${iconCSSVarNames.color}: ${LitButton.cssVar('color')};
+        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('color')};
         --click-x: 0;
         --click-y: 0;
         --radiant: 5%;
@@ -219,11 +217,11 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
 
       :host([type='switch']) .wrapper {
         color: ${LitButton.cssVar('switch-color')};
-        ${iconCSSVarNames.color}: ${LitButton.cssVar('switch-color')};
+        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('switch-color')};
       }
       :host([type='switch'][switchOn]) .wrapper {
         color: ${LitButton.cssVar('switch-on-color')};
-        ${iconCSSVarNames.color}: ${LitButton.cssVar('switch-on-color')};
+        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('switch-on-color')};
         background-color: ${LitButton.cssVar('switch-on-background')};
       }
       :host([type='switch']) .wrapper:focus {
@@ -244,7 +242,7 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
         color: ${LitButton.cssVar('primary-color')};
         background: ${LitButton.cssVar('primary-background')};
         border: ${LitButton.cssVar('primary-border')};
-        ${iconCSSVarNames.color}: ${LitButton.cssVar('primary-background')};
+        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('primary-background')};
       }
       :host([primary]) .wrapper:focus {
         outline: ${LitButton.cssVar('primary-outline-focus')};
@@ -262,13 +260,13 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
       }
 
       :host([success]) {
-        ${iconCSSVarNames.color}: ${LitButton.cssVar('success-color')};
+        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('success-color')};
       }
       :host([success]) .wrapper {
         color: ${LitButton.cssVar('success-color')};
         background: ${LitButton.cssVar('success-background')};
         border: ${LitButton.cssVar('success-border')};
-        ${iconCSSVarNames.color}: ${LitButton.cssVar('success-color')};
+        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('success-color')};
       }
       :host([success]) .wrapper:focus {
         outline: ${LitButton.cssVar('success-outline-focus')};
@@ -285,10 +283,10 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
       }
 
       :host([danger]) {
-        ${iconCSSVarNames.color}: ${LitButton.cssVar('danger-color')};
+        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('danger-color')};
       }
       :host([danger]) .wrapper {
-        ${iconCSSVarNames.color}: ${LitButton.cssVar('danger-color')};
+        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('danger-color')};
         background: ${LitButton.cssVar('danger-background')};
         border: ${LitButton.cssVar('danger-border')};
         color: ${LitButton.cssVar('danger-color')};

@@ -1,1 +1,2 @@
-export * from './icon.component.js'
+export * from './icon.component'
+export * from './styles-vars'

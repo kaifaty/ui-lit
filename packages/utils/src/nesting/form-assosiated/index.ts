@@ -1,2 +1,2 @@
-export * from './form-assosiated'
-export * from './styles'
+export * from './form-assosiated.js'
+export * from './styles.js'

@@ -1,2 +1,8 @@
-    "test": "wtr --config web-test-runner.config.mjs --watch"
-    "doc": "parcel serve -p 1113 --https --target=docs --dist-dir=./docs/dist",
+{
+    "test": "wtr --config web-test-runner.config.mjs --watch",
+    "namers": [
+      "parcel-namer-struct",
+      "..."
+    ],
+    "doc": "parcel serve -p 1113 --https --target=docs --dist-dir=./docs/dist"
+}

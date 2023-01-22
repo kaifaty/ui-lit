@@ -6,5 +6,9 @@
   "resolvers": [
     "parcel-resolver-fix-ts-esm-shit", 
     "..."
+  ],
+  "namers": [
+    "parcel-namer-struct",
+    "..."
   ]
 }

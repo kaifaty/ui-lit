@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/<%= name %>",
+  "name": "@ui-lit/spinner",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -11,7 +11,7 @@
     "UI kit",
     "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-lit/packages/<%= name %>",
+  "homepage": "https://github.com/kaifaty/ui-lit/packages/spinner",
   "bugs": {
     "url": "https://github.com/kaifaty/ui-lit/issues"
   },
@@ -32,6 +32,7 @@
     "build": "rimraf ./build/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
+    "demo": "parcel serve --target=demo",
     "dev": "parcel watch",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
@@ -42,6 +43,8 @@
   "peerDependencies": {
     "@ui-lit/utils": "*",
     "lit": "^2.0.0"
+  },
+  "dependencies": {
   },
   "targets": {
     "build": {

@@ -1,7 +1,7 @@
 import {LitElement} from 'lit'
 import {property} from 'lit/decorators.js'
 
-import type {LitFrom, FormAssociatedElement, TValidationMessages, TValidationMessageKey} from '@ui-lit/types'
+import type {LitForm, FormAssociatedElement, TValidationMessages, TValidationMessageKey} from '@ui-lit/types'
 import {OuterClickRemoveController} from '../../controllers/click.js'
 import {KeyDownController} from '../../controllers/key.js'
 
@@ -15,7 +15,7 @@ let lastReportValidity = 0
 export class LitFormAssoc extends LitElement implements FormAssociatedElement {
   static styles = [styles]
 
-  #submitForm: LitFrom | null = null
+  #submitForm: LitForm | null = null
   #keyDown = new KeyDownController(this, (e) => {
     if (e.key === 'Enter') {
       this.dispatchEvent(
@@ -284,7 +284,7 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
         composed: true,
         detail: {
           element: this,
-          onAttatch: (form: LitFrom) => {
+          onAttatch: (form: LitForm) => {
             this.#submitForm = form
           },
         },

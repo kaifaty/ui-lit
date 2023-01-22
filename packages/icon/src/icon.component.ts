@@ -1,14 +1,9 @@
 import {css, LitElement} from 'lit'
-import {property} from 'lit/decorators.js'
+import {property} from 'lit/decorators'
 
 import {definable, stylable} from '@ui-lit/utils'
 
-import {iconCSSVarMap, PREFIX} from './styles.map.js'
-
-export interface IIconProps {
-  material: boolean
-  icon: string
-}
+import {iconCSSVarMap, PREFIX} from './styles-vars'
 
 export class LitIcon extends stylable(definable(LitElement), iconCSSVarMap, PREFIX) {
   static styles = css`

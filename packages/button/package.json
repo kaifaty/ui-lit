@@ -32,7 +32,6 @@
     "build": "rimraf ./build/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
-    "demo": "parcel serve --target=demo",
     "dev": "parcel watch",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
@@ -40,7 +39,11 @@
   "browserslist": [
     "last 4 chrome versions"
   ],
-  "dependencies": {
+  "peerDependencies": {
+    "@kaifat/utils": "^1.1.1",
+    "@ui-lit/link": "*",
+    "@ui-lit/icon": "*",
+    "lit": "^2.0.0"
   },
   "targets": {
     "build": {
@@ -49,15 +52,13 @@
       "source": "./src/index.ts",
       "isLibrary": true,
       "optimize": true,
+      "includeNodeModules": {
+        "@kaifat/utils": false,
+        "@ui-lit/link": false,
+        "@ui-lit/icon": false,
+        "lit": false
+      },
       "outputFormat": "esmodule"
-    },
-    "demo": {
-      "context": "browser",
-      "distDir": "./build/demo/",
-      "source": "./src/demo/index.html",
-      "isLibrary": false,
-      "includeNodeModules": true,
-      "scopeHoist": false
     }
   }
 }

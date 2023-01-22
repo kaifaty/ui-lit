@@ -19,8 +19,8 @@
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
-  "source": "./src/index.ts",
+  "main": "build/index.d.ts",
+  "source": "src/index.ts",
   "types": "build/index.d.ts",
   "files": [
     "/build",

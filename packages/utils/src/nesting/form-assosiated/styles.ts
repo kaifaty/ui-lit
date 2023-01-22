@@ -1,25 +1,25 @@
-import {createcssMap} from '@kai/utils'
+import {createcssMap} from '../../create-css-map.js'
 import {css} from 'lit'
 
-import {formCCSVarsMap, PREFIX} from './styles.keys'
+import {formCCSVarsMap, PREFIX} from './styles.keys.js'
 
 const {getVar, getKey} = createcssMap(formCCSVarsMap, PREFIX)
 
 export const formAssocCSSNames = getKey
 
-export const styles = css`    
-:host{
+export const styles = css`
+  :host {
     position: relative;
-}
-:host([disabled]){
+  }
+  :host([disabled]) {
     opacity: 0.5;
     pointer-events: none;
-}
-:host([readonly]){
+  }
+  :host([readonly]) {
     opacity: 0.7;
     pointer-events: none;
-}
-:host::after{
+  }
+  :host::after {
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -32,11 +32,11 @@ export const styles = css`
     left: 0;
     position: absolute;
     z-index: 1;
-}
-:host([invalid])::after{
+  }
+  :host([invalid])::after {
     opacity: 1;
-}
-:host([invalid][invalid-viewed])::after{
+  }
+  :host([invalid][invalid-viewed])::after {
     opacity: 0;
-}
+  }
 `

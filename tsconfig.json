@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "module": "ESNext",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "node",
     "noLib": false,
     "removeComments": true,
     "sourceMap": true,

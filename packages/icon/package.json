@@ -39,8 +39,9 @@
   "browserslist": [
     "last 4 chrome versions"
   ],
-  "dependencies": {
-    "@ui-lit/utils": "*"
+  "peerDependencies": {
+    "@ui-lit/utils": "*",
+    "lit": "^2.0.0"
   },
   "targets": {
     "build": {
@@ -49,6 +50,10 @@
       "source": "./src/index.ts",
       "isLibrary": true,
       "optimize": true,
+      "includeNodeModules": {
+        "@kaifat/utils": false,
+        "lit": false
+      },
       "outputFormat": "esmodule"
     }
   }

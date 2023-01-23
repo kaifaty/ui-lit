@@ -51,7 +51,7 @@
       "isLibrary": true,
       "optimize": true,
       "includeNodeModules": {
-        "@kaifat/utils": false,
+        "@ui-lit/utils": false,
         "lit": false
       },
       "outputFormat": "esmodule"

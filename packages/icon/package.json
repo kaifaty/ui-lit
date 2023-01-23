@@ -33,9 +33,20 @@
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
     "dev": "parcel watch",
+    "demo": "parcel build --target=demo",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
   },
+  "parcel-namer-struct": [
+    {
+      "type": [
+        "png",
+        "jpg",
+        "svg"
+      ],
+      "dest": "/assets/"
+    }
+  ],
   "browserslist": [
     "last 4 chrome versions"
   ],
@@ -55,6 +66,11 @@
         "lit": false
       },
       "outputFormat": "esmodule"
+    },
+    "demo":{
+      "context": "browser",
+      "distDir": "./build/",
+      "source": "./src/demo/index.html"
     }
   }
 }

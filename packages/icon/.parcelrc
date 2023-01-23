@@ -3,6 +3,10 @@
   "transformers": {
     "*.{js,mjs,jsm,jsx,es6,cjs,ts,tsx}": ["parcel-transformer-minify-literals", "..."]
   },
+  "namers": [
+    "parcel-namer-struct",
+    "..."
+  ],
   "resolvers": [
     "parcel-resolver-fix-ts-esm-shit", 
     "..."

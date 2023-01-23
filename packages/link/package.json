@@ -15,6 +15,7 @@
   "bugs": {
     "url": "https://github.com/kaifaty/ui-lit/issues"
   },
+  
   "license": "MIT",
   "author": "kaifaty",
   "sideEffects": false,
@@ -59,9 +60,5 @@
       },
       "outputFormat": "esmodule"
     }
-  },
-  "devDependencies": {
-    "@ui-lit/parcel-transformer-temp": "^1.0.7",
-    "parcel-transformer-temp": "^1.0.7"
   }
 }

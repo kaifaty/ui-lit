@@ -1,9 +1,9 @@
-import type {LitElement, ReactiveController} from 'lit'
+import {ReactiveController, ReactiveControllerHost} from '../mixins/withControllers/index.js'
 
 export class FocusController implements ReactiveController {
-  host: LitElement
+  host: ReactiveControllerHost
   focused = false
-  constructor(host: LitElement) {
+  constructor(host: ReactiveControllerHost) {
     ;(this.host = host).addController(this)
   }
   hostConnected() {

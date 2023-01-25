@@ -23,13 +23,13 @@
   "source": "src/index.ts",
   "types": "build/index.d.ts",
   "files": [
-    "/build",
+    "/dist",
     "/package.json",
     "/README.md",
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./build/ && npm run build:types",
+    "build": "rimraf ./dist/ && npm run build:types",
     "build:types": "tsc"
   },
   "browserslist": [

@@ -1,4 +1,4 @@
-import type {ReactiveController, ReactiveControllerHost} from 'lit'
+import {ReactiveController, ReactiveControllerHost} from '../mixins/withControllers/index.js'
 
 export class OuterClickRemoveController implements ReactiveController {
   host: ReactiveControllerHost

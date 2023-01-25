@@ -1,13 +1,12 @@
 import {pascal2kebabCase} from '@kaifat/utils'
-import type {LitElement} from 'lit'
 
-import {Constructor} from '../types.js'
+import type {Constructor} from '@ui-lit/types'
 
-export type Definable<T extends Constructor<LitElement>> = T & {
+export type Definable<T extends Constructor<HTMLElement>> = T & {
   define(name?: string): void
 }
 
-export const definable = <T extends Constructor<LitElement>>(litEl: T): Definable<T> => {
+export const definable = <T extends Constructor<HTMLElement>>(litEl: T): Definable<T> => {
   return class LitDefinable extends litEl {
     static define(name: string = pascal2kebabCase(this.name)) {
       if (!customElements.get(name)) {

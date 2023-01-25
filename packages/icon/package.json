@@ -19,58 +19,52 @@
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
+  "module": "build/index.js",
   "source": "./src/index.ts",
   "types": "build/index.d.ts",
   "files": [
-    "/build",
+    "/dist",
     "/package.json",
     "/README.md",
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./build/ && npm run build:parcel && npm run build:types",
+    "build": "rimraf ./dist/ && npm run build:mv && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
     "dev": "parcel watch",
-    "demo": "parcel build --target=demo",
+    "demo": "parcel serve --target=demo",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
   },
-  "parcel-namer-struct": [
-    {
-      "type": [
-        "png",
-        "jpg",
-        "svg"
-      ],
-      "dest": "/assets/"
-    }
-  ],
   "browserslist": [
     "last 4 chrome versions"
   ],
   "peerDependencies": {
+    "@kaifat/utils": "*",
     "@ui-lit/utils": "*",
     "lit": "^2.0.0"
   },
   "targets": {
     "build": {
       "context": "browser",
-      "distDir": "./build/",
+      "distDir": "./dist/",
       "source": "./src/index.ts",
-      "isLibrary": true,
-      "optimize": true,
+      "scopeHoist": false,
       "includeNodeModules": {
         "@kaifat/utils": false,
+        "@ui-lit/utils": false,
         "lit": false
       },
       "outputFormat": "esmodule"
     },
-    "demo":{
+    "demo": {
       "context": "browser",
-      "distDir": "./build/",
+      "distDir": "./dist/",
       "source": "./src/demo/index.html"
     }
+  },
+  "devDependencies": {
+    "minify-literals": "^0.2.2"
   }
 }

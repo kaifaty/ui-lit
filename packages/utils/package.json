@@ -17,19 +17,21 @@
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
+  "main": "dist/index.js",
+  "module": "dist/module.js",
   "source": "./src/index.ts",
-  "types": "build/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
-    "/build",
+    "/dist",
     "/package.json",
     "/README.md",
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./build/ && npm run build:parcel && npm run build:types",
+    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
+    "demo": "parcel serve --target=demo",
     "dev": "parcel watch",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
@@ -38,21 +40,28 @@
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "lit": "^2.0.0",
+    "@ui-lit/types": "*",
     "@kaifat/utils": "^1.1.1"
   },
   "targets": {
     "build": {
       "context": "browser",
-      "distDir": "./build/",
+      "distDir": "./dist/",
       "source": "./src/index.ts",
       "isLibrary": true,
       "includeNodeModules": {
-        "@kaifat/utils": false,
-        "lit": false
+        "@kaifat/utils": false
       },
       "optimize": true,
       "outputFormat": "esmodule"
+    },
+    "demo": {
+      "context": "browser",
+      "distDir": "./dist/",
+      "source": "./src/demo/index.html"
     }
+  },
+  "devDependencies": {
+    "minify-literals": "^0.2.3"
   }
 }

@@ -33,6 +33,16 @@
     "doc:css": "parcel build --no-cache --target=cssgen --no-source-maps",
     "fix": "eslint --fix \"**/*.{ts,tsx}\""
   },
+  "parcel-namer-struct": [
+    {
+      "type": [
+        "png",
+        "jpg",
+        "svg"
+      ],
+      "dest": "./assets"
+    }
+  ],
   "keywords": [
     "user-interface",
     "lit-element",
@@ -73,6 +83,7 @@
     "lerna": "^6.4.1",
     "lit": "^2.6.1",
     "markdown-it": "^13.0.1",
+    "microbundle": "^0.15.1",
     "minify-literals": "^0.2.0",
     "parcel": "^2.8.2",
     "parcel-namer-struct": "^1.0.0",

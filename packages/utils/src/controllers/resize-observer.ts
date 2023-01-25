@@ -1,64 +1,33 @@
-import {noChange} from 'lit'
-import type {ReactiveController, ReactiveControllerHost} from 'lit'
-import {Directive, directive, ElementPart, PartInfo, PartType} from 'lit/directive.js'
+import {ReactiveController, ReactiveControllerHost} from '../mixins/withControllers/index.js'
 
-interface IResizeObserverController extends ReactiveController {
-  startOberve(el: HTMLElement): void
-}
+type OnChangeAction = (rect: DOMRect) => void
 
-class ResizeDirective extends Directive {
-  _inited = false
-  constructor(partInfo: PartInfo) {
-    super(partInfo)
-    if (partInfo.type !== PartType.ELEMENT) {
-      throw new Error('Must be element')
-    }
-  }
-  render(controller: ReactiveController) {
-    return noChange
-  }
-  update(part: ElementPart, args: [IResizeObserverController]) {
-    if (this._inited === false) {
-      args[0].startOberve(part.element as HTMLElement)
-      this._inited = true
-    }
-  }
-}
-const resizeDirective = directive(ResizeDirective)
-
-type OnChangeAction = (...args: any[]) => void
-
-export class ResizeObserverController implements IResizeObserverController {
-  host: ReactiveControllerHost
-  _observer: ResizeObserver | null = null
-  _lastFunction?: OnChangeAction
-  _observers = new Map()
+export class ResizeObserverController implements ReactiveController {
+  private _host: ReactiveControllerHost
+  private _observer: ResizeObserver | null = null
+  private _observerCallback?: OnChangeAction
+  private _element: HTMLElement
 
   constructor(host: ReactiveControllerHost) {
-    ;(this.host = host).addController(this)
+    ;(this._host = host).addController(this)
+    this._observer = new ResizeObserver(this._onMutate)
   }
-  hostConnected() {
-    this._observer = new ResizeObserver(this.onMutate)
-  }
+  hostConnected() {}
   hostDisconnected() {
-    this._observer?.disconnect()
-    this._observers.clear()
+    this._observer.unobserve(this._element)
   }
 
-  private onMutate = (entries: ResizeObserverEntry[]) => {
+  private _onMutate = (entries: ResizeObserverEntry[]) => {
     for (const entry of entries) {
-      const func = this._observers.get(entry.target)
-      if (func) {
-        func(entry.contentRect)
-      }
+      this._observerCallback(entry.contentRect)
+      return
     }
   }
   startOberve(el: HTMLElement) {
-    this._observers.set(el, this._lastFunction)
-    this._observer?.observe(el, {box: 'content-box'})
+    this._element = el
+    this._observer.observe(el, {box: 'content-box'})
   }
-  observe(f?: OnChangeAction) {
-    this._lastFunction = f
-    return resizeDirective(this)
+  observe(observer: OnChangeAction) {
+    this._observerCallback = observer
   }
 }

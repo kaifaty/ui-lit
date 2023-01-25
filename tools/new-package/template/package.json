@@ -19,9 +19,9 @@
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
+  "module": "dist/index.js",
   "source": "./src/index.ts",
-  "types": "build/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "/build",
     "/package.json",
@@ -29,9 +29,10 @@
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./build/ && npm run build:parcel && npm run build:types",
+    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
+    "build:mb": "microbundle",
     "dev": "parcel watch",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
@@ -46,7 +47,7 @@
   "targets": {
     "build": {
       "context": "browser",
-      "distDir": "./build/",
+      "distDir": "./dist/",
       "source": "./src/index.ts",
       "isLibrary": true,
       "optimize": true,

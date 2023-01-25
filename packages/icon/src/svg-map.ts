@@ -1,10 +1,4 @@
-export const iconsMap = {
-  cancel: new URL('./cancel.svg', import.meta.url),
-  dropdown: new URL('./dropdown.svg', import.meta.url),
-  search: new URL('./search.svg', import.meta.url),
-} as const
-
-export type IconKeys = keyof typeof iconsMap
+export type IconKeys = 'cancel' | 'dropdown' | 'search'
 /**
  * 
   static iconsMap: Record<string, number> = {

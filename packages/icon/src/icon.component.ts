@@ -1,16 +1,14 @@
-import {css, html, LitElement, nothing} from 'lit'
-import {unsafeSVG} from 'lit/directives/unsafe-svg'
-import {property} from 'lit/decorators/property'
-import {until} from 'lit/directives/until'
+import {adoptToElement, createStyle, css, definable, stylable} from '@ui-lit/utils'
 
-import {definable, stylable} from '@ui-lit/utils'
+import {iconCSSVarMap, PREFIX} from './types'
 
-import {iconCSSVarMap, PREFIX} from './styles.map'
+import type {IconKeys} from './svg-map'
 
-import {iconsMap, IconKeys} from './assets'
-
-export class LitIcon extends stylable(definable(LitElement), iconCSSVarMap, PREFIX) {
-  static styles = css`
+export class LitIcon extends stylable(definable(HTMLElement), iconCSSVarMap, PREFIX) {
+  static properties = {
+    icon: {type: String, attibute: true},
+  }
+  static styles = createStyle(css`
     :host {
       cursor: pointer;
       display: inline-block;
@@ -29,33 +27,49 @@ export class LitIcon extends stylable(definable(LitElement), iconCSSVarMap, PREF
 
     :host([danger]),
     :host([error]) .icon {
-      fill: ${this.cssVar('negative-color')};
+      fill: ${LitIcon.cssVar('negative-color')};
     }
     :host([success]) {
-      fill: ${this.cssVar('positive-color')};
+      fill: ${LitIcon.cssVar('positive-color')};
     }
     :host([icon='back']),
     :host([icon='arrow-left']) {
       transform-origin: center;
       transform: rotate(90deg);
     }
-  `
+  `)
 
-  @property({type: String, reflect: true}) icon: IconKeys | '' = ''
+  constructor() {
+    super()
+    adoptToElement(this, [LitIcon.styles])
+    this.attachShadow({mode: 'open'})
+  }
+
+  attributeChangedCallback(name: string, _: string, newValue: string) {
+    if (name === 'icon') {
+      this.icon = newValue as IconKeys
+    }
+  }
+  private _icon: IconKeys
+  set icon(value: IconKeys) {
+    this._icon = value
+    this._load()
+  }
+  get icon() {
+    return this._icon
+  }
+
   private _load() {
     if (!this.icon) {
       return Promise.resolve('')
     }
-    return fetch(iconsMap[this.icon])
+    return fetch('./assets/' + this.icon + '.svg')
       .then((r) => r.text())
-      .then(unsafeSVG)
-  }
-
-  render() {
-    if (!this.icon) {
-      return nothing
-    }
-    return html`${until(this._load(), nothing)}`
+      .then((r) => {
+        const node = document.createElement('template')
+        node.insertAdjacentHTML('afterbegin', r)
+        this.shadowRoot.appendChild(node.content)
+      })
   }
 }
 declare global {

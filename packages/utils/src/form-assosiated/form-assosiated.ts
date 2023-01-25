@@ -1,22 +1,83 @@
-import {LitElement} from 'lit'
-import {property} from 'lit/decorators.js'
-
 import type {LitForm, FormAssociatedElement, TValidationMessages, TValidationMessageKey} from '@ui-lit/types'
-import {OuterClickRemoveController} from '../../controllers/click.js'
-import {KeyDownController} from '../../controllers/key.js'
+import {OuterClickRemoveController} from '../controllers/click.js'
+import {KeyDownController} from '../controllers/key.js'
 
 import {defaultValidationMessages, defaultValidity} from './consts.js'
-import {styles} from './styles.js'
+import {css} from '../styles/css-stylesheet.js'
+import {AccessorParams, withProps} from '../mixins/withProps/index.js'
+import {FormAssosiatedProps} from './types.js'
+import {createcssMap} from '../create-css-map.js'
+import {formAssocCCSVarsMap} from './styles.map.js'
+import {PREFIX} from './styles.map.js'
+import {withControllers} from '../mixins/withControllers/index.js'
 
 const getLang = () => document.querySelector('html')?.lang || window.navigator.language.split('-')[0]
 
+const options = {attribute: true, reflect: true}
+
+const props: AccessorParams[] = [
+  {name: 'customMessage', defaultValue: '', options},
+  {name: 'disabled', defaultValue: false, options},
+  {name: 'initValidation', defaultValue: true, options},
+  {name: 'inputValidation', defaultValue: false, options},
+  {name: 'max', defaultValue: undefined, options},
+  {name: 'min', defaultValue: undefined, options},
+  {name: 'name', defaultValue: '', options},
+  {name: 'readonly', defaultValue: false, options},
+  {name: 'reporterNode', defaultValue: undefined, options},
+  {name: 'required', defaultValue: false, options},
+  {name: 'step', defaultValue: undefined, options},
+  {name: 'value', defaultValue: '', options},
+  {name: 'willValidate', defaultValue: true, options},
+]
+
+const {getVar} = createcssMap(formAssocCCSVarsMap, PREFIX)
+
 let lastReportValidity = 0
 
-export class LitFormAssoc extends LitElement implements FormAssociatedElement {
-  static styles = [styles]
+export class FormAssociated
+  extends withControllers(withProps<FormAssosiatedProps>(HTMLElement, props))
+  implements FormAssociatedElement
+{
+  static styles = [
+    css`
+      :host {
+        position: relative;
+      }
+      :host([disabled]) {
+        opacity: 0.5;
+        pointer-events: none;
+      }
+      :host([readonly]) {
+        opacity: 0.7;
+        pointer-events: none;
+      }
+      :host::after {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+        background-color: ${getVar('invalid-background-color')};
+        color: ${getVar('invalid-color')};
+        padding: ${getVar('invalid-padding')};
+        box-shadow: 3px 3px 3px ${getVar('invalid-shadow-color')};
+        content: attr(data-message);
+        top: 100%;
+        left: 0;
+        position: absolute;
+        z-index: 1;
+      }
+      :host([invalid])::after {
+        opacity: 1;
+      }
+      :host([invalid][invalid-viewed])::after {
+        opacity: 0;
+      }
+    `,
+  ]
 
-  #submitForm: LitForm | null = null
-  #keyDown = new KeyDownController(this, (e) => {
+  private _submitForm: LitForm | null = null
+
+  private _keyDown = new KeyDownController(this, (e) => {
     if (e.key === 'Enter') {
       this.dispatchEvent(
         new CustomEvent('submitForm', {
@@ -26,7 +87,7 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
       )
     }
   })
-  #click = new OuterClickRemoveController(this, () => {
+  private _click = new OuterClickRemoveController(this, () => {
     if (performance.now() - lastReportValidity < 200) {
       return
     }
@@ -34,31 +95,6 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
       this.setAttribute('invalid-viewed', '')
     }
   })
-  @property({type: String, reflect: true, attribute: true}) name = ''
-  @property({type: Boolean, attribute: true, reflect: true}) disabled = false
-  @property({type: Boolean, attribute: true, reflect: true}) required = false
-  @property({type: Boolean, attribute: true, reflect: true}) readonly = false
-  @property({type: String, attribute: true, reflect: true}) customMessage = ''
-
-  /**
-   * Validation on each input. Logic must realazied in child class
-   */
-  @property({type: Boolean, attribute: true, reflect: true}) inputValidation = false
-
-  /**
-   * Whet false validation will only when current value not equal default value
-   */
-  @property({type: Boolean, attribute: true}) initValidation = true
-
-  /**
-   * Validation of component (off on false).
-   */
-  @property({type: Boolean, attribute: true}) willValidate = true
-
-  /**
-   * Node to report validation state
-   */
-  @property({type: Object}) reporterNode?: HTMLElement
 
   validity: ValidityStateFlags = {...defaultValidity}
 
@@ -69,56 +105,14 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
   maxlength?: number
 
   /** @ignore */
-  #min?: number
-  get min() {
-    return this.#min
-  }
-  set min(value: number | undefined) {
-    this.#min = value
-  }
-
-  /** @ignore */
-  #max?: number
-  get max() {
-    return this.#max
-  }
-  set max(value: number | undefined) {
-    this.#max = value
-  }
-
-  /** @ignore */
-
-  #step?: number
-  get step() {
-    return this.#step
-  }
-  set step(value: number | undefined) {
-    this.#step = value
-  }
-
-  /** @ignore */
   pattern?: string
 
-  #value = ''
-  get value() {
-    return this.#value
-  }
-  set value(value: string) {
-    this.#value = value
-  }
-
-  #valueOnInit?: string
-  #isFirstUpdated = false
-  #removeDataTimer = 0
-
-  /** @ignore  */
-  async firstUpdated() {
-    this.#valueOnInit = this.value
-    this.#isFirstUpdated = true
-  }
+  private _valueOnInit?: string
+  private _isFirstUpdated = false
+  private _removeDataTimer = 0
 
   get form() {
-    return this.#submitForm
+    return this._submitForm
   }
 
   get validationMessage() {
@@ -126,7 +120,7 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
     for (const key of keys) {
       const v = this.validity[key as TValidationMessageKey]
       if (v) {
-        return this.#getErrorText(key as TValidationMessageKey)
+        return this._getErrorText(key as TValidationMessageKey)
       }
     }
     return ''
@@ -137,10 +131,10 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
    */
   checkValidity(): boolean {
     //Skip check on initial state
-    if (!this.#isFirstUpdated) {
+    if (!this._isFirstUpdated) {
       return true
     }
-    if (!this.initValidation && this.#valueOnInit === this.value) {
+    if (!this.initValidation && this._valueOnInit === this.value) {
       return true
     }
     return !Object.values(this.validity).find(Boolean)
@@ -151,7 +145,7 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
    */
   reportValidity(): boolean {
     const valid = this.checkValidity()
-    clearTimeout(this.#removeDataTimer)
+    clearTimeout(this._removeDataTimer)
     lastReportValidity = performance.now()
     if (!valid) {
       if (this.reporterNode) {
@@ -165,7 +159,7 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
       if (this.reporterNode) {
         this.reporterNode.textContent = this.validationMessage
       } else {
-        this.#removeDataTimer = window.setTimeout(() => {
+        this._removeDataTimer = window.setTimeout(() => {
           this.removeAttribute('invalid')
         }, 220)
       }
@@ -184,54 +178,54 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
   validate() {
     if (this.minlength && this.minlength > 0) {
       if (this.value.length < this.minlength) {
-        this.#setValidity({tooShort: true})
+        this._setValidity({tooShort: true})
         return
       } else if (this.validity.tooShort) {
-        this.#setValidity({tooShort: false})
+        this._setValidity({tooShort: false})
       }
     }
 
     if (this.maxlength && this.maxlength > 0) {
       if (this.value && this.value.length > this.maxlength) {
-        this.#setValidity({tooLong: true})
+        this._setValidity({tooLong: true})
         return
       } else if (this.validity.tooLong) {
-        this.#setValidity({tooLong: false})
+        this._setValidity({tooLong: false})
       }
     }
 
     if (this.pattern) {
       const patten = new RegExp(this.pattern)
       if (this.value && !patten.test(this.value)) {
-        this.#setValidity({patternMismatch: true})
+        this._setValidity({patternMismatch: true})
         return
       } else if (this.validity.patternMismatch) {
-        this.#setValidity({patternMismatch: false})
+        this._setValidity({patternMismatch: false})
       }
     }
 
     if (this.required) {
       if (!this.value && !this.disabled) {
-        this.#setValidity({valueMissing: true})
+        this._setValidity({valueMissing: true})
         return
       } else if (this.validity.valueMissing) {
-        this.#setValidity({valueMissing: false})
+        this._setValidity({valueMissing: false})
       }
     }
   }
 
   validityDefault() {
-    this.#setValidity({...defaultValidity})
+    this._setValidity({...defaultValidity})
     this.reportValidity()
   }
 
   /** @ignore*/
-  #setValidity(flags: ValidityStateFlags): void {
+  private _setValidity(flags: ValidityStateFlags): void {
     if (!this.willValidate) {
       return
     }
     this.validity = Object.assign(this.validity, flags)
-    this.#updateValidity()
+    this._updateValidity()
   }
 
   /**
@@ -239,7 +233,7 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
    *
    * @ignore
    */
-  #getErrorText(key: TValidationMessageKey) {
+  private _getErrorText(key: TValidationMessageKey) {
     const text =
       window.ValidationsMessages?.[key][getLang()] ||
       window.ValidationsMessages?.[key]['en'] ||
@@ -264,7 +258,7 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
   /**
    * @ignore
    */
-  #updateValidity() {
+  private _updateValidity() {
     this.dispatchEvent(
       new CustomEvent(this.checkValidity() ? 'valid' : 'invalid', {
         detail: this,
@@ -276,8 +270,8 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
 
   /** @ignore  */
   connectedCallback(): void {
+    //@ts-ignore
     super.connectedCallback()
-
     this.dispatchEvent(
       new CustomEvent('fromAttached', {
         bubbles: true,
@@ -285,17 +279,20 @@ export class LitFormAssoc extends LitElement implements FormAssociatedElement {
         detail: {
           element: this,
           onAttatch: (form: LitForm) => {
-            this.#submitForm = form
+            this._submitForm = form
           },
         },
       }),
     )
+    queueMicrotask(() => {
+      this._valueOnInit = this.value
+      this._isFirstUpdated = true
+    })
   }
 
   /** @ignore  */
   disconnectedCallback() {
-    super.disconnectedCallback()
-    this.#submitForm?.detatchElement(this)
+    this._submitForm?.detatchElement(this)
   }
 }
 

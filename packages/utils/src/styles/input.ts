@@ -1,24 +1,28 @@
 import {createcssMap} from '../create-css-map.js'
-import {css} from 'lit'
+import {css} from './css-stylesheet.js'
 
-import {makeCSSNameProxy, makeCSSProxy} from '../helpers/cssproxy.js'
+export const INPUT_PREFIX = '--lit-input-'
+export const inputCSSVar = {
+  display: 'inline-block',
+  height: 'initial',
+  color: 'inherit',
+  background: '#fff',
+  'border-radius': '3px',
+  'font-size': 'inherit',
+  padding: '6px 8p',
+  border: '1px solid hsla(222, 20%, 60%, 0.5)',
+  align: 'initial',
+  'outline-focus': '1px solid  hsla(222, 20%, 60%, 0.5)',
+  'error-border': '1px solid hsl(5, 66%, 55%)',
+  'error-outline': '1px solid hsl(5, 66%, 55%)',
+}
 
-import {INPUT_PREFIX, inputCSSVar} from './consts.js'
-
-const {getVar} = createcssMap(
-  {
-    'border-radius': '3px',
-  },
-  INPUT_PREFIX,
-)
-
-const _v = makeCSSProxy(inputCSSVar, '--lit-input-')
-export const inputCSSVarNames = makeCSSNameProxy(inputCSSVar, '--lit-input-')
+const {getVar} = createcssMap(inputCSSVar, INPUT_PREFIX)
 
 export const input = css`
   :host {
-    display: ${_v.display};
-    height: ${_v.height};
+    display: ${getVar('display')};
+    height: ${getVar('height')};
   }
   .wrapper {
     position: relative;
@@ -37,13 +41,13 @@ export const input = css`
   textarea {
     height: 100%;
     width: 100%;
-    font-size: ${_v.fontSize};
+    font-size: ${getVar('font-size')};
     box-sizing: border-box;
-    padding: ${_v.padding};
-    border: ${_v.border};
-    text-align: ${_v.align};
-    background: ${_v.background};
-    color: ${_v.color};
+    padding: ${getVar('padding')};
+    border: ${getVar('border')};
+    text-align: ${getVar('align')};
+    background: ${getVar('background')};
+    color: ${getVar('color')};
     font-family: inherit;
     border-radius: ${getVar('border-radius')};
   }
@@ -59,7 +63,7 @@ export const input = css`
   }
   input:focus,
   textarea:focus {
-    outline: ${_v.outlineFocus};
+    outline: ${getVar('outline-focus')};
   }
   input:focus::-webkit-input-placeholder {
     opacity: 0;
@@ -86,10 +90,10 @@ export const input = css`
   }
 
   :host([invalid]) input {
-    border: ${_v.errorBorder};
+    border: ${getVar('error-border')};
   }
   :host([invalid]) input:focus {
-    outline: ${_v.errorOutline};
+    outline: ${getVar('error-outline')};
   }
 
   textarea:focus::-webkit-input-placeholder {

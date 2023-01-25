@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "declarationDir": "./build/",
+    "declarationDir": "./dist/",
     "rootDir": "./src",
     "baseUrl": "."
   },

@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
-    "declarationDir": "./build/",
+    "declarationDir": "./dist/",
     "rootDir": "./src",
+    "moduleResolution": "nodeNext",
     "baseUrl": "."
   },
   "exclude": ["node_modules", "build"],

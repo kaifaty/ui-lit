@@ -1,9 +1,6 @@
-import type {LitElement, PropertyDeclaration, PropertyValueMap, ReactiveController, RenderOptions} from 'lit'
+import type {Constructor, FormAssociatedElement, LitLabel} from '@ui-lit/types'
 
-import type {FormAssociatedElement, LitLabel} from '@ui-lit/types'
-import type {Constructor} from '../types.js'
-
-export interface ILabled extends LitElement {
+export interface ILabled extends HTMLElement {
   readonly labels: LitLabel[]
   addLabel(data: LitLabel): void
   removeLabel(data: LitLabel): void
@@ -13,11 +10,11 @@ export interface ILabled extends LitElement {
  * Mixin append labels for component
  */
 export const labled = <T extends Constructor<FormAssociatedElement>>(superClass: T) => {
-  class LabledElement extends superClass implements ILabled {
-    #labels: LitLabel[] = []
+  return class LabledElement extends superClass implements ILabled {
+    private _labels: LitLabel[] = []
 
     /** @ignore  */
-    #notify() {
+    private _notify() {
       this.dispatchEvent(
         new CustomEvent('labledConnected', {
           composed: true,
@@ -28,8 +25,8 @@ export const labled = <T extends Constructor<FormAssociatedElement>>(superClass:
     }
 
     /** @ignore  */
-    #updateDisabled() {
-      this.#labels.forEach((it) => {
+    private _updateDisabled() {
+      this._labels.forEach((it) => {
         if (this.disabled) {
           it.setAttribute('disabled', '')
         } else {
@@ -39,53 +36,48 @@ export const labled = <T extends Constructor<FormAssociatedElement>>(superClass:
     }
 
     /** @ignore  */
-    #getExistLabelIndex(label: LitLabel) {
-      return this.#labels.findIndex((el) => el === label)
+    private _getExistLabelIndex(label: LitLabel) {
+      return this._labels.findIndex((el) => el === label)
     }
 
     get labels() {
-      return this.#labels
+      return this._labels
+    }
+    set disabled(value: boolean) {
+      super.disabled = value
+      this._updateDisabled()
     }
 
     /**
      * @param label {LitLabel} - custom label
      */
     addLabel(label: LitLabel): void {
-      const i = this.#getExistLabelIndex(label)
+      const i = this._getExistLabelIndex(label)
       if (i >= 0) return
-      this.#labels.push(label)
-      this.#updateDisabled()
+      this._labels.push(label)
+      this._updateDisabled()
     }
 
     /**
      * @param label {LitLabel} - custom label
      */
     removeLabel(label: LitLabel): void {
-      const i = this.#getExistLabelIndex(label)
+      const i = this._getExistLabelIndex(label)
       if (i < 0) return
-      this.#labels.splice(i, 1)
-      this.#labels = this.#labels.filter((l) => l !== label)
-    }
-
-    /** @ignore  */
-    willUpdate(props: PropertyValueMap<any>) {
-      super.willUpdate(props)
-      if (props.has('disabled')) {
-        this.#updateDisabled()
-      }
+      this._labels.splice(i, 1)
+      this._labels = this._labels.filter((l) => l !== label)
     }
 
     /** @ignore  */
     connectedCallback() {
       super.connectedCallback()
-      this.#notify()
+      this._notify()
     }
 
     /** @ignore  */
     disconnectedCallback() {
       super.disconnectedCallback()
-      this.#labels = []
+      this._labels = []
     }
-  }
-  return LabledElement as Constructor<ILabled> & T
+  } as Constructor<ILabled> & T
 }

@@ -59,6 +59,11 @@
         "lit": false
       },
       "outputFormat": "esmodule"
+    },
+    "demo": {
+      "context": "browser",
+      "distDir": "./dist/",
+      "source": "./src/demo/index.html"
     }
   }
 }

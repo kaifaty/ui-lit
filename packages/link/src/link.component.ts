@@ -1,76 +1,92 @@
-import {css, html, LitElement} from 'lit'
-import {property} from 'lit/decorators.js'
-import {ifDefined} from 'lit/directives/if-defined.js'
-
-import {definable, stylable} from '@ui-lit/utils'
+import {definable, css, html, createTemplate, stylable, StyleSheet} from '@ui-lit/utils'
 import {LitIcon} from '@ui-lit/icon'
 
 import {linkCCSVarsMap, PREFIX} from './styles.map'
 import type {LinkTarget} from './types'
+/**
+ * 
+      @mouseover="${this._onMouseover}"
+      @mouseout="${this._onMouseout}"
+      tabindex="${this.tabindex}"
+      target="${this.target}"
+      rel="${ifDefined(this.rel)}"
+      href="${ifDefined(this.href)}"
+ */
+const template = createTemplate(html`
+  <a>
+    <slot></slot>
+  </a>
+`)
 
-export class LitLink extends stylable(definable(LitElement), linkCCSVarsMap, PREFIX) {
+export class LitLink extends stylable(definable(HTMLElement), linkCCSVarsMap, PREFIX) {
   static define(name?: string) {
     LitIcon.define()
     super.define(name)
   }
 
-  static styles = css`
-    :host {
-      display: inline-block;
-      box-sizing: border-box;
-      position: relative;
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    :host([type='button']) a {
-      color: inherit;
-    }
-    :host(:not([type='button'])) a {
-      color: ${this.cssVar('color')};
-      ${LitLink.cssKey('color')}: ${this.cssVar('color')};
-      text-decoration: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      width: 100%;
-    }
-    :host::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      left: 0;
-      bottom: 0;
-      background-color: ${this.cssVar('color')};
-      height: 1px;
-      opacity: 0;
-      transition: opacity 0.1s ease;
-      border-radius: 2px;
-    }
-    :host(:not([type='button'])[hover]) a {
-      color: ${this.cssVar('color-hover')};
-    }
-    :host([hover])::after {
-      opacity: 1;
-      background-color: ${this.cssVar('color-hover')};
-    }
-    :host(:not([type='button'])[underlined])::after {
-      opacity: 1;
-    }
-  `
+  static styles: StyleSheet[] = [
+    css`
+      :host {
+        display: inline-block;
+        box-sizing: border-box;
+        position: relative;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      :host([type='button']) a {
+        color: inherit;
+      }
+      :host(:not([type='button'])) a {
+        color: ${this.cssVar('color')};
+        ${LitLink.cssKey('color')}: ${this.cssVar('color')};
+        text-decoration: none;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        width: 100%;
+      }
+      :host::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        background-color: ${this.cssVar('color')};
+        height: 1px;
+        opacity: 0;
+        transition: opacity 0.1s ease;
+        border-radius: 2px;
+      }
+      :host(:not([type='button'])[hover]) a {
+        color: ${this.cssVar('color-hover')};
+      }
+      :host([hover])::after {
+        opacity: 1;
+        background-color: ${this.cssVar('color-hover')};
+      }
+      :host(:not([type='button'])[underlined])::after {
+        opacity: 1;
+      }
+    `,
+  ]
+  constructor() {
+    super()
+    this.shadowRoot.append(template.content.cloneNode(true))
+  }
 
-  @property({type: String}) href: string | undefined = undefined
-  @property({type: String, reflect: true}) type: 'button' | 'link' = 'link'
-  @property({type: String}) rel?: string = 'nofollow'
-  @property({type: String}) target: LinkTarget = '_self'
-  @property({type: Boolean, reflect: true}) underlined = false
-  @property({type: String, reflect: true, attribute: true}) tabindex = 0
-
+  href: string | undefined = undefined
+  type: 'button' | 'link' = 'link'
+  rel?: string = 'nofollow'
+  target: LinkTarget = '_self'
+  underlined = false
+  tabindex = 0
+  /*
   render() {
     return html`<a
-      @mouseover="${this.#onMouseover}"
-      @mouseout="${this.#onMouseout}"
+      @mouseover="${this._onMouseover}"
+      @mouseout="${this._onMouseout}"
       tabindex="${this.tabindex}"
       target="${this.target}"
       rel="${ifDefined(this.rel)}"
@@ -78,11 +94,12 @@ export class LitLink extends stylable(definable(LitElement), linkCCSVarsMap, PRE
       ><slot></slot
     ></a>`
   }
-  #onMouseover() {
+  */
+  private _onMouseover() {
     if (this.type === 'button') return
     this.setAttribute('hover', '')
   }
-  #onMouseout() {
+  private _onMouseout() {
     if (this.type === 'button') return
     this.removeAttribute('hover')
   }

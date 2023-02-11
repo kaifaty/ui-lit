@@ -1,4 +1,4 @@
-type StyleSheet = CSSStyleSheet | string
+export type StyleSheet = CSSStyleSheet | string
 
 export const supportsAdoptingStyleSheets =
   global.ShadowRoot && 'adoptedStyleSheets' in Document.prototype && 'replace' in CSSStyleSheet.prototype
@@ -33,19 +33,4 @@ export const adoptToElement = (element: HTMLElement, styles: StyleSheet[]) => {
       ...new Set([...element.shadowRoot.adoptedStyleSheets, ...(styles as CSSStyleSheet[])]),
     ]
   }
-}
-
-/**
- * Do completly nothing. Just for IDE
- */
-export const css = (strings: TemplateStringsArray, ...values: string[]) => {
-  const len = strings.length
-  let acc = ''
-  for (let i = 0; i < len; i++) {
-    acc += strings[i]
-    if (values[i]) {
-      acc += values[i]
-    }
-  }
-  return acc
 }

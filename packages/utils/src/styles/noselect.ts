@@ -1,4 +1,4 @@
-import {css} from './css-stylesheet.js'
+import {css} from '../helpers/literals.js'
 
 export const noselect = css`
   :host,

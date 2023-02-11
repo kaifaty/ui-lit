@@ -3,7 +3,7 @@ import {OuterClickRemoveController} from '../controllers/click.js'
 import {KeyDownController} from '../controllers/key.js'
 
 import {defaultValidationMessages, defaultValidity} from './consts.js'
-import {css} from '../styles/css-stylesheet.js'
+import {css} from '../helpers/literals.js'
 import {AccessorParams, withProps} from '../mixins/withProps/index.js'
 import {FormAssosiatedProps} from './types.js'
 import {createcssMap} from '../create-css-map.js'

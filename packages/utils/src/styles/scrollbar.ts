@@ -1,5 +1,5 @@
 import {createcssMap} from '../create-css-map.js'
-import {css} from './css-stylesheet.js'
+import {css} from '../helpers/literals.js'
 
 const {getVar, getKey} = createcssMap(
   {

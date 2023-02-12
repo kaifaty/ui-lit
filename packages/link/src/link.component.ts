@@ -1,4 +1,4 @@
-import {definable, css, html, createTemplate, stylable, StyleSheet} from '@ui-lit/utils'
+import {definable, css, html, createTemplate, stylable, WCStyleSheet} from '@ui-lit/utils'
 import {LitIcon} from '@ui-lit/icon'
 
 import {linkCCSVarsMap, PREFIX} from './styles.map'
@@ -24,7 +24,7 @@ export class LitLink extends stylable(definable(HTMLElement), linkCCSVarsMap, PR
     super.define(name)
   }
 
-  static styles: StyleSheet[] = [
+  static styles = [
     css`
       :host {
         display: inline-block;

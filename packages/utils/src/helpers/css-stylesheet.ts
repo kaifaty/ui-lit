@@ -1,4 +1,4 @@
-export type StyleSheet = CSSStyleSheet | string
+export type WCStyleSheet = CSSStyleSheet | string
 
 export const supportsAdoptingStyleSheets =
   global.ShadowRoot && 'adoptedStyleSheets' in Document.prototype && 'replace' in CSSStyleSheet.prototype
@@ -6,7 +6,7 @@ export const supportsAdoptingStyleSheets =
 /**
  * Create css styles
  */
-export const createStyle = (styles: string): StyleSheet => {
+export const createStyle = (styles: string): WCStyleSheet => {
   if (supportsAdoptingStyleSheets) {
     const result = new CSSStyleSheet()
     result.replaceSync(styles)
@@ -18,7 +18,7 @@ export const createStyle = (styles: string): StyleSheet => {
 /**
  * Adoption styles to elelement
  */
-export const adoptToElement = (element: HTMLElement, styles: StyleSheet[]) => {
+export const adoptToElement = (element: HTMLElement, styles: WCStyleSheet[]) => {
   if (!styles.length) {
     return
   }

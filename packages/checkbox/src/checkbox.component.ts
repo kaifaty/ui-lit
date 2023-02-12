@@ -1,15 +1,91 @@
-import {html, svg, css} from 'lit'
-import {property} from 'lit/decorators.js'
-
-import {definable, stylable, LitFormAssoc, noselect, labled} from '@ui-lit/utils'
+import {
+  definable,
+  stylable,
+  FormAssociated,
+  html,
+  css,
+  withProps,
+  AccessorParam,
+  createTemplate,
+  ILabled,
+  labled,
+} from '@ui-lit/utils'
 
 import {PREFIX, checkboxCCSVarsMap} from './styles.map'
 import {CheckboxEvents, TCheckboxType, TCkeckboxValue} from './types'
 
-const checkmark = svg`
-<svg class = "checkmark" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M3.2276 7.56922L7.33116 12.2454L12.7864 3.33211" />
-</svg>`
+type ComponentProps = {
+  value: TCkeckboxValue
+  type: TCheckboxType
+  checked: boolean
+}
+
+const template = createTemplate(html`
+  <div role="checkbox" aria-checked="false" class="noselect" id="content">
+    <svg
+      class="checkmark"
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M3.2276 7.56922L7.33116 12.2454L12.7864 3.33211" />
+    </svg>
+    <span class="control"></span>
+  </div>
+`)
+
+const checkbox: AccessorParam<boolean> = {
+  defaultValue: false,
+  name: 'checked',
+  options: {
+    attribute: true,
+    reflect: true,
+  },
+  get(target) {
+    return (target as FormAssociated).value === 'on'
+  },
+  set: (target, old, newValue) => {
+    if (old === newValue) {
+      return false
+    }
+    ;(target as FormAssociated).value = newValue ? 'on' : 'off'
+    return true
+  },
+}
+
+const value: AccessorParam<TCkeckboxValue> = {
+  defaultValue: 'off',
+  name: 'value',
+  options: {
+    attribute: true,
+    reflect: true,
+  },
+  set(target, old, value) {
+    if (old === value) {
+      return
+    }
+    const content = target.querySelector<HTMLDivElement>('#content')
+    if (content) {
+      content.ariaChecked = value === 'on' ? 'true' : 'false'
+      content.ariaLabel = ((target as ILabled).labels[0].textContent || '').trim()
+    }
+    return true
+  },
+}
+
+const type: AccessorParam<TCheckboxType> = {
+  defaultValue: 'switcher',
+  name: 'type',
+  options: {
+    attribute: true,
+    reflect: true,
+  },
+}
+
+const Base = labled(stylable(definable(FormAssociated), checkboxCCSVarsMap, PREFIX))
+const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [checkbox, type, value])
 
 /**
  * # Lit checkbox-switcher
@@ -29,6 +105,7 @@ const checkmark = svg`
  *
  * @element lit-checkbox - UI Lit button element
  *
+ * @prop {'on' | 'off'} - Value of checkbox/switcher
  *
  * @CSS
  * @cssprop [--lit-checkbox-checkbox-background=#fff] - Background color of checkbox
@@ -43,9 +120,9 @@ const checkmark = svg`
  * @CSS
  */
 
-export class LitCheckbox extends labled(stylable(definable(LitFormAssoc), checkboxCCSVarsMap, PREFIX)) {
+export class WCCheckbox extends PropsedBase {
   static styles = [
-    noselect,
+    ...PropsedBase.styles,
     css`
       .checkmark {
         stroke: ${this.cssVar('checkmark-color')};
@@ -77,7 +154,9 @@ export class LitCheckbox extends labled(stylable(definable(LitFormAssoc), checkb
       :host {
         contain: content;
         display: inline-block;
-        --control-size: 16px;
+        padding: 3px;
+        box-sizing: border-box;
+        --control-size: 17px;
         --offset: calc((var(--switcher-height) - var(--control-size)) / 2);
         --switcher-height: 16px;
         --switcher-width: 34px;
@@ -100,7 +179,7 @@ export class LitCheckbox extends labled(stylable(definable(LitFormAssoc), checkb
         height: var(--control-size);
         left: var(--offset);
         position: absolute;
-        top: 0;
+        top: -1px;
         transition: transform ease 0.2s;
         width: var(--control-size);
       }
@@ -114,66 +193,35 @@ export class LitCheckbox extends labled(stylable(definable(LitFormAssoc), checkb
       }
 
       :host([type='switcher'][value='on']) .control {
-        transform: translateX(calc(var(--switcher-width) - var(--control-size)));
+        transform: translateX(calc(var(--switcher-width) - var(--control-size) + 1px));
       }
     `,
   ]
 
-  @property({type: String, reflect: true}) type: TCheckboxType = 'switcher'
-
-  static get properties() {
-    return {
-      ...super.properties,
-      value: {type: String},
-      name: {type: String},
-      checked: {type: Boolean},
-    }
-  }
-  get checked() {
-    return this.value === 'on'
-  }
-  set checked(value: boolean) {
-    this.value = value ? 'on' : 'off'
+  constructor() {
+    super()
+    this.shadowRoot.append(template.content.cloneNode(true))
+    this.attachInternals()
   }
 
-  /** @ignore */
-  private _value: TCkeckboxValue = 'off'
-
-  /**
-   * @prop {'on' | 'off'} - Value of checkbox/switcher
-   */
-  get value() {
-    return this._value
+  connectedCallback(): void {
+    super.connectedCallback()
+    this.addEventListener('click', this.click)
   }
-  set value(value: TCkeckboxValue) {
-    const oldValue = this._value
-    if (oldValue === value) return
-    this._value = value
-    this.setAttribute('value', value)
-    this.requestUpdate('value', oldValue)
+
+  disconnectedCallback(): void {
+    super.disconnectedCallback()
+    this.removeEventListener('click', this.click)
   }
 
   toggle() {
     if (this.readonly || this.disabled) return
     this.checked = !this.checked
+    //this.value = this.value === 'on' ? 'off' : 'on'
     this.notify()
   }
-  click() {
+  click = () => {
     this.toggle()
-  }
-
-  /** @ignore*/
-  render() {
-    return html` <div
-      role="checkbox"
-      aria-checked="${this.checked}"
-      aria-label="${(this.labels[0]?.textContent || '').trim()}"
-      class="noselect"
-      id="content"
-      @click="${this.click}"
-    >
-      ${checkmark}<span class="control"></span>
-    </div>`
   }
 
   /** @ignore*/
@@ -191,6 +239,6 @@ export class LitCheckbox extends labled(stylable(definable(LitFormAssoc), checkb
 }
 declare global {
   interface HTMLElementTagNameMap {
-    'lit-checkbox': LitCheckbox
+    'wc-checkbox': WCCheckbox
   }
 }

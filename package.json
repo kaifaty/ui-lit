@@ -60,6 +60,7 @@
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.6.6",
     "@custom-elements-manifest/to-markdown": "^0.1.0",
+    "@esm-bundle/chai": "^4.3.4-fix.0",
     "@kaifat/utils": "^1.1.1",
     "@open-wc/testing": "^2.5.33",
     "@parcel/packager-ts": "^2.0.0",

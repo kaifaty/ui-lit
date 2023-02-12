@@ -1,13 +1,17 @@
 import type {Definable} from '../definable/index.js'
 import type {Constructor} from '@ui-lit/types'
 import {createcssMap} from '../../create-css-map.js'
-import {adoptToElement} from '../../helpers/css-stylesheet.js'
+import {adoptToElement, WCStyleSheet} from '../../helpers/css-stylesheet.js'
 
 type StringOnly<T> = T extends string ? T : never
 type Data = Record<string, string | number | readonly [string | number, string]>
 
+type MaybeStyled = {
+  styles?: WCStyleSheet[]
+}
+
 type Styleble<D extends Data, T extends Constructor<HTMLElement>> = T & {
-  styles: StyleSheet[]
+  styles: WCStyleSheet[]
   readonly prefix: string
   readonly dataDefault: D
   readonly data: {
@@ -18,13 +22,13 @@ type Styleble<D extends Data, T extends Constructor<HTMLElement>> = T & {
   cssKey(name: StringOnly<keyof D>): string
 }
 
-export const stylable = <D extends Data, T extends Definable<Constructor<HTMLElement>>>(
-  litEl: T,
+export const stylable = <D extends Data, T extends Definable<Constructor<HTMLElement>> & MaybeStyled>(
+  Element: T,
   data: D,
   prefix: string,
 ): Styleble<D, T> => {
-  return class LitStylable extends litEl {
-    static styles: StyleSheet[] = []
+  return class LitStylable extends Element {
+    static styles: WCStyleSheet[] = [...(Element.styles || [])]
     static prefix: string = prefix
     static get dataDefault() {
       return data

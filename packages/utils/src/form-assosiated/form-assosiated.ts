@@ -1,44 +1,46 @@
-import type {LitForm, FormAssociatedElement, TValidationMessages, TValidationMessageKey} from '@ui-lit/types'
+import type {LitForm, TValidationMessages, TValidationMessageKey} from '@ui-lit/types'
 import {OuterClickRemoveController} from '../controllers/click.js'
 import {KeyDownController} from '../controllers/key.js'
 
 import {defaultValidationMessages, defaultValidity} from './consts.js'
 import {css} from '../helpers/literals.js'
-import {AccessorParams, withProps} from '../mixins/withProps/index.js'
-import {FormAssosiatedProps} from './types.js'
-import {createcssMap} from '../create-css-map.js'
+import {AccessorParam, withProps} from '../mixins/withProps/index.js'
+import type {FormAssosiatedProps} from './types.js'
 import {formAssocCCSVarsMap} from './styles.map.js'
 import {PREFIX} from './styles.map.js'
 import {withControllers} from '../mixins/withControllers/index.js'
+import {definable} from '../mixins/definable/index.js'
+import {createcssMap} from '../create-css-map.js'
 
 const getLang = () => document.querySelector('html')?.lang || window.navigator.language.split('-')[0]
 
 const options = {attribute: true, reflect: true}
+const optionsNoReflect = {attribute: true, reflect: false}
+const noattr = {attribute: false, reflect: false}
 
-const props: AccessorParams[] = [
-  {name: 'customMessage', defaultValue: '', options},
+const props: AccessorParam<unknown>[] = [
+  {name: 'customMessage', defaultValue: '', options: optionsNoReflect},
   {name: 'disabled', defaultValue: false, options},
-  {name: 'initValidation', defaultValue: true, options},
-  {name: 'inputValidation', defaultValue: false, options},
+  {name: 'initValidation', defaultValue: true, options: optionsNoReflect},
+  {name: 'inputValidation', defaultValue: false, options: optionsNoReflect},
   {name: 'max', defaultValue: undefined, options},
   {name: 'min', defaultValue: undefined, options},
   {name: 'name', defaultValue: '', options},
   {name: 'readonly', defaultValue: false, options},
-  {name: 'reporterNode', defaultValue: undefined, options},
+  {name: 'reporterNode', defaultValue: undefined, options: noattr},
   {name: 'required', defaultValue: false, options},
   {name: 'step', defaultValue: undefined, options},
   {name: 'value', defaultValue: '', options},
-  {name: 'willValidate', defaultValue: true, options},
+  {name: 'willValidate', defaultValue: true, options: optionsNoReflect},
 ]
-
-const {getVar} = createcssMap(formAssocCCSVarsMap, PREFIX)
 
 let lastReportValidity = 0
 
-export class FormAssociated
-  extends withControllers(withProps<FormAssosiatedProps>(HTMLElement, props))
-  implements FormAssociatedElement
-{
+const Base = definable(withControllers(withProps<FormAssosiatedProps>(HTMLElement, props)))
+
+const {getVar} = createcssMap(formAssocCCSVarsMap, PREFIX)
+
+export class FormAssociated extends Base {
   static styles = [
     css`
       :host {

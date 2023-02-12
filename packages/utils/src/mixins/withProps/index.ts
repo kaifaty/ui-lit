@@ -1,27 +1,61 @@
 import type {Constructor} from '@ui-lit/types'
 
-export type AccessorParams = {
+export type AccessorParam<T> = {
   name: string
-  defaultValue: unknown
+  defaultValue: T
+  set?: (target: HTMLElement, oldValue: T, value: T) => boolean
+  get?: (target: HTMLElement, value: T) => void
   options?: {
     attribute?: boolean
     reflect?: boolean
   }
 }
 
-export const defindeAccessors = <T>(target: HTMLElement, name: string, value: T) => {
-  Object.defineProperty(target, name, {
+const defineAttr = (target: HTMLElement, name: string, value: unknown) => {
+  if (typeof value === 'string') {
+    target.setAttribute(name, value)
+  }
+  if (typeof value === 'boolean') {
+    if (value) {
+      target.setAttribute(name, '')
+    } else {
+      target.removeAttribute(name)
+    }
+  }
+}
+
+export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>) => {
+  let currentValue = data.defaultValue
+  Object.defineProperty(target, data.name, {
+    configurable: true,
     get() {
-      return value
+      if (data.get) {
+        return data.get(target, currentValue)
+      }
+      return currentValue
     },
     set(newValue: T) {
-      console.log({newValue})
-      if (value === newValue) {
+      let curr = currentValue
+      if (data.get) {
+        curr = data.get(target, currentValue) as any
+      }
+      if (data.set) {
+        if (!data.set(target, curr, newValue)) {
+          return
+        }
+      } else if (currentValue === newValue) {
         return
       }
-      value = newValue
+      currentValue = newValue
+
+      if (data.options?.reflect && data.options?.attribute) {
+        defineAttr(target, data.name, newValue)
+      }
     },
   })
+  if (data.options?.reflect && data.options?.attribute && data.defaultValue) {
+    defineAttr(target, data.name, data.defaultValue)
+  }
 }
 
 export const withProps = <
@@ -29,7 +63,7 @@ export const withProps = <
   T extends Constructor<HTMLElement> = Constructor<HTMLElement>,
 >(
   superClass: T,
-  props: AccessorParams[],
+  props: AccessorParam<any>[],
 ) => {
   const data = new Map(props.map((it) => [it.name, it]))
   return class WithProps extends superClass {
@@ -37,15 +71,19 @@ export const withProps = <
     constructor(...args: any[]) {
       super(...args)
       props.forEach((entry) => {
-        defindeAccessors(this, entry.name, entry.defaultValue)
+        defindeAccessors(this, entry)
       })
     }
     attributeChangedCallback(prop: string, old: string, value: string) {
-      console.log(prop, old, value)
-      if (data.has(prop) && value !== old) {
-        //@ts-ignore
-        this[prop] = value
-        console.log(prop)
+      const opts = data.get(prop)
+      if (opts && value != old) {
+        if (typeof opts.defaultValue === 'boolean') {
+          //@ts-ignore
+          this[prop] = typeof value === 'string'
+        } else {
+          //@ts-ignore
+          this[prop] = value
+        }
       }
     }
   } as any as T & Constructor<P>

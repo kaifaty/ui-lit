@@ -11,7 +11,7 @@ import {
   labled,
 } from '@ui-lit/utils'
 
-import {PREFIX, checkboxCCSVarsMap} from './styles.map'
+import {CHECKBOX_PREFIX, checkboxCCSVarsMap} from './styles.map'
 import {CheckboxEvents, TCheckboxType, TCkeckboxValue} from './types'
 
 type ComponentProps = {
@@ -84,7 +84,7 @@ const type: AccessorParam<TCheckboxType> = {
   },
 }
 
-const Base = labled(stylable(definable(FormAssociated), checkboxCCSVarsMap, PREFIX))
+const Base = labled(stylable(definable(FormAssociated), checkboxCCSVarsMap, CHECKBOX_PREFIX))
 const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [checkbox, type, value])
 
 /**

@@ -6,19 +6,13 @@
   "module": "src/index.ts",
   "types": "src/index.ts",
   "browserslist": [
-    "since 2020-06"
+    "since 2022-06"
   ],
   "targets": {
-    "docs": {
-      "context": "browser",
-      "source": "./docs/index.html",
-      "isLibrary": false,
-      "includeNodeModules": true
-    },
     "cssgen": {
       "context": "node",
-      "distDir": "./cssgen/",
-      "source": "./cssgen/cssgen.ts",
+      "distDir": "./tools/dist",
+      "source": "./tools/generate-css.ts",
       "includeNodeModules": true,
       "outputFormat": "commonjs"
     }
@@ -30,7 +24,9 @@
     "test": "lerna run test",
     "graph": "nx graph",
     "cem": "custom-elements-manifest analyze --config ./cem.config.mjs",
-    "doc:css": "parcel build --no-cache --target=cssgen --no-source-maps",
+    "doc:css": "npm run doc:css:build && npm run doc:css:gen",
+    "doc:css:build": "parcel build --no-cache --target=cssgen --no-source-maps",
+    "doc:css:gen": "node ./tools/dist/generate-css.js",
     "fix": "eslint --fix \"**/*.{ts,tsx}\""
   },
   "parcel-namer-struct": [
@@ -70,6 +66,8 @@
     "@swc/cli": "^0.1.59",
     "@swc/core": "^1.3.25",
     "@swc/helpers": "^0.4.12",
+    "@types/clean-css": "^4.2.6",
+    "@types/glob": "^8.0.1",
     "@types/html-minifier-terser": "^7.0.0",
     "@types/markdown-it": "^12.2.3",
     "@types/mocha": "^8.2.2",
@@ -103,8 +101,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "@types/clean-css": "^4.2.6"
-  }
+  ]
 }

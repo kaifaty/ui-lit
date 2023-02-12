@@ -1,5 +1,6 @@
 import glob from 'glob'
-import { readFile, writeFile } from 'fs'
+import {readFile, writeFile} from 'fs'
+import {checkboxCCSVarsMap, CHECKBOX_PREFIX} from '@ui-lit/checkbox/src/styles.map'
 /*
 import {
   buttonCCSVarsMap,
@@ -12,7 +13,7 @@ import {
 */
 const Files = {
   //button: { map: buttonCCSVarsMap, prefix: buttonPrefix },
-  //checkbox: { map: checkboxCCSVarsMap, prefix: checkboxPrefix },
+  checkbox: {map: checkboxCCSVarsMap, prefix: CHECKBOX_PREFIX},
 } as const
 
 const getKeys = (data: Record<string, string | readonly [string | number, string]>, preffix: string) =>
@@ -27,7 +28,9 @@ const getKeys = (data: Record<string, string | readonly [string | number, string
 const asyncRead = (path: string) => new Promise<string>((r) => readFile(path, 'utf-8', (_, data) => r(data)))
 
 const getComponentPath = (name: string) =>
-  new Promise<string[]>((r) => glob(`../src/components/**/${name}.component.ts`, {}, (_, data) => r(data)))
+  new Promise<string[]>((r) =>
+    glob(`../../packages/components/**/${name}.component.ts`, {}, (_, data) => r(data)),
+  )
 
 const getFilesData = async () => {
   return Promise.all(

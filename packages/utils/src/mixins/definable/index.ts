@@ -1,6 +1,6 @@
 import {pascal2kebabCase} from '@kaifat/utils'
 
-import type {Constructor} from '@ui-lit/types'
+import type {Constructor} from '@ui-wc/types'
 
 export type Definable<T extends Constructor<HTMLElement>> = T & {
   define(name?: string): void

@@ -1,6 +1,9 @@
 import {statableLit} from '@statx/lit'
 import {css, html, LitElement} from 'lit'
-import {LitButton} from '@ui-lit/button'
+import {WcApiViewer} from '@ui-wc/api-viewer'
+import {WcHeader} from '@ui-wc/header'
+
+// import {LitButton} from '@ui-lit/button'
 // import {LitForm} from '@ui-lit/form'
 /*
 import {LitButton, LitCheckbox, LitHeader, LitMarkdown, LitNavBurger, LitTheme, LitTreeItem, LitTreeView, LitWcViewer} from '../../src'
@@ -8,7 +11,7 @@ import {LitButton, LitCheckbox, LitHeader, LitMarkdown, LitNavBurger, LitTheme, 
 //import {getPage, getPageContent, paths} from './router'
 
 //const json = new URL('../../dist/custom-elements.json', import.meta.url) as unknown as string
-LitButton.define()
+// LitButton.define()
 /*
 LitMarkdown.define()
 LitCheckbox.define()
@@ -19,13 +22,20 @@ LitNavBurger.define()
 LitWcViewer.define()
 LitHeader.define()
 */
-const logo = new URL('./logo.svg', import.meta.url) as unknown as string
+WcApiViewer.define()
+WcHeader.define()
+
+const json = new URL('../custom-elements.json', import.meta.url) as unknown as string
+const logo = new URL('./logo.png', import.meta.url) as unknown as string
 const blacktocat = new URL('./assets/blacktocat.png', import.meta.url) as unknown as string
 
 export class Doc extends statableLit(LitElement) {
   static styles = css`
     :host {
       display: block;
+    }
+    wc-header {
+      margin: 0;
     }
   `
   protected createRenderRoot() {
@@ -34,37 +44,31 @@ export class Doc extends statableLit(LitElement) {
 
   render() {
     return html`
-        <lit-theme>
-            <div class = "wrapper">
-                <header>
-                    <div>
-                        <div>
-                            <lit-header level = "1"><img src = "${logo}" style = "width: 40px; height: 40px;">&nbsp;UI Lit</lit-header>
-                            <lit-header level = "5">Web-components UI library based on Lit 2</lit-header>
-                        </div>
-                        <div class = "buttons">
-                            <lit-button primary 
-                                        target="_blank"
-                                        href = "https://github.com/kaifaty/ui-lit">
-            
-                                View on GitHub
-                                <img width="16px" slot = 'icon-after' src = "${blacktocat}"/>
-                            </lit-button>
-                            <lit-button 
-                                href = "https://github.com/kaifaty/ui-lit/archive/refs/heads/main.zip" 
-                                >Download .zip</lit-button>
-                        </div>
-                    </div>
-                    <lit-theme-switcher></lit-theme-switcher>
-                </header>
-                <main>
-                    <lit-wc-viewer src = "/custom-elements.json"></lit-wc-viewer></lit-wc-viewer>
-                </main>
+      <lit-theme>
+        <div class="wrapper">
+          <header>
+            <div>
+              <div>
+                <wc-header level="1"><img src="${logo}" style="width: 80px; height: 80px;" />UI WC</wc-header>
+                <wc-header level="5">Native Web-components UI library</wc-header>
+              </div>
+              <div class="buttons">
+                <lit-button primary target="_blank" href="https://github.com/kaifaty/ui-lit">
+                  View on GitHub
+                  <img width="16px" slot="icon-after" src="${blacktocat}" />
+                </lit-button>
+                <lit-button href="https://github.com/kaifaty/ui-lit/archive/refs/heads/main.zip">Download .zip</lit-button>
+              </div>
             </div>
-            <lit-nav-burger></lit-nav-burger>
-            
-        </lit-theme>
-        `
+            <lit-theme-switcher></lit-theme-switcher>
+          </header>
+          <main>
+            <wc-api-viewer src="${json}"></wc-api-viewer>
+          </main>
+        </div>
+        <lit-nav-burger></lit-nav-burger>
+      </lit-theme>
+    `
   }
 }
 

@@ -1,0 +1,61 @@
+{
+  "name": "@ui-wc/nav-burger",
+  "version": "1.0.0",
+  "private": false,
+  "description": "",
+  "keywords": [
+    "user-interface",
+    "lit-element",
+    "lit",
+    "UI",
+    "UI kit",
+    "Webcomponent UI"
+  ],
+  "homepage": "https://github.com/kaifaty/ui-wc/packages/nav-burger",
+  "bugs": {
+    "url": "https://github.com/kaifaty/ui-wc/issues"
+  },
+  "license": "MIT",
+  "author": "kaifaty",
+  "sideEffects": false,
+  "type": "module",
+  "module": "dist/index.js",
+  "source": "./src/index.ts",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/build",
+    "/package.json",
+    "/README.md",
+    "/src"
+  ],
+  "scripts": {
+    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
+    "build:parcel": "parcel build --target=build",
+    "build:types": "tsc",
+    "build:mb": "microbundle",
+    "dev": "parcel watch",
+    "test": "tsx src/index.test.ts",
+    "test:watch": "tsx watch src/index.test.ts"
+  },
+  "browserslist": [
+    "last 4 chrome versions"
+  ],
+  "peerDependencies": {
+    "@ui-wc/utils": "*",
+    "lit": "^2.0.0"
+  },
+  "targets": {
+    "build": {
+      "context": "browser",
+      "distDir": "./dist/",
+      "source": "./src/index.ts",
+      "isLibrary": true,
+      "optimize": true,
+      "includeNodeModules": {
+        "@ui-wc/utils": false,
+        "lit": false
+      },
+      "outputFormat": "esmodule"
+    }
+  }
+}

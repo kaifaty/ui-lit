@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/link
+npm i @ui-wc/link
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/link'
+import {} from '@ui-wc/link'
 
 // ...
 ```

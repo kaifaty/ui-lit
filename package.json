@@ -1,32 +1,16 @@
 {
-  "name": "ui-lit",
+  "name": "ui-wc",
   "version": "1.0.0",
   "description": "Tiny and effective UI web-components",
-  "main": "src/index.ts",
-  "module": "src/index.ts",
-  "types": "src/index.ts",
   "browserslist": [
     "since 2022-06"
   ],
-  "targets": {
-    "cssgen": {
-      "context": "node",
-      "distDir": "./tools/dist",
-      "source": "./tools/generate-css.ts",
-      "includeNodeModules": true,
-      "outputFormat": "commonjs"
-    }
-  },
   "scripts": {
     "new": "tsx tools/new-package/create.ts",
     "prettify": "prettier --write **/*.json",
     "build": "lerna run build",
     "test": "lerna run test",
     "graph": "nx graph",
-    "cem": "custom-elements-manifest analyze --config ./cem.config.mjs",
-    "doc:css": "npm run doc:css:build && npm run doc:css:gen",
-    "doc:css:build": "parcel build --no-cache --target=cssgen --no-source-maps",
-    "doc:css:gen": "node ./tools/dist/generate-css.js",
     "fix": "eslint --fix \"**/*.{ts,tsx}\""
   },
   "parcel-namer-struct": [
@@ -54,7 +38,7 @@
   "author": "kaifaty",
   "license": "MIT",
   "devDependencies": {
-    "@custom-elements-manifest/analyzer": "^0.6.6",
+    "@custom-elements-manifest/analyzer": "^0.6.8",
     "@custom-elements-manifest/to-markdown": "^0.1.0",
     "@esm-bundle/chai": "^4.3.4-fix.0",
     "@kaifat/utils": "^1.1.1",

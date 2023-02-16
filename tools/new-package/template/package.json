@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/<%= name %>",
+  "name": "@ui-wc/<%= name %>",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -29,11 +29,12 @@
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
+    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types && npm run cem",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
     "build:mb": "microbundle",
     "dev": "parcel watch",
+    "cem": "custom-elements-manifest analyze --config ./cem.config.mjs --dev",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
   },
@@ -41,8 +42,7 @@
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "@ui-lit/utils": "*",
-    "lit": "^2.0.0"
+    "@ui-wc/utils": "*"
   },
   "targets": {
     "build": {
@@ -52,8 +52,7 @@
       "isLibrary": true,
       "optimize": true,
       "includeNodeModules": {
-        "@ui-lit/utils": false,
-        "lit": false
+        "@ui-wc/utils": false
       },
       "outputFormat": "esmodule"
     }

@@ -2,8 +2,8 @@ import {mobileAndTabletCheck} from '@kaifat/utils'
 import {css, html, LitElement, nothing} from 'lit'
 import {property} from 'lit/decorators.js'
 
-import {definable, scrollbar, stylable} from '@ui-lit/utils'
-import {LitButton} from '@ui-lit/button'
+import {definable, scrollbar, stylable} from '@ui-wc/utils'
+import {LitButton} from '@ui-wc/button'
 import {PREFIX, selectCSSVars} from '../styles.map'
 import type {TListboxPosition} from '../types'
 

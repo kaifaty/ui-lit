@@ -1,3 +1,3 @@
-import {LitIcon} from '../index'
+import {WcIcon} from '../index'
 
-LitIcon.define()
+WcIcon.define()

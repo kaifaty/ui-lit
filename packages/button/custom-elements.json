@@ -1,0 +1,424 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/button.component.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "WcButton",
+          "cssProperties": [
+            {
+              "description": "background",
+              "name": "--lit-buttonbackground",
+              "default": "initial"
+            },
+            {
+              "description": "background-focus",
+              "name": "--lit-buttonbackground-focus",
+              "default": "hsl(264, 100%, 55%)"
+            },
+            {
+              "description": "background-hover",
+              "name": "--lit-buttonbackground-hover",
+              "default": "hsl(264, 100%, 93%)"
+            },
+            {
+              "description": "border",
+              "name": "--lit-buttonborder",
+              "default": "1px solid hsl(264, 50%, 85%)"
+            },
+            {
+              "description": "border-radius",
+              "name": "--lit-buttonborder-radius",
+              "default": "2px"
+            },
+            {
+              "description": "color",
+              "name": "--lit-buttoncolor",
+              "default": "hsl(264, 100%, 46%)"
+            },
+            {
+              "description": "danger-background",
+              "name": "--lit-buttondanger-background",
+              "default": "hsl(5, 80%, 55%)"
+            },
+            {
+              "description": "danger-background-hover",
+              "name": "--lit-buttondanger-background-hover",
+              "default": "hsl(5, 80%, 60%)"
+            },
+            {
+              "description": "danger-border",
+              "name": "--lit-buttondanger-border",
+              "default": "1px solid hsl(5, 80%, 55%)"
+            },
+            {
+              "description": "danger-color",
+              "name": "--lit-buttondanger-color",
+              "default": "hsl(5, 80%, 98%)"
+            },
+            {
+              "description": "danger-outline-focus",
+              "name": "--lit-buttondanger-outline-focus",
+              "default": "1px solid hsl(5, 80%, 35%)"
+            },
+            {
+              "description": "danger-ripple",
+              "name": "--lit-buttondanger-ripple",
+              "default": "hsl(5, 80%, 65%)"
+            },
+            {
+              "description": "default display position of button",
+              "name": "--lit-buttondisplay",
+              "default": "inline-flex"
+            },
+            {
+              "description": "Medium size fontsize",
+              "name": "--lit-buttonfont-size",
+              "default": "inherit"
+            },
+            {
+              "description": "Medium size height",
+              "name": "--lit-buttonheight",
+              "default": "30px"
+            },
+            {
+              "description": "icon-gap",
+              "name": "--lit-buttonicon-gap",
+              "default": "8px"
+            },
+            {
+              "description": "justify",
+              "name": "--lit-buttonjustify",
+              "default": "center"
+            },
+            {
+              "description": "large-font-size",
+              "name": "--lit-buttonlarge-font-size",
+              "default": "inherit"
+            },
+            {
+              "description": "large-height",
+              "name": "--lit-buttonlarge-height",
+              "default": "0 40px"
+            },
+            {
+              "description": "large-padding",
+              "name": "--lit-buttonlarge-padding",
+              "default": "0 20px"
+            },
+            {
+              "description": "letter-spacing",
+              "name": "--lit-buttonletter-spacing",
+              "default": "normal"
+            },
+            {
+              "description": "outline",
+              "name": "--lit-buttonoutline",
+              "default": "none"
+            },
+            {
+              "description": "outline-focus",
+              "name": "--lit-buttonoutline-focus",
+              "default": "1px #ccc solid"
+            },
+            {
+              "description": "Medium size padding",
+              "name": "--lit-buttonpadding",
+              "default": "0 20px"
+            },
+            {
+              "description": "primary-background",
+              "name": "--lit-buttonprimary-background",
+              "default": "hsl(264, 80%, 55%)"
+            },
+            {
+              "description": "primary-background-hover",
+              "name": "--lit-buttonprimary-background-hover",
+              "default": "hsl(264, 80%, 60%)"
+            },
+            {
+              "description": "primary-border",
+              "name": "--lit-buttonprimary-border",
+              "default": "1px solid hsl(264, 80%, 55%)"
+            },
+            {
+              "description": "Primary text color",
+              "name": "--lit-buttonprimary-color",
+              "default": "hsl(264, 80%, 98%)"
+            },
+            {
+              "description": "primary-outline-focus",
+              "name": "--lit-buttonprimary-outline-focus",
+              "default": "1px solid hsl(264, 80%, 75%)"
+            },
+            {
+              "description": "primary-ripple",
+              "name": "--lit-buttonprimary-ripple",
+              "default": "hsl(264, 80%, 75%)"
+            },
+            {
+              "description": "ripple",
+              "name": "--lit-buttonripple",
+              "default": "hsl(264, 100%, 88%)"
+            },
+            {
+              "description": "Small size font-size",
+              "name": "--lit-buttonsmall-font-size",
+              "default": "inherit"
+            },
+            {
+              "description": "Small size height",
+              "name": "--lit-buttonsmall-height",
+              "default": "25px"
+            },
+            {
+              "description": "Small size padding",
+              "name": "--lit-buttonsmall-padding",
+              "default": "0 6px"
+            },
+            {
+              "description": "success-background",
+              "name": "--lit-buttonsuccess-background",
+              "default": "hsl(110, 80%, 55%)"
+            },
+            {
+              "description": "success-background-hover",
+              "name": "--lit-buttonsuccess-background-hover",
+              "default": "hsl(110, 80%, 60%)"
+            },
+            {
+              "description": "success-border",
+              "name": "--lit-buttonsuccess-border",
+              "default": "1px solid hsl(110, 80%, 55%)"
+            },
+            {
+              "description": "success-color",
+              "name": "--lit-buttonsuccess-color",
+              "default": "hsl(110, 80%, 4%)"
+            },
+            {
+              "description": "success-outline-focus",
+              "name": "--lit-buttonsuccess-outline-focus",
+              "default": "1px solid hsl(110, 80%, 35%)"
+            },
+            {
+              "description": "success-ripple",
+              "name": "--lit-buttonsuccess-ripple",
+              "default": "hsl(110, 80%, 65%)"
+            },
+            {
+              "description": "switch-color",
+              "name": "--lit-buttonswitch-color",
+              "default": "hsl(264, 100%, 46%)"
+            },
+            {
+              "description": "switch-on-background",
+              "name": "--lit-buttonswitch-on-background",
+              "default": "hsl(264, 80%, 60%)"
+            },
+            {
+              "description": "switch-on-color",
+              "name": "--lit-buttonswitch-on-color",
+              "default": "hsl(264, 80%, 98%)"
+            },
+            {
+              "description": "switch-on-outline-focus",
+              "name": "--lit-buttonswitch-on-outline-focus",
+              "default": "1px solid hsl(264, 100%, 46%)"
+            },
+            {
+              "description": "switch-outline-focus",
+              "name": "--lit-buttonswitch-outline-focus",
+              "default": "1px solid hsl(264, 100%, 46%)"
+            },
+            {
+              "description": "text-transform",
+              "name": "--lit-buttontext-transform",
+              "default": "uppercase"
+            },
+            {
+              "description": "weight",
+              "name": "--lit-buttonweight",
+              "default": "600"
+            }
+          ],
+          "slots": [
+            {
+              "description": "You can put some elements before content",
+              "name": "icon-before"
+            },
+            {
+              "description": "You can put some elements after content",
+              "name": "icon-after"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "define",
+              "static": true
+            },
+            {
+              "kind": "field",
+              "name": "notificable",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "description": "Notify on click. Render checked icon for a while."
+            },
+            {
+              "kind": "field",
+              "name": "tabindex",
+              "type": {
+                "text": "number"
+              },
+              "default": "0",
+              "description": "Tab index to native tabIntex of reflected inner conteiner. Pay attention - lowercase!"
+            },
+            {
+              "kind": "method",
+              "name": "click",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Click button action"
+            },
+            {
+              "kind": "method",
+              "name": "toggleSwitch",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Toggle switchOn state for type=switch button."
+            },
+            {
+              "kind": "method",
+              "name": "submit",
+              "privacy": "public",
+              "return": {
+                "type": {
+                  "text": "void"
+                }
+              },
+              "description": "Submit for type='submit' button"
+            }
+          ],
+          "events": [
+            {
+              "name": "buttonClose",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "switchChanged",
+              "type": {
+                "text": "CustomEvent"
+              }
+            },
+            {
+              "name": "submitForm",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "type": {
+                "text": "start | center | end"
+              },
+              "description": "Align of button content",
+              "name": "align",
+              "default": "center"
+            },
+            {
+              "type": {
+                "text": "small | medium | large"
+              },
+              "description": "Size",
+              "name": "size",
+              "default": "medium"
+            },
+            {
+              "type": {
+                "text": "submit | button | switch | close"
+              },
+              "description": "Type of button.",
+              "name": "type",
+              "default": "button"
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Borderless element",
+              "name": "borderless",
+              "default": "false"
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Success",
+              "name": "success",
+              "default": "false"
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Danger style",
+              "name": "danger",
+              "default": "false"
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Primary style",
+              "name": "primary",
+              "default": "false"
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "justify space between on button content",
+              "name": "between",
+              "default": "false"
+            }
+          ],
+          "superclass": {
+            "name": "BaseWithProps",
+            "module": "src/button.component.ts"
+          },
+          "tagName": "wc-button",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WcButton",
+          "declaration": {
+            "name": "WcButton",
+            "module": "src/button.component.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

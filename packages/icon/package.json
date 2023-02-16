@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/icon",
+  "name": "@ui-wc/icon",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -11,17 +11,17 @@
     "UI kit",
     "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-lit/packages/icon",
+  "homepage": "https://github.com/kaifaty/ui-wc/packages/icon",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-lit/issues"
+    "url": "https://github.com/kaifaty/ui-wc/issues"
   },
   "license": "MIT",
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "module": "build/index.js",
+  "module": "./dist/index.js",
   "source": "./src/index.ts",
-  "types": "build/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "/dist",
     "/package.json",
@@ -29,7 +29,7 @@
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./dist/ && npm run build:mv && npm run build:types",
+    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
     "dev": "parcel watch",
@@ -42,7 +42,7 @@
   ],
   "peerDependencies": {
     "@kaifat/utils": "*",
-    "@ui-lit/utils": "*",
+    "@ui-wc/utils": "*",
     "lit": "^2.0.0"
   },
   "targets": {
@@ -53,7 +53,7 @@
       "scopeHoist": false,
       "includeNodeModules": {
         "@kaifat/utils": false,
-        "@ui-lit/utils": false,
+        "@ui-wc/utils": false,
         "lit": false
       },
       "outputFormat": "esmodule"

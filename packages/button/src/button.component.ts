@@ -1,54 +1,141 @@
-import {css, html, LitElement, TemplateResult} from 'lit'
-import {property, state} from 'lit/decorators.js'
-import {classMap} from 'lit/directives/class-map.js'
-import {styleMap} from 'lit/directives/style-map.js'
+import {WcIcon} from '@ui-wc/icon'
 
-import {LitIcon} from '@ui-lit/icon'
+import {definable, withProps, html, css, createGetParams, focusable, stylable, createTemplate} from '@ui-wc/utils'
 
-import {definable, noselect, focusable, stylable} from '@ui-lit/utils'
-
-import {LinkTarget, LitLink} from '@ui-lit/link'
-import {LitSpinner} from '@ui-lit/spinner'
+import {LinkTarget, WcLink} from '@ui-wc/link'
+// import {LitSpinner} from '@ui-wc/spinner'
 
 import {buttonCCSVarsMap, PREFIX} from './styles.map'
 import type {ButtonEvents, ButtonSize, ButtonType} from './types'
 
-const stringProps = {type: String, attribute: true, reflect: true}
-const numerProps = {type: Number, attribute: true, reflect: true}
-const booleanProps = {type: Boolean, attribute: true, reflect: true}
+const notifyOnClick = Symbol()
+const getParams = createGetParams({
+  attribute: true,
+})
+
+const loading = getParams('loading', false)
+const disabled = getParams('disabled', false)
+const pressed = getParams('pressed', false, {
+  set(target, _, value) {
+    if ((target as HTMLElement & Props).type === 'switch') {
+      target.querySelector('#button').ariaPressed = value.toString()
+    } else {
+      target.querySelector('#button').ariaPressed = 'undefined'
+    }
+    return true
+  },
+})
+const notificable = getParams('notificable', false)
+const tabIndex = getParams('tabIndex', 0, {
+  set(target, _, value) {
+    if ((target as HTMLElement & Props).href) {
+      target.querySelector<HTMLButtonElement>('#link').tabIndex = value
+      target.querySelector<HTMLButtonElement>('#button').tabIndex = -1
+    } else {
+      target.querySelector<HTMLButtonElement>('#link').tabIndex = -1
+      target.querySelector<HTMLButtonElement>('#button').tabIndex = value
+    }
+    return true
+  },
+})
+const href = getParams<string | null>('href', null, {
+  set(target, _, value) {
+    target.querySelector<HTMLLinkElement>('#link').href = value
+    return true
+  },
+})
+const target = getParams<LinkTarget>('target', '_self', {
+  set(target, _, value) {
+    target.querySelector<HTMLLinkElement>('#link').target = value
+    return true
+  },
+})
+const type = getParams<ButtonType>('type', 'button', {
+  set(target, _, value) {
+    if (value === 'switch') {
+      target.querySelector('#button').ariaPressed = (target as HTMLElement & Props).pressed.toString()
+    } else {
+      target.querySelector('#button').ariaPressed = 'undefined'
+    }
+    return true
+  },
+})
+const size = getParams<ButtonSize>('size', 'medium')
+
+type Props = {
+  loading: boolean
+  disabled: boolean
+  pressed: boolean
+  notificable: boolean
+  tabIndex: number
+  href: string
+  target: LinkTarget
+  type: ButtonType
+  size: ButtonSize
+}
 
 /**
- * # Lit button element
- * ## Features
- * - Form assosiated - can submit `lit-form`
- * - May set `href` propperty for a link button
- * - Can be `notificable`:  on click appears a checkmark confirm icon
- * - Has ripple effect
- * - Button can be a switcher. It contain pressed boolean property
+ * 
+      @focus="${this._onFocus}"
+      @blur="${this._onBlur}"
+      @mouseover="${this._onMouseOver}"
+      @mouseout="${this._onMouseOut}"
+      @mousedown="${this._onMouseDown}"
+      @touchstart="${this._onTouchstart}"
+      @touchcancel="${this._endPress}"
+      @touchend="${this._endPress}"
+ */
+const template = createTemplate(html`
+  <wc-link type="button" id="link">
+    <button id="button" class="button wrapper noselect">
+      <wc-icon id="checkmark" icon="checkmark"></wc-icon>
+      <wc-spinner small id="spinner"></wc-spinner>
+      <slot id="icon-before" name="icon-before"></slot>
+      <div part="content" class="content"><slot></slot></div>
+      <slot name="icon-after"></slot>
+    </button>
+  </wc-link>
+`)
+
+// noselect,
+const Base = stylable(definable(HTMLElement), buttonCCSVarsMap, PREFIX)
+const BaseWithProps = withProps<Props, typeof Base>(Base, [loading, tabIndex, notificable, pressed, href, target, type, disabled, size])
+
+/**
+ * @element wc-button - button element
  *
- * ## Examples
  *
- * ```html
- * <lit-button type = "submit" primary>Button</lit-button>
- * ```
- * <lit-button type = "submit" primary>Button</lit-button>
- *
- * @element lit-button - UI Lit button element
- *
- *
- * ```html
- * <thing-doer></thing-doer>
- * ```
- *
- * @attr {'start' | 'center' | 'end'} [align="center"] - Align of button content
- * @attr {'submit' | 'button' | 'switch' | 'close'} [type="button"] - Button Type
- * @attr {'small' | 'medium' | 'large'} [size="medium"] - Size
- * @attr {boolean} [borderless=false] - Borderless element
+ * @attr {boolean} [pressed=false] - Switcher state for type=switch button
  * @attr {boolean} [disabled=false] - Disable element
+ * @attr {boolean} [loading=false] - Loading button state. If defined - render spinner
+ * @attr {boolean} [loading=notificable] - Notify on click. Render checked icon for a while.
+ *
+ *
+ * === tabIndex ===
+ * @attr {number} [tabIndex=0] - Tab index
+ *
+ * === target ===
+ * @attr {_blank | _parent | _self | _top} [target=_self] - Target for `link`. Work with `href` prop.
+ *
+ * === href ===
+ * @attr {string | null} [href=null] - Button can be `link` if href defined
+ *
+ * === align ===
+ * @attr {start | center | end} [align=center] - Align of button content
+ *
+ * === size ===
+ * @attr {small | medium | large} [size=medium] - Size
+ *
+ * === type ===
+ * @attr {submit | button | switch | close} [type=button] - Type of button.
+ *
+ *
+ * @attr {boolean} [borderless=false] - Borderless element
  * @attr {boolean} [success=false] - Success
  * @attr {boolean} [danger=false] - Danger style
  * @attr {boolean} [primary=false] - Primary style
  * @attr {boolean} [between=false] - justify space between on button content
+ *
  *
  * @slot icon-before - You can put some elements before content
  * @slot icon-after - You can put some elements after content
@@ -104,50 +191,46 @@ const booleanProps = {type: Boolean, attribute: true, reflect: true}
  * @CSS
  *
  */
-
-export class LitButton extends focusable(stylable(definable(LitElement), buttonCCSVarsMap, PREFIX)) {
-  static define() {
-    LitSpinner.define()
-    LitIcon.define()
-    LitLink.define()
-    super.define()
+export class WcButton extends BaseWithProps {
+  static define(name?: string) {
+    // LitSpinner.define()
+    WcIcon.define()
+    WcLink.define()
+    super.define(name)
   }
 
   /** @ignore */
   static styles = [
-    noselect,
     css`
       :host {
-        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('color')};
+        ${this.cssKey('color')}: ${this.cssVar('color')};
         --click-x: 0;
         --click-y: 0;
         --radiant: 5%;
         box-sizing: border-box;
-        display: ${LitButton.cssVar('display')};
+        display: ${this.cssVar('display')};
         position: relative;
       }
-
-      :host([size='small']) .wrapper {
-        padding: ${LitButton.cssVar('small-padding')};
-        font-size: ${LitButton.cssVar('small-font-size')};
+      :host(:not([href])) wc-link {
+        display: contents;
       }
-      :host([size='medium']) .wrapper {
-        padding: ${LitButton.cssVar('padding')};
-        font-size: ${LitButton.cssVar('font-size')};
+      :host([size='small']) .wrapper {
+        padding: ${this.cssVar('small-padding')};
+        font-size: ${this.cssVar('small-font-size')};
       }
       :host([size='large']) .wrapper {
-        padding: ${LitButton.cssVar('large-padding')};
-        font-size: ${LitButton.cssVar('large-font-size')};
+        padding: ${this.cssVar('large-padding')};
+        font-size: ${this.cssVar('large-font-size')};
       }
 
       :host([size='small']) {
-        height: ${LitButton.cssVar('small-height')};
+        height: ${this.cssVar('small-height')};
       }
       :host([size='medium']) {
-        height: ${LitButton.cssVar('height')};
+        height: ${this.cssVar('height')};
       }
       :host([size='large']) {
-        height: ${LitButton.cssVar('large-height')};
+        height: ${this.cssVar('large-height')};
       }
 
       :host([disabled]),
@@ -157,32 +240,51 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
       :host([disabled]) .wrapper {
         opacity: 0.4;
       }
+      :host(:not([loading])) #spinner {
+        display: none;
+      }
 
       :host([between]) .wrapper {
         justify-content: space-between;
       }
+
+      #checkmark {
+        display: none;
+      }
+      .wrapper[checkmark] {
+        width: var(--width);
+      }
+      .wrapper[checkmark] #checkmark {
+        display: block;
+      }
+      .wrapper[checkmark] :not(#checkmark) {
+        display: none;
+      }
+
       .wrapper {
         -webkit-appearance: none;
         -webkit-tap-highlight-color: transparent;
         align-items: center;
-        background-color: ${LitButton.cssVar('background')};
-        border-radius: ${LitButton.cssVar('border-radius')};
-        border: ${LitButton.cssVar('border')};
+        background-color: ${this.cssVar('background')};
+        border-radius: ${this.cssVar('border-radius')};
+        border: ${this.cssVar('border')};
         box-sizing: border-box;
-        color: ${LitButton.cssVar('color')};
+        color: ${this.cssVar('color')};
         cursor: pointer;
         display: grid;
         font-family: inherit;
-        font-weight: ${LitButton.cssVar('weight')};
-        gap: ${LitButton.cssVar('icon-gap')};
+        font-size: ${this.cssVar('font-size')};
+        font-weight: ${this.cssVar('weight')};
+        gap: ${this.cssVar('icon-gap')};
         grid-auto-flow: column;
         height: 100%;
-        justify-content: ${LitButton.cssVar('justify')};
-        letter-spacing: ${LitButton.cssVar('letter-spacing')};
-        outline: ${LitButton.cssVar('outline')};
+        justify-content: ${this.cssVar('justify')};
+        letter-spacing: ${this.cssVar('letter-spacing')};
+        outline: ${this.cssVar('outline')};
         overflow: hidden;
+        padding: ${this.cssVar('padding')};
         position: relative;
-        text-transform: ${LitButton.cssVar('text-transform')};
+        text-transform: ${this.cssVar('text-transform')};
         white-space: nowrap;
         width: 100%;
       }
@@ -190,47 +292,47 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
         display: flex;
       }
       :host(:not([type='switch'])[hover]) .wrapper {
-        background-color: ${LitButton.cssVar('background-hover')};
+        background-color: ${this.cssVar('background-hover')};
       }
       :host(:not([type='switch'])[pressed]) .wrapper {
         background: radial-gradient(
           circle at var(--click-x) var(--click-y),
-          ${LitButton.cssVar('ripple')} 5px,
-          ${LitButton.cssVar('background-hover')} var(--radiant)
+          ${this.cssVar('ripple')} 5px,
+          ${this.cssVar('background-hover')} var(--radiant)
         );
       }
 
       :host .wrapper:focus {
-        outline: ${LitButton.cssVar('outline-focus')};
+        outline: ${this.cssVar('outline-focus')};
       }
       :host([loading]) .wrapper {
         cursor: initial;
       }
-      lit-spinner {
+      wc-spinner {
         height: 12.8px;
         width: 12.8px;
         justify-self: center;
       }
-      lit-link {
+      wc-link {
         width: 100%;
       }
 
       :host([type='switch']) .wrapper {
-        color: ${LitButton.cssVar('switch-color')};
-        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('switch-color')};
+        color: ${this.cssVar('switch-color')};
+        ${this.cssKey('color')}: ${this.cssVar('switch-color')};
       }
       :host([type='switch'][switchOn]) .wrapper {
-        color: ${LitButton.cssVar('switch-on-color')};
-        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('switch-on-color')};
-        background-color: ${LitButton.cssVar('switch-on-background')};
+        color: ${this.cssVar('switch-on-color')};
+        ${this.cssKey('color')}: ${this.cssVar('switch-on-color')};
+        background-color: ${this.cssVar('switch-on-background')};
       }
       :host([type='switch']) .wrapper:focus {
-        outline: ${LitButton.cssVar('switch-outline-focus')};
-        border: ${LitButton.cssVar('switch-outline-focus')};
+        outline: ${this.cssVar('switch-outline-focus')};
+        border: ${this.cssVar('switch-outline-focus')};
       }
       :host([type='switch'][switchOn]) .wrapper:focus {
-        outline: ${LitButton.cssVar('switch-on-outline-focus')};
-        border: ${LitButton.cssVar('switch-on-outline-focus')};
+        outline: ${this.cssVar('switch-on-outline-focus')};
+        border: ${this.cssVar('switch-on-outline-focus')};
       }
 
       :host([borderless]) .wrapper,
@@ -239,139 +341,82 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
       }
 
       :host([primary]) .wrapper {
-        color: ${LitButton.cssVar('primary-color')};
-        background: ${LitButton.cssVar('primary-background')};
-        border: ${LitButton.cssVar('primary-border')};
-        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('primary-background')};
+        color: ${this.cssVar('primary-color')};
+        background: ${this.cssVar('primary-background')};
+        border: ${this.cssVar('primary-border')};
+        ${this.cssKey('color')}: ${this.cssVar('primary-background')};
       }
       :host([primary]) .wrapper:focus {
-        outline: ${LitButton.cssVar('primary-outline-focus')};
+        outline: ${this.cssVar('primary-outline-focus')};
       }
 
       :host([primary][hover]) .wrapper {
-        background-color: ${LitButton.cssVar('primary-background-hover')};
+        background-color: ${this.cssVar('primary-background-hover')};
       }
       :host([primary][pressed]) .wrapper {
         background: radial-gradient(
           circle at var(--click-x) var(--click-y),
-          ${LitButton.cssVar('primary-ripple')} 5px,
-          ${LitButton.cssVar('primary-background-hover')} var(--radiant)
+          ${this.cssVar('primary-ripple')} 5px,
+          ${this.cssVar('primary-background-hover')} var(--radiant)
         );
       }
 
       :host([success]) {
-        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('success-color')};
+        ${this.cssKey('color')}: ${this.cssVar('success-color')};
       }
       :host([success]) .wrapper {
-        color: ${LitButton.cssVar('success-color')};
-        background: ${LitButton.cssVar('success-background')};
-        border: ${LitButton.cssVar('success-border')};
-        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('success-color')};
+        color: ${this.cssVar('success-color')};
+        background: ${this.cssVar('success-background')};
+        border: ${this.cssVar('success-border')};
+        ${this.cssKey('color')}: ${this.cssVar('success-color')};
       }
       :host([success]) .wrapper:focus {
-        outline: ${LitButton.cssVar('success-outline-focus')};
+        outline: ${this.cssVar('success-outline-focus')};
       }
       :host([success][hover]) .wrapper {
-        background-color: ${LitButton.cssVar('success-background-hover')};
+        background-color: ${this.cssVar('success-background-hover')};
       }
       :host([success][pressed]) .wrapper {
         background: radial-gradient(
           circle at var(--click-x) var(--click-y),
-          ${LitButton.cssVar('success-ripple')} 5px,
-          ${LitButton.cssVar('success-background-hover')} var(--radiant)
+          ${this.cssVar('success-ripple')} 5px,
+          ${this.cssVar('success-background-hover')} var(--radiant)
         );
       }
 
       :host([danger]) {
-        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('danger-color')};
+        ${this.cssKey('color')}: ${this.cssVar('danger-color')};
       }
       :host([danger]) .wrapper {
-        ${LitIcon.cssKey('color')}: ${LitButton.cssVar('danger-color')};
-        background: ${LitButton.cssVar('danger-background')};
-        border: ${LitButton.cssVar('danger-border')};
-        color: ${LitButton.cssVar('danger-color')};
+        ${this.cssKey('color')}: ${this.cssVar('danger-color')};
+        background: ${this.cssVar('danger-background')};
+        border: ${this.cssVar('danger-border')};
+        color: ${this.cssVar('danger-color')};
       }
       :host([danger]) .wrapper:focus {
-        outline: ${LitButton.cssVar('danger-outline-focus')};
+        outline: ${this.cssVar('danger-outline-focus')};
       }
       :host([danger][hover]) .wrapper {
-        background-color: ${LitButton.cssVar('danger-background-hover')};
+        background-color: ${this.cssVar('danger-background-hover')};
       }
       :host([danger][pressed]) .wrapper {
         background: radial-gradient(
           circle at var(--click-x) var(--click-y),
-          ${LitButton.cssVar('danger-ripple')} 5px,
-          ${LitButton.cssVar('danger-background-hover')} var(--radiant)
+          ${this.cssVar('danger-ripple')} 5px,
+          ${this.cssVar('danger-background-hover')} var(--radiant)
         );
       }
     `,
   ]
 
-  /**
-   * Loading button state. If defined - render spinner.
-   */
-  @property(booleanProps)
-  loading = false
-
-  /**
-   * Button can be `link` if href defined
-   */
-  @property(stringProps)
-  href: string | null = null
-
-  /**
-   * Target for `link`. Work with `href` prop.
-   *
-   */
-  @property(stringProps)
-  target: LinkTarget = '_self'
-
-  /**
-   * Type of button.
-   */
-  @property(stringProps)
-  type: ButtonType = 'button'
-
-  /**
-   * Button size
-   *
-   */
-  @property(stringProps)
-  size: ButtonSize = 'medium'
-
-  /**
-   * Disabled state
-   */
-  @property(booleanProps)
-  disabled = false
-
-  /**
-   * Switcher state for type=switch button
-   */
-  @property(booleanProps)
-  pressed = false
-
-  /**
-   * Notify on click. Render checked icon for a while.
-   */
-  @property(booleanProps)
-  notificable = false
-
-  /**
-   * Tab index to native tabIntex of reflected inner conteiner. Pay attention - lowercase!
-   */
-  @property(numerProps)
-  tabindex = 0
-
-  /** @ignore  */
-  @state()
-  _notifyIcon = false
+  constructor() {
+    super()
+    this.shadowRoot.append(template.content.cloneNode(true))
+    this.shadowRoot.querySelector('#button').addEventListener('click', this.click.bind(this))
+  }
 
   /** @ignore  */
   private _notifyTimeout = 0
-
-  /** @ignore  */
-  private _width = 0
 
   /** @ignore  */
   private _radiant = 5
@@ -381,61 +426,6 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
 
   /** @ignore  */
   private _pressed = false
-
-  /** @ignore  */
-  private get classes() {
-    return {
-      button: true,
-      wrapper: true,
-      noselect: true,
-      checkmark: this._notifyIcon,
-    }
-  }
-
-  /** @ignore  */
-  private _contentTemplate() {
-    if (this._notifyIcon) {
-      return html`<lit-icon icon="checkmark"></lit-icon>`
-    }
-    return html`${this.loading
-        ? html`<lit-spinner small></lit-spinner>`
-        : html`<slot name="icon-before"></slot>`}
-      <div part="content" class="content"><slot></slot></div>
-      <slot name="icon-after"></slot>`
-  }
-
-  /** @ignore  */
-  private wrapperTemplate(content: TemplateResult) {
-    if (this.href) {
-      return html`<lit-link type="button" target="${this.target}" href="${this.href}">${content}</lit-link>`
-    }
-    return content
-  }
-
-  /** @ignore  */
-  render() {
-    const styles = this._width ? {width: this._width + 'px'} : {}
-    const template = html` <button
-      role="button"
-      aria-pressed="${this.type === 'switch' ? this.pressed : 'undefined'}"
-      tabindex="${this.href ? -1 : this.tabindex}"
-      style="${styleMap(styles)}"
-      class="${classMap(this.classes)}"
-      @click="${this.click}"
-      @focus="${this._onFocus}"
-      @blur="${this._onBlur}"
-      @mouseover="${this._onMouseOver}"
-      @mouseout="${this._onMouseOut}"
-      @mousedown="${this._onMouseDown}"
-      @touchstart="${this._onTouchstart}"
-      @touchcancel="${this._endPress}"
-      @touchend="${this._endPress}"
-    >
-      ${this._contentTemplate()}
-    </button>`
-
-    return this.wrapperTemplate(template)
-  }
 
   // ==== Events ====
 
@@ -514,29 +504,34 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
       this.submit()
       e.preventDefault()
     }
-  }
+  };
 
-  /** @ignore  */
-  private _notifyOnClick() {
-    if (this.notificable) {
-      this._notifyIcon = true
-      this._width = this.clientWidth
+  [notifyOnClick]() {
+    if (this.notificable && !this._notifyTimeout) {
+      const button = this.shadowRoot.querySelector<HTMLButtonElement>('#button')
+      this.style.setProperty('--width', this.clientWidth + 'px')
+      button.setAttribute('checkmark', '')
       clearTimeout(this._notifyTimeout)
+
       this._notifyTimeout = window.setTimeout(() => {
-        this._notifyIcon = false
-        this._width = 0
+        button.removeAttribute('width')
+        button.removeAttribute('checkmark')
+        this._notifyTimeout = 0
       }, 1000)
     }
   }
-  // +++ Actions +++
+
+  get isUnavailable() {
+    return this.disabled || this.loading || this.href || this._notifyTimeout
+  }
 
   /**
    * Click button action
    */
-  public click(): void {
+  click() {
     window.navigator.vibrate?.(20)
 
-    if (this.disabled || this.loading || this.href) return
+    if (this.isUnavailable) return
 
     if (this.type === 'submit') {
       this.submit()
@@ -552,13 +547,13 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
       )
     }
 
-    this._notifyOnClick()
+    this[notifyOnClick]()
   }
 
   /**
    * Toggle switchOn state for type=switch button.
    */
-  public toggleSwitch(): void {
+  toggleSwitch() {
     this.pressed = !this.pressed
 
     this.dispatchEvent(
@@ -572,8 +567,8 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
   /**
    * Submit for type='submit' button
    */
-  public submit(): void {
-    if (this.disabled || this.loading || this.href || this.type !== 'submit') return
+  submit() {
+    if (this.isUnavailable || this.type !== 'submit') return
 
     this.dispatchEvent(
       new CustomEvent<ButtonEvents['submitForm']>('submitForm', {
@@ -581,12 +576,17 @@ export class LitButton extends focusable(stylable(definable(LitElement), buttonC
         composed: true,
       }),
     )
-    this._notifyOnClick()
+    this[notifyOnClick]()
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lit-button': LitButton
+    'wc-button': WcButton
+  }
+  interface HTMLElementEventMap {
+    submitForm: CustomEvent<ButtonEvents['submitForm']>
+    switchChanged: CustomEvent<ButtonEvents['switchChanged']>
+    buttonClose: CustomEvent<ButtonEvents['buttonClose']>
   }
 }

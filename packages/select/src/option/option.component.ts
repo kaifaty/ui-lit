@@ -2,8 +2,8 @@ import {mobileAndTabletCheck} from '@kaifat/utils'
 import {css, html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 
-import {definable, focusable, stylable} from '@ui-lit/utils'
-import {LitButton} from '@ui-lit/button'
+import {definable, focusable, stylable} from '@ui-wc/utils'
+import {LitButton} from '@ui-wc/button'
 import type {LitSelect} from '../select/select.component'
 import {PREFIX, selectCSSVars} from '../styles.map'
 

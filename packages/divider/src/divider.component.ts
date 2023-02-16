@@ -1,6 +1,6 @@
 import {css, LitElement} from 'lit'
 
-import {definable, stylable} from '@ui-lit/utils'
+import {definable, stylable} from '@ui-wc/utils'
 
 import {dividerCSSMap, PREFIX} from './styles.map'
 

@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/select
+npm i @ui-wc/select
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/select'
+import {} from '@ui-wc/select'
 
 // ...
 ```

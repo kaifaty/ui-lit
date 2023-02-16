@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/types",
+  "name": "@ui-wc/types",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -11,9 +11,9 @@
     "UI kit",
     "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-lit/packages/types",
+  "homepage": "https://github.com/kaifaty/ui-wc/packages/types",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-lit/issues"
+    "url": "https://github.com/kaifaty/ui-wc/issues"
   },
   "license": "MIT",
   "author": "kaifaty",

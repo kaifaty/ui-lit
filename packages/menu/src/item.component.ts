@@ -1,8 +1,8 @@
 import {css, html, LitElement} from 'lit'
 import {property} from 'lit/decorators.js'
 
-import {definable, focusable, stylable} from '@ui-lit/utils'
-import {LitButton} from '@ui-lit/button'
+import {definable, focusable, stylable} from '@ui-wc/utils'
+import {LitButton} from '@ui-wc/button'
 
 import {menuCSSMap, PREFIX} from './styles.map'
 

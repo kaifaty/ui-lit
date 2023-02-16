@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/circlepercent
+npm i @ui-wc/circlepercent
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/circlepercent'
+import {} from '@ui-wc/circlepercent'
 
 // ...
 ```

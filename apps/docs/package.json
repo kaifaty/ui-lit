@@ -18,7 +18,6 @@
   "license": "MIT",
   "author": "kaifaty",
   "sideEffects": false,
-  "type": "module",
   "main": "build/index.js",
   "source": "./src/index.ts",
   "types": "build/index.d.ts",
@@ -68,7 +67,12 @@
     "build:types": "tsc",
     "dev": "parcel serve --target=build",
     "test": "tsx src/index.test.ts",
-    "test:watch": "tsx watch src/index.test.ts"
+    "test:watch": "tsx watch src/index.test.ts",
+    "doc": "npm run doc:css && npm run doc:cem",
+    "doc:cem": "custom-elements-manifest analyze --config ./cem.config.mjs" ,
+    "doc:css": "npm run doc:css:build && npm run doc:css:gen",
+    "doc:css:build": "parcel build --no-cache --target=cssgen --no-source-maps",
+    "doc:css:gen": "node ./dist/tools/generate-css.js"
   },
   "browserslist": [
     "last 4 chrome versions"
@@ -86,6 +90,14 @@
       "isLibrary": false,
       "optimize": true,
       "outputFormat": "esmodule"
+    },
+    
+    "cssgen": {
+      "context": "node",
+      "distDir": "./dist/tools",
+      "source": "./src/tools/generate-css.ts",
+      "includeNodeModules": true,
+      "outputFormat": "commonjs"
     }
   }
 }

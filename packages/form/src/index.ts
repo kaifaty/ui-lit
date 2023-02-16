@@ -1,9 +1,9 @@
 import {css, html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 
-import type {FormAssociatedElement} from '@ui-lit/types'
-import type {LitButton} from '@ui-lit/button'
-import type {LitCheckbox} from '@ui-lit/checkbox'
+import type {FormAssociatedElement} from '@ui-wc/types'
+import type {LitButton} from '@ui-wc/button'
+import type {LitCheckbox} from '@ui-wc/checkbox'
 import type {LitNumberField} from '../number'
 import type {LitSelect} from '../select'
 

@@ -1,7 +1,7 @@
 import {css, html, LitElement} from 'lit'
 import {property} from 'lit/decorators.js'
 
-import {definable, stylable} from '@ui-lit/utils'
+import {definable, stylable} from '@ui-wc/utils'
 
 import {canvasDirective} from './directive'
 import {circleCSSMap, PREFIX} from './styles.map'

@@ -1,79 +1,87 @@
-import {adoptToElement, createStyle, css, definable, stylable} from '@ui-lit/utils'
+import {css, AccessorParam, withProps, definable, stylable} from '@ui-wc/utils'
 
-import {iconCSSVarMap, PREFIX} from './types'
+import {iconCSSVarMap, ICON_PREFIX} from './style.map'
 
-import type {IconKeys} from './svg-map'
+import {IconKeys, IconsMap} from './svg-map'
 
-export class LitIcon extends stylable(definable(HTMLElement), iconCSSVarMap, PREFIX) {
+const load = Symbol()
+const icon: AccessorParam<IconKeys> = {
+  name: 'icon',
+  defaultValue: '',
+  set(target, old, value) {
+    if (value === old) {
+      return false
+    }
+    ;(target as WcIcon)[load](value)
+    return true
+  },
+  options: {
+    attribute: true,
+    reflect: true,
+  },
+}
+
+const Basic = stylable(definable(HTMLElement), iconCSSVarMap, ICON_PREFIX)
+const Base = withProps<{icon: IconKeys}, typeof Basic>(Basic, [icon])
+
+export class WcIcon extends Base {
   static properties = {
     icon: {type: String, attibute: true},
   }
-  static styles = createStyle(css`
-    :host {
-      cursor: pointer;
-      display: inline-block;
-      font-weight: normal;
-      direction: ltr;
-      width: 16px;
-      height: 16px;
-    }
-    .dropdown {
-      transform-origin: center;
-      transition: transform 0.3s ease;
-    }
-    :host([opened]) .dropdown {
-      transform: rotate(180deg);
-    }
+  static styles = [
+    css`
+      :host {
+        cursor: pointer;
+        display: inline-block;
+        font-weight: normal;
+        direction: ltr;
+        width: 16px;
+        height: 16px;
+      }
+      svg {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+      :host([opened]) .dropdown {
+        transform: rotate(180deg);
+      }
 
-    :host([danger]),
-    :host([error]) .icon {
-      fill: ${LitIcon.cssVar('negative-color')};
-    }
-    :host([success]) {
-      fill: ${LitIcon.cssVar('positive-color')};
-    }
-    :host([icon='back']),
-    :host([icon='arrow-left']) {
-      transform-origin: center;
-      transform: rotate(90deg);
-    }
-  `)
+      :host([danger]) svg,
+      :host([error]) svg {
+        fill: ${WcIcon.cssVar('negative-color')};
+      }
+      :host([success]) svg {
+        fill: ${WcIcon.cssVar('positive-color')};
+      }
 
-  constructor() {
-    super()
-    adoptToElement(this, [LitIcon.styles])
-    this.attachShadow({mode: 'open'})
-  }
+      /* TODO добавить рефлеты на значения */
+      .dropdown {
+        transform-origin: center;
+        transition: transform 0.3s ease;
+      }
+      :host([icon='back']),
+      :host([icon='arrow-left']) {
+        transform-origin: center;
+        transform: rotate(90deg);
+      }
+    `,
+  ];
 
-  attributeChangedCallback(name: string, _: string, newValue: string) {
-    if (name === 'icon') {
-      this.icon = newValue as IconKeys
-    }
-  }
-  private _icon: IconKeys
-  set icon(value: IconKeys) {
-    this._icon = value
-    this._load()
-  }
-  get icon() {
-    return this._icon
-  }
-
-  private _load() {
-    if (!this.icon) {
+  [load](value: IconKeys) {
+    if (!value) {
       return Promise.resolve('')
     }
-    return fetch('./assets/' + this.icon + '.svg')
+    return fetch(IconsMap[value])
       .then((r) => r.text())
       .then((r) => {
-        const node = document.createElement('template')
-        node.insertAdjacentHTML('afterbegin', r)
-        this.shadowRoot.appendChild(node.content)
+        this.shadowRoot.innerHTML = r
       })
   }
 }
+
 declare global {
   interface HTMLElementTagNameMap {
-    'lit-icon': LitIcon
+    'wc-icon': WcIcon
   }
 }

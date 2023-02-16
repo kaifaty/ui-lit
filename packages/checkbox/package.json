@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/checkbox",
+  "name": "@ui-wc/checkbox",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -11,17 +11,18 @@
     "UI kit",
     "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-lit/packages/checkbox",
+  "homepage": "https://github.com/kaifaty/ui-wc/packages/checkbox",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-lit/issues"
+    "url": "https://github.com/kaifaty/ui-wc/issues"
   },
+  "customElements": "custom-elements.json",
   "license": "MIT",
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
+  "main": "dist/index.js",
   "source": "./src/index.ts",
-  "types": "build/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
     "/dist",
     "/package.json",
@@ -29,20 +30,21 @@
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
+    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types && npm run cem",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
     "dev": "parcel watch",
     "test": "tsx src/index.test.ts",
     "demo": "parcel serve --target=demo",
+    "cem": "custom-elements-manifest analyze --config ./cem.config.mjs",
     "test:watch": "tsx watch src/index.test.ts"
   },
   "browserslist": [
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "@ui-lit/utils": "*",
-    "lit": "^2.0.0"
+    "@ui-wc/utils": "*",
+    "@kaifat/utils": "^1.1.1"
   },
   "targets": {
     "build": {
@@ -53,7 +55,7 @@
       "optimize": true,
       "includeNodeModules": {
         "@kaifat/utils": false,
-        "lit": false
+        "@ui-wc/utils": false
       },
       "outputFormat": "esmodule"
     },

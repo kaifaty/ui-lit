@@ -1,4 +1,4 @@
-import type {TValidationMessages} from '@ui-lit/types'
+import type {TValidationMessages} from '@ui-wc/types'
 
 export const defaultValidity = {
   badInput: false,

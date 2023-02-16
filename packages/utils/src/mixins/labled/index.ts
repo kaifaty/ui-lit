@@ -1,4 +1,4 @@
-import type {Constructor, FormAssociatedElement, LitLabel} from '@ui-lit/types'
+import type {Constructor, FormAssociatedElement, LitLabel} from '@ui-wc/types'
 
 export interface ILabled extends HTMLElement {
   readonly labels: LitLabel[]

@@ -2,9 +2,9 @@ import {mobileAndTabletCheck} from '@kaifat/utils'
 import {css, html, LitElement} from 'lit'
 import {property} from 'lit/decorators.js'
 
-import {definable, stylable} from '@ui-lit/utils'
-import {LitButton} from '@ui-lit/button'
-import {LitSelect} from '@ui-lit/select'
+import {definable, stylable} from '@ui-wc/utils'
+import {LitButton} from '@ui-wc/button'
+import {LitSelect} from '@ui-wc/select'
 
 import {LitMenuItem} from './item.component'
 import {menuCSSMap, PREFIX} from './styles.map'

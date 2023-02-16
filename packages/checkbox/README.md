@@ -1,13 +1,26 @@
+# Lit checkbox-switcher
+
 ## Installation
 
 ```sh
-npm i @ui-lit/checkbox
+npm i @ui-wc/checkbox
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/checkbox'
+import {WCCheckbox} from '@ui-wc/checkbox'
+
+WCCheckbox.define()
 
 // ...
+```
+
+## Examples
+
+```html
+<lit-checkbox type = "checkbox"></lit-checkbox>
+
+<!-- Switcher is defaul type -->
+<lit-checkbox></lit-checkbox>
 ```

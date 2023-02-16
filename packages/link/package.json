@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/link",
+  "name": "@ui-wc/link",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -11,18 +11,18 @@
     "UI kit",
     "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-lit/packages/link",
+  "homepage": "https://github.com/kaifaty/ui-wc/packages/link",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-lit/issues"
+    "url": "https://github.com/kaifaty/ui-wc/issues"
   },
   
   "license": "MIT",
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
+  "main": "./dist/index.js",
   "source": "./src/index.ts",
-  "types": "build/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "/dist",
     "/package.json",
@@ -42,8 +42,8 @@
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "@ui-lit/icon": "*",
-    "@ui-lit/utils": "*",
+    "@ui-wc/icon": "*",
+    "@ui-wc/utils": "*",
     "lit": "^2.0.0"
   },
   "targets": {
@@ -55,7 +55,7 @@
       "optimize": true,
       "includeNodeModules": {
         "@kaifat/utils": false,
-        "@ui-lit/icon": false,
+        "@ui-wc/icon": false,
         "lit": false
       },
       "outputFormat": "esmodule"

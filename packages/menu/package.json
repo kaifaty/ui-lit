@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/menu",
+  "name": "@ui-wc/menu",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -11,9 +11,9 @@
     "UI kit",
     "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-lit/packages/menu",
+  "homepage": "https://github.com/kaifaty/ui-wc/packages/menu",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-lit/issues"
+    "url": "https://github.com/kaifaty/ui-wc/issues"
   },
   "license": "MIT",
   "author": "kaifaty",
@@ -41,8 +41,8 @@
   ],
   "peerDependencies": {
     "@kaifat/utils": "*",
-    "@ui-lit/utils": "*",
-    "@ui-lit/button": "*",
+    "@ui-wc/utils": "*",
+    "@ui-wc/button": "*",
     "lit": "^2.0.0"
   },
   "targets": {
@@ -54,8 +54,8 @@
       "optimize": true,
       "includeNodeModules": {
         "@kaifat/utils": false,
-        "@ui-lit/utils": false,
-        "@ui-lit/button": false,
+        "@ui-wc/utils": false,
+        "@ui-wc/button": false,
         "lit": false
       },
       "outputFormat": "esmodule"

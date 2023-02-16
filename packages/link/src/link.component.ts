@@ -1,26 +1,79 @@
-import {definable, css, html, createTemplate, stylable, WCStyleSheet} from '@ui-lit/utils'
-import {LitIcon} from '@ui-lit/icon'
+import {definable, css, html, createTemplate, stylable, createGetParams, withProps} from '@ui-wc/utils'
+import {WcIcon} from '@ui-wc/icon'
 
 import {linkCCSVarsMap, PREFIX} from './styles.map'
 import type {LinkTarget} from './types'
-/**
- * 
-      @mouseover="${this._onMouseover}"
-      @mouseout="${this._onMouseout}"
-      tabindex="${this.tabindex}"
-      target="${this.target}"
-      rel="${ifDefined(this.rel)}"
-      href="${ifDefined(this.href)}"
- */
+
+type Type = 'button' | 'link'
+type Href = string | null
+
+type Props = {
+  type: Type
+  href: Href
+  rel?: string
+}
+
 const template = createTemplate(html`
-  <a>
+  <a id="link">
     <slot></slot>
   </a>
 `)
 
-export class LitLink extends stylable(definable(HTMLElement), linkCCSVarsMap, PREFIX) {
+const hover = Symbol()
+const unhover = Symbol()
+
+const getParam = createGetParams({attribute: true})
+
+const href = getParam<string | null>('href', null, {
+  set(target, _, value) {
+    target.querySelector<HTMLLinkElement>('#link').href = value
+    return true
+  },
+})
+const type = getParam<Type>('type', 'link')
+const rel = getParam<Href>('rel', 'nofollow', {
+  set(target, _, value) {
+    target.querySelector<HTMLLinkElement>('#link').rel = value
+    return true
+  },
+})
+const target = getParam<LinkTarget>('target', '_self', {
+  set(target, _, value) {
+    target.querySelector<HTMLLinkElement>('#link').target = value
+    return true
+  },
+})
+
+const underlined = getParam<boolean>('underlined', false)
+const tabindex = getParam<number>('tabIndex', 0)
+
+const Basic = stylable(definable(HTMLElement), linkCCSVarsMap, PREFIX)
+const WcLinkBase = withProps<Props, typeof Basic>(Basic, [href, underlined, tabindex, target, rel, type])
+
+/**
+ * @element wc-link - link element
+ *
+ *
+ * @attr {boolean} [underlined=false] - has link undeline or not
+ *
+ *
+ * === type ===
+ * @attr {button | link} [type=link] - type of link
+ *
+ * === tabIndex ===
+ * @attr {number} [tabIndex=0] - Tab index
+ *
+ * === target ===
+ * @attr {_blank | _parent | _self | _top} [target=_self] - Target for `link`. Work with `href` prop.
+ *
+ * === href ===
+ * @attr {string | null} [href=null] - Button can be `link` if href defined
+ *
+ *
+ */
+export class WcLink extends WcLinkBase {
   static define(name?: string) {
-    LitIcon.define()
+    WcIcon.define()
     super.define(name)
   }
 
@@ -40,7 +93,7 @@ export class LitLink extends stylable(definable(HTMLElement), linkCCSVarsMap, PR
       }
       :host(:not([type='button'])) a {
         color: ${this.cssVar('color')};
-        ${LitLink.cssKey('color')}: ${this.cssVar('color')};
+        ${this.cssKey('color')}: ${this.cssVar('color')};
         text-decoration: none;
         cursor: pointer;
         display: inline-flex;
@@ -71,38 +124,25 @@ export class LitLink extends stylable(definable(HTMLElement), linkCCSVarsMap, PR
       }
     `,
   ]
+
   constructor() {
     super()
     this.shadowRoot.append(template.content.cloneNode(true))
+    this.addEventListener('mouseover', this[hover].bind(this))
+    this.addEventListener('mouseout', this[unhover].bind(this))
+    this.addEventListener('touchstart', this[hover].bind(this))
+    this.addEventListener('touchend', this[unhover].bind(this))
   }
 
-  href: string | undefined = undefined
-  type: 'button' | 'link' = 'link'
-  rel?: string = 'nofollow'
-  target: LinkTarget = '_self'
-  underlined = false
-  tabindex = 0
-  /*
-  render() {
-    return html`<a
-      @mouseover="${this._onMouseover}"
-      @mouseout="${this._onMouseout}"
-      tabindex="${this.tabindex}"
-      target="${this.target}"
-      rel="${ifDefined(this.rel)}"
-      href="${ifDefined(this.href)}"
-      ><slot></slot
-    ></a>`
-  }
-  */
-  private _onMouseover() {
+  [hover]() {
     if (this.type === 'button') return
     this.setAttribute('hover', '')
   }
-  private _onMouseout() {
+  [unhover]() {
     if (this.type === 'button') return
     this.removeAttribute('hover')
   }
+
   click() {
     this.shadowRoot?.querySelector('a')?.click()
   }
@@ -110,6 +150,6 @@ export class LitLink extends stylable(definable(HTMLElement), linkCCSVarsMap, PR
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lit-link': LitLink
+    'wc-link': WcIcon
   }
 }

@@ -1,4 +1,4 @@
-import type {Constructor} from '@ui-lit/types'
+import type {Constructor} from '@ui-wc/types'
 
 export interface ReactiveController {
   hostConnected(): void

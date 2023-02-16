@@ -1,3 +1,3 @@
-import {LitLink} from '../link.component'
+import {WcLink} from '../link.component'
 
-LitLink.define('test-link')
+WcLink.define('test-link')

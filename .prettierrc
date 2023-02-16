@@ -1,11 +1,11 @@
 {
   "singleQuote": true,
   "trailingComma": "all",
-  "printWidth": 110,
+  "printWidth": 140,
   "bracketSpacing": false,
   "max-len": ["error", 
   {
-    "code": 110,
+    "code": 140,
     "tabWidth": 2,
     "ignoreComments": true,
     "ignoreUrls": true,

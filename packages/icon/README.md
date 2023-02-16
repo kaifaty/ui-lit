@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/icon
+npm i @ui-wc/icon
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/icon'
+import {} from '@ui-wc/icon'
 
 // ...
 ```

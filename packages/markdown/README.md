@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/markdown
+npm i @ui-wc/markdown
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/markdown'
+import {} from '@ui-wc/markdown'
 
 // ...
 ```

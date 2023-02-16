@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/utils
+npm i @ui-wc/utils
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/utils'
+import {} from '@ui-wc/utils'
 
 // ...
 ```

@@ -1,4 +1,4 @@
-import type {LitForm, TValidationMessages, TValidationMessageKey} from '@ui-lit/types'
+import type {LitForm, TValidationMessages, TValidationMessageKey} from '@ui-wc/types'
 import {OuterClickRemoveController} from '../controllers/click.js'
 import {KeyDownController} from '../controllers/key.js'
 

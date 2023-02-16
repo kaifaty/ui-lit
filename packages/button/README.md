@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/button
+npm i @ui-wc/button
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/button'
+import {} from '@ui-wc/button'
 
 // ...
 ```

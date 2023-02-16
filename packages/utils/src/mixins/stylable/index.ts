@@ -1,5 +1,5 @@
 import type {Definable} from '../definable/index.js'
-import type {Constructor} from '@ui-lit/types'
+import type {Constructor} from '@ui-wc/types'
 import {createcssMap} from '../../create-css-map.js'
 import {adoptToElement, WCStyleSheet} from '../../helpers/css-stylesheet.js'
 
@@ -35,8 +35,8 @@ export const stylable = <D extends Data, T extends Definable<Constructor<HTMLEle
     }
     static readonly data = createcssMap(data, this.prefix)
 
-    static cssVar(name: StringOnly<keyof D>) {
-      return this.data.getVar(name)
+    static cssVar(name: StringOnly<keyof D>, defaultValue?: string) {
+      return this.data.getVar(name, defaultValue)
     }
 
     static cssKey(name: StringOnly<keyof D>) {

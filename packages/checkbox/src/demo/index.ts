@@ -1,3 +1,3 @@
-import {WCCheckbox} from '../checkbox.component'
+import {WcCheckbox} from '../checkbox.component'
 
-WCCheckbox.define('wc-checkbox')
+WcCheckbox.define('wc-checkbox')

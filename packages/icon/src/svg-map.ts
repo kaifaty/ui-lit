@@ -1,4 +1,12 @@
-export type IconKeys = 'cancel' | 'dropdown' | 'search'
+export type IconKeys = keyof typeof IconsMap | ''
+
+export const IconsMap = {
+  cancel: new URL('./assets/cancel.svg', import.meta.url) as unknown as string,
+  dropdown: new URL('./assets/dropdown.svg', import.meta.url) as unknown as string,
+  search: new URL('./assets/search.svg', import.meta.url) as unknown as string,
+  checkmark: new URL('./assets/checkmark.svg', import.meta.url) as unknown as string,
+}
+
 /**
  * 
   static iconsMap: Record<string, number> = {

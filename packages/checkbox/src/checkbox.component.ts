@@ -9,7 +9,7 @@ import {
   createTemplate,
   ILabled,
   labled,
-} from '@ui-lit/utils'
+} from '@ui-wc/utils'
 
 import {CHECKBOX_PREFIX, checkboxCCSVarsMap} from './styles.map'
 import {CheckboxEvents, TCheckboxType, TCkeckboxValue} from './types'
@@ -36,7 +36,7 @@ const template = createTemplate(html`
   </div>
 `)
 
-const checkbox: AccessorParam<boolean> = {
+const checked: AccessorParam<boolean> = {
   defaultValue: false,
   name: 'checked',
   options: {
@@ -85,27 +85,22 @@ const type: AccessorParam<TCheckboxType> = {
 }
 
 const Base = labled(stylable(definable(FormAssociated), checkboxCCSVarsMap, CHECKBOX_PREFIX))
-const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [checkbox, type, value])
+const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [checked, type, value])
 
 /**
- * # Lit checkbox-switcher
  *
- * ## Examples
- * ```html
- * <lit-checkbox type = "checkbox"></lit-checkbox>
- * ````
- * <lit-checkbox type = "checkbox"></lit-checkbox>
+ * @element wc-checkbox - UI WC checkbox element
  *
  *
- * ```html
- * //Switcher is defaul type
- * <lit-checkbox></lit-checkbox>
- * ````
- * <lit-checkbox></lit-checkbox>
+ * @reflect
+ * @attr [value=off] {on | off} - Value of checkbox/switcher
  *
- * @element lit-checkbox - UI Lit button element
  *
- * @prop {'on' | 'off'} - Value of checkbox/switcher
+ * @attr
+ * @reflect [type=switcher] {switcher | checkbox} - type of component
+ *
+ * @attr
+ * @reflect [checked=false] {boolean} - checked state, based on value
  *
  * @CSS
  * @cssprop [--lit-checkbox-checkbox-background=#fff] - Background color of checkbox
@@ -118,9 +113,13 @@ const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [checkbox, type
  * @cssprop [--lit-checkbox-switcher-on-background=hsl(110, 65%, 50%)] - Enabled switcher color
  * @cssprop [--lit-checkbox-switcher-shadow=inset 1px 1px 2px rgba(0,0,0,0.7)] - Shadow of switcher circle
  * @CSS
+ *
  */
 
-export class WCCheckbox extends PropsedBase {
+export class WcCheckbox extends PropsedBase {
+  /**
+   * @internal
+   */
   static styles = [
     ...PropsedBase.styles,
     css`
@@ -217,7 +216,6 @@ export class WCCheckbox extends PropsedBase {
   toggle() {
     if (this.readonly || this.disabled) return
     this.checked = !this.checked
-    //this.value = this.value === 'on' ? 'off' : 'on'
     this.notify()
   }
   click = () => {
@@ -239,6 +237,9 @@ export class WCCheckbox extends PropsedBase {
 }
 declare global {
   interface HTMLElementTagNameMap {
-    'wc-checkbox': WCCheckbox
+    'wc-checkbox': WcCheckbox
+  }
+  interface HTMLElementEventMap {
+    changed: CustomEvent<CheckboxEvents['changed']>
   }
 }

@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/divider
+npm i @ui-wc/divider
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/divider'
+import {} from '@ui-wc/divider'
 
 // ...
 ```

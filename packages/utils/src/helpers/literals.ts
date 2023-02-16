@@ -7,7 +7,7 @@ export const html = (strings: TemplateStringsArray, ...values: string[]) => {
   const len = strings.length
   let acc = ''
   for (let i = 0; i < len; i++) {
-    acc += strings[i].replace(/(\n  )(\r  )(    )(\n)|(\r)/g, '')
+    acc += strings[i].replace(/(\n)(\r)/g, '')
     if (values[i]) {
       acc += values[i]
     }

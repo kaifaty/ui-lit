@@ -1,7 +1,7 @@
 import {css, html, LitElement} from 'lit'
 import {property} from 'lit/decorators.js'
 
-import {definable} from '@ui-lit/utils'
+import {definable} from '@ui-wc/utils'
 
 export class ListOptGroup extends definable(LitElement) {
   static styles = css`

@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/form
+npm i @ui-wc/form
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/form'
+import {} from '@ui-wc/form'
 
 // ...
 ```

@@ -25,7 +25,7 @@ header{
     position: relative;
     padding: 40px 50px;
     grid-column: 1 / 3;
-    background: hsl(20, 20%, 15%);
+    background: linear-gradient(220.39deg, #bb3c69 0%, #350046 83.73%);
     color: #fafafa;
 }
 header > div{
@@ -34,18 +34,18 @@ header > div{
     grid-template-columns: 1fr auto;
     gap: 5px;
 }
-header lit-theme-switcher{
+header wc-theme-switcher{
     position: absolute;
     right: 20px; 
     top: 10px;
 }
 
-header lit-header[level="1"]{
+header wc-header[level="1"]{
     display: flex;
     align-items: center;
     margin: 0;
 }
-header lit-header[level="5"]{
+header wc-header[level="5"]{
     margin-top: 1rem;
     font-weight: 300;
 }
@@ -53,6 +53,7 @@ header .zip{
     display: inline-block;
     margin-top: 10px;
 }
+
 main{
     position: relative;
     z-index: 0;
@@ -75,10 +76,10 @@ tree-view{
 ul{
     font-size: 18px;
 }
-lit-range{
+wc-range{
     width: 230px;
 }
-lit-nav-burger{
+wc-nav-burger{
     display: none;
 }
 

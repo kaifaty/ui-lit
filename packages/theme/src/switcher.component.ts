@@ -1,8 +1,8 @@
 import {css, html, LitElement} from 'lit'
 import {state} from 'lit/decorators.js'
 
-import {definable} from '@ui-lit/utils'
-import {LitButton} from '@ui-lit/button'
+import {definable} from '@ui-wc/utils'
+import {LitButton} from '@ui-wc/button'
 
 import {PREFIX} from './styles.map'
 import type {TTheme} from './types'

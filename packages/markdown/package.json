@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/markdown",
+  "name": "@ui-wc/markdown",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -11,9 +11,9 @@
     "UI kit",
     "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-lit/packages/markdown",
+  "homepage": "https://github.com/kaifaty/ui-wc/packages/markdown",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-lit/issues"
+    "url": "https://github.com/kaifaty/ui-wc/issues"
   },
   "license": "MIT",
   "author": "kaifaty",
@@ -40,10 +40,10 @@
     "last 4 chrome versions"
   ],
   "devDependencies": {
-    "@ui-lit/types": "*"
+    "@ui-wc/types": "*"
   },
   "peerDependencies": {
-    "@ui-lit/utils": "*",
+    "@ui-wc/utils": "*",
     "lit": "^2.0.0"
   },
   "targets": {
@@ -54,7 +54,7 @@
       "isLibrary": true,
       "optimize": true,
       "includeNodeModules": {
-        "@ui-lit/utils": false,
+        "@ui-wc/utils": false,
         "lit": false
       },
       "outputFormat": "esmodule"

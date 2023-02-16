@@ -1,13 +1,13 @@
 ## Installation
 
 ```sh
-npm i @ui-lit/types
+npm i @ui-wc/types
 ```
 
 ## Usage
 
 ```ts
-import {} from '@ui-lit/types'
+import {} from '@ui-wc/types'
 
 // ...
 ```

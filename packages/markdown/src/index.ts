@@ -3,8 +3,8 @@ import {property, state} from 'lit/decorators'
 import {unsafeHTML} from 'lit/directives/unsafe-html'
 import type MarkdownIt from 'markdown-it'
 
-import {definable, stylable} from '@ui-lit/utils'
-import type {Constructor} from '@ui-lit/types'
+import {definable, stylable} from '@ui-wc/utils'
+import type {Constructor} from '@ui-wc/types'
 
 import {androidStyles} from './styles'
 import {markdownCSSVars, PREFIX} from './styles.map'

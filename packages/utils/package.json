@@ -1,5 +1,5 @@
 {
-  "name": "@ui-lit/utils",
+  "name": "@ui-wc/utils",
   "version": "1.0.0",
   "private": false,
   "description": "",
@@ -9,9 +9,9 @@
     "lit-html-optimizer",
     "lit-html-minify"
   ],
-  "homepage": "https://github.com/kaifaty/ui-lit/packages/utils",
+  "homepage": "https://github.com/kaifaty/ui-wc/packages/utils",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-lit/issues"
+    "url": "https://github.com/kaifaty/ui-wc/issues"
   },
   "license": "MIT",
   "author": "kaifaty",
@@ -40,7 +40,7 @@
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "@ui-lit/types": "*",
+    "@ui-wc/types": "*",
     "@kaifat/utils": "^1.1.1"
   },
   "targets": {
@@ -60,8 +60,5 @@
       "distDir": "./dist/",
       "source": "./src/demo/index.html"
     }
-  },
-  "devDependencies": {
-    "minify-literals": "^0.2.3"
   }
 }

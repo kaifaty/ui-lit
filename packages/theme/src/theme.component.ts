@@ -7,17 +7,17 @@ import {
   formAssocCSSNames as formassoc,
   scrollbarCSSVarNames,
   inputCSSVarNames as input,
-} from '@ui-lit/utils'
+} from '@ui-wc/utils'
 
-import {LitButton} from '@ui-lit/button'
+import {LitButton} from '@ui-wc/button'
 
-import {LitCheckbox} from '@ui-lit/checkbox'
-import {LitCircle} from '@ui-lit/circlepercent'
-import {LitDivider} from '@ui-lit/divider'
-import {LitIcon} from '@ui-lit/icon'
-import {LitLink} from '@ui-lit/link'
-import {LitMarkdown} from '@ui-lit/markdown'
-import {LitMenu} from '@ui-lit/menu'
+import {LitCheckbox} from '@ui-wc/checkbox'
+import {LitCircle} from '@ui-wc/circlepercent'
+import {LitDivider} from '@ui-wc/divider'
+import {LitIcon} from '@ui-wc/icon'
+import {LitLink} from '@ui-wc/link'
+import {LitMarkdown} from '@ui-wc/markdown'
+import {LitMenu} from '@ui-wc/menu'
 import {noteCSSVarsNames as note} from '../note/styles'
 import {paginationCSSVarsNames as pagination} from '../pagination/style'
 import {panelCSSVarsNames as panel} from '../panel/styles'

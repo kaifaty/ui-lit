@@ -1,6 +1,6 @@
 import {TemplateResult} from 'lit'
 
-import type {FormAssociatedProps} from '@ui-lit/types'
+import type {FormAssociatedProps} from '@ui-wc/types'
 
 export type TSelectItem = {
   content: string | TemplateResult

@@ -1,4 +1,4 @@
-import type {Constructor} from '@ui-lit/types'
+import type {Constructor} from '@ui-wc/types'
 
 export type AccessorParam<T> = {
   name: string
@@ -58,10 +58,7 @@ export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>)
   }
 }
 
-export const withProps = <
-  P extends Record<string, unknown>,
-  T extends Constructor<HTMLElement> = Constructor<HTMLElement>,
->(
+export const withProps = <P extends Record<string, unknown>, T extends Constructor<HTMLElement> = Constructor<HTMLElement>>(
   superClass: T,
   props: AccessorParam<any>[],
 ) => {
@@ -88,3 +85,19 @@ export const withProps = <
     }
   } as any as T & Constructor<P>
 }
+
+export const createGetParams =
+  <T>(options: AccessorParam<T>['options']) =>
+  <T>(
+    name: string,
+    defaultValue: T,
+    accessors?: {
+      set?: AccessorParam<T>['set']
+      get?: AccessorParam<T>['get']
+    },
+  ): AccessorParam<T> => ({
+    name: name,
+    defaultValue: defaultValue,
+    options,
+    ...accessors,
+  })

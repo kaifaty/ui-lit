@@ -58,11 +58,13 @@ export class Doc extends statableLit(LitElement) {
                 </div>
               </div>
               <div class="buttons">
-                <wc-button primary target="_blank" href="https://github.com/kaifaty/ui-lit">
+                <wc-button variant="primary" target="_blank" href="https://github.com/kaifaty/ui-lit">
                   View on GitHub
                   <img width="24px" slot="suffix" src="${blacktocat}" />
                 </wc-button>
-                <wc-button href="https://github.com/kaifaty/ui-lit/archive/refs/heads/main.zip">Download .zip</wc-button>
+                <wc-button variant="text">Test button</wc-button>
+                <wc-button>No variant button</wc-button>
+                <wc-button variant="default" href="https://github.com/kaifaty/ui-lit/archive/refs/heads/main.zip">Download .zip</wc-button>
               </div>
             </div>
             <lit-theme-switcher></lit-theme-switcher>

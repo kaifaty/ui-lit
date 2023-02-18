@@ -74,7 +74,7 @@ describe('Test Button', async () => {
   })
   it('should switch ', async () => {
     const button = getButton()
-    button.type = 'switch'
+    button.variant = 'switch'
     let switched = false
     button.addEventListener('switchChanged', ((e: CustomEvent) => {
       switched = e.detail

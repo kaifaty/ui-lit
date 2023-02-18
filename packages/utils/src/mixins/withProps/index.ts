@@ -38,6 +38,9 @@ export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>)
       return currentValue
     },
     set(newValue: T) {
+      if (data.name === 'variant') {
+        console.log(data.name, newValue, target)
+      }
       let curr = currentValue
       if (data.get) {
         curr = data.get(target, currentValue) as any
@@ -46,8 +49,6 @@ export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>)
         if (!data.set(target, curr, newValue)) {
           return
         }
-      } else if (currentValue === newValue) {
-        return
       }
       currentValue = newValue
 
@@ -57,9 +58,7 @@ export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>)
     },
   })
   if (data.defaultValue !== undefined) {
-    queueMicrotask(() => {
-      ;(target as any)[data.name] = data.defaultValue
-    })
+    ;(target as any)[data.name] = data.defaultValue
   }
 }
 

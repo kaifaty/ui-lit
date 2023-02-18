@@ -17,7 +17,7 @@ const asyncRead = (path: string) => new Promise<string>((r) => readFile(path, 'u
 
 const getComponentPath = (name: string) =>
   new Promise<string[]>((r) => {
-    const path = `../../packages/${name}/**/styles.map.ts`
+    const path = `../../packages/${name}/**/${name}.component.ts`
     return glob(path, {}, (_, data) => {
       r(data)
     })
@@ -39,9 +39,12 @@ const getFilesData = async () => {
           acc += ` * @cssprop [${v[0]}=${v[1]}] - ${v[2]} \n`
           return acc
         }, '')
+        console.log(result)
 
         return `@CSS\n${result} * @CSS`
       })
+
+      console.log({hasReplacement, data})
       if (hasReplacement) {
         return new Promise((r) => writeFile(file, newFile, 'utf8', r))
       }

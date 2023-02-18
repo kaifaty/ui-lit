@@ -103,15 +103,15 @@ const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [checked, type,
  * @reflect [checked=false] {boolean} - checked state, based on value
  *
  * @CSS
- * @cssprop [--lit-checkbox-checkbox-background=#fff] - Background color of checkbox
- * @cssprop [--lit-checkbox-checkbox-border=1px solid #999] - Border of checkbox
- * @cssprop [--lit-checkbox-checkmark-color=hsl(100, 65%, 5%)] - Checkmark color
- * @cssprop [--lit-checkbox-checkmark-shadow-hover=0 0 2px #999] - checkmark-shadow-hover
- * @cssprop [--lit-checkbox-switcher-control-background=#fff] - switcher-control-background
- * @cssprop [--lit-checkbox-switcher-control-shadow=1px 1px 2px rgba(0,0,0,0.6)] - switcher-control-shadow
- * @cssprop [--lit-checkbox-switcher-off-background=hsl(0, 65%, 50%)] - Disabled switcher color
- * @cssprop [--lit-checkbox-switcher-on-background=hsl(110, 65%, 50%)] - Enabled switcher color
- * @cssprop [--lit-checkbox-switcher-shadow=inset 1px 1px 2px rgba(0,0,0,0.7)] - Shadow of switcher circle
+ * @cssprop [--wc-checkbox-checkbox-background=#fff] - Background color of checkbox 
+ * @cssprop [--wc-checkbox-checkbox-border=1px solid #999] - Border of checkbox 
+ * @cssprop [--wc-checkbox-checkmark-color=hsl(100, 65%, 5%)] - Checkmark color 
+ * @cssprop [--wc-checkbox-checkmark-shadow-hover=0 0 2px #999] - checkmark-shadow-hover 
+ * @cssprop [--wc-checkbox-switcher-control-background=#fff] - switcher-control-background 
+ * @cssprop [--wc-checkbox-switcher-control-shadow=1px 1px 2px rgba(0,0,0,0.6)] - switcher-control-shadow 
+ * @cssprop [--wc-checkbox-switcher-off-background=hsl(0, 65%, 50%)] - Disabled switcher color 
+ * @cssprop [--wc-checkbox-switcher-on-background=hsl(110, 65%, 50%)] - Enabled switcher color 
+ * @cssprop [--wc-checkbox-switcher-shadow=inset 1px 1px 2px rgba(0,0,0,0.7)] - Shadow of switcher circle 
  * @CSS
  *
  */

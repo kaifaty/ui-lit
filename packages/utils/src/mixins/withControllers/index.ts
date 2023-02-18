@@ -9,9 +9,7 @@ export interface ReactiveControllerHost extends HTMLElement {
   removeController(v: ReactiveController): void
 }
 
-export const withControllers = <T extends Constructor<HTMLElement> = Constructor<HTMLElement>>(
-  superClass: T,
-) => {
+export const withControllers = <T extends Constructor<HTMLElement> = Constructor<HTMLElement>>(superClass: T) => {
   return class WithProps extends superClass implements ReactiveControllerHost {
     private _controllers: ReactiveController[] = []
     addController(controller: ReactiveController) {
@@ -24,13 +22,11 @@ export const withControllers = <T extends Constructor<HTMLElement> = Constructor
       }
     }
     connectedCallback() {
-      //@ts-ignore
-      super.connectedCallback?.()
+      super.connectedCallback()
       this._controllers.forEach((c) => c.hostConnected())
     }
     disconnectedCallback() {
-      //@ts-ignore
-      super.disconnectedCallback?.()
+      super.disconnectedCallback()
       this._controllers.forEach((c) => c.hostDisconnected())
     }
   } as T & Constructor<ReactiveControllerHost>

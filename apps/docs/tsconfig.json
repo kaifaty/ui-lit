@@ -1,10 +1,8 @@
 {
   "compilerOptions": {
     "moduleResolution": "node",
-    "declarationDir": "./build/",
-    "rootDir": "./src",
     "baseUrl": "."
   },
-  "exclude": ["node_modules", "build"],
+  "exclude": ["node_modules", "dist"],
   "extends": "../../tsconfig.json"
 }

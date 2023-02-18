@@ -19,9 +19,9 @@
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
+  "main": "/dist/index.js",
   "source": "./src/index.ts",
-  "types": "build/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "/dist",
     "/package.json",
@@ -41,8 +41,7 @@
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "@ui-wc/utils": "*",
-    "lit": "^2.0.0"
+    "@ui-wc/utils": "*"
   },
   "dependencies": {
   },
@@ -54,8 +53,7 @@
       "isLibrary": true,
       "optimize": true,
       "includeNodeModules": {
-        "@kaifat/utils": false,
-        "lit": false
+        "@ui-wc/utils": false
       },
       "outputFormat": "esmodule"
     }

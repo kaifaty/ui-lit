@@ -250,11 +250,15 @@
           "slots": [
             {
               "description": "You can put some elements before content",
-              "name": "icon-before"
+              "name": "prefix"
             },
             {
               "description": "You can put some elements after content",
-              "name": "icon-after"
+              "name": "suffix"
+            },
+            {
+              "description": "default slot for content",
+              "name": ""
             }
           ],
           "members": [
@@ -265,63 +269,25 @@
             },
             {
               "kind": "field",
-              "name": "notificable",
-              "type": {
-                "text": "boolean"
-              },
-              "default": "false",
-              "description": "Notify on click. Render checked icon for a while."
-            },
-            {
-              "kind": "field",
-              "name": "tabindex",
+              "name": "_notifyTimeout",
               "type": {
                 "text": "number"
               },
-              "default": "0",
-              "description": "Tab index to native tabIntex of reflected inner conteiner. Pay attention - lowercase!"
-            },
-            {
-              "kind": "method",
-              "name": "click",
-              "privacy": "public",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
-              "description": "Click button action"
+              "privacy": "private",
+              "default": "0"
             },
             {
               "kind": "method",
               "name": "toggleSwitch",
-              "privacy": "public",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
               "description": "Toggle switchOn state for type=switch button."
             },
             {
               "kind": "method",
               "name": "submit",
-              "privacy": "public",
-              "return": {
-                "type": {
-                  "text": "void"
-                }
-              },
               "description": "Submit for type='submit' button"
             }
           ],
           "events": [
-            {
-              "name": "buttonClose",
-              "type": {
-                "text": "CustomEvent"
-              }
-            },
             {
               "name": "switchChanged",
               "type": {
@@ -336,6 +302,54 @@
             }
           ],
           "attributes": [
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Switcher state for type=switch button",
+              "name": "pressed",
+              "default": "false"
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Disable element",
+              "name": "disabled",
+              "default": "false"
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Loading button state. If defined - render spinner",
+              "name": "loading",
+              "default": "false"
+            },
+            {
+              "type": {
+                "text": "boolean"
+              },
+              "description": "Notify on click. Render checked icon for a while.",
+              "name": "notificable",
+              "default": "false"
+            },
+            {
+              "type": {
+                "text": "_blank | _parent | _self | _top"
+              },
+              "description": "Target for `link`. Work with `href` prop.",
+              "name": "target",
+              "default": "_self"
+            },
+            {
+              "type": {
+                "text": "string | null"
+              },
+              "description": "Button can be `link` if href defined",
+              "name": "href",
+              "default": "null"
+            },
             {
               "type": {
                 "text": "start | center | end"
@@ -354,7 +368,7 @@
             },
             {
               "type": {
-                "text": "submit | button | switch | close"
+                "text": "'text' | 'primary' | 'danger' | 'success' | 'neutral' | 'warning'"
               },
               "description": "Type of button.",
               "name": "type",
@@ -390,14 +404,6 @@
               },
               "description": "Primary style",
               "name": "primary",
-              "default": "false"
-            },
-            {
-              "type": {
-                "text": "boolean"
-              },
-              "description": "justify space between on button content",
-              "name": "between",
               "default": "false"
             }
           ],

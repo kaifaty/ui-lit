@@ -35,6 +35,7 @@
     "build:mb": "microbundle",
     "dev": "parcel watch",
     "cem": "custom-elements-manifest analyze --config ./cem.config.mjs --dev",
+    "lint": "tsc --noEmit", 
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
   },

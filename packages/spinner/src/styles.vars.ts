@@ -3,4 +3,4 @@ export const spinnerCSSVars = {
   color: 'rgba(0,0,0,0.5)',
 } as const
 
-export const PREFIX = '--lit-spinner-'
+export const PREFIX = '--wc-spinner-'

@@ -19,9 +19,9 @@
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
+  "main": "./dist/index.js",
   "source": "./src/index.ts",
-  "types": "build/index.d.ts",
+  "types": "./dist/index.d.ts",
   "files": [
     "/dist",
     "/package.json",
@@ -35,6 +35,7 @@
     "demo": "parcel serve --target=demo",
     "dev": "parcel watch",
     "test": "tsx src/index.test.ts",
+    "lint": "tsc", 
     "cem": "custom-elements-manifest analyze --config ./cem.config.mjs",
     "test:watch": "tsx watch src/index.test.ts"
   },
@@ -44,6 +45,8 @@
   "peerDependencies": {
     "@kaifat/utils": "^1.1.1",
     "@ui-wc/link": "*",
+    "@ui-wc/spinner": "*",
+    "@ui-wc/utils": "*",
     "@ui-wc/icon": "*"
   },
   "targets": {
@@ -55,9 +58,10 @@
       "optimize": true,
       "includeNodeModules": {
         "@kaifat/utils": false,
+        "@ui-wc/spinner": false,
+        "@ui-wc/utils": false,
         "@ui-wc/link": false,
-        "@ui-wc/icon": false,
-        "lit": false
+        "@ui-wc/icon": false
       },
       "outputFormat": "esmodule"
     },

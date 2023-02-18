@@ -1,38 +1,24 @@
 import glob from 'glob'
 import {readFile, writeFile} from 'fs'
 import {checkboxCCSVarsMap, CHECKBOX_PREFIX} from '../../../../packages/checkbox/src/styles.map'
+import {buttonCCSVarsMap, BUTTON_PREFIX} from '../../../../packages/button/src/styles.map'
 
-/*
-import {
-  buttonCCSVarsMap,
-  PREFIX as buttonPrefix,
-} from "../src/components/button/styles.keys";
-import {
-  checkboxCCSVarsMap,
-  PREFIX as checkboxPrefix,
-} from "../src/components/checkbox/styles.keys";
-*/
 const Files = {
-  //button: { map: buttonCCSVarsMap, prefix: buttonPrefix },
+  button: {map: buttonCCSVarsMap, prefix: BUTTON_PREFIX},
   checkbox: {map: checkboxCCSVarsMap, prefix: CHECKBOX_PREFIX},
 } as const
 
 const getKeys = (data: Record<string, string | readonly [string | number, string]>, preffix: string) =>
   Object.keys(data)
-    .map((a) => [
-      preffix + a,
-      Array.isArray(data[a]) ? data[a][0] : data[a],
-      Array.isArray(data[a]) ? data[a][1] : a,
-    ])
+    .map((a) => [preffix + a, Array.isArray(data[a]) ? data[a][0] : data[a], Array.isArray(data[a]) ? data[a][1] : a])
     .sort((a, b) => (a[0] > b[0] ? 1 : a[0] === b[0] ? 0 : -1))
 
 const asyncRead = (path: string) => new Promise<string>((r) => readFile(path, 'utf-8', (_, data) => r(data)))
 
 const getComponentPath = (name: string) =>
   new Promise<string[]>((r) => {
-    const path = `packages/${name}/**/styles.map.ts`
+    const path = `../../packages/${name}/**/styles.map.ts`
     return glob(path, {}, (_, data) => {
-      console.log(_, data)
       r(data)
     })
   })
@@ -41,7 +27,6 @@ const getFilesData = async () => {
   return Promise.all(
     Object.keys(Files).map(async (name) => {
       const list = await getComponentPath(name)
-      console.log({list})
       const file = list[0]
       const data = await asyncRead(file)
       let hasReplacement = false
@@ -65,3 +50,5 @@ const getFilesData = async () => {
 }
 
 getFilesData()
+
+console.log(1234)

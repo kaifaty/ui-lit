@@ -12,6 +12,8 @@ body{
     padding: 0;
     margin: 0;
     height: 100%;
+    background-color: rgb(13, 17, 23);
+    color: #fafafa;
 }
 nav{
     padding: 40px 30px;
@@ -19,14 +21,18 @@ nav{
     flex-direction: column;
 }
 .wrapper{
-    width: 100%;
+    width: 900px;
+    margin: 0 auto;
+}
+.v-center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 header{
     position: relative;
     padding: 40px 50px;
     grid-column: 1 / 3;
-    background: linear-gradient(220.39deg, #bb3c69 0%, #350046 83.73%);
-    color: #fafafa;
 }
 header > div{
     box-sizing: border-box;
@@ -39,13 +45,25 @@ header wc-theme-switcher{
     right: 20px; 
     top: 10px;
 }
-
+.logo{
+    width: 150px;
+    height: 150px;
+}
+header .logo-wrapper{
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-self: start;
+    align-self: center;
+    gap: 40px;
+}
 header wc-header[level="1"]{
     display: flex;
     align-items: center;
     margin: 0;
 }
-header wc-header[level="5"]{
+header wc-header[level="4"],
+header wc-header[level="5"]
+{
     margin-top: 1rem;
     font-weight: 300;
 }

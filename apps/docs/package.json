@@ -28,39 +28,6 @@
     "/src"
   ],
   
-  "parcel-namer-struct": [
-    {
-      "match": "/index.html",
-      "dest": "/"
-    },
-    {
-      "type": [
-        "png",
-        "jpg",
-        "svg"
-      ],
-      "dest": "/images/"
-    },
-    {
-      "type": [
-        "woff",
-        "woff2"
-      ],
-      "dest": "/fonts/"
-    },
-    {
-      "type": [
-        "js"
-      ],
-      "dest": "/js/"
-    },
-    {
-      "type": [
-        "css"
-      ],
-      "dest": "/styles/"
-    }
-  ],
   "scripts": {
     "build": "rimraf ./build/ && rimraf ./dist/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
@@ -79,8 +46,9 @@
   ],
   "dependencies": {
     "lit": "^2.6.1",
-    "@ui-lit/button": "*",
-    "@ui-lit/utils": "*"
+    "@ui-wc/button": "*",
+    "@ui-wc/checkbox": "*",
+    "@ui-wc/utils": "*"
   },
   "targets": {
     "build": {
@@ -97,6 +65,9 @@
       "distDir": "./dist/tools",
       "source": "./src/tools/generate-css.ts",
       "includeNodeModules": true,
+      "isLibrary": false,
+      "optimize": false,
+      "scopeHoist": false,
       "outputFormat": "commonjs"
     }
   }

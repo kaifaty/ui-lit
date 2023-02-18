@@ -2,6 +2,7 @@ import {statableLit} from '@statx/lit'
 import {css, html, LitElement} from 'lit'
 import {WcApiViewer} from '@ui-wc/api-viewer'
 import {WcHeader} from '@ui-wc/header'
+import {WcButton} from '@ui-lit/button'
 
 // import {LitButton} from '@ui-lit/button'
 // import {LitForm} from '@ui-lit/form'
@@ -24,9 +25,10 @@ LitHeader.define()
 */
 WcApiViewer.define()
 WcHeader.define()
+WcButton.define()
 
 const json = new URL('../custom-elements.json', import.meta.url) as unknown as string
-const logo = new URL('./logo.png', import.meta.url) as unknown as string
+const logo = new URL('./logo.svg', import.meta.url) as unknown as string
 const blacktocat = new URL('./assets/blacktocat.png', import.meta.url) as unknown as string
 
 export class Doc extends statableLit(LitElement) {
@@ -48,16 +50,19 @@ export class Doc extends statableLit(LitElement) {
         <div class="wrapper">
           <header>
             <div>
-              <div>
-                <wc-header level="1"><img src="${logo}" style="width: 80px; height: 80px;" />UI WC</wc-header>
-                <wc-header level="5">Native Web-components UI library</wc-header>
+              <div class="logo-wrapper">
+                <img src="${logo}" class="logo" />
+                <div class="v-center">
+                  <wc-header level="1">Wuik</wc-header>
+                  <wc-header level="4">Web-components UI kit</wc-header>
+                </div>
               </div>
               <div class="buttons">
-                <lit-button primary target="_blank" href="https://github.com/kaifaty/ui-lit">
+                <wc-button primary target="_blank" href="https://github.com/kaifaty/ui-lit">
                   View on GitHub
-                  <img width="16px" slot="icon-after" src="${blacktocat}" />
-                </lit-button>
-                <lit-button href="https://github.com/kaifaty/ui-lit/archive/refs/heads/main.zip">Download .zip</lit-button>
+                  <img width="24px" slot="suffix" src="${blacktocat}" />
+                </wc-button>
+                <wc-button href="https://github.com/kaifaty/ui-lit/archive/refs/heads/main.zip">Download .zip</wc-button>
               </div>
             </div>
             <lit-theme-switcher></lit-theme-switcher>
@@ -72,6 +77,6 @@ export class Doc extends statableLit(LitElement) {
   }
 }
 
-if (!customElements.get('ui-lit-doc')) {
-  customElements.define('ui-lit-doc', Doc)
+if (!customElements.get('wuik-doc')) {
+  customElements.define('wuik-doc', Doc)
 }

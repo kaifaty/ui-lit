@@ -12,15 +12,18 @@ export type AccessorParam<T> = {
 }
 
 const defineAttr = (target: HTMLElement, name: string, value: unknown) => {
-  if (typeof value === 'string') {
+  if (typeof value === 'number') {
+    target.setAttribute(name, String(value))
+  } else if (typeof value === 'string') {
     target.setAttribute(name, value)
-  }
-  if (typeof value === 'boolean') {
+  } else if (typeof value === 'boolean') {
     if (value) {
       target.setAttribute(name, '')
     } else {
       target.removeAttribute(name)
     }
+  } else if (typeof value === null) {
+    target.removeAttribute(name)
   }
 }
 
@@ -53,8 +56,10 @@ export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>)
       }
     },
   })
-  if (data.options?.reflect && data.options?.attribute && data.defaultValue) {
-    defineAttr(target, data.name, data.defaultValue)
+  if (data.defaultValue !== undefined) {
+    queueMicrotask(() => {
+      ;(target as any)[data.name] = data.defaultValue
+    })
   }
 }
 

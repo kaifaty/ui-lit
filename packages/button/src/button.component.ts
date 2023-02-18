@@ -1,26 +1,39 @@
 import {WcIcon} from '@ui-wc/icon'
 
-import {definable, withProps, html, css, createGetParams, focusable, stylable, createTemplate} from '@ui-wc/utils'
+import {definable, withProps, html, css, noselect, createGetParams, focusable, stylable, createTemplate} from '@ui-wc/utils'
 
 import {LinkTarget, WcLink} from '@ui-wc/link'
-// import {LitSpinner} from '@ui-wc/spinner'
+import {WcSpinner} from '@ui-wc/spinner'
 
-import {buttonCCSVarsMap, PREFIX} from './styles.map'
-import type {ButtonEvents, ButtonSize, ButtonType} from './types'
+import {buttonCCSVarsMap, BUTTON_PREFIX} from './styles.map'
+
+export type ButtonEvents = {
+  switchChanged: boolean
+  submitForm: boolean
+  buttonClose: boolean
+}
+
+type ButtonType = 'submit' | 'button' | 'switch' | 'close'
+type ButtonVariant = 'text' | 'primary' | 'danger' | 'success' | 'neutral' | 'warning'
+type ButtonSize = 'small' | 'medium' | 'large'
 
 const notifyOnClick = Symbol()
 const getParams = createGetParams({
-  attribute: true,
+  reflect: true,
 })
+
+const getButton = (target: HTMLElement) => {
+  return target.shadowRoot.querySelector<HTMLLinkElement>('#button')
+}
 
 const loading = getParams('loading', false)
 const disabled = getParams('disabled', false)
 const pressed = getParams('pressed', false, {
   set(target, _, value) {
     if ((target as HTMLElement & Props).type === 'switch') {
-      target.querySelector('#button').ariaPressed = value.toString()
+      getButton(target).ariaPressed = value.toString()
     } else {
-      target.querySelector('#button').ariaPressed = 'undefined'
+      getButton(target).ariaPressed = 'undefined'
     }
     return true
   },
@@ -28,39 +41,49 @@ const pressed = getParams('pressed', false, {
 const notificable = getParams('notificable', false)
 const tabIndex = getParams('tabIndex', 0, {
   set(target, _, value) {
-    if ((target as HTMLElement & Props).href) {
-      target.querySelector<HTMLButtonElement>('#link').tabIndex = value
-      target.querySelector<HTMLButtonElement>('#button').tabIndex = -1
-    } else {
-      target.querySelector<HTMLButtonElement>('#link').tabIndex = -1
-      target.querySelector<HTMLButtonElement>('#button').tabIndex = value
-    }
+    getButton(target).setAttribute('tabIndex', value.toString())
     return true
   },
 })
 const href = getParams<string | null>('href', null, {
   set(target, _, value) {
-    target.querySelector<HTMLLinkElement>('#link').href = value
+    target.shadowRoot.querySelector<HTMLLinkElement>('#button').href = value
     return true
   },
 })
 const target = getParams<LinkTarget>('target', '_self', {
   set(target, _, value) {
-    target.querySelector<HTMLLinkElement>('#link').target = value
+    target.shadowRoot.querySelector<HTMLLinkElement>('#button').target = value
     return true
   },
 })
 const type = getParams<ButtonType>('type', 'button', {
   set(target, _, value) {
     if (value === 'switch') {
-      target.querySelector('#button').ariaPressed = (target as HTMLElement & Props).pressed.toString()
+      getButton(target).ariaPressed = (target as HTMLElement & Props).pressed.toString()
     } else {
-      target.querySelector('#button').ariaPressed = 'undefined'
+      getButton(target).ariaPressed = 'undefined'
     }
     return true
   },
 })
 const size = getParams<ButtonSize>('size', 'medium')
+
+const getXY = (e: TouchEvent | MouseEvent, target: HTMLElement) => {
+  const rect = target.getBoundingClientRect()
+
+  if ('touches' in e) {
+    return {
+      x: e.targetTouches[0].clientX - rect.x,
+      y: e.targetTouches[0].clientY - rect.y,
+    }
+  }
+
+  return {
+    x: e.clientX - rect.x,
+    y: e.clientY - rect.y,
+  }
+}
 
 type Props = {
   loading: boolean
@@ -74,31 +97,20 @@ type Props = {
   size: ButtonSize
 }
 
-/**
- * 
-      @focus="${this._onFocus}"
-      @blur="${this._onBlur}"
-      @mouseover="${this._onMouseOver}"
-      @mouseout="${this._onMouseOut}"
-      @mousedown="${this._onMouseDown}"
-      @touchstart="${this._onTouchstart}"
-      @touchcancel="${this._endPress}"
-      @touchend="${this._endPress}"
- */
-const template = createTemplate(html`
-  <wc-link type="button" id="link">
-    <button id="button" class="button wrapper noselect">
-      <wc-icon id="checkmark" icon="checkmark"></wc-icon>
-      <wc-spinner small id="spinner"></wc-spinner>
-      <slot id="icon-before" name="icon-before"></slot>
-      <div part="content" class="content"><slot></slot></div>
-      <slot name="icon-after"></slot>
-    </button>
-  </wc-link>
-`)
+const template = createTemplate(html` <a id="button" class="noselect" part="base">
+  <wc-icon id="checkmark" icon="checkmark"></wc-icon>
+  <wc-spinner id="spinner"></wc-spinner>
+  <slot part="preffix" name="preffix"></slot>
+  <slot part="label"></slot>
+  <slot part="suffix" name="suffix"></slot>
+</a>`)
 
-// noselect,
-const Base = stylable(definable(HTMLElement), buttonCCSVarsMap, PREFIX)
+const start = Symbol()
+const end = Symbol()
+const blur = Symbol()
+const focus = Symbol()
+const keydown = Symbol()
+const Base = focusable(stylable(definable(HTMLElement), buttonCCSVarsMap, BUTTON_PREFIX))
 const BaseWithProps = withProps<Props, typeof Base>(Base, [loading, tabIndex, notificable, pressed, href, target, type, disabled, size])
 
 /**
@@ -108,37 +120,32 @@ const BaseWithProps = withProps<Props, typeof Base>(Base, [loading, tabIndex, no
  * @attr {boolean} [pressed=false] - Switcher state for type=switch button
  * @attr {boolean} [disabled=false] - Disable element
  * @attr {boolean} [loading=false] - Loading button state. If defined - render spinner
- * @attr {boolean} [loading=notificable] - Notify on click. Render checked icon for a while.
+ * @attr {boolean} [notificable=false] - Notify on click. Render checked icon for a while.
+ * @attr {boolean} [outline=false] - Use the outline attribute to draw outlined buttons with transparent backgrounds.
  *
  *
- * === tabIndex ===
- * @attr {number} [tabIndex=0] - Tab index
  *
- * === target ===
- * @attr {_blank | _parent | _self | _top} [target=_self] - Target for `link`. Work with `href` prop.
  *
- * === href ===
+ * @attr {'_blank' | '_parent' | '_self' | '_top'} [target='_self'] - Target for `link`. Work with `href` prop.
  * @attr {string | null} [href=null] - Button can be `link` if href defined
+ * @attr {'start' | 'center' | 'end'} [align='center'] - Align of button content
+ * @attr {'small' | 'medium' | 'large'} [size='medium'] - Use the size attribute to change a button's size.
  *
- * === align ===
- * @attr {start | center | end} [align=center] - Align of button content
+ * @attr {'submit' | 'button' | 'switch' | 'close'} [type='button'] - Use type to change button behavour
  *
- * === size ===
- * @attr {small | medium | large} [size=medium] - Size
- *
- * === type ===
- * @attr {submit | button | switch | close} [type=button] - Type of button.
+ * @attr {'text' | 'primary' | 'danger' | 'success' | 'neutral' | 'warning'} [variant='default'] - Use the variant attribute to set the button's variant.
  *
  *
- * @attr {boolean} [borderless=false] - Borderless element
- * @attr {boolean} [success=false] - Success
- * @attr {boolean} [danger=false] - Danger style
- * @attr {boolean} [primary=false] - Primary style
- * @attr {boolean} [between=false] - justify space between on button content
  *
+ * @slot prefix - You can put some elements before content
+ * @slot suffix - You can put some elements after content
+ * @slot - default slot for content
  *
- * @slot icon-before - You can put some elements before content
- * @slot icon-after - You can put some elements after content
+ * @csspart base - The component's base wrapper.
+ * @csspart label - The button's label.
+ * @csspart prefix - The container that wraps the prefix.
+ * @csspart suffix - The container that wraps the suffix.
+ * @csspart caret - The button's caret icon, an `<sl-icon>` element.
  *
  * @CSS
  * @cssprop [--lit-buttonbackground=initial] - background
@@ -192,16 +199,37 @@ const BaseWithProps = withProps<Props, typeof Base>(Base, [loading, tabIndex, no
  *
  */
 export class WcButton extends BaseWithProps {
-  static define(name?: string) {
-    // LitSpinner.define()
+  static define() {
+    WcSpinner.define()
     WcIcon.define()
     WcLink.define()
-    super.define(name)
+    super.define()
   }
 
   /** @ignore */
   static styles = [
+    noselect,
     css`
+      #checkmark {
+        display: none;
+      }
+      #button[checkmark] {
+        width: var(--width);
+      }
+      #button[checkmark] #checkmark {
+        display: block;
+      }
+      #button[checkmark] :not(#checkmark) {
+        display: none;
+      }
+      wc-spinner {
+        height: 12.8px;
+        width: 12.8px;
+        justify-self: center;
+      }
+      wc-link {
+        width: 100%;
+      }
       :host {
         ${this.cssKey('color')}: ${this.cssVar('color')};
         --click-x: 0;
@@ -209,62 +237,49 @@ export class WcButton extends BaseWithProps {
         --radiant: 5%;
         box-sizing: border-box;
         display: ${this.cssVar('display')};
+        height: ${this.cssVar('height')};
         position: relative;
       }
       :host(:not([href])) wc-link {
         display: contents;
       }
-      :host([size='small']) .wrapper {
+      :host([size='small']) #button {
         padding: ${this.cssVar('small-padding')};
         font-size: ${this.cssVar('small-font-size')};
+        line-height: ${this.cssVar('small-height')};
       }
-      :host([size='large']) .wrapper {
+      :host([size='large']) #button {
         padding: ${this.cssVar('large-padding')};
         font-size: ${this.cssVar('large-font-size')};
+        line-height: ${this.cssVar('large-height')};
       }
 
       :host([size='small']) {
         height: ${this.cssVar('small-height')};
       }
-      :host([size='medium']) {
-        height: ${this.cssVar('height')};
-      }
       :host([size='large']) {
         height: ${this.cssVar('large-height')};
+        line-height: ${this.cssVar('height')};
       }
 
       :host([disabled]),
       :host([loading]) {
         pointer-events: none;
       }
-      :host([disabled]) .wrapper {
+      :host([disabled]) #button {
         opacity: 0.4;
       }
       :host(:not([loading])) #spinner {
         display: none;
       }
 
-      :host([between]) .wrapper {
+      :host([between]) #button {
         justify-content: space-between;
       }
 
-      #checkmark {
-        display: none;
-      }
-      .wrapper[checkmark] {
-        width: var(--width);
-      }
-      .wrapper[checkmark] #checkmark {
-        display: block;
-      }
-      .wrapper[checkmark] :not(#checkmark) {
-        display: none;
-      }
-
-      .wrapper {
+      #button {
         -webkit-appearance: none;
         -webkit-tap-highlight-color: transparent;
-        align-items: center;
         background-color: ${this.cssVar('background')};
         border-radius: ${this.cssVar('border-radius')};
         border: ${this.cssVar('border')};
@@ -275,85 +290,81 @@ export class WcButton extends BaseWithProps {
         font-family: inherit;
         font-size: ${this.cssVar('font-size')};
         font-weight: ${this.cssVar('weight')};
-        gap: ${this.cssVar('icon-gap')};
+        gap: ${this.cssVar('gap')};
         grid-auto-flow: column;
         height: 100%;
         justify-content: ${this.cssVar('justify')};
         letter-spacing: ${this.cssVar('letter-spacing')};
+
+        line-height: ${this.cssVar('height')};
         outline: ${this.cssVar('outline')};
         overflow: hidden;
         padding: ${this.cssVar('padding')};
         position: relative;
         text-transform: ${this.cssVar('text-transform')};
+        text-decoration: none;
         white-space: nowrap;
         width: 100%;
+        contain: content;
       }
-      .content {
-        display: flex;
+      ::slotted(*) {
+        align-self: center;
       }
-      :host(:not([type='switch'])[hover]) .wrapper {
+      :host(:not([type='switch'])[hover]) #button {
+        color: ${this.cssVar('color-hover')};
         background-color: ${this.cssVar('background-hover')};
       }
-      :host(:not([type='switch'])[pressed]) .wrapper {
+      :host(:not([type='switch'])[pressed]) #button {
         background: radial-gradient(
           circle at var(--click-x) var(--click-y),
           ${this.cssVar('ripple')} 5px,
           ${this.cssVar('background-hover')} var(--radiant)
         );
       }
-
-      :host .wrapper:focus {
+      :host #button:focus {
         outline: ${this.cssVar('outline-focus')};
       }
-      :host([loading]) .wrapper {
+      :host([loading]) #button {
         cursor: initial;
       }
-      wc-spinner {
-        height: 12.8px;
-        width: 12.8px;
-        justify-self: center;
-      }
-      wc-link {
-        width: 100%;
-      }
 
-      :host([type='switch']) .wrapper {
+      :host([type='switch']) #button {
         color: ${this.cssVar('switch-color')};
         ${this.cssKey('color')}: ${this.cssVar('switch-color')};
       }
-      :host([type='switch'][switchOn]) .wrapper {
+      :host([type='switch'][switchOn]) #button {
         color: ${this.cssVar('switch-on-color')};
         ${this.cssKey('color')}: ${this.cssVar('switch-on-color')};
         background-color: ${this.cssVar('switch-on-background')};
       }
-      :host([type='switch']) .wrapper:focus {
+      :host([type='switch']) #button:focus {
         outline: ${this.cssVar('switch-outline-focus')};
         border: ${this.cssVar('switch-outline-focus')};
       }
-      :host([type='switch'][switchOn]) .wrapper:focus {
+      :host([type='switch'][switchOn]) #button:focus {
         outline: ${this.cssVar('switch-on-outline-focus')};
         border: ${this.cssVar('switch-on-outline-focus')};
       }
 
-      :host([borderless]) .wrapper,
-      :host([borderless]) .wrapper.hover {
+      :host([borderless]) #button,
+      :host([borderless][hover]) #button {
         border: none;
       }
 
-      :host([primary]) .wrapper {
+      :host([primary]) #button {
         color: ${this.cssVar('primary-color')};
         background: ${this.cssVar('primary-background')};
         border: ${this.cssVar('primary-border')};
         ${this.cssKey('color')}: ${this.cssVar('primary-background')};
       }
-      :host([primary]) .wrapper:focus {
+      :host([primary]) #button:focus {
         outline: ${this.cssVar('primary-outline-focus')};
       }
 
-      :host([primary][hover]) .wrapper {
+      :host([primary][hover]) #button {
         background-color: ${this.cssVar('primary-background-hover')};
       }
-      :host([primary][pressed]) .wrapper {
+      :host([primary][pressed]) #button {
         background: radial-gradient(
           circle at var(--click-x) var(--click-y),
           ${this.cssVar('primary-ripple')} 5px,
@@ -364,19 +375,19 @@ export class WcButton extends BaseWithProps {
       :host([success]) {
         ${this.cssKey('color')}: ${this.cssVar('success-color')};
       }
-      :host([success]) .wrapper {
+      :host([success]) #button {
         color: ${this.cssVar('success-color')};
         background: ${this.cssVar('success-background')};
         border: ${this.cssVar('success-border')};
         ${this.cssKey('color')}: ${this.cssVar('success-color')};
       }
-      :host([success]) .wrapper:focus {
+      :host([success]) #button:focus {
         outline: ${this.cssVar('success-outline-focus')};
       }
-      :host([success][hover]) .wrapper {
+      :host([success][hover]) #button {
         background-color: ${this.cssVar('success-background-hover')};
       }
-      :host([success][pressed]) .wrapper {
+      :host([success][pressed]) #button {
         background: radial-gradient(
           circle at var(--click-x) var(--click-y),
           ${this.cssVar('success-ripple')} 5px,
@@ -387,19 +398,19 @@ export class WcButton extends BaseWithProps {
       :host([danger]) {
         ${this.cssKey('color')}: ${this.cssVar('danger-color')};
       }
-      :host([danger]) .wrapper {
+      :host([danger]) #button {
         ${this.cssKey('color')}: ${this.cssVar('danger-color')};
         background: ${this.cssVar('danger-background')};
         border: ${this.cssVar('danger-border')};
         color: ${this.cssVar('danger-color')};
       }
-      :host([danger]) .wrapper:focus {
+      :host([danger]) #button:focus {
         outline: ${this.cssVar('danger-outline-focus')};
       }
-      :host([danger][hover]) .wrapper {
+      :host([danger][hover]) #button {
         background-color: ${this.cssVar('danger-background-hover')};
       }
-      :host([danger][pressed]) .wrapper {
+      :host([danger][pressed]) #button {
         background: radial-gradient(
           circle at var(--click-x) var(--click-y),
           ${this.cssVar('danger-ripple')} 5px,
@@ -409,129 +420,53 @@ export class WcButton extends BaseWithProps {
     `,
   ]
 
+  private _notifyTimeout = 0
+
   constructor() {
     super()
     this.shadowRoot.append(template.content.cloneNode(true))
-    this.shadowRoot.querySelector('#button').addEventListener('click', this.click.bind(this))
+    this.addEventListener('mouseover', () => this.setAttribute('hover', ''))
+    this.addEventListener('mouseout', () => this.removeAttribute('hover'))
+    this.addEventListener('mousedown', this[start])
+    this.addEventListener('touchstart', this[start])
+    this.addEventListener('touchend', this[end])
+    this.addEventListener('touchcancel', this[end])
+    this.addEventListener('blur', this[blur])
+    this.addEventListener('focus', this[focus])
+  }
+  connectedCallback() {
+    super.connectedCallback?.()
+    setTimeout(() => {
+      if (this.hasAttribute('autofocus')) {
+        this.focus()
+      }
+    })
   }
 
   /** @ignore  */
-  private _notifyTimeout = 0
 
+  [blur] = () => {
+    document.removeEventListener('keydown', this[keydown])
+  };
   /** @ignore  */
-  private _radiant = 5
-
-  /** @ignore  */
-  private _animationFrame = 0
-
-  /** @ignore  */
-  private _pressed = false
-
-  // ==== Events ====
-
-  // +++ Ripple +++
-  /** @ignore  */
-  private _startAnimation = () => {
-    if (this._radiant < 1000 && this._pressed) {
-      this._radiant += 20
-      this.style.setProperty('--radiant', this._radiant + 'px')
-      this._animationFrame = requestAnimationFrame(this._startAnimation)
-    }
-  }
-
-  /** @ignore  */
-  private _onTouchstart(e: TouchEvent) {
-    this._startPress(e.touches[0].clientX, e.touches[0].clientY)
-    document.addEventListener('touchend', this._endPress)
-    document.addEventListener('touchcancel', this._endPress)
-  }
-
-  /** @ignore  */
-  private _onMouseOver() {
-    this.setAttribute('hover', '')
-  }
-
-  /** @ignore  */
-  private _onMouseOut() {
-    this.removeAttribute('hover')
-  }
-
-  /** @ignore  */
-  private _onMouseDown(e: MouseEvent) {
-    this._startPress(e.clientX, e.clientY)
-    document.addEventListener('mouseup', this._endPress)
-  }
-
-  /** @ignore  */
-  private _startPress(x: number, y: number) {
-    const rect = this.getBoundingClientRect()
-    this._pressed = true
-    this.setAttribute('pressed', '')
-    const _x = x - rect.x
-    const _y = y - rect.y
-    this.style.setProperty('--click-x', _x + 'px')
-    this.style.setProperty('--click-y', _y + 'px')
-    this._startAnimation()
-  }
-
-  /** @ignore  */
-  private _endPress = () => {
-    this._pressed = false
-    this._radiant = 5
-    cancelAnimationFrame(this._animationFrame)
-    this.removeAttribute('pressed')
-    this.removeAttribute('hover')
-    document.removeEventListener('mouseup', this._endPress)
-    document.removeEventListener('touchend', this._endPress)
-    document.removeEventListener('touchcancel', this._endPress)
-  }
-
-  // --- Ripple ---
-
-  /** @ignore  */
-  private _onBlur() {
-    document.removeEventListener('keydown', this._onKeyDown)
-  }
-
-  /** @ignore  */
-  private _onFocus() {
-    document.addEventListener('keydown', this._onKeyDown)
-  }
-
-  /** @ignore  */
-  private _onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      this.submit()
-      e.preventDefault()
-    }
+  [focus] = () => {
+    document.addEventListener('keydown', this[keydown])
   };
 
-  [notifyOnClick]() {
-    if (this.notificable && !this._notifyTimeout) {
-      const button = this.shadowRoot.querySelector<HTMLButtonElement>('#button')
-      this.style.setProperty('--width', this.clientWidth + 'px')
-      button.setAttribute('checkmark', '')
-      clearTimeout(this._notifyTimeout)
-
-      this._notifyTimeout = window.setTimeout(() => {
-        button.removeAttribute('width')
-        button.removeAttribute('checkmark')
-        this._notifyTimeout = 0
-      }, 1000)
-    }
-  }
-
-  get isUnavailable() {
-    return this.disabled || this.loading || this.href || this._notifyTimeout
-  }
-
-  /**
-   * Click button action
-   */
-  click() {
+  /** @ignore  */
+  [start] = (e: TouchEvent | MouseEvent) => {
+    if (this.isUnavailable) return
     window.navigator.vibrate?.(20)
 
-    if (this.isUnavailable) return
+    const {x, y} = getXY(e, this)
+
+    if (!('touches' in e)) {
+      document.addEventListener('mouseup', this[end])
+    }
+
+    this.setAttribute('pressed', '')
+    this.style.setProperty('--click-x', x + 'px')
+    this.style.setProperty('--click-y', y + 'px')
 
     if (this.type === 'submit') {
       this.submit()
@@ -548,6 +483,43 @@ export class WcButton extends BaseWithProps {
     }
 
     this[notifyOnClick]()
+  };
+
+  /** @ignore  */
+  [end] = () => {
+    this.removeAttribute('pressed')
+    this.removeAttribute('hover')
+    document.removeEventListener('mouseup', this[end])
+  };
+
+  /** @ignore  */
+  [keydown] = (e: KeyboardEvent) => {
+    console.log('down', document.activeElement)
+    if (e.key === 'Enter' || e.key === ' ') {
+      this.submit()
+      e.preventDefault()
+    }
+  };
+
+  /** @ignore  */
+  [notifyOnClick]() {
+    if (this.notificable && !this._notifyTimeout) {
+      const button = this.shadowRoot.querySelector<HTMLButtonElement>('#button')
+      this.style.setProperty('--width', this.clientWidth + 'px')
+      button.setAttribute('checkmark', '')
+      clearTimeout(this._notifyTimeout)
+
+      this._notifyTimeout = window.setTimeout(() => {
+        button.removeAttribute('width')
+        button.removeAttribute('checkmark')
+        this._notifyTimeout = 0
+      }, 1000)
+    }
+  }
+
+  /** @ignore  */
+  get isUnavailable() {
+    return this.disabled || this.loading || this.href || this._notifyTimeout
   }
 
   /**

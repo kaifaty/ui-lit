@@ -272,7 +272,6 @@ export class FormAssociated extends Base {
 
   /** @ignore  */
   connectedCallback(): void {
-    //@ts-ignore
     super.connectedCallback()
     this.dispatchEvent(
       new CustomEvent('fromAttached', {
@@ -294,6 +293,7 @@ export class FormAssociated extends Base {
 
   /** @ignore  */
   disconnectedCallback() {
+    super.disconnectedCallback()
     this._submitForm?.detatchElement(this)
   }
 }

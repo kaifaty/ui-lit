@@ -40,9 +40,10 @@
   "browserslist": [
     "last 4 chrome versions"
   ],
-  "peerDependencies": {
+  "dependencies": {
     "@ui-wc/utils": "*",
-    "lit": "^2.0.0"
+    "lit": "^2.0.0",
+    "@statx/core": "1.0.6"
   },
   "targets": {
     "build": {

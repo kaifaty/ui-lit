@@ -1,3 +1,3 @@
 export * from './treeview.component'
-export * from './tree-item'
-export * from './tree-subview'
+export * from './treeitem.component'
+export * from './treesubview.component'

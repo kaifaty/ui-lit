@@ -1,2 +1,2 @@
 export * from './checkbox.component'
-export * from './styles.map'
+export * from './styles'

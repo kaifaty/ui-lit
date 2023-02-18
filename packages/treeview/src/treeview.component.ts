@@ -1,57 +1,69 @@
-import {definable, createTemplate, stylable, withProps, AccessorParam, css} from '@ui-wc/utils'
+import {definable, createTemplate, stylable, withProps, html, AccessorParam, css} from '@ui-wc/utils'
+import {treeviewStyleMap, TREEVIEW_PREFIX} from './styles.map'
+import {WcTreeItem} from './treeitem.component'
+import {WcTreeSubview} from './treesubview.component'
+
+const update = (target: HTMLElement, value: string) => {
+  target.querySelectorAll('wc-tree-item')?.forEach((it) => {
+    it.removeAttribute('selected')
+  })
+  target.querySelectorAll<WcTreeItem>(`wc-tree-item[value="${value}"]`)?.forEach((it) => {
+    it.setAttribute('selected', '')
+  })
+}
 
 const value: AccessorParam<string> = {
   name: 'value',
   defaultValue: '',
   set(target, _, value) {
-    queueMicrotask(() => {
-      target.querySelectorAll('lit-tree-subview').forEach((it) => {
-        it.updateSelection(false)
-      })
-      target.querySelectorAll('lit-tree-item').forEach((it) => {
-        it.updateSelection(value)
-      })
-    })
+    update(target, value)
     return true
   },
+  options: {
+    attribute: true,
+    reflect: true,
+  },
 }
-const BaseTreeview = withProps<{value: string}>(stylable(definable(HTMLElement), {}, ''), [value])
+const Base = stylable(definable(HTMLElement), treeviewStyleMap, TREEVIEW_PREFIX)
 
-const template = createTemplate(`<slot></slot>`)
+const BaseTreeview = withProps<{value: string}, typeof Base>(Base, [value])
 
-const onChanged = Symbol()
+const template = createTemplate(html`<slot></slot>`)
 
 export class WcTreeview extends BaseTreeview {
+  static define() {
+    WcTreeItem.define()
+    WcTreeSubview.define()
+    super.define()
+  }
   static styles = [
     css`
       :host {
         display: block;
-        font-size: var(--lit-treeview-font-size, 14px);
-        color: var(--lit-treeitem-color, inherit);
-        --icon-color: var(--lit-treeitem-color, inherit);
+        font-size: ${this.cssVar('font-size')};
+        color: ${this.cssVar('color')};
       }
     `,
   ]
   constructor() {
     super()
-    this.attachShadow({mode: 'open'})
     this.shadowRoot.append(template.content.cloneNode(true))
-  }
-  connectedCallback() {
-    super.connectedCallback()
-    this.addEventListener('changed', this[onChanged] as EventListener)
-  }
-  disconnectedCallback() {
-    super.disconnectedCallback()
-    this.removeEventListener('changed', this[onChanged] as EventListener)
-  }
-  [onChanged] = (e: CustomEvent<string>) => {
-    this.value = e.detail
+    this.addEventListener('changed', ((e: CustomEvent<string>) => {
+      this.value = e.detail
+    }) as EventListener)
+    let t = 0
+
+    this.shadowRoot.querySelector('slot').addEventListener('slotchange', () => {
+      clearInterval(t)
+      t = window.setTimeout(() => {
+        update(this, this.value)
+      })
+    })
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lit-tree-view': WcTreeview
+    'wc-treeview': WcTreeview
   }
 }

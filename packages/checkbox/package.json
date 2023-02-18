@@ -52,11 +52,11 @@
       "distDir": "./dist/",
       "source": "./src/index.ts",
       "isLibrary": true,
-      "optimize": true,
       "includeNodeModules": {
         "@kaifat/utils": false,
         "@ui-wc/utils": false
       },
+      "optimize": true,
       "outputFormat": "esmodule"
     },
     "demo": {

@@ -24,10 +24,12 @@ const icon: AccessorParam<IconKeys> = {
 const Basic = stylable(definable(HTMLElement), iconCSSVarMap, ICON_PREFIX)
 const Base = withProps<{icon: IconKeys}, typeof Basic>(Basic, [icon])
 
+/**
+ * @element - wc-icon
+ *
+ * @attr {"" | "cancel" | "dropdown" | "search" | "checkmark"} [icon=''] - selected icon
+ */
 export class WcIcon extends Base {
-  static properties = {
-    icon: {type: String, attibute: true},
-  }
   static styles = [
     css`
       :host {

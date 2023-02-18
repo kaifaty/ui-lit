@@ -2,7 +2,7 @@
   "compilerOptions": {
     "declarationDir": "./dist/",
     "rootDir": "./src",
-    "moduleResolution": "nodeNext",
+    "moduleResolution": "nodenext",
     "baseUrl": "."
   },
   "exclude": ["node_modules", "dist"],

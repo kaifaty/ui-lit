@@ -50,14 +50,6 @@
       "isLibrary": true,
       "optimize": true,
       "outputFormat": "esmodule"
-    },
-    "demo": {
-      "context": "browser",
-      "distDir": "./dist/demo/",
-      "source": "./src/demo/index.html",
-      "isLibrary": false,
-      "includeNodeModules": true,
-      "scopeHoist": false
     }
   }
 }

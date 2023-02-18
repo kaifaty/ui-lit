@@ -23,7 +23,7 @@
   "source": "./src/index.ts",
   "types": "dist/index.d.ts",
   "files": [
-    "/build",
+    "/dist",
     "/package.json",
     "/README.md",
     "/src"
@@ -34,7 +34,7 @@
     "build:types": "tsc",
     "build:mb": "microbundle",
     "dev": "parcel watch",
-    "cem": "custom-elements-manifest analyze --config ./cem.config.mjs --dev",
+    "cem": "custom-elements-manifest analyze --config ./cem.config.mjs",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
   },
@@ -42,8 +42,7 @@
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "@ui-wc/utils": "*",
-    "lit": "^2.0.0"
+    "@ui-wc/utils": "*"
   },
   "targets": {
     "build": {
@@ -53,10 +52,10 @@
       "isLibrary": true,
       "optimize": true,
       "includeNodeModules": {
-        "@ui-wc/utils": false,
-        "lit": false
+        "@ui-wc/utils": false
       },
       "outputFormat": "esmodule"
     }
-  }
+  },
+  "customElements": "custom-elements.json"
 }

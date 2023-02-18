@@ -15,7 +15,11 @@ const defineAttr = (target: HTMLElement, name: string, value: unknown) => {
   if (typeof value === 'number') {
     target.setAttribute(name, String(value))
   } else if (typeof value === 'string') {
-    target.setAttribute(name, value)
+    if (value === 'null') {
+      target.removeAttribute(name)
+    } else {
+      target.setAttribute(name, value)
+    }
   } else if (typeof value === 'boolean') {
     if (value) {
       target.setAttribute(name, '')
@@ -29,6 +33,7 @@ const defineAttr = (target: HTMLElement, name: string, value: unknown) => {
 
 export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>) => {
   let currentValue = data.defaultValue
+  let inited = false
   Object.defineProperty(target, data.name, {
     configurable: true,
     get() {
@@ -38,9 +43,6 @@ export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>)
       return currentValue
     },
     set(newValue: T) {
-      if (data.name === 'variant') {
-        console.log(data.name, newValue, target)
-      }
       let curr = currentValue
       if (data.get) {
         curr = data.get(target, currentValue) as any
@@ -49,12 +51,15 @@ export const defindeAccessors = <T>(target: HTMLElement, data: AccessorParam<T>)
         if (!data.set(target, curr, newValue)) {
           return
         }
+      } else if (currentValue == newValue && inited) {
+        return
       }
       currentValue = newValue
 
       if (data.options?.reflect && data.options?.attribute) {
         defineAttr(target, data.name, newValue)
       }
+      inited = true
     },
   })
   if (data.defaultValue !== undefined) {

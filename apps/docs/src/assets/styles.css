@@ -85,7 +85,7 @@ main lit-header:first-child {
     gap: 5px;
     width: 200px;
     align-content: center;
-    justify-content: center;
+    justify-content: end;
 }
 tree-view{
     font-size: 16px;

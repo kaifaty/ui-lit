@@ -1,17 +1,6 @@
-import {
-  definable,
-  stylable,
-  FormAssociated,
-  html,
-  css,
-  withProps,
-  AccessorParam,
-  createTemplate,
-  ILabled,
-  labled,
-} from '@ui-wc/utils'
+import {definable, stylable, FormAssociated, html, css, withProps, AccessorParam, createTemplate, ILabled, labled} from '@ui-wc/utils'
 
-import {CHECKBOX_PREFIX, checkboxCCSVarsMap} from './styles.map'
+import {CHECKBOX_PREFIX, checkboxCCSVarsMap} from './styles'
 import {CheckboxEvents, TCheckboxType, TCkeckboxValue} from './types'
 
 type ComponentProps = {
@@ -22,14 +11,7 @@ type ComponentProps = {
 
 const template = createTemplate(html`
   <div role="checkbox" aria-checked="false" class="noselect" id="content">
-    <svg
-      class="checkmark"
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg class="checkmark" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M3.2276 7.56922L7.33116 12.2454L12.7864 3.33211" />
     </svg>
     <span class="control"></span>

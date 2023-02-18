@@ -1,288 +1,136 @@
-import {pascal2kebabCase} from '@kaifat/utils'
 import type {Declaration, JavaScriptModule, Package} from 'custom-elements-manifest/schema'
-import {css, CSSResult, html, LitElement, nothing, PropertyValueMap} from 'lit'
-import {createRef, ref} from 'lit/directives/ref'
-import {property, state} from 'lit/decorators'
-import {html as statichtml, unsafeStatic} from 'lit/static-html'
 
 import {WcCheckbox} from '@ui-wc/checkbox'
+import {WcTreeview} from '@ui-wc/treeview'
+import {WcHeader} from '@ui-wc/header'
 
-/*
-import {CheckboxEvents} from '../checkbox/types'
-import {LitDescription} from '../description'
-import {LitMarkdown} from '../markdown'
-import {LitTabs} from '../tabs'
-import {LitTextfield} from '../textfield'
-import {LitTreeItem, LitTreeView} from '../treeview'
+import {withProps, definable, createGetParams, css, html, createTemplate, stylable} from '@ui-wc/utils'
+import {getDeclarations, loadCEMJson} from './utils/cem'
 
-LitTreeView.define()
-LitTreeItem.define()
-LitDescription.define()
-LitTextfield.define()
-LitMarkdown.define()
-LitTabs.define()
-*/
-
-type Key = keyof typeof values
-
-const changedPage = Symbol()
-const changedTab = Symbol()
-const props = Symbol()
-const cssprops = Symbol()
-const cssStyles = Symbol()
-const cssChanged = Symbol()
-const contentTemplate = Symbol()
-const tagTemplate = Symbol()
-const loadFile = Symbol()
-
-const values = {
-  doc: 'Doc',
-  attrs: 'Attributes',
-  props: 'Properties',
-  cssprops: 'CSS Properties',
-  events: 'Events',
-  slots: 'Slots',
-} as const
-
-const setTargetValue = <T extends LitElement | undefined>(targetEl: () => T, key: string, value: unknown) => {
-  const target = targetEl() as any
-  if (target && target[key] !== undefined) {
-    target[key] = value
-  }
+type Props = {
+  isLoading: boolean
+  data: Package | null
+  selectedName: string
+  src: string | null
 }
 
-const createTypedComponent = <T extends LitElement | undefined>(
-  type: string,
-  defaulValue: string | undefined,
-  name: string,
-  docElement: () => T,
-) => {
-  if (defaulValue === undefined && !(type.includes('null') || type.includes('undefined'))) {
-    return 'readonly'
+type ApiViewerElement = HTMLElement & Props
+
+const formatName = (v: string) => {
+  return v.replace('Wc', '')
+}
+const getParam = createGetParams({attribute: true, reflect: true})
+const getStateProp = createGetParams({})
+
+const isLoading = getStateProp<boolean>('isLoading', false)
+const data = getStateProp<Package | null>('data', null)
+
+const STORAGE_KEY = 'wc-apiviewer-'
+const save2storage = (src: string, data: Package) => {
+  localStorage.setItem(STORAGE_KEY + src, JSON.stringify(data))
+}
+const restore = (src: string) => {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY + src)) as Package
+  } catch {
+    return null
   }
-  if (type.includes('string')) {
-    const el = document.createElement('input')
-    el.type = 'text'
-    el.value = defaulValue || ''
-    el.addEventListener('change', (e: any) => {
-      setTargetValue(docElement, name, e.target.value)
+}
+const lastName = localStorage.getItem(STORAGE_KEY + 'name')
+const onDataChange = (target: ApiViewerElement, data: Package) => {
+  const declarations = getDeclarations(data)
+  renderNames(target, declarations)
+}
+
+const renderNames = (target: ApiViewerElement, data: Declaration[]) => {
+  target.shadowRoot.querySelector('#names').innerHTML = data
+    .map((item) => {
+      return html`<wc-tree-item value="${item.name}">${formatName(item.name)}</wc-tree-item>`
     })
-    return el
-  }
-
-  if (type === 'boolean') {
-    const el = document.createElement('wc-checkbox')
-    el.checked = defaulValue === 'true'
-    el.addEventListener('changed', (e) => {
-      setTargetValue(docElement, name, e.detail.checked)
-    })
-    return el
-  }
-  return defaulValue
+    .join('')
 }
-
-const getDeclarations = (data: Package | null) => {
-  const res: Declaration[] = []
-  data?.modules?.forEach((item) => item.declarations?.forEach((item) => res.push(item)))
-  return res
-}
-
-export class WcApiViewer extends LitElement {
-  static define(name = 'wc-api-viewer') {
-    if (!customElements.get(name)) {
-      WcCheckbox.define()
-      customElements.define(name, WcApiViewer)
+const selectedName = getParam<string>('selectedName', lastName, {
+  set(target, _, value) {
+    if (value) {
+      localStorage.setItem(STORAGE_KEY + 'name', value)
+      queueMicrotask(() => {
+        target.shadowRoot.querySelector('#selectedName').textContent = formatName(value)
+      })
     }
+
+    return true
+  },
+})
+
+const srcParam = getParam<null | string>('src', null, {
+  set(target, _, value) {
+    const t = target as ApiViewerElement
+    t.isLoading = true
+    const restored = restore(value)
+    if (restored) {
+      queueMicrotask(() => {
+        onDataChange(t, restored)
+        t.shadowRoot.querySelector('wc-treeview').value = lastName
+      })
+    }
+
+    loadCEMJson(value).then((res) => {
+      console.log(res)
+      t.data = res
+      if (res) {
+        onDataChange(t, res)
+        save2storage(value, res)
+      }
+      t.isLoading = false
+    })
+    return true
+  },
+})
+
+const Base = stylable(definable(HTMLElement), {}, '--wc-apiviewer-')
+const BaseApiViewer = withProps<Props, typeof Base>(Base, [isLoading, selectedName, data, srcParam])
+
+const template = createTemplate(html`
+  <div class="wrapper">
+    <wc-treeview id="names"></wc-treeview>
+    <section id="content">
+      <wc-header level="4">Preview: <span id="selectedName">[Not selected]</span></wc-header>
+      <div class="preview"></div>
+    </section>
+  </div>
+`)
+
+export class WcApiViewer extends BaseApiViewer {
+  static define() {
+    WcCheckbox.define()
+    WcTreeview.define()
+    WcHeader.define()
+    super.define()
   }
-  static styles: CSSResult[] = [
+  static styles = [
     css`
       :host {
-        display: block;
-        width: 100%;
-      }
-      table {
-        width: 100%;
-      }
-      lit-tree-item {
-        font-size: 1.2em;
-        font-weight: bold;
-      }
-      lit-description {
-        padding-left: 15px;
-        font-size: 0.8em;
-      }
-      .name {
-        font-size: 1em;
-        padding: 10px 0;
       }
       .wrapper {
-        display: flex;
-        width: 100%;
-      }
-      nav {
-        padding-right: 50px;
-        width: 180px;
-      }
-      main {
-        flex: 1 1 auto;
-        width: calc(100% - 230px);
         display: grid;
-        gap: 3em;
+        grid-template-columns: 180px auto;
+        gap: 30px;
       }
       .preview {
-        padding: 40px;
-        box-sizing: border-box;
-        background-color: rgba(0, 0, 0, 0.6);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        height: 250px;
+        background: #fff;
+      }
+      #content wc-header {
+        margin-top: 0;
       }
     `,
   ]
-  @property({type: String, reflect: true, attribute: true}) src = ''
-  @state() tab: Key = 'props'
-  @state() data: Package | null = null
-  private _ref = createRef<LitElement>()
-
-  @state() changedCSSProps: Record<string, string> = {}
-  @state() selectedTagName = ''
-
-  declarations: Declaration[] = []
-  declarationsMap: Record<string, Declaration> = {}
-
-  get selectedDeclaration() {
-    return this.declarationsMap[this.selectedTagName]
-  }
-  get description() {
-    return this.selectedDeclaration?.description ?? nothing
-  }
-  async [loadFile]() {
-    const response = await fetch(this.src)
-    this.data = await response.json()
-  }
-
-  connectedCallback() {
-    super.connectedCallback()
-    this[loadFile]()
-  }
-  willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>) {
-    if (_changedProperties.has('data')) {
-      this.declarations = getDeclarations(this.data)
-      this.declarationsMap = this.declarations.reduce<Record<string, Declaration>>((acc, v) => {
-        acc[pascal2kebabCase(v.name)] = v
-        return acc
-      }, {})
-    }
-  }
-
-  [changedPage](e: CustomEvent<Key>) {
-    this.selectedTagName = e.detail
-  }
-
-  [changedTab](e: CustomEvent<Key>) {
-    this.tab = e.detail
-  }
-
-  [props]() {
-    console.log(this.selectedDeclaration)
-    const data: any[] = []
-    return html`
-      <table>
-        ${data.map((item) => {
-          return html`<tr>
-            <td>${item.name}</td>
-            <td>${createTypedComponent(item.type, item.default, item.name, () => this._ref?.value)}</td>
-            <td>${item.type}</td>
-          </tr>`
-        })}
-      </table>
-    `
-  }
-
-  [cssprops]() {
-    const data: any[] = [] // this.data?.tags[0]?.cssProperties ??
-    return html`<table>
-      ${data.map((item) => {
-        return html`<tr>
-          <td>
-            <div class="name">${item.name}</div>
-            <lit-description>${item.description}</lit-description>
-          </td>
-          <td>
-            <lit-textfield
-              @changed="${(e: CustomEvent<string>) => this[cssChanged](e.detail, item.name)}"
-              value="${item.default.replace(/(")/g, '')}"
-            ></lit-textfield>
-          </td>
-        </tr>`
-      })}
-    </table>`
-  }
-
-  [cssStyles]() {
-    return Object.keys(this.changedCSSProps).map((key) => {
-      return `${key}: ${this.changedCSSProps[key]}; `
-    })
-  }
-
-  [cssChanged](value: string, name: string) {
-    this.changedCSSProps = {
-      ...this.changedCSSProps,
-      [name]: value,
-    }
-  }
-
-  [contentTemplate]() {
-    let content
-    if (this.tab === 'props') {
-      content = this[props]()
-    }
-    if (this.tab === 'cssprops') {
-      content = this[cssprops]()
-    }
-    if (this.tab === 'doc') {
-      return html`<lit-markdown .text="${this.description as string}"></lit-markdown>`
-    }
-    return html`
-      <div class="preview">${this[tagTemplate]()}</div>
-      <div>${content}</div>
-    `
-  }
-
-  [tagTemplate]() {
-    if (!this.selectedTagName) {
-      return 'Tag not selected'
-    }
-    return statichtml`<${unsafeStatic(this.selectedTagName)} ${ref(this._ref)}>${
-      this.selectedTagName
-    }</${unsafeStatic(this.selectedTagName)}>`
-  }
-
-  render() {
-    const declarations = this.declarations
-    return html` <div class="wrapper">
-      <style>
-        :host{
-          ${this[cssStyles]()}
-        }
-      </style>
-      <nav>
-        <lit-tree-view .value="${this.selectedTagName}" @changed="${this[changedPage]}">
-          ${declarations.map((key) => {
-            const value = pascal2kebabCase(key.name)
-            return html`<lit-tree-item .value="${value}">${pascal2kebabCase(value)}</lit-tree-item>`
-          })}
-        </lit-tree-view>
-      </nav>
-      <main>
-        <lit-tabs value="${this.tab}" @changed="${this[changedTab]}">
-          ${Object.keys(values).map((key) => {
-            return html`<lit-tab value="${key}">${values[key as Key]}</lit-tab>`
-          })}
-        </lit-tabs>
-        <div>${this[contentTemplate]()}</div>
-      </main>
-    </div>`
+  constructor() {
+    super()
+    this.shadowRoot.append(template.content.cloneNode(true))
+    this.addEventListener('changed', ((e: CustomEvent<string>) => {
+      this.selectedName = e.detail
+    }) as EventListener)
   }
 }
 

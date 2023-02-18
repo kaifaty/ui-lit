@@ -50,7 +50,11 @@ const tabIndex = getParams('tabIndex', 0, {
 const href = getParams<string | null>('href', null, {
   set(target, _, value) {
     getButton(target).then((button) => {
-      button.href = value
+      if (value) {
+        button.setAttribute('href', value)
+      } else {
+        button.removeAttribute('href')
+      }
     })
     return true
   },
@@ -58,7 +62,7 @@ const href = getParams<string | null>('href', null, {
 const target = getParams<LinkTarget>('target', '_self', {
   set(target, _, value) {
     getButton(target).then((button) => {
-      button.target = value
+      button.setAttribute('target', value)
     })
     return true
   },

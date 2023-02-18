@@ -1,8 +1,9 @@
-export const TREEVIEW_PREFIX = '--lit-tree-'
+export const TREEVIEW_PREFIX = '--wc-tree-'
 
 export const treeviewStyleMap = {
-  'item-color': 'hsl(306, 65%, 98%)',
-  'item-color-selected': 'hsl(306, 65%, 80%)',
-  'item-background-color-selected': 'hsl(306, 30%, 15%)',
-  'item-background-color-hover': 'hsl(306, 30%, 17%)',
+  'font-size': '14px',
+  color: 'hsl(306, 65%, 98%)',
+  'color-selected': 'hsl(306, 65%, 80%)',
+  'background-color-selected': 'hsl(306, 30%, 15%)',
+  'background-color-hover': 'hsl(306, 30%, 17%)',
 }

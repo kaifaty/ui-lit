@@ -1,6 +1,7 @@
 {
   "extends": "@parcel/config-default",
   "transformers": {
+    "*.json": ["@parcel/transformer-raw"],
     "*.{js,mjs,jsm,jsx,es6,cjs,ts,tsx}": ["parcel-transformer-minify-literals", "..."]
   },
   "resolvers": [

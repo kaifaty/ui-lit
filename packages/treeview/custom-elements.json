@@ -1,0 +1,140 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/treeitem.component.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "WcTreeItem",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[\r\n    css`\r\n      :host {\r\n        display: block;\r\n        cursor: pointer;\r\n        font-size: 1.4rem;\r\n        line-height: 1.5rem;\r\n        color: ${this.cssVar('color')};\r\n        padding: 6px 12px;\r\n      }\r\n      :host(:hover) {\r\n        background-color: ${this.cssVar('background-color-hover')};\r\n      }\r\n      :host([selected]),\r\n      :host([sel]) {\r\n        background-color: ${this.cssVar('background-color-selected')};\r\n        color: ${this.cssVar('color-selected')};\r\n      }\r\n    `,\r\n  ]"
+            }
+          ],
+          "attributes": [
+            {
+              "type": {
+                "text": "string"
+              },
+              "description": "= value of tree item",
+              "name": "value",
+              "default": "null"
+            }
+          ],
+          "superclass": {
+            "name": "Base",
+            "module": "src/treeitem.component.ts"
+          },
+          "tagName": "wc-tree-item",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WcTreeItem",
+          "declaration": {
+            "name": "WcTreeItem",
+            "module": "src/treeitem.component.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/treesubview.component.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "WcTreeSubview",
+          "members": [
+            {
+              "kind": "method",
+              "name": "define",
+              "static": true
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[\r\n    css`\r\n      :host {\r\n        display: block;\r\n      }\r\n      .label {\r\n        display: flex;\r\n        align-items: center;\r\n        cursor: pointer;\r\n        padding: 5px 10px;\r\n      }\r\n      .content {\r\n        margin-left: 25px;\r\n      }\r\n      wc-icon {\r\n        margin-right: 5px;\r\n      }\r\n      :host(:not([opened])) .content {\r\n        display: none;\r\n      }\r\n      :host([selected]) .label {\r\n        color: ${this.cssVar('color-selected')};\r\n      }\r\n    `,\r\n  ]"
+            }
+          ],
+          "superclass": {
+            "name": "BaseTreesubview",
+            "module": "src/treesubview.component.ts"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WcTreeSubview",
+          "declaration": {
+            "name": "WcTreeSubview",
+            "module": "src/treesubview.component.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/treeview.component.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "WcTreeview",
+          "members": [
+            {
+              "kind": "method",
+              "name": "define",
+              "static": true
+            },
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[\r\n    css`\r\n      :host {\r\n        display: block;\r\n        font-size: ${this.cssVar('font-size')};\r\n        color: ${this.cssVar('color')};\r\n      }\r\n    `,\r\n  ]"
+            },
+            {
+              "kind": "field",
+              "name": "[onChanged]"
+            }
+          ],
+          "superclass": {
+            "name": "BaseTreeview",
+            "module": "src/treeview.component.ts"
+          }
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WcTreeview",
+          "declaration": {
+            "name": "WcTreeview",
+            "module": "src/treeview.component.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

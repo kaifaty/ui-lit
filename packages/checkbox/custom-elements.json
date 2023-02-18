@@ -13,47 +13,47 @@
           "cssProperties": [
             {
               "description": "Background color of checkbox",
-              "name": "--lit-checkbox-checkbox-background",
+              "name": "--wc-checkbox-checkbox-background",
               "default": "#fff"
             },
             {
               "description": "Border of checkbox",
-              "name": "--lit-checkbox-checkbox-border",
+              "name": "--wc-checkbox-checkbox-border",
               "default": "1px solid #999"
             },
             {
               "description": "Checkmark color",
-              "name": "--lit-checkbox-checkmark-color",
+              "name": "--wc-checkbox-checkmark-color",
               "default": "hsl(100, 65%, 5%)"
             },
             {
               "description": "checkmark-shadow-hover",
-              "name": "--lit-checkbox-checkmark-shadow-hover",
+              "name": "--wc-checkbox-checkmark-shadow-hover",
               "default": "0 0 2px #999"
             },
             {
               "description": "switcher-control-background",
-              "name": "--lit-checkbox-switcher-control-background",
+              "name": "--wc-checkbox-switcher-control-background",
               "default": "#fff"
             },
             {
               "description": "switcher-control-shadow",
-              "name": "--lit-checkbox-switcher-control-shadow",
+              "name": "--wc-checkbox-switcher-control-shadow",
               "default": "1px 1px 2px rgba(0,0,0,0.6)"
             },
             {
               "description": "Disabled switcher color",
-              "name": "--lit-checkbox-switcher-off-background",
+              "name": "--wc-checkbox-switcher-off-background",
               "default": "hsl(0, 65%, 50%)"
             },
             {
               "description": "Enabled switcher color",
-              "name": "--lit-checkbox-switcher-on-background",
+              "name": "--wc-checkbox-switcher-on-background",
               "default": "hsl(110, 65%, 50%)"
             },
             {
               "description": "Shadow of switcher circle",
-              "name": "--lit-checkbox-switcher-shadow",
+              "name": "--wc-checkbox-switcher-shadow",
               "default": "inset 1px 1px 2px rgba(0,0,0,0.7)"
             }
           ],

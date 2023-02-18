@@ -6,5 +6,5 @@
   "resolvers": [
     "parcel-resolver-fix-ts-esm-shit", 
     "..."
-  ]
+]
 }

@@ -87,6 +87,7 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
     justify-content: ${Button.cssVar('justify')};
     letter-spacing: ${Button.cssVar('letter-spacing')};
 
+    border: none;
     outline: ${Button.cssVar('outline')};
     overflow: hidden;
     position: relative;
@@ -101,7 +102,7 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
     align-self: center;
   }
 
-  /* Default */
+  /* Default & Text */
   :host([variant='default']) #button {
     color: ${Button.cssVar('color')};
     background-color: ${Button.cssVar('background')};
@@ -116,6 +117,14 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
   }
   :host([variant='default'][pressed]) #button {
     background-color: ${Button.cssVar('background-hover')};
+  }
+
+  /* Text */
+  :host([variant='text']) #button {
+    color: ${Button.cssVar('color')};
+  }
+  :host([variant='text'][hover]) #button {
+    color: ${Button.cssVar('color-hover')};
   }
 
   /* Switch */
@@ -135,12 +144,6 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
   :host([variant='switch'][switchOn]) #button:focus {
     outline: ${Button.cssVar('switch-on-outline-focus')};
     border: ${Button.cssVar('switch-on-outline-focus')};
-  }
-
-  /* Text */
-  :host([variant='text']) #button,
-  :host([variant='text'][hover]) #button {
-    border: none;
   }
 
   /* Primary */

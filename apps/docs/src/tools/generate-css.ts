@@ -1,6 +1,6 @@
 import glob from 'glob'
 import {readFile, writeFile} from 'fs'
-import {checkboxCCSVarsMap, CHECKBOX_PREFIX} from '../../../../packages/checkbox/src/styles.map'
+import {checkboxCCSVarsMap, CHECKBOX_PREFIX} from '../../../../packages/checkbox/src/styles'
 import {buttonCCSVarsMap, BUTTON_PREFIX} from '../../../../packages/button/src/styles.map'
 
 const Files = {
@@ -39,12 +39,10 @@ const getFilesData = async () => {
           acc += ` * @cssprop [${v[0]}=${v[1]}] - ${v[2]} \n`
           return acc
         }, '')
-        console.log(result)
 
         return `@CSS\n${result} * @CSS`
       })
 
-      console.log({hasReplacement, data})
       if (hasReplacement) {
         return new Promise((r) => writeFile(file, newFile, 'utf8', r))
       }
@@ -53,5 +51,3 @@ const getFilesData = async () => {
 }
 
 getFilesData()
-
-console.log(1234)

@@ -22,11 +22,11 @@ export const withControllers = <T extends Constructor<HTMLElement> = Constructor
       }
     }
     connectedCallback() {
-      super.connectedCallback()
+      super.connectedCallback?.()
       this._controllers.forEach((c) => c.hostConnected())
     }
     disconnectedCallback() {
-      super.disconnectedCallback()
+      super.disconnectedCallback?.()
       this._controllers.forEach((c) => c.hostDisconnected())
     }
   } as T & Constructor<ReactiveControllerHost>

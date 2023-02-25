@@ -1,3 +1,3 @@
-export * from './input.js'
-export * from './noselect.js'
-export * from './scrollbar.js'
+export * from './input'
+export * from './noselect'
+export * from './scrollbar'

@@ -1,9 +1,10 @@
-export * from './controllers/index.js'
-export * from './helpers/index.js'
-export * from './mixins/index.js'
-export * from './form-assosiated/index.js'
-export * from './styles/index.js'
-export * from './create-css-map.js'
+export * from './controllers/index'
+export * from './helpers/index'
+export * from './mixins/index'
+export * from './form-assosiated/index'
+export * from './styles/index'
+export * from './create-css-map'
+export {pallets} from './colors/default-color'
 
 declare global {
   interface HTMLElement {

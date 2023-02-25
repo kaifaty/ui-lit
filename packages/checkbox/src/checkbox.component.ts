@@ -74,15 +74,10 @@ const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [checked, type,
  * @element wc-checkbox - UI WC checkbox element
  *
  *
- * @reflect
- * @attr [value=off] {on | off} - Value of checkbox/switcher
+ * @attr {'on' | 'off'} [value=off] - Value of checkbox/switcher
+ * @attr {'switcher' | 'checkbox'}[type=switcher]  - type of component
+ * @attr {boolean} [checked=false] - checked state, based on value
  *
- *
- * @attr
- * @reflect [type=switcher] {switcher | checkbox} - type of component
- *
- * @attr
- * @reflect [checked=false] {boolean} - checked state, based on value
  *
  * @CSS
  * @cssprop [--wc-checkbox-checkbox-background=#fff] - Background color of checkbox 
@@ -182,25 +177,21 @@ export class WcCheckbox extends PropsedBase {
   constructor() {
     super()
     this.shadowRoot.append(template.content.cloneNode(true))
-    this.attachInternals()
+    this.addEventListener('click', this.click.bind(this))
   }
 
-  connectedCallback(): void {
-    super.connectedCallback()
-    this.addEventListener('click', this.click)
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    this.removeEventListener('click', this.click)
-  }
-
+  /**
+   * Toggle element value
+   */
   toggle() {
     if (this.readonly || this.disabled) return
     this.checked = !this.checked
     this.notify()
   }
-  click = () => {
+  /**
+   * Click is toggle element value
+   */
+  click() {
     this.toggle()
   }
 

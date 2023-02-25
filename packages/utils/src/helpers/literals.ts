@@ -1,4 +1,4 @@
-import {createStyle} from './css-stylesheet.js'
+import {createStyle} from './css-stylesheet'
 
 /**
  * Simple miniize and for IDE support

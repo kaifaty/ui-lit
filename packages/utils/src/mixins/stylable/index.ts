@@ -1,7 +1,7 @@
-import type {Definable} from '../definable/index.js'
+import type {Definable} from '../definable/index'
 import type {Constructor} from '@ui-wc/types'
-import {createcssMap} from '../../create-css-map.js'
-import {adoptToElement, WCStyleSheet} from '../../helpers/css-stylesheet.js'
+import {createcssMap} from '../../create-css-map'
+import {adoptToElement, WCStyleSheet} from '../../helpers/css-stylesheet'
 
 type StringOnly<T> = T extends string ? T : never
 type Data = Record<string, string | number | readonly [string | number, string]>

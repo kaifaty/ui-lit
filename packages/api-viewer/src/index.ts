@@ -1,1 +1,1 @@
-export {WcApiViewer} from './api-viewer'
+export {WcApiViewer} from './api-viewer.component'

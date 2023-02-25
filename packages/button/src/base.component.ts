@@ -17,8 +17,7 @@ type Props = {
   size: ButtonSize
 }
 type ButtonType = 'submit' | 'button' | 'close'
-// | 'neutral' | 'warning'
-type ButtonVariant = 'text' | 'primary' | 'danger' | 'success' | 'default' | 'switch'
+type ButtonVariant = 'text' | 'primary' | 'danger' | 'success' | 'default'
 type ButtonSize = 'small' | 'medium' | 'large'
 
 const withReflect = createGetParams({
@@ -34,9 +33,6 @@ const disabled = getParams('disabled', false)
 const pressed = getParams('pressed', false, {
   set(target, _, value) {
     const variant = target.getAttribute('variant')
-    getButton(target).then((button) => {
-      button.ariaPressed = variant === 'switch' ? value.toString() : 'undefined'
-    })
     return true
   },
 })
@@ -69,6 +65,7 @@ const target = getParams<LinkTarget>('target', '_self', {
 })
 const type = getParams<ButtonType>('type', 'button')
 const size = getParams<ButtonSize>('size', 'medium')
+
 const variant = withReflect<ButtonVariant>('variant', 'default')
 
 const withoutProps = focusable(stylable(definable(HTMLElement), buttonCCSVarsMap, BUTTON_PREFIX))

@@ -1,4 +1,4 @@
-import {ReactiveController, ReactiveControllerHost} from '../mixins/withControllers/index.js'
+import {ReactiveController, ReactiveControllerHost} from '../mixins/withControllers/index'
 
 export class KeyDownController implements ReactiveController {
   host: ReactiveControllerHost

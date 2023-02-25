@@ -7,23 +7,32 @@ type Focusable<T extends Constructor<HTMLElement>> = T & Constructor<FocusablePr
 
 type Constructor<T> = new (...args: any[]) => T
 
+const getElement = Symbol()
+
 export function focusable<T extends Constructor<HTMLElement>>(superClass: T): Focusable<T> {
   /**
    * @attr {boolean} autofocus - Auto focus on element after it was connected
    */
   return class FocusableElement extends superClass {
-    private _getElement() {
+    /**
+     * @ignore
+     */
+    [getElement]() {
       return this.shadowRoot?.querySelector('input, button, textarea, a, [autofocus]')
     }
+    connectedCallback() {
+      super.connectedCallback?.()
+      setTimeout(() => {
+        if (this.hasAttribute('autofocus')) {
+          this.focus()
+        }
+      })
+    }
     get isFocused() {
-      const autofocus = this.shadowRoot?.querySelector<HTMLElement & FocusableProps>('[autofocus]')
-      if (autofocus) {
-        return autofocus.isFocused
-      }
-      return Boolean(this.shadowRoot?.querySelector('*:focus'))
+      return Boolean(this.querySelector('*:focus'))
     }
     blur() {
-      const el = this._getElement()
+      const el = this[getElement]()
       if (el) {
         ;(el as HTMLElement).blur()
       } else {
@@ -31,7 +40,7 @@ export function focusable<T extends Constructor<HTMLElement>>(superClass: T): Fo
       }
     }
     focus() {
-      const el = this._getElement()
+      const el = this[getElement]()
       if (el) {
         ;(el as HTMLElement).focus()
         if (el instanceof HTMLInputElement) {

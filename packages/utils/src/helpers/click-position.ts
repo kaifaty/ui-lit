@@ -1,4 +1,4 @@
-export const getXY = (e: TouchEvent | MouseEvent, rect: DOMRect) => {
+export const clickPosition = (e: TouchEvent | MouseEvent, rect: DOMRect) => {
   if ('touches' in e) {
     return {
       x: e.targetTouches[0].clientX - rect.x,

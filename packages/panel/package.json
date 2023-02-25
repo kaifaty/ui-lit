@@ -1,38 +1,41 @@
 {
-  "name": "@ui-wc/utils",
+  "name": "@ui-wc/panel",
   "version": "1.0.0",
   "private": false,
   "description": "",
   "keywords": [
-    "html-literal-minify",
-    "html-literal-optimizer",
-    "lit-html-optimizer",
-    "lit-html-minify"
+    "user-interface",
+    "lit-element",
+    "lit",
+    "UI",
+    "UI kit",
+    "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-wc/packages/utils",
+  "homepage": "https://github.com/kaifaty/ui-lit/packages/panel",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-wc/issues"
+    "url": "https://github.com/kaifaty/ui-lit/issues"
   },
   "license": "MIT",
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/module.js",
+  "module": "dist/index.js",
   "source": "./src/index.ts",
   "types": "dist/index.d.ts",
   "files": [
-    "/dist",
+    "/build",
     "/package.json",
     "/README.md",
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
+    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types && npm run cem",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
-    "demo": "parcel serve --target=demo",
+    "build:mb": "microbundle",
     "dev": "parcel watch",
+    "cem": "custom-elements-manifest analyze --config ./cem.config.mjs --dev",
+    "lint": "tsc --noEmit",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
   },
@@ -40,9 +43,7 @@
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "@ui-wc/types": "*",
-    "better-color-tools": "^0.10.0",
-    "@kaifat/utils": "^1.1.1"
+    "@ui-wc/utils": "*"
   },
   "targets": {
     "build": {
@@ -50,17 +51,12 @@
       "distDir": "./dist/",
       "source": "./src/index.ts",
       "isLibrary": true,
-      "includeNodeModules": {
-        "better-color-tools": false,
-        "@kaifat/utils": false
-      },
       "optimize": true,
+      "includeNodeModules": {
+        "@ui-wc/utils": false
+      },
       "outputFormat": "esmodule"
-    },
-    "demo": {
-      "context": "browser",
-      "distDir": "./dist/",
-      "source": "./src/demo/index.html"
     }
-  }
+  },
+  "customElements": "custom-elements.json"
 }

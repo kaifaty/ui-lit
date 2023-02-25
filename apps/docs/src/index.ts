@@ -3,6 +3,7 @@ import {css, html, LitElement} from 'lit'
 import {WcApiViewer} from '@ui-wc/api-viewer'
 import {WcHeader} from '@ui-wc/header'
 import {WcButton} from '@ui-wc/button'
+import {pallets} from '@ui-wc/utils'
 // import {LitButton} from '@ui-lit/button'
 // import {LitForm} from '@ui-lit/form'
 /*
@@ -41,28 +42,18 @@ export class Doc extends statableLit(LitElement) {
   protected createRenderRoot() {
     return this
   }
+  pallets(data: any) {
+    if (!data) return
+    return Object.keys(data).map((key) => {
+      const value = data[key]
+      return html`<div class="pallete-block" data-key="${key}" style="background: ${value}"></div>`
+    })
+  }
 
   render() {
     return html`
       <lit-theme>
         <div class="wrapper">
-          <main>
-            <wc-api-viewer src="/custom-elements.json"></wc-api-viewer>
-          </main>
-        </div>
-        <lit-nav-burger></lit-nav-burger>
-      </lit-theme>
-    `
-  }
-}
-
-if (!customElements.get('wuik-doc')) {
-  customElements.define('wuik-doc', Doc)
-}
-
-/**
- * 
-          <!--
           <header>
             <div>
               <div class="logo-wrapper">
@@ -77,10 +68,25 @@ if (!customElements.get('wuik-doc')) {
                   GitHub
                   <img width="24px" slot="suffix" src="${blacktocat}" />
                 </wc-button>
-                <wc-button>Button</wc-button>
               </div>
             </div>
             <lit-theme-switcher></lit-theme-switcher>
           </header>
-  -->
- */
+          <main>
+            <div class="pallets">${this.pallets(pallets.neutral)}</div>
+            <div class="pallets">${this.pallets(pallets.primary)}</div>
+            <div class="pallets">${this.pallets(pallets.danger)}</div>
+            <div class="pallets">${this.pallets(pallets.warning)}</div>
+            <div class="pallets">${this.pallets(pallets.success)}</div>
+            <wc-api-viewer src="/custom-elements.json"></wc-api-viewer>
+          </main>
+        </div>
+        <lit-nav-burger></lit-nav-burger>
+      </lit-theme>
+    `
+  }
+}
+
+if (!customElements.get('wuik-doc')) {
+  customElements.define('wuik-doc', Doc)
+}

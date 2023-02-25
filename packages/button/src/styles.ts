@@ -1,10 +1,12 @@
 import {css} from '@ui-wc/utils'
+import {WcSpinner} from '@ui-wc/spinner'
 
 import type {BaseButton} from './base.component'
 
 export const getButtonStyles = (Button: typeof BaseButton) => css`
   #checkmark {
     display: none;
+    align-self: center;
   }
   #button[checkmark] {
     width: var(--width);
@@ -16,9 +18,9 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
     display: none;
   }
   wc-spinner {
-    height: 12.8px;
-    width: 12.8px;
-    justify-self: center;
+    align-self: center;
+    height: 60%;
+    ${WcSpinner.cssKey('color')}: currentColor;
   }
   :host {
     ${Button.cssKey('color')}: ${Button.cssVar('color')};
@@ -38,7 +40,7 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
   :host #button {
     padding: ${Button.cssVar('padding')};
     font-size: ${Button.cssVar('font-size')};
-    line-height: ${Button.cssVar('height')};
+    line-height: calc(${Button.cssVar('height')} - 2px);
   }
   :host([size='large']) #button {
     padding: ${Button.cssVar('large-padding')};
@@ -79,8 +81,8 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
     box-sizing: border-box;
     cursor: pointer;
     display: grid;
-    font-family: inherit;
-    font-weight: ${Button.cssVar('weight')};
+    font-family: ${Button.cssVar('font-family')};
+    font-weight: ${Button.cssVar('font-weight')};
     gap: ${Button.cssVar('gap')};
     grid-auto-flow: column;
     height: 100%;
@@ -89,6 +91,7 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
 
     border: none;
     outline: ${Button.cssVar('outline')};
+    outline-offset: ${Button.cssVar('outline-offset')};
     overflow: hidden;
     position: relative;
     text-transform: ${Button.cssVar('text-transform')};
@@ -96,12 +99,32 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
     white-space: nowrap;
     width: 100%;
     contain: content;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  #button::before {
+    position: absolute;
+    z-index: 1;
+    content: '';
+    top: var(--click-y);
+    left: var(--click-x);
+    background-color: ${Button.cssVar('ripple')};
+    width: 100%;
+    min-height: 100%;
+    aspect-ratio: 1 / 1;
+    transform-origin: center;
+    transform: translate(-50%, -50%) scale(0);
+    border-radius: 50%;
+  }
+  #button[pressed]::before {
+    animation-duration: 0.5s;
+    animation-name: ripple;
+    animation-timing-function: ease-out;
   }
   ::slotted([slot='prefix']),
   ::slotted([slot='suffix']) {
     align-self: center;
   }
-
   /* Default & Text */
   :host([variant='default']) #button {
     color: ${Button.cssVar('color')};
@@ -109,14 +132,18 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
     border: ${Button.cssVar('border')};
   }
   :host([variant='default']) #button:focus {
+    color: ${Button.cssVar('color-focus')};
+    background-color: ${Button.cssVar('background-focus')};
     outline: ${Button.cssVar('outline-focus')};
   }
-  :host([variant='default'][hover]) #button {
+  :host([variant='default']) #button[hover] {
     color: ${Button.cssVar('color-hover')};
+    border: ${Button.cssVar('border-hover')};
     background-color: ${Button.cssVar('background-hover')};
   }
-  :host([variant='default'][pressed]) #button {
-    background-color: ${Button.cssVar('background-hover')};
+  :host([variant='default']) #button[pressed] {
+    color: ${Button.cssVar('color-pressed')};
+    background-color: ${Button.cssVar('background-pressed')};
   }
 
   /* Text */
@@ -125,25 +152,6 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
   }
   :host([variant='text'][hover]) #button {
     color: ${Button.cssVar('color-hover')};
-  }
-
-  /* Switch */
-  :host([variant='switch']) #button {
-    color: ${Button.cssVar('switch-color')};
-    ${Button.cssKey('color')}: ${Button.cssVar('switch-color')};
-  }
-  :host([variant='switch']) #button:focus {
-    outline: ${Button.cssVar('switch-outline-focus')};
-    border: ${Button.cssVar('switch-outline-focus')};
-  }
-  :host([variant='switch'][switchOn]) #button {
-    color: ${Button.cssVar('switch-on-color')};
-    ${Button.cssKey('color')}: ${Button.cssVar('switch-on-color')};
-    background-color: ${Button.cssVar('switch-on-background')};
-  }
-  :host([variant='switch'][switchOn]) #button:focus {
-    outline: ${Button.cssVar('switch-on-outline-focus')};
-    border: ${Button.cssVar('switch-on-outline-focus')};
   }
 
   /* Primary */
@@ -156,11 +164,11 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
   :host([variant='primary']) #button:focus {
     outline: ${Button.cssVar('primary-outline-focus')};
   }
-  :host([variant='primary'][hover]) #button {
+  :host([variant='primary']) #button[hover] {
     color: ${Button.cssVar('primary-color-hover')};
     background-color: ${Button.cssVar('primary-background-hover')};
   }
-  :host([variant='primary'][pressed]) #button {
+  :host([variant='primary']) #button[pressed] {
     background-color: ${Button.cssVar('primary-background-hover')};
   }
 
@@ -174,11 +182,11 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
   :host([variant='success']) #button:focus {
     outline: ${Button.cssVar('success-outline-focus')};
   }
-  :host([variant='success'][hover]) #button {
+  :host([variant='success']) #button[hover] {
     color: ${Button.cssVar('success-color-hover')};
     background-color: ${Button.cssVar('success-background-hover')};
   }
-  :host([variant='success'][pressed]) #button {
+  :host([variant='success']) #button[pressed] {
     /** TODO Pressed style  */
     background-color: ${Button.cssVar('success-background-hover')};
   }
@@ -193,15 +201,21 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
   :host([variant='danger']) #button:focus {
     outline: ${Button.cssVar('danger-outline-focus')};
   }
-  :host([variant='danger'][hover]) #button {
+  :host([variant='danger']) #button[hover] {
     color: ${Button.cssVar('danger-color-hover')};
     background-color: ${Button.cssVar('danger-background-hover')};
   }
-  :host([variant='danger'][pressed]) #button {
+  :host([variant='danger']) #button[pressed] {
     background-color: ${Button.cssVar('danger-background-hover')};
   }
 
   :host([outline]) #button {
     background-color: transparent;
+  }
+  @keyframes ripple {
+    to {
+      transform: translate(-50%, -50%) scale(4);
+      opacity: 0;
+    }
   }
 `

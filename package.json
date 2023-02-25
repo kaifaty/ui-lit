@@ -86,6 +86,7 @@
     "@types/markdown-it": "^12.2.3",
     "@types/mocha": "^8.2.2",
     "@types/qrcode": "^1.4.1",
+    "better-color-tools": "^0.10.0",
     "custom-elements-manifest": "^2.0.0",
     "eslint": "^8.27.0",
     "eslint-plugin-lit": "^1.6.1",

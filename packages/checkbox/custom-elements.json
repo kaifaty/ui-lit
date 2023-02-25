@@ -63,7 +63,7 @@
               "name": "toggle"
             },
             {
-              "kind": "field",
+              "kind": "method",
               "name": "click"
             }
           ],

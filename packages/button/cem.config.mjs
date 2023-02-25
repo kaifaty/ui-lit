@@ -1,4 +1,4 @@
-
+import {litPlugin} from '@custom-elements-manifest/analyzer'
 export default {
   /** Globs to analyze */
   globs: [

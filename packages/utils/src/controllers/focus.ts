@@ -1,4 +1,4 @@
-import {ReactiveController, ReactiveControllerHost} from '../mixins/withControllers/index.js'
+import {ReactiveController, ReactiveControllerHost} from '../mixins/withControllers/index'
 
 export class FocusController implements ReactiveController {
   host: ReactiveControllerHost

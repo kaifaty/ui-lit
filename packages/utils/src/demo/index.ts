@@ -1,5 +1,5 @@
-import {FormAssociated} from '../form-assosiated/index.js'
-import {definable} from '../mixins/definable/index.js'
+import {FormAssociated} from '../form-assosiated/index'
+import {definable} from '../mixins/definable/index'
 
 class TestAssoc extends definable(FormAssociated) {
   shadowRoot = this.attachShadow({mode: 'open'})

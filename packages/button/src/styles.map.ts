@@ -1,21 +1,41 @@
+import {pallets} from '@ui-wc/utils'
+
 export const BUTTON_PREFIX = '--wc-button-'
 
-const getDefaultColor = (diffL = 0, diffS = 0) => {
-  const baseL = 56
-  const baseS = 90
-  return `hsl(264, ${baseS + diffS}%, ${baseL + diffL}%)`
+const getDefaultColor = (S = 0, L = 0, a?: number) => {
+  const h = 264
+  return `hsl${a ? 'a' : ''}(${h}, ${S}%, ${L}%${a ? `, ${a}` : ''})`
 }
+const primary = pallets.primary
+const primary20 = pallets.primary20
+const primary40 = pallets.primary40
+const neutral = pallets.neutral
 
 export const buttonCCSVarsMap = {
   display: ['inline-flex', 'default display position of button'],
 
-  'primary-color': ['hsl(264, 80%, 96%)', 'Primary text color'],
-  'primary-color-hover': ['hsl(264, 80%, 100%)', 'Primary text color'],
-  'primary-background': getDefaultColor(0, -10),
-  'primary-background-hover': getDefaultColor(6, -10),
-  'primary-ripple': getDefaultColor(10, -10),
-  'primary-border': `1px solid ${getDefaultColor(0, -10)}`,
-  'primary-outline-focus': `1px solid ${getDefaultColor(35, -10)}`,
+  color: neutral['900'],
+  'color-hover': neutral['700'],
+  'color-focus': neutral['700'],
+  'color-pressed': neutral['700'],
+  background: 'initial',
+  'background-focus': primary40['100'],
+  'background-hover': primary40['100'],
+  'background-pressed': primary20['200'],
+  ripple: pallets.primary20['900'],
+  border: `1px solid ${neutral[400]}`,
+  'border-hover': `1px solid ${primary['600']}`,
+  'outline-focus': `2px solid ${primary['600']}`,
+  outline: 'none',
+  'outline-offset': '1px',
+
+  'primary-color': [neutral['100'], 'Primary text color'],
+  'primary-color-hover': [neutral['100'], 'Primary text color'],
+  'primary-background': primary['800'],
+  'primary-background-hover': primary['700'],
+  'primary-ripple': primary['900'],
+  'primary-border': `1px solid transparent`,
+  'primary-outline-focus': `2px solid ${pallets.primary['700']}`,
 
   'success-color': 'hsl(110, 80%, 4%)',
   'success-color-hover': 'hsl(110, 80%, 8%)',
@@ -23,25 +43,15 @@ export const buttonCCSVarsMap = {
   'success-background-hover': 'hsl(110, 80%, 60%)',
   'success-ripple': 'hsl(110, 80%, 65%)',
   'success-border': '1px solid hsl(110, 80%, 55%)',
-  'success-outline-focus': '1px solid hsl(110, 80%, 35%)',
+  'success-outline-focus': '2px solid hsl(110, 80%, 35%)',
 
   'danger-color': 'hsl(5, 80%, 92%)',
   'danger-color-hover': 'hsl(5, 80%, 98%)',
   'danger-background': 'hsl(5, 80%, 55%)',
   'danger-background-hover': 'hsl(5, 80%, 60%)',
   'danger-border': '1px solid hsl(5, 80%, 55%)',
-  'danger-outline-focus': '1px solid hsl(5, 80%, 35%)',
+  'danger-outline-focus': '2px solid hsl(5, 80%, 35%)',
   'danger-ripple': 'hsl(5, 80%, 65%)',
-
-  color: getDefaultColor(15),
-  'color-hover': getDefaultColor(-10, -15),
-  background: 'initial',
-  'background-focus': getDefaultColor(2),
-  'background-hover': getDefaultColor(40, 50),
-  border: '1px solid hsl(264, 50%, 85%)',
-  ripple: 'hsl(264, 100%, 88%)',
-  outline: 'none',
-  'outline-focus': `1px solid ${getDefaultColor(35, -10)}`,
 
   'border-radius': '3px',
 
@@ -64,10 +74,7 @@ export const buttonCCSVarsMap = {
 
   padding: ['0 16px', 'Medium size padding'],
 
-  'switch-color': getDefaultColor(),
-  'switch-on-background': getDefaultColor(5, -10),
-  'switch-on-color': getDefaultColor(44, -10),
-  'switch-on-outline-focus': `1px solid ${getDefaultColor(-5, -10)}`,
-  'switch-outline-focus': `1px solid ${getDefaultColor(-5, -10)}`,
-  weight: '600',
+  'font-family': `-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  'Segoe UI Emoji', 'Segoe UI Symbol'`,
+  'font-weight': '500',
 } as const

@@ -32,7 +32,7 @@
     "build": "rimraf ./build/ && rimraf ./dist/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
-    "dev": "npm run doc && parcel serve --target=build",
+    "dev": "parcel serve --target=build",
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts",
     "doc": "npm run doc:css && npm run doc:cem",

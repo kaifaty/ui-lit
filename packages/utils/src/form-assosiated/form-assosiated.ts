@@ -1,16 +1,16 @@
 import type {LitForm, TValidationMessages, TValidationMessageKey} from '@ui-wc/types'
-import {OuterClickRemoveController} from '../controllers/click.js'
-import {KeyDownController} from '../controllers/key.js'
+import {OuterClickRemoveController} from '../controllers/click'
+import {KeyDownController} from '../controllers/key'
 
-import {defaultValidationMessages, defaultValidity} from './consts.js'
-import {css} from '../helpers/literals.js'
-import {AccessorParam, withProps} from '../mixins/withProps/index.js'
-import type {FormAssosiatedProps} from './types.js'
-import {formAssocCCSVarsMap} from './styles.map.js'
-import {PREFIX} from './styles.map.js'
-import {withControllers} from '../mixins/withControllers/index.js'
-import {definable} from '../mixins/definable/index.js'
-import {createcssMap} from '../create-css-map.js'
+import {defaultValidationMessages, defaultValidity} from './consts'
+import {css} from '../helpers/literals'
+import {AccessorParam, withProps} from '../mixins/withProps/index'
+import type {FormAssosiatedProps} from './types'
+import {formAssocCCSVarsMap} from './styles.map'
+import {PREFIX} from './styles.map'
+import {withControllers} from '../mixins/withControllers/index'
+import {definable} from '../mixins/definable/index'
+import {createcssMap} from '../create-css-map'
 
 const getLang = () => document.querySelector('html')?.lang || window.navigator.language.split('-')[0]
 

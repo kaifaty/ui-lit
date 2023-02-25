@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "src/panel.component.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "WcPanel",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "type": {
+                "text": "array"
+              },
+              "static": true,
+              "default": "[\r\n    css`\r\n      :host {\r\n        display: block;\r\n        background-color: ${this.cssVar('background')};\r\n        color: ${this.cssVar('color')};\r\n        padding: ${this.cssVar('padding')};\r\n        border: ${this.cssVar('border')};\r\n      }\r\n      :host([danger]) {\r\n        background-color: ${this.cssVar('danger-background')};\r\n        color: ${this.cssVar('danger-color')};\r\n        border: ${this.cssVar('danger-border')};\r\n      }\r\n      :host([success]) {\r\n        background-color: ${this.cssVar('success-background')};\r\n        color: ${this.cssVar('success-color')};\r\n        border: ${this.cssVar('success-border')};\r\n      }\r\n    `,\r\n  ]"
+            },
+            {
+              "kind": "field",
+              "name": "innerHTML",
+              "default": "html`<slot></slot>`"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "stylable",
+              "package": "@ui-wc/utils"
+            },
+            {
+              "name": "definable",
+              "package": "@ui-wc/utils"
+            }
+          ],
+          "superclass": {
+            "name": "HTMLElement"
+          },
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "WcPanel",
+          "declaration": {
+            "name": "WcPanel",
+            "module": "src/panel.component.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

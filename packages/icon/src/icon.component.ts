@@ -33,7 +33,6 @@ export class WcIcon extends Base {
   static styles = [
     css`
       :host {
-        cursor: pointer;
         display: inline-block;
         font-weight: normal;
         direction: ltr;
@@ -44,6 +43,7 @@ export class WcIcon extends Base {
         display: block;
         width: 100%;
         height: 100%;
+        fill: ${WcIcon.cssVar('color')};
       }
       :host([opened]) .dropdown {
         transform: rotate(180deg);

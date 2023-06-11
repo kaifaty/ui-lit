@@ -86,7 +86,7 @@ export class WcApiViewer extends BaseApiViewer {
         width: 100%;
         border-collapse: collapse;
         font-size: 14px;
-        color: #ccc;
+        color: #666;
       }
       th {
         border-bottom: 1px solid #555;

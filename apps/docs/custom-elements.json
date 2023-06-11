@@ -1,0 +1,276 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "dist/index.c06b3248.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Doc",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "(0, _lit1.css)`:host{display:block}wc-header{margin:0}`"
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot"
+            },
+            {
+              "kind": "method",
+              "name": "pallets",
+              "parameters": [
+                {
+                  "name": "data"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "(0, _lit.statableLit)",
+              "module": "dist/index.c06b3248.js"
+            }
+          ],
+          "superclass": {
+            "module": "dist/index.c06b3248.js"
+          },
+          "tagName": "wuik-doc",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "custom-element-definition",
+          "name": "wuik-doc",
+          "declaration": {
+            "name": "Doc",
+            "module": "dist/index.c06b3248.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "name",
+          "declaration": {
+            "name": "anonymous_1",
+            "module": "dist/index.c06b3248.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/index.ts",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Doc",
+          "members": [
+            {
+              "kind": "field",
+              "name": "styles",
+              "static": true,
+              "default": "css`\r\n    :host {\r\n      display: block;\r\n    }\r\n    wc-header {\r\n      margin: 0;\r\n    }\r\n  `"
+            },
+            {
+              "kind": "method",
+              "name": "createRenderRoot",
+              "privacy": "protected"
+            },
+            {
+              "kind": "method",
+              "name": "pallets",
+              "parameters": [
+                {
+                  "name": "data",
+                  "type": {
+                    "text": "any"
+                  }
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "render"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "statableLit",
+              "package": "@statx/lit"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "wuik-doc",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Doc",
+          "declaration": {
+            "name": "Doc",
+            "module": "src/index.ts"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "wuik-doc",
+          "declaration": {
+            "name": "Doc",
+            "module": "src/index.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/utils.ts",
+      "declarations": [
+        {
+          "kind": "function",
+          "name": "getURL",
+          "parameters": [
+            {
+              "name": "url",
+              "type": {
+                "text": "string"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "getURL",
+          "declaration": {
+            "name": "getURL",
+            "module": "src/utils.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "dist/tools/generate-css.js",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/pages/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./main/getting-started"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/router/index.ts",
+      "declarations": [],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "*",
+          "declaration": {
+            "name": "*",
+            "package": "./router"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/router/router.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "paths",
+          "type": {
+            "text": "{\r\n  'Getting Started': GettingStartedTemplate,\r\n}"
+          },
+          "default": "{\r\n  'Getting Started': GettingStartedTemplate,\r\n}"
+        },
+        {
+          "kind": "function",
+          "name": "setPage",
+          "parameters": [
+            {
+              "name": "key",
+              "type": {
+                "text": "Pages"
+              }
+            }
+          ]
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "paths",
+          "declaration": {
+            "name": "paths",
+            "module": "src/router/router.ts"
+          }
+        },
+        {
+          "kind": "js",
+          "name": "setPage",
+          "declaration": {
+            "name": "setPage",
+            "module": "src/router/router.ts"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/tools/generate-css.ts",
+      "declarations": [],
+      "exports": []
+    },
+    {
+      "kind": "javascript-module",
+      "path": "src/pages/main/getting-started.ts",
+      "declarations": [
+        {
+          "kind": "variable",
+          "name": "GettingStartedTemplate",
+          "default": "html`<lit-markdown filePath = \"${main as any}\" ></lit-markdown>`"
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "GettingStartedTemplate",
+          "declaration": {
+            "name": "GettingStartedTemplate",
+            "module": "src/pages/main/getting-started.ts"
+          }
+        }
+      ]
+    }
+  ]
+}

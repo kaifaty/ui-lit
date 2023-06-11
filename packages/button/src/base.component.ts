@@ -1,4 +1,4 @@
-import {definable, withProps, createGetParams, focusable, stylable} from '@ui-wc/utils'
+import {definable, withProps, withControllers, createGetParams, focusable, stylable} from '@ui-wc/utils'
 
 import {LinkTarget} from '@ui-wc/link'
 import {buttonCCSVarsMap, BUTTON_PREFIX} from './styles.map'
@@ -68,7 +68,8 @@ const size = getParams<ButtonSize>('size', 'medium')
 
 const variant = withReflect<ButtonVariant>('variant', 'default')
 
-const withoutProps = focusable(stylable(definable(HTMLElement), buttonCCSVarsMap, BUTTON_PREFIX))
+const withoutProps = withControllers(focusable(stylable(definable(HTMLElement), buttonCCSVarsMap, BUTTON_PREFIX)))
+
 export const BaseButton = withProps<Props, typeof withoutProps>(withoutProps, [
   variant,
   loading,

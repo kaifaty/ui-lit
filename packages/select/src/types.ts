@@ -7,8 +7,6 @@ export type TSelectItem = {
   value: string
 }
 
-export type TListboxPosition = 'auto' | 'top'
-
 export interface IPropsSelect extends FormAssociatedProps {
   multiple: boolean
   searchable: boolean

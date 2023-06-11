@@ -1,27 +1,29 @@
 {
-  "name": "@ui-wc/select",
+  "name": "@ui-wc/colors",
   "version": "1.0.0",
   "private": false,
   "description": "",
   "keywords": [
     "user-interface",
+    "lit-element",
+    "lit",
     "UI",
     "UI kit",
     "Webcomponent UI"
   ],
-  "homepage": "https://github.com/kaifaty/ui-wc/packages/select",
+  "homepage": "https://github.com/kaifaty/ui-lit/packages/colors",
   "bugs": {
-    "url": "https://github.com/kaifaty/ui-wc/issues"
+    "url": "https://github.com/kaifaty/ui-lit/issues"
   },
   "license": "MIT",
   "author": "kaifaty",
   "sideEffects": false,
   "type": "module",
-  "main": "build/index.js",
+  "module": "dist/index.js",
   "source": "./src/index.ts",
-  "types": "build/index.d.ts",
+  "types": "dist/index.d.ts",
   "files": [
-    "/dist",
+    "/build",
     "/package.json",
     "/README.md",
     "/src"
@@ -30,7 +32,9 @@
     "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
+    "build:mb": "microbundle",
     "dev": "parcel watch",
+    "lint": "tsc --noEmit", 
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"
   },
@@ -38,8 +42,7 @@
     "last 4 chrome versions"
   ],
   "peerDependencies": {
-    "@ui-wc/utils": "*",
-    "lit": "^2.0.0"
+    "@ui-wc/utils": "*"
   },
   "targets": {
     "build": {
@@ -49,8 +52,7 @@
       "isLibrary": true,
       "optimize": true,
       "includeNodeModules": {
-        "@ui-wc/utils": false,
-        "lit": false
+        "@ui-wc/utils": false
       },
       "outputFormat": "esmodule"
     }

@@ -35,7 +35,6 @@ const genaratePallete = <T extends string>({C, L, H, a = 1}: Data): Record<Names
       res[levelname] = value.oklch
     }
   }
-  console.log(res)
   return res
 }
 const base = 255

@@ -1,11 +1,7 @@
-import {pallets} from '@ui-wc/utils'
+import {pallets} from '@ui-wc/colors'
 
 export const BUTTON_PREFIX = '--wc-button-'
 
-const getDefaultColor = (S = 0, L = 0, a?: number) => {
-  const h = 264
-  return `hsl${a ? 'a' : ''}(${h}, ${S}%, ${L}%${a ? `, ${a}` : ''})`
-}
 const primary = pallets.primary
 const primary20 = pallets.primary20
 const primary40 = pallets.primary40

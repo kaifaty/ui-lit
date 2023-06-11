@@ -1,6 +1,6 @@
 import {WcIcon} from '@ui-wc/icon'
 
-import {html, WCStyleSheet, noselect, clickPosition, createTemplate} from '@ui-wc/utils'
+import {html, WCStyleSheet, HoverController, noselect, clickPosition, createTemplate} from '@ui-wc/utils'
 
 import {WcLink} from '@ui-wc/link'
 import {WcSpinner} from '@ui-wc/spinner'
@@ -59,57 +59,61 @@ const notifyOnClick = Symbol()
  * @csspart suffix - The container that wraps the suffix.
  * @csspart caret - The button's caret icon, an `<sl-icon>` element.
  *
- * @CSS
- * @cssprop [--wc-button-background=initial] - background
- * @cssprop [--wc-button-background-focus=hsl(264, 2%, 0%)] - background-focus
- * @cssprop [--wc-button-background-hover=hsla(264, 80%, 40%, 0.06)] - background-hover
- * @cssprop [--wc-button-background-pressed=hsla(264, 80%, 40%, 0.06)] - background-pressed
- * @cssprop [--wc-button-border=1px solid hsl(264, 5%, 40%)] - border
- * @cssprop [--wc-button-border-hover=1px solid hsl(264, 30%, 60%)] - border-hover
- * @cssprop [--wc-button-border-radius=3px] - border-radius
- * @cssprop [--wc-button-color=hsl(264, 5%, 80%)] - color
- * @cssprop [--wc-button-color-hover=hsl(264, 80%, 80%)] - color-hover
- * @cssprop [--wc-button-color-pressed=hsl(264, 80%, 80%)] - color-pressed
- * @cssprop [--wc-button-danger-background=hsl(5, 80%, 55%)] - danger-background
- * @cssprop [--wc-button-danger-background-hover=hsl(5, 80%, 60%)] - danger-background-hover
- * @cssprop [--wc-button-danger-border=1px solid hsl(5, 80%, 55%)] - danger-border
- * @cssprop [--wc-button-danger-color=hsl(5, 80%, 92%)] - danger-color
- * @cssprop [--wc-button-danger-color-hover=hsl(5, 80%, 98%)] - danger-color-hover
- * @cssprop [--wc-button-danger-outline-focus=1px solid hsl(5, 80%, 35%)] - danger-outline-focus
- * @cssprop [--wc-button-danger-ripple=hsl(5, 80%, 65%)] - danger-ripple
- * @cssprop [--wc-button-display=inline-flex] - default display position of button
- * @cssprop [--wc-button-font-size=1rem] - Medium size fontsize
- * @cssprop [--wc-button-gap=10px] - gap
- * @cssprop [--wc-button-height=40px] - Medium size height
- * @cssprop [--wc-button-justify=center] - justify
- * @cssprop [--wc-button-large-font-size=inherit] - large-font-size
- * @cssprop [--wc-button-large-height=48px] - large-height
- * @cssprop [--wc-button-large-padding=0 20px] - large-padding
- * @cssprop [--wc-button-letter-spacing=normal] - letter-spacing
- * @cssprop [--wc-button-outline=none] - outline
- * @cssprop [--wc-button-outline-focus=1px solid hsl(264, 35%, 70%)] - outline-focus
- * @cssprop [--wc-button-padding=0 16px] - Medium size padding
- * @cssprop [--wc-button-primary-background=hsl(264, 55%, 55%)] - primary-background
- * @cssprop [--wc-button-primary-background-hover=hsl(264, 6%, -10%)] - primary-background-hover
- * @cssprop [--wc-button-primary-border=1px solid hsl(264, 0%, -10%)] - primary-border
- * @cssprop [--wc-button-primary-color=hsl(264, 80%, 96%)] - Primary text color
- * @cssprop [--wc-button-primary-color-hover=hsl(264, 80%, 100%)] - Primary text color
- * @cssprop [--wc-button-primary-outline-focus=1px solid hsl(264, 35%, -10%)] - primary-outline-focus
- * @cssprop [--wc-button-primary-ripple=hsl(264, 10%, -10%)] - primary-ripple
- * @cssprop [--wc-button-ripple=hsla(264, 80%, 80%, 0.1)] - ripple
- * @cssprop [--wc-button-small-font-size=inherit] - Small size font-size
- * @cssprop [--wc-button-small-height=32px] - Small size height
- * @cssprop [--wc-button-small-padding=0 6px] - Small size padding
- * @cssprop [--wc-button-success-background=hsl(110, 80%, 55%)] - success-background
- * @cssprop [--wc-button-success-background-hover=hsl(110, 80%, 60%)] - success-background-hover
- * @cssprop [--wc-button-success-border=1px solid hsl(110, 80%, 55%)] - success-border
- * @cssprop [--wc-button-success-color=hsl(110, 80%, 4%)] - success-color
- * @cssprop [--wc-button-success-color-hover=hsl(110, 80%, 8%)] - success-color-hover
- * @cssprop [--wc-button-success-outline-focus=1px solid hsl(110, 80%, 35%)] - success-outline-focus
- * @cssprop [--wc-button-success-ripple=hsl(110, 80%, 65%)] - success-ripple
- * @cssprop [--wc-button-text-transform=normal] - text-transform
- * @cssprop [--wc-button-weight=400] - weight
- * @CSS
+ * #CSS
+ * @cssprop [--wc-button-background=initial] - background 
+ * @cssprop [--wc-button-background-focus=rgba(217, 234, 255, 0.4)] - background-focus 
+ * @cssprop [--wc-button-background-hover=rgba(217, 234, 255, 0.4)] - background-hover 
+ * @cssprop [--wc-button-background-pressed=rgba(190, 218, 255, 0.2)] - background-pressed 
+ * @cssprop [--wc-button-border=1px solid rgb(166, 168, 169)] - border 
+ * @cssprop [--wc-button-border-hover=1px solid rgb(68, 153, 255)] - border-hover 
+ * @cssprop [--wc-button-border-radius=3px] - border-radius 
+ * @cssprop [--wc-button-color=rgb(38, 41, 45)] - color 
+ * @cssprop [--wc-button-color-focus=rgb(86, 88, 91)] - color-focus 
+ * @cssprop [--wc-button-color-hover=rgb(86, 88, 91)] - color-hover 
+ * @cssprop [--wc-button-color-pressed=rgb(86, 88, 91)] - color-pressed 
+ * @cssprop [--wc-button-danger-background=hsl(5, 80%, 55%)] - danger-background 
+ * @cssprop [--wc-button-danger-background-hover=hsl(5, 80%, 60%)] - danger-background-hover 
+ * @cssprop [--wc-button-danger-border=1px solid hsl(5, 80%, 55%)] - danger-border 
+ * @cssprop [--wc-button-danger-color=hsl(5, 80%, 92%)] - danger-color 
+ * @cssprop [--wc-button-danger-color-hover=hsl(5, 80%, 98%)] - danger-color-hover 
+ * @cssprop [--wc-button-danger-outline-focus=2px solid hsl(5, 80%, 35%)] - danger-outline-focus 
+ * @cssprop [--wc-button-danger-ripple=hsl(5, 80%, 65%)] - danger-ripple 
+ * @cssprop [--wc-button-display=inline-flex] - default display position of button 
+ * @cssprop [--wc-button-font-family=-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+  'Segoe UI Emoji', 'Segoe UI Symbol'] - font-family 
+ * @cssprop [--wc-button-font-size=1rem] - Medium size fontsize 
+ * @cssprop [--wc-button-font-weight=500] - font-weight 
+ * @cssprop [--wc-button-gap=10px] - gap 
+ * @cssprop [--wc-button-height=40px] - Medium size height 
+ * @cssprop [--wc-button-justify=center] - justify 
+ * @cssprop [--wc-button-large-font-size=inherit] - large-font-size 
+ * @cssprop [--wc-button-large-height=48px] - large-height 
+ * @cssprop [--wc-button-large-padding=0 20px] - large-padding 
+ * @cssprop [--wc-button-letter-spacing=normal] - letter-spacing 
+ * @cssprop [--wc-button-outline=none] - outline 
+ * @cssprop [--wc-button-outline-focus=2px solid rgb(68, 153, 255)] - outline-focus 
+ * @cssprop [--wc-button-outline-offset=1px] - outline-offset 
+ * @cssprop [--wc-button-padding=0 16px] - Medium size padding 
+ * @cssprop [--wc-button-primary-background=rgb(0, 120, 231)] - primary-background 
+ * @cssprop [--wc-button-primary-background-hover=rgb(14, 135, 255)] - primary-background-hover 
+ * @cssprop [--wc-button-primary-border=1px solid transparent] - primary-border 
+ * @cssprop [--wc-button-primary-color=rgb(255, 255, 255)] - Primary text color 
+ * @cssprop [--wc-button-primary-color-hover=rgb(255, 255, 255)] - Primary text color 
+ * @cssprop [--wc-button-primary-outline-focus=2px solid rgb(14, 135, 255)] - primary-outline-focus 
+ * @cssprop [--wc-button-primary-ripple=rgb(0, 105, 205)] - primary-ripple 
+ * @cssprop [--wc-button-ripple=rgba(0, 105, 205, 0.2)] - ripple 
+ * @cssprop [--wc-button-small-font-size=inherit] - Small size font-size 
+ * @cssprop [--wc-button-small-height=32px] - Small size height 
+ * @cssprop [--wc-button-small-padding=0 6px] - Small size padding 
+ * @cssprop [--wc-button-success-background=hsl(110, 80%, 55%)] - success-background 
+ * @cssprop [--wc-button-success-background-hover=hsl(110, 80%, 60%)] - success-background-hover 
+ * @cssprop [--wc-button-success-border=1px solid hsl(110, 80%, 55%)] - success-border 
+ * @cssprop [--wc-button-success-color=hsl(110, 80%, 4%)] - success-color 
+ * @cssprop [--wc-button-success-color-hover=hsl(110, 80%, 8%)] - success-color-hover 
+ * @cssprop [--wc-button-success-outline-focus=2px solid hsl(110, 80%, 35%)] - success-outline-focus 
+ * @cssprop [--wc-button-success-ripple=hsl(110, 80%, 65%)] - success-ripple 
+ * @cssprop [--wc-button-text-transform=normal] - text-transform 
+ * #CSS
  *
  */
 export class WcButton extends BaseButton {
@@ -127,12 +131,11 @@ export class WcButton extends BaseButton {
   /** @ignore */
   [notifyTimeout] = 0
 
+  hoverController = new HoverController(this, () => getButtonSync(this))
+
   constructor() {
     super()
     this.shadowRoot.append(template.content.cloneNode(true))
-    const button = getButtonSync(this)
-    this.addEventListener('mouseover', () => button.setAttribute('hover', ''))
-    this.addEventListener('mouseout', () => button.removeAttribute('hover'))
     this.addEventListener('mousedown', this[start])
     this.addEventListener('touchstart', this[start])
     this.addEventListener('touchend', this[end])

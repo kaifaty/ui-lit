@@ -67,7 +67,7 @@ export const getAttrAndProps = (data: Package | null, moduleName: string) => {
         hasAttr: true,
       }
     })
-    declaration.members.forEach((item) => {
+    declaration.members?.forEach((item) => {
       if (item.kind === 'field') {
         if (data[item.name]) {
           data[item.name].hasProp = true

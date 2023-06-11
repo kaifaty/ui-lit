@@ -1,16 +1,18 @@
+import {pallets} from '@ui-wc/colors'
+
 export const PANEL_PREFIX = '--wc-panel-'
 
 export const panelCSSVars = {
-  'danger-background': 'hsl(0, 85%, 75%)',
+  'danger-background': pallets.danger[100],
   'danger-border': '1px solid initial',
-  'danger-color': 'hsl(0, 80%, 5%)',
+  'danger-color': pallets.danger[900],
 
-  'success-background': 'hsl(110, 85%, 75%)',
+  'success-background': pallets.success[100],
   'success-border': '1px solid initial',
-  'success-color': 'hsl(0, 80%, 5%)',
+  'success-color': pallets.success[900],
 
-  background: 'hsla(299, 10%, 62%, 0.1)',
-  border: '1px solid hsl(299, 15%, 65%)',
-  color: 'hsl(299, 70%, 5%)',
+  background: pallets.primary20[100],
+  border: '1px solid ' + pallets.primary20[900],
+  color: pallets.neutral[200],
   padding: '10px 15px',
 }

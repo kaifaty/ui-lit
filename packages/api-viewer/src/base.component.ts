@@ -117,11 +117,17 @@ const renderNames = (target: ApiViewerElement) => {
     .join('')
 }
 
+const getContent = (description: string) => {
+  return description.match(/(#content[A-Za-z0-9 \n\r\\\<\>\-\/\"\'\=]*#content)/g)?.[0]?.replaceAll('#content', '') ?? ''
+}
+
 const renderElement = (target: ApiViewerElement) => {
   const selectedModule = getSelectedModule(target.data, target.selectedName)
   const tag = selectedModule?.tagName
   if (tag) {
-    const template = createTemplate(`<${tag}></${tag}>`)
+    const content = getContent(selectedModule.description ?? '')
+    console.log({content, d: selectedModule.description})
+    const template = createTemplate(`<${tag}>${content}</${tag}>`)
     const element = (template.content.cloneNode(true) as HTMLElement).querySelector(tag) as HTMLElement | null
     if (hasUnnamedSlot(selectedModule)) {
       element.innerText = formatName(selectedModule.name)
@@ -342,6 +348,7 @@ const srcParam = getParam<null | string>('src', null, {
 })
 
 const Base = stylable(definable(HTMLElement), {}, '--wc-apiviewer-')
+
 export const BaseApiViewer = withProps<Props, typeof Base>(Base, [
   isLoading,
   element,

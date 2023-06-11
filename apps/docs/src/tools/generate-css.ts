@@ -1,11 +1,13 @@
 import glob from 'glob'
 import {readFile, writeFile} from 'fs'
-import {checkboxCCSVarsMap, CHECKBOX_PREFIX} from '../../../../packages/checkbox/src/styles'
+import {checkboxCCSVarsMap, CHECKBOX_PREFIX} from '../../../../packages/checkbox/src/styles.map'
 import {buttonCCSVarsMap, BUTTON_PREFIX} from '../../../../packages/button/src/styles.map'
+import {selectCSSVarsMap, SELECT_PREFIX} from '../../../../packages/select/src/styles.map'
 
 const Files = {
-  button: {map: buttonCCSVarsMap, prefix: BUTTON_PREFIX},
   checkbox: {map: checkboxCCSVarsMap, prefix: CHECKBOX_PREFIX},
+  button: {map: buttonCCSVarsMap, prefix: BUTTON_PREFIX},
+  select: {map: selectCSSVarsMap, prefix: SELECT_PREFIX},
 } as const
 
 const getKeys = (data: Record<string, string | readonly [string | number, string]>, preffix: string) =>
@@ -30,7 +32,7 @@ const getFilesData = async () => {
       const file = list[0]
       const data = await asyncRead(file)
       let hasReplacement = false
-      const newFile = data.replace(/(@CSS*[A-Za-z][A-Za-z0-9-()#,%. _\r\n*[\]@+=]*@CSS)/g, () => {
+      const newFile = data.replace(/(#CSS*[A-Za-z][A-Za-z0-9-()#,%. _\r\n*[\]@+=]*#CSS)/g, () => {
         hasReplacement = true
         const data = Files[name as keyof typeof Files]
         const keys = getKeys(data.map, data.prefix)
@@ -40,7 +42,7 @@ const getFilesData = async () => {
           return acc
         }, '')
 
-        return `@CSS\n${result} * @CSS`
+        return `#CSS\n${result} * #CSS`
       })
 
       if (hasReplacement) {

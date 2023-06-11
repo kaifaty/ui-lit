@@ -1,38 +1,46 @@
 import {getEventDataset} from '@kaifat/utils'
-import {css, html, nothing, TemplateResult} from 'lit'
-import {property} from 'lit/decorators.js'
-import {unsafeHTML} from 'lit/directives/unsafe-html.js'
 
-import {definable, LitFormAssoc, focusable, labled, stylable} from '@ui-wc/utils'
-import {LitButton} from '@ui-wc/button'
-import {LitIcon} from '@ui-wc/icon'
+import {definable, withProps, AccessorParam, FormAssociated, focusable, labled, stylable} from '@ui-wc/utils'
+import {WcButton} from '@ui-wc/button'
+import {WcIcon} from '@ui-wc/icon'
 import {cancel, dropdown, search} from '../../svgIcons'
-import type {LitOption} from '../option/option.component'
-import {PREFIX, selectCSSVars} from '../styles.map'
-import type {IPropsSelect, TListboxPosition} from '../types'
+import type {LitOption} from '../option/old.option.component'
+import {SELECT_PREFIX, selectCSSVarsMap} from '../styles.map'
+import type {} from '../types'
 
-import '../../button/button.component'
-import '../listbox/listbox.component'
-import '../group/group.component'
-import '../option/option.component'
+export type TListboxPosition = 'auto' | 'top'
 
-export class LitSelect
-  extends focusable(labled(stylable(definable(LitFormAssoc), selectCSSVars, PREFIX)))
-  implements IPropsSelect
-{
+type ComponentProps = {
+  value: boolean
+  open: boolean
+  multiple: boolean
+  searchable: boolean
+  searchPlaceholder: string
+  listboxPosition: TListboxPosition
+}
+
+const multiple: AccessorParam<boolean> = {
+  defaultValue: false,
+  name: 'multiple',
+  options: {attribute: true, reflect: true},
+}
+
+const Base = labled(stylable(definable(FormAssociated), selectCSSVarsMap, SELECT_PREFIX))
+const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [multiple])
+
+export class WcSelect extends focusable(labled(stylable(definable(FormAssociated), selectCSSVarsMap, SELECT_PREFIX))) {
   static styles = [
-    ...super.styles,
     css`
       :host {
-        ${LitButton.cssKey('border')}: ${LitSelect.cssVar('border')};
+        ${LitButton.cssKey('border')}: ${WcSelect.cssVar('border')};
         ${LitButton.cssKey('border-radius')}: 0;
-        ${LitButton.cssKey('color')}: ${LitSelect.cssVar('color')};
+        ${LitButton.cssKey('color')}: ${WcSelect.cssVar('color')};
         ${LitButton.cssKey('justify')}: normal;
-        ${LitButton.cssKey('padding')}: ${LitSelect.cssVar('padding')};
-        ${LitIcon.cssKey('color')}: ${LitSelect.cssVar('color')};
+        ${LitButton.cssKey('padding')}: ${WcSelect.cssVar('padding')};
+        ${LitIcon.cssKey('color')}: ${WcSelect.cssVar('color')};
         --input-width: 0;
         display: inline-block;
-        height: ${LitSelect.cssVar('height')};
+        height: ${WcSelect.cssVar('height')};
       }
       :host([multiple]) {
         height: initial;
@@ -48,7 +56,7 @@ export class LitSelect
         cursor: text;
       }
       :host([multiple]) .wrapper {
-        border: ${LitSelect.cssVar('border')};
+        border: ${WcSelect.cssVar('border')};
         cursor: text;
         flex-wrap: wrap;
         min-width: 100px;
@@ -57,13 +65,13 @@ export class LitSelect
         box-sizing: border-box;
         cursor: pointer;
         display: flex;
-        min-height: ${LitSelect.cssVar('height')};
+        min-height: ${WcSelect.cssVar('height')};
         padding-right: 22px;
         padding: 1px;
         position: relative;
       }
       .wrapper:focus {
-        outline: ${LitSelect.cssVar('outline-focus')};
+        outline: ${WcSelect.cssVar('outline-focus')};
       }
       .icon-wrapper {
         align-items: center;
@@ -88,16 +96,16 @@ export class LitSelect
         background: transparent;
         border: none;
         box-sizing: border-box;
-        color: ${LitSelect.cssVar('color')};
+        color: ${WcSelect.cssVar('color')};
         margin: 0;
-        min-height: calc(${LitSelect.cssVar('height')} - 4px);
+        min-height: calc(${WcSelect.cssVar('height')} - 4px);
         min-width: 4px;
         outline: none;
         padding: 0 8px;
         width: 100%;
       }
       :host(:not([multiple])) input {
-        border: ${LitSelect.cssVar('listbox-border')};
+        border: ${WcSelect.cssVar('listbox-border')};
         margin: 6px 14px 6px 14px;
         padding: 0 5px;
         width: calc(100% - 32px);
@@ -125,11 +133,11 @@ export class LitSelect
         text-overflow: ellipsis;
       }
       lit-button {
-        ${LitButton.cssKey('background')}: ${LitSelect.cssVar('background')};
-        ${LitButton.cssKey('background-hover')}: ${LitSelect.cssVar('background-hover')};
-        ${LitButton.cssKey('color')}: ${LitSelect.cssVar('color')};
-        ${LitButton.cssKey('outline-focus')}: ${LitSelect.cssVar('outline-focus')};
-        ${LitButton.cssKey('ripple')}: ${LitSelect.cssVar('ripple')};
+        ${LitButton.cssKey('background')}: ${WcSelect.cssVar('background')};
+        ${LitButton.cssKey('background-hover')}: ${WcSelect.cssVar('background-hover')};
+        ${LitButton.cssKey('color')}: ${WcSelect.cssVar('color')};
+        ${LitButton.cssKey('outline-focus')}: ${WcSelect.cssVar('outline-focus')};
+        ${LitButton.cssKey('ripple')}: ${WcSelect.cssVar('ripple')};
         height: 100%;
         min-width: 70px;
         width: 100%;
@@ -144,17 +152,12 @@ export class LitSelect
       }
     `,
   ]
-  static get properties() {
-    return {
-      open: {type: Boolean},
-    }
-  }
 
-  @property({type: Number}) tabindex = 0
-  @property({type: Boolean, reflect: true}) multiple = false
-  @property({type: Boolean, reflect: true}) searchable = false
-  @property({type: String}) searchPlaceholder = 'search'
-  @property({type: String}) listboxPosition: TListboxPosition = 'auto'
+  //@property({type: Number}) tabindex = 0
+  //@property({type: Boolean, reflect: true}) multiple = false
+  //@property({type: Boolean, reflect: true}) searchable = false
+  //@property({type: String}) searchPlaceholder = 'search'
+  //@property({type: String}) listboxPosition: TListboxPosition = 'auto'
 
   /** @ignore */
   #optionMap: Set<LitOption> = new Set()
@@ -176,7 +179,6 @@ export class LitSelect
     if (value) {
       this.searchValue = ''
     }
-    this.requestUpdate('open', oldValue)
   }
   get open() {
     return this.#open
@@ -439,14 +441,7 @@ export class LitSelect
   /** @ignore */
   #containerTemplate(data: TemplateResult) {
     if (this.multiple) {
-      return html` <div
-        class="wrapper"
-        tabindex="0"
-        @keydown="${this.#handlekeyDown}"
-        @click="${this.#toggle}"
-      >
-        ${data}
-      </div>`
+      return html` <div class="wrapper" tabindex="0" @keydown="${this.#handlekeyDown}" @click="${this.#toggle}">${data}</div>`
     }
     return html`<lit-button @keydown="${this.#handlekeyDown}" @click="${this.#toggle}">
       <div class="wrapper">${data}</div>
@@ -455,11 +450,8 @@ export class LitSelect
 
   /** @ignore */
   #wrapperTemplate() {
-    return this.#containerTemplate(html` ${this.#contentTemplate()}
-      ${this.multiple ? this.#searchTamplate() : nothing}
-      <div class="icon-wrapper">
-        ${this.multiple && this.searchable && this.open ? search() : dropdown(this.open)}
-      </div>`)
+    return this.#containerTemplate(html` ${this.#contentTemplate()} ${this.multiple ? this.#searchTamplate() : nothing}
+      <div class="icon-wrapper">${this.multiple && this.searchable && this.open ? search() : dropdown(this.open)}</div>`)
   }
 
   /** @ignore */
@@ -525,11 +517,5 @@ export class LitSelect
         composed: true,
       }),
     )
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'lit-select': LitSelect
   }
 }

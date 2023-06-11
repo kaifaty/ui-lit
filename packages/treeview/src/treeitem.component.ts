@@ -25,6 +25,7 @@ export class WcTreeItem extends BaseTreeitem {
         padding: 6px 12px;
       }
       :host(:hover) {
+        color: ${this.cssVar('color-hover')};
         background-color: ${this.cssVar('background-color-hover')};
       }
       :host([selected]) {

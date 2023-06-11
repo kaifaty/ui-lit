@@ -1,184 +1,100 @@
-import {mobileAndTabletCheck} from '@kaifat/utils'
-import {css, html, LitElement} from 'lit'
-import {customElement, property} from 'lit/decorators.js'
+import {
+  stylable,
+  HoverController,
+  withControllers,
+  css,
+  AccessorParam,
+  withProps,
+  html,
+  createTemplate,
+  definable,
+} from '@ui-wc/utils'
 
-import {definable, focusable, stylable} from '@ui-wc/utils'
-import {LitButton} from '@ui-wc/button'
-import type {LitSelect} from '../select/select.component'
-import {PREFIX, selectCSSVars} from '../styles.map'
+import {SELECT_PREFIX, selectCSSVarsMap} from '../styles.map'
 
-const options: [LitOption, string][] = []
+type ComponentProps = {
+  value: string
+  selected: boolean
+}
 
-/*
-setInterval(() => {
-  options.forEach((item) => {
-    if (item[1] !== item[0].textContent) {
-      item[0].notify()
-      item[1] = item[0].textContent || ''
-    }
-  })
-}, 600)
-*/
+export const Base = withControllers(stylable(definable(HTMLElement), selectCSSVarsMap, SELECT_PREFIX))
 
-@customElement('lit-option')
-export class LitOption extends focusable(stylable(definable(LitElement), selectCSSVars, PREFIX)) {
-  static styles = css`
-    :host {
-      display: block;
-      ${LitButton.cssKey('color')}: ${LitOption.cssVar('option-color')};
-      ${LitButton.cssKey('background')}: ${LitOption.cssVar('option-background')};
-      ${LitButton.cssKey('background-hover')}: ${LitOption.cssVar('option-background-hover')};
-      ${LitButton.cssKey('ripple')}: ${LitOption.cssVar('option-ripple')};
-      ${LitButton.cssKey('height')}: ${LitOption.cssVar('height')};
+const value: AccessorParam<string> = {
+  defaultValue: '',
+  name: 'value',
+  set(target, old, value) {
+    if (old === value) {
+      return false
     }
-    :host([mobile]) {
-      ${LitButton.cssKey('height')}: ${LitOption.cssVar('mobile-height')};
-    }
-    :host([selected]) span::after {
-      width: 8px;
-      height: 8px;
-      background-color: ${LitOption.cssVar('option-circle-color')};
-    }
-    :host span::after {
-      content: '';
-      border-radius: 8px;
-      width: 8px;
-      height: 8px;
-      position: absolute;
-      top: 2px;
-      left: 2px !important;
-    }
-    :host(:not([visability])) {
-      display: none;
-    }
-
-    :host([disabled]) {
-      pointer-events: none;
-    }
-    lit-button {
-      display: block;
-      width: 100%;
-      height: ${LitOption.cssVar('height')};
-      ${LitButton.cssKey('outline-focus')}: none;
-    }
-    :host(:not([selected])) lit-button:hover span::after,
-    :host(:not([selected])) lit-button[pressed] span::after {
-      opacity: 0.3;
-      background-color: ${LitOption.cssVar('option-circle-color')};
-    }
-    :host(:not([selected])) lit-button[pressed] span::after {
-      opacity: 0.5;
-    }
-    span {
-      border-radius: 12px;
-      border: 2px solid ${LitOption.cssVar('option-circle-color')};
-      display: inline-block;
-      height: 12px;
-      margin-left: 15px;
-      position: relative;
-      width: 12px;
-    }
-  `
-
-  // @property({type: Boolean, reflect: true}) disabled: boolean = false;
-  @property({type: Boolean, reflect: true}) selected = false
-  @property({type: Boolean, reflect: true}) disabled = false
-  @property({type: String}) label = ''
-  @property({type: String}) value = ''
-  @property({type: Boolean, reflect: true}) visability = true
-  @property({type: Boolean, reflect: true}) mobile: boolean = mobileAndTabletCheck()
-  private _selectHost: LitSelect | null = null
-
-  public setSelectHost(host: LitSelect) {
-    this._selectHost = host
-  }
-  connectedCallback(): void {
-    super.connectedCallback()
-    setTimeout(() => {
-      options.push([this, this.textContent || ''])
+    queueMicrotask(() => {
+      target.dispatchEvent(new CustomEvent<string>('optionValueChanged'))
     })
-    this.dispatchEvent(
-      new CustomEvent('optionConnected', {
-        bubbles: true,
-        composed: true,
-        detail: this,
-      }),
-    )
-  }
-  disconnectedCallback(): void {
-    super.disconnectedCallback()
-    options.filter((item) => item[0] !== this)
-    this._selectHost?.optionDisconnect(this)
-  }
-  updated(_changedProperties: Map<string | number | symbol, unknown>): void {
-    this.ariaLabel = this.label || this.textContent || ''
-    if (_changedProperties.has('selected')) {
-      if (this.selected) {
-        setTimeout(() => {
-          this.toggleSelect()
-        })
+    return true
+  },
+  options: {
+    attribute: true,
+    reflect: true,
+  },
+}
+const selected: AccessorParam<boolean> = {
+  defaultValue: false,
+  name: 'selected',
+  set(_t, old, value) {
+    const target = _t as WcOption
+    if (old === value) {
+      return false
+    }
+    if (value) {
+      queueMicrotask(() => {
+        target.dispatchEvent(new CustomEvent<string>('optionSelected', {detail: target.value, composed: true, bubbles: true}))
+      })
+    }
+    return true
+  },
+  options: {
+    attribute: true,
+    reflect: true,
+  },
+}
+
+export const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [value, selected])
+
+const template = createTemplate(html`<slot></slot>`)
+
+export class WcOption extends PropsedBase {
+  static styles = [
+    css`
+      :host {
+        display: flex;
+        align-items: center;
+        min-width: 100px;
+        height: 40px;
+        cursor: pointer;
+        padding: 0 10px;
+        background-color: ${this.cssVar('option-background')};
       }
-    }
-  }
-  render() {
-    return html`<lit-button
-      ?disabled="${this.disabled}"
-      @click="${this.toggleSelect}"
-      between
-      borderless
-      tabIndex="1"
-      @focus="${this._focus}"
-      @blur="${this._blur}"
-    >
-      <slot @slotchange="${this.notify}"></slot> <span slot="icon-after"></span
-    ></lit-button>`
-  }
+      :host([hover]) {
+        background-color: ${this.cssVar('option-background-hover')};
+      }
+      :host([selected]) {
+        background-color: ${this.cssVar('option-background-selected')};
+      }
+    `,
+  ]
 
-  private toggleSelect() {
-    this.dispatchEvent(
-      new CustomEvent('optionChange', {
-        composed: true,
-        bubbles: true,
-        detail: this,
-      }),
-    )
-  }
-  private _focus() {
-    document.addEventListener('keydown', this._handleFocus)
-  }
-  private _blur() {
-    document.removeEventListener('keydown', this._handleFocus)
-  }
-  private _handleFocus = (e: KeyboardEvent) => {
-    let event = ''
-    if (e.key === 'ArrowDown') {
-      event = 'focusNext'
-    } else if (e.key === 'ArrowUp') {
-      event = 'focusPrev'
-    }
-    if (event) {
-      this.dispatchEvent(
-        new CustomEvent(event, {
-          detail: true,
-          bubbles: true,
-          composed: true,
-        }),
-      )
-    }
-  }
-
-  notify() {
-    this.dispatchEvent(
-      new CustomEvent('optionSlotChanged', {
-        composed: true,
-        bubbles: true,
-      }),
-    )
+  _hoverController = new HoverController(this)
+  constructor() {
+    super()
+    this.shadowRoot.append(template.content.cloneNode(true))
+    this.addEventListener('click', () => {
+      this.selected = true
+    })
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lit-option': LitOption
+    'wc-option': WcOption
   }
+  interface HTMLElementEventMap {}
 }

@@ -81,6 +81,7 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
     box-sizing: border-box;
     cursor: pointer;
     display: grid;
+    align-items: center;
     font-family: ${Button.cssVar('font-family')};
     font-weight: ${Button.cssVar('font-weight')};
     gap: ${Button.cssVar('gap')};
@@ -150,7 +151,7 @@ export const getButtonStyles = (Button: typeof BaseButton) => css`
   :host([variant='text']) #button {
     color: ${Button.cssVar('color')};
   }
-  :host([variant='text'][hover]) #button {
+  :host([variant='text']) #button[hover] {
     color: ${Button.cssVar('color-hover')};
   }
 

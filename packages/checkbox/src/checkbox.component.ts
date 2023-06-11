@@ -1,6 +1,17 @@
-import {definable, stylable, FormAssociated, html, css, withProps, AccessorParam, createTemplate, ILabled, labled} from '@ui-wc/utils'
+import {
+  definable,
+  stylable,
+  FormAssociated,
+  html,
+  css,
+  withProps,
+  AccessorParam,
+  createTemplate,
+  ILabled,
+  labled,
+} from '@ui-wc/utils'
 
-import {CHECKBOX_PREFIX, checkboxCCSVarsMap} from './styles'
+import {CHECKBOX_PREFIX, checkboxCCSVarsMap} from './styles.map'
 import {CheckboxEvents, TCheckboxType, TCkeckboxValue} from './types'
 
 type ComponentProps = {
@@ -51,7 +62,6 @@ const value: AccessorParam<TCkeckboxValue> = {
     const content = target.querySelector<HTMLDivElement>('#content')
     if (content) {
       content.ariaChecked = value === 'on' ? 'true' : 'false'
-      content.ariaLabel = ((target as ILabled).labels[0].textContent || '').trim()
     }
     return true
   },
@@ -79,17 +89,17 @@ const PropsedBase = withProps<ComponentProps, typeof Base>(Base, [checked, type,
  * @attr {boolean} [checked=false] - checked state, based on value
  *
  *
- * @CSS
- * @cssprop [--wc-checkbox-checkbox-background=#fff] - Background color of checkbox 
- * @cssprop [--wc-checkbox-checkbox-border=1px solid #999] - Border of checkbox 
- * @cssprop [--wc-checkbox-checkmark-color=hsl(100, 65%, 5%)] - Checkmark color 
- * @cssprop [--wc-checkbox-checkmark-shadow-hover=0 0 2px #999] - checkmark-shadow-hover 
- * @cssprop [--wc-checkbox-switcher-control-background=#fff] - switcher-control-background 
- * @cssprop [--wc-checkbox-switcher-control-shadow=1px 1px 2px rgba(0,0,0,0.6)] - switcher-control-shadow 
- * @cssprop [--wc-checkbox-switcher-off-background=hsl(0, 65%, 50%)] - Disabled switcher color 
- * @cssprop [--wc-checkbox-switcher-on-background=hsl(110, 65%, 50%)] - Enabled switcher color 
- * @cssprop [--wc-checkbox-switcher-shadow=inset 1px 1px 2px rgba(0,0,0,0.7)] - Shadow of switcher circle 
- * @CSS
+ * #CSS
+ * @cssprop [--wc-checkbox-checkbox-background=#fff] - Background color of checkbox
+ * @cssprop [--wc-checkbox-checkbox-border=1px solid rgb(86, 88, 91)] - Border of checkbox
+ * @cssprop [--wc-checkbox-checkmark-color=rgb(86, 88, 91)] - Checkmark color
+ * @cssprop [--wc-checkbox-checkmark-shadow-hover=0 0 2px rgb(86, 88, 91)] - checkmark-shadow-hover
+ * @cssprop [--wc-checkbox-switcher-control-background=#fff] - switcher-control-background
+ * @cssprop [--wc-checkbox-switcher-control-shadow=1px 1px 2px rgba(0,0,0,0.6)] - switcher-control-shadow
+ * @cssprop [--wc-checkbox-switcher-off-background=rgb(255, 119, 121)] - Disabled switcher color
+ * @cssprop [--wc-checkbox-switcher-on-background=rgb(124, 190, 31)] - Enabled switcher color
+ * @cssprop [--wc-checkbox-switcher-shadow=inset 1px 1px 2px rgba(0,0,0,0.7)] - Shadow of switcher circle
+ * #CSS
  *
  */
 

@@ -1,157 +1,153 @@
-import {mobileAndTabletCheck} from '@kaifat/utils'
-import {css, html, LitElement, nothing} from 'lit'
-import {property} from 'lit/decorators.js'
+import {stylable, css, html, createTemplate, definable} from '@ui-wc/utils'
+import {SELECT_PREFIX, selectCSSVarsMap} from '../styles.map'
+import type {WcSelect} from '../select.component'
+export const base = stylable(definable(HTMLElement), selectCSSVarsMap, SELECT_PREFIX)
 
-import {definable, scrollbar, stylable} from '@ui-wc/utils'
-import {LitButton} from '@ui-wc/button'
-import {PREFIX, selectCSSVars} from '../styles.map'
-import type {TListboxPosition} from '../types'
+const template = createTemplate(html``)
 
-export class ListBox extends stylable(definable(LitElement), selectCSSVars, PREFIX) {
+const closeOnAnyClick = (container: WcListbox) => {
+  document.addEventListener('click', (e) => {
+    const donotNeedHide = e.composedPath().find((item) => {
+      if (item instanceof HTMLElement) {
+        return ['#select', 'wc-listbox'].includes(item.tagName.toLowerCase())
+      }
+    })
+    if (!donotNeedHide) {
+      container.close()
+      document.dispatchEvent(new CustomEvent('closeSelect', {}))
+    }
+  })
+}
+
+const getRootOffset = (element: HTMLElement | undefined) => {
+  let offset = 0
+  while (element) {
+    offset += element.offsetTop
+    element = element.offsetParent as HTMLElement | undefined
+  }
+
+  return offset
+}
+
+const isFromTop = (rect: DOMRect): boolean => {
+  return rect.top - window.innerHeight / 2 > 0
+}
+
+const onOptionSelected = Symbol()
+const onValueChanged = Symbol()
+const updateStyle = Symbol()
+
+export class WcListbox extends base {
   static styles = [
     css`
       :host {
-        ${LitButton.cssKey('border')}: none;
-        --shadow-pos: -1;
-        background: ${ListBox.cssVar('option-background')};
-        box-sizing: border-box;
-        box-sizing: border-box;
-        display: none;
-        position: absolute;
-        z-index: 30;
-      }
-      :host([open]) {
         display: block;
-      }
-      .wrapper {
-        border: ${ListBox.cssVar('listbox-border')};
-        box-shadow: 2px calc(2px * var(--shadow-pos)) 6px ${ListBox.cssVar('listbox-shadow')};
-        height: ${ListBox.cssVar('listbox-height')};
-        max-height: ${ListBox.cssVar('listbox-max-height')};
-        overflow-x: hidden;
-        overflow-y: auto;
-      }
-      :host([mobile]) .wrapper {
-        ${LitButton.cssKey('background')}: ${ListBox.cssVar('fullscreen-background')};
-        border-radius: 5px;
-        border: none;
-        box-shadow: 3px 3px 3px ${ListBox.cssVar('fullscreen-shadow')};
-        color: ${ListBox.cssVar('fullscreen-color')};
-        margin: 0 auto;
-        max-height: 50%;
-        max-width: 90%;
-        min-width: 280px;
-      }
-      :host([mobile]) {
-        align-items: center;
-        background-color: ${ListBox.cssVar('fullscreen-overlay-background')};
-        display: none;
-        height: 100vh;
-        justify-content: center;
-        left: 0;
-        position: fixed;
+        position: absolute;
+        visibility: hidden;
         top: 0;
-        width: 100vw;
-        z-index: 1;
+        left: 0;
+        border: 1px solid #ccc;
+        opacity: 0;
+        transition: opacity 150ms ease;
       }
-      :host([mobile][open]) {
-        display: flex;
+      :host([visible]) {
+        visibility: visible;
+        opacity: 1;
       }
     `,
-    scrollbar,
   ]
 
-  @property({type: String}) position: TListboxPosition = 'auto'
-  @property({type: Boolean, reflect: true}) open = false
-  @property({type: Boolean, reflect: true}) mobile: boolean = mobileAndTabletCheck()
+  _caller: WcSelect
+  value: string | string[] = ''
+  isVisible = false
 
-  /** @ignore */
-  #calcPosition() {
-    if (!this.isConnected || this.mobile) return
-    const host = (this.parentNode as ShadowRoot).host.shadowRoot?.querySelector('.wrapper')
-    const wrapper = this.shadowRoot!.querySelector('.wrapper') as HTMLElement
-    if (!host) return
-    const rect = host!.getBoundingClientRect()
-    const topAvailable = rect.top
-    const bottomAvailable = (window.visualViewport?.height || window.innerHeight) - rect.bottom
-    const floatRight = (window.visualViewport?.width || window.innerWidth) / 2 - rect.left < 0
+  constructor() {
+    super()
+    this.shadowRoot.append(template.content.cloneNode(true))
 
-    this.style.minWidth = rect.width + 'px'
-    if (floatRight) {
-      this.style.right = '0'
-      this.style.left = 'initial'
+    closeOnAnyClick(this)
+    this.addEventListener('optionSelected', this[onOptionSelected] as EventListener)
+    this.addEventListener('optionValueChanged', this[onValueChanged] as EventListener)
+  }
+
+  connectedCallback(): void {
+    window.addEventListener('resize', this[updateStyle] as EventListener)
+  }
+
+  disconnectedCallback(): void {
+    window.removeEventListener('resize', this[updateStyle] as EventListener)
+  }
+
+  [onValueChanged] = () => {};
+
+  [updateStyle] = () => {
+    if (!this.isVisible) {
+      return
+    }
+    this.updateStyle()
+  };
+
+  [onOptionSelected] = (e: CustomEvent<string>) => {
+    if (this._caller) {
+      this._caller.value = e.detail
+      this.updateStyle()
+    }
+  }
+
+  updateValue(root: WcSelect) {
+    this.value = root.value
+    this.shadowRoot.querySelectorAll(`[selected]`).forEach((node) => node.removeAttribute('selected'))
+
+    if (root.multiple) {
+      this.shadowRoot.querySelector(`[value="${root.value}"]`)?.setAttribute('selected', '')
     } else {
-      this.style.right = 'initial'
-      this.style.left = '0'
-    }
-    if (topAvailable > bottomAvailable && this.position === 'auto') {
-      this.style.top = '0'
-      this.style.transform = 'translateY(calc(-100% - 1px))'
-      if (wrapper) {
-        wrapper.style.maxHeight = topAvailable - 2 + 'px'
-      }
-      this.style.setProperty('--shadow-pos', '-1')
-    } else {
-      this.style.top = host.clientHeight + 'px'
-      this.style.transform = 'none'
-      if (wrapper) {
-        wrapper.style.maxHeight = bottomAvailable - 2 + 'px'
-      }
-      this.style.setProperty('--shadow-pos', '1')
+      this.shadowRoot.querySelector(`[value="${root.value}"]`)?.setAttribute('selected', '')
     }
   }
 
-  private _onClick = (e: Event) => {
-    let clickInOption = false
-    for (const el of e.composedPath()) {
-      const tag = ((el as HTMLElement).tagName || '').toLowerCase()
-      if (tag === 'lit-option') {
-        clickInOption = true
-        break
-      }
-    }
-    if (!clickInOption) {
-      this.dispatchEvent(
-        new CustomEvent('listboxClose', {
-          detail: true,
-          composed: true,
-          bubbles: true,
-        }),
-      )
-    } else {
-      this.#calcPosition()
-    }
+  updateOptions(root: WcSelect) {
+    this.shadowRoot.innerHTML = root.innerHTML
   }
 
-  /** @ignore */
-  willUpdate(_changedProperties: Map<string | number | symbol, unknown>): void {
-    if (_changedProperties.has('open')) {
-      this.#calcPosition()
-    }
+  updateStyle() {
+    const root = this._caller
+    const button = root.shadowRoot.querySelector<HTMLElement>('#select')
+    const rect = button.getBoundingClientRect()
+    const fromTop = isFromTop(rect)
+    const x = rect.x
+    const y = Math.floor(getRootOffset(button) + (fromTop ? -this.clientHeight - 1 : rect.height))
+    this.style.transform = `translate(${x}px, ${y}px)`
   }
 
-  /** @ignore */
-  updated(_changedProperties: Map<string | number | symbol, unknown>): void {
-    setTimeout(() => {
-      if (_changedProperties.has('open')) {
-        if (this.open) {
-          document.addEventListener('click', this._onClick)
-        } else {
-          document.removeEventListener('click', this._onClick)
-        }
-      }
-    })
-  }
+  open(root: WcSelect) {
+    this._caller = root
+    this.isVisible = true
 
-  /** @ignore */
-  render() {
-    if (!this.open) return nothing
-    return html`<div class="wrapper ff-scrollbar"><slot></slot></div>`
+    this.updateOptions(root)
+    this.updateStyle()
+    this.updateValue(root)
+
+    this.setAttribute('visible', '')
+  }
+  close() {
+    this.isVisible = false
+    this.removeAttribute('visible')
+  }
+}
+
+const checkExist = () => {
+  return Boolean(document.querySelector('wc-listbox'))
+}
+
+export const createListbox = () => {
+  if (!checkExist()) {
+    document.body.appendChild(document.createElement('wc-listbox'))
   }
 }
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lit-listbox': ListBox
+    'wc-listbox': WcListbox
   }
+  interface HTMLElementEventMap {}
 }

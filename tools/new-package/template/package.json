@@ -5,8 +5,6 @@
   "description": "",
   "keywords": [
     "user-interface",
-    "lit-element",
-    "lit",
     "UI",
     "UI kit",
     "Webcomponent UI"
@@ -29,12 +27,11 @@
     "/src"
   ],
   "scripts": {
-    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types && npm run cem",
+    "build": "rimraf ./dist/ && npm run build:parcel && npm run build:types",
     "build:parcel": "parcel build --target=build",
     "build:types": "tsc",
     "build:mb": "microbundle",
     "dev": "parcel watch",
-    "cem": "custom-elements-manifest analyze --config ./cem.config.mjs --dev",
     "lint": "tsc --noEmit", 
     "test": "tsx src/index.test.ts",
     "test:watch": "tsx watch src/index.test.ts"

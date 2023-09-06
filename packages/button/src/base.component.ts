@@ -1,24 +1,10 @@
 import {definable, withProps, withControllers, createGetParams, focusable, stylable} from '@ui-wc/utils'
 
-import {LinkTarget} from '@ui-wc/link'
+import type {LinkTarget} from '@ui-wc/link'
 import {buttonCCSVarsMap, BUTTON_PREFIX} from './styles.map'
 import {getButton} from './utils'
+import {ButtonSize, ButtonType, ButtonVariant, ButtonProps} from './types'
 
-type Props = {
-  loading: boolean
-  disabled: boolean
-  pressed: boolean
-  notificable: boolean
-  tabIndex: number
-  href: string
-  variant: ButtonVariant
-  target: LinkTarget
-  type: ButtonType
-  size: ButtonSize
-}
-type ButtonType = 'submit' | 'button' | 'close'
-type ButtonVariant = 'text' | 'primary' | 'danger' | 'success' | 'default'
-type ButtonSize = 'small' | 'medium' | 'large'
 
 const withReflect = createGetParams({
   reflect: true,
@@ -70,7 +56,7 @@ const variant = withReflect<ButtonVariant>('variant', 'default')
 
 const withoutProps = withControllers(focusable(stylable(definable(HTMLElement), buttonCCSVarsMap, BUTTON_PREFIX)))
 
-export const BaseButton = withProps<Props, typeof withoutProps>(withoutProps, [
+export const BaseButton = withProps<ButtonProps, typeof withoutProps>(withoutProps, [
   variant,
   loading,
   tabIndex,

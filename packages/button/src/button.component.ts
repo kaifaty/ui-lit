@@ -126,7 +126,7 @@ export class WcButton extends BaseButton {
   }
 
   /** @ignore */
-  static styles: WCStyleSheet[] = [noselect, getButtonStyles(this)];
+  static styles: WCStyleSheet[] = [noselect, ...getButtonStyles(this)];
 
   /** @ignore */
   [notifyTimeout] = 0
